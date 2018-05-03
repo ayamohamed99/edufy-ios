@@ -1,17 +1,51 @@
 <ion-header no-margin no-padding></ion-header>
 
-<ion-content padding-right="16px" padding-left="16px" >
+
+
+<ion-content padding-right="16px" padding-left="16px">
+  <div id="particle-container">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
   <ion-grid>
     <ion-row>
     <div col-sm-1 col-md-3 col-lg-2 col-xl-4></div>
     <div col-sm-10 col-md-6 col-lg-8 col-xl-4>
 
-      <section class="login-container">
+      <section class="login-container" >
         <div class = "col header text-center" no-padding no-margin>
 
           <div col-sm-1 col-md-1 col-lg-1></div>
           <div col-sm-10 col-md-10 col-lg-10 col-xl-12 justify-content-center align-items-center align-self-center text-center no-margin no-padding>
-            <img src="../../assets/imgs/edufy.png" class = "logo" />
+            <img class="colorless" src="../../assets/imgs/edufy.png" class = "logo" />
           </div>
           <div col-sm-1 col-md-10 col-lg-1></div>
         </div>
@@ -22,11 +56,11 @@
             <ion-col no-margin no-padding>
               <ion-list inset no-padding no-margin>
 
-                <ion-item>
+                <ion-item class="colorless">
                   <ion-input width-5 placeholder="Email" name="username" id="loginField" type="text" required [(ngModel)]="username" #email></ion-input>
                 </ion-item>
 
-                <ion-item>
+                <ion-item class="colorless">
                   <ion-input width-5 placeholder="Password" name="password" id="passwordField" type="password" required [(ngModel)]="password"></ion-input>
                 </ion-item>
 
@@ -35,7 +69,7 @@
           </ion-row>
 
           <ion-row>
-            <ion-col no-margin no-padding="">
+            <ion-col no-margin no-paddings>
               <button ion-button width-5 class="submit-btn" full type="submit" [disabled]="!loginForm.form.valid">Login</button>
             </ion-col>
           </ion-row>

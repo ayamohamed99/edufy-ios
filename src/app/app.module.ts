@@ -10,13 +10,15 @@ import {HttpClientModule} from "@angular/common/http";
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {IonicStorageModule} from "@ionic/storage";
+import {NotificationPage} from "../pages/notification/notification";
 
 
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    NotificationPage
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import {IonicStorageModule} from "@ionic/storage";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    NotificationPage
   ],
   providers: [
     StatusBar,

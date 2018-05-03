@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {LoadingController, NavController, Platform} from 'ionic-angular';
+import {AlertController, LoadingController, NavController, Platform} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login_service";
+import {NotificationPage} from "../notification/notification";
 
 
 @Component({
@@ -18,8 +19,8 @@ export class HomePage {
   localStorageKey:string = 'LOCAL_STORAGE_TOKEN';
   storage:Storage;
 
-  constructor(public navCtrl: NavController,private loginServ:LoginService
-    ,private platform:Platform, private loading:LoadingController) {}
+  constructor(private navCtrl: NavController,private loginServ:LoginService
+    ,private platform:Platform, private loading:LoadingController,private alertCtrl: AlertController) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -60,17 +61,21 @@ export class HomePage {
             this.storage.setItem(this.localStorageKey, this.fullToken());
           }
         }
-
-
-
       },
       err => {
         load.dismiss();
         console.log("POST call in error", err);
+        this.alertCtrl.create({
+          title: 'Error!',
+          subTitle: err.statusText,
+          buttons: ['OK']
+        }).present();
+
       },
       () => {
-        console.log("LocalStorage: "+localStorage.getItem(this.localStorageKey))
+        console.log("LocalStorage: "+localStorage.getItem(this.localStorageKey));
         console.log("The POST observable is now completed.")
+        this.navCtrl.push(NotificationPage);
       });
   }
   fullToken(){
