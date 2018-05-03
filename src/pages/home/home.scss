@@ -1,3 +1,18 @@
 page-home {
 
+  .login-container {
+    display: -webkit-flex;
+    -webkit-flex-direction: column;
+    height: 100%;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+    background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  }
+
+  .login-container > .header {
+    -webkit-flex: 4;
+    //padding-top: 20px;
+  }
+
 }
+
+
