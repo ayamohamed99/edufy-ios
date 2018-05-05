@@ -4,6 +4,7 @@ import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login_service";
 import {NotificationPage} from "../notification/notification";
 import {Storage} from "@ionic/storage";
+import {root} from "rxjs/util/root";
 
 
 @Component({
@@ -66,6 +67,8 @@ export class HomePage {
             this.storage.set(this.loginServ.localStoragePassword, this.password);
           }
         }
+        this.navCtrl.setRoot(NotificationPage);
+        root.whichPage();
       },
       err => {
         load.dismiss();
@@ -80,10 +83,10 @@ export class HomePage {
       () => {
         console.log("LocalStorage: "+localStorage.getItem(this.loginServ.localStorageToken));
         console.log("LocalStorageMobile: "+getToken);
-        console.log("The POST observable is now completed.")
-        this.navCtrl.push(NotificationPage);
+        console.log("The POST observable is now completed.");
       });
   }
+
   fullToken(){
     return this.token_Type + ' ' +this.token;
   }

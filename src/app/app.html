@@ -1,8 +1,8 @@
-<ion-split-pane>
-  <ion-menu  [content]="content" *ngIf="whichPage()">
+<ion-split-pane [when]="whichPage()">
+  <ion-menu  [content]="content" >
 
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-title>Menu</ion-title>
       </ion-toolbar>
     </ion-header>
@@ -10,10 +10,17 @@
     <ion-content class="outer-content">
 
       <ion-list>
-        <button ion-item menuClose (click)="openPage()">
-          <ion-icon item-start [name]="notification"></ion-icon>
-          N
+
+        <button ion-item icon-left (click)="onLoad(notificationPage)">
+          <ion-icon name="notifications"></ion-icon>
+          Notification
         </button>
+
+        <button ion-item icon-left (click)="onLoad(reportPage)">
+          <ion-icon name="document"></ion-icon>
+          Reports
+        </button>
+
       </ion-list>
 
     </ion-content>
