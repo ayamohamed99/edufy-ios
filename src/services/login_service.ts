@@ -5,6 +5,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class LoginService {
 
+  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+  localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
+  localStoragePassword:string = 'LOCAL_STORAGE_PASSWORD';
 
   constructor(private http: HttpClient) {}
 

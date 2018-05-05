@@ -3,6 +3,7 @@ import {AlertController, LoadingController, NavController, Platform} from 'ionic
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login_service";
 import {NotificationPage} from "../notification/notification";
+import {Storage} from "@ionic/storage";
 
 
 @Component({
@@ -16,10 +17,8 @@ export class HomePage {
   token_Type:string;
   token:string;
   values:any =[];
-  localStorageKey:string = 'LOCAL_STORAGE_TOKEN';
-  storage:Storage;
 
-  constructor(private navCtrl: NavController,private loginServ:LoginService
+  constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage
     ,private platform:Platform, private loading:LoadingController,private alertCtrl: AlertController) {}
 
   login(form:NgForm){
@@ -35,6 +34,8 @@ export class HomePage {
     });
     load.present();
 
+    let getToken:string;
+    this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
       (data) => {
         console.log("POST call successful value returned in body", data);
@@ -48,17 +49,21 @@ export class HomePage {
         if ( (this.platform.is("core") )
           && (this.token_Type != null || this.token_Type != '')
           && (this.token != null || this.token != '')
-          && (this.fullToken() != localStorage.getItem(this.localStorageKey)))
+          && (this.fullToken() != localStorage.getItem(this.loginServ.localStorageToken)))
         {
 
-          localStorage.setItem(this.localStorageKey, this.fullToken());
+          localStorage.setItem(this.loginServ.localStorageToken, this.fullToken());
+          localStorage.setItem(this.loginServ.localStorageUserName, this.userName);
+          localStorage.setItem(this.loginServ.localStoragePassword, this.password);
 
         } else {
           if ((this.token_Type != null || this.token_Type != '')
             && (this.token != null || this.token != '')
-            && (this.storage.getItem(this.localStorageKey) != this.fullToken()))
+            && (getToken != this.fullToken()))
           {
-            this.storage.setItem(this.localStorageKey, this.fullToken());
+            this.storage.set(this.loginServ.localStorageToken, this.fullToken());
+            this.storage.set(this.loginServ.localStorageUserName, this.userName);
+            this.storage.set(this.loginServ.localStoragePassword, this.password);
           }
         }
       },
@@ -73,7 +78,8 @@ export class HomePage {
 
       },
       () => {
-        console.log("LocalStorage: "+localStorage.getItem(this.localStorageKey));
+        console.log("LocalStorage: "+localStorage.getItem(this.loginServ.localStorageToken));
+        console.log("LocalStorageMobile: "+getToken);
         console.log("The POST observable is now completed.")
         this.navCtrl.push(NotificationPage);
       });
