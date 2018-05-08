@@ -1,0 +1,70 @@
+import {Injectable} from "@angular/core";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+
+@Injectable()
+export class AccountService{
+
+  private value:any = [];
+  private accountFeature:any = [];
+  private userRole:any = [];
+  private userTelephone:string;
+  private userEmail:string;
+  private userName:string;
+  private userUserName:string;
+  private userAddress:string;
+
+  constructor(private http: HttpClient) {}
+
+  getAccountRoles(subHeader:string){
+
+    const httpOptions =  {headers: new HttpHeaders({
+            // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
+            // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
+            // 'Accept':'application/json',
+            // 'content-type':'application/json',
+            'Authorization' : subHeader
+          })};
+
+    return this.http.post('/authentication/authenticator.ent?operationId=3', null, httpOptions);
+  }
+
+  setDate(data:any){
+
+    this.value = data;
+    this.accountFeature = this.value.accountFeatures;
+    this.userRole = this.value.userRoles;
+    this.userTelephone = this.value.telephone;
+    this.userEmail = this.value.email;
+    this.userName = this.value.name;
+    this.userUserName = this.value.username;
+    this.userAddress = this.value.address;
+
+  }
+
+  getAccountFeature(){
+    return this.accountFeature;
+  }
+
+  getUserRole(){
+    return this.userRole;
+  }
+  getUserTelephone(){
+    return this.userTelephone;
+  }
+  getUserEmail(){
+    return this.userEmail;
+  }
+  getUserName(){
+    return this.userName;
+  }
+  getUserUserName(){
+    return this.userUserName;
+  }
+  getUserAddress(){
+    return this.userAddress;
+  }
+
+
+
+
+}

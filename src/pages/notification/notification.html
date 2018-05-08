@@ -10,6 +10,34 @@
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let user of users; let i = index" col-12 col-xl-4 col-lg-6 col-md-4>
+        <ion-card>
+          <ion-item>
+            <ion-avatar item-start>
+              <img src="../../assets/imgs/profile.png">
+            </ion-avatar>
+            <ion-label text-capitalize>{{ user}} {{i}} </ion-label>
+            <button item-end (click)="onSelectCard(i)" class="buttonShape">
+              <ion-icon name="more" class="buttonShape" ></ion-icon>
+            </button>
+          </ion-item>
+          <ion-card-content>
+            Bacon ipsum dolor amet salami prosciutto ham hock, strip steak buffalo ribeye pork chop. Beef ribs tenderloin tail shoulder.
+            Spare ribs ham shoulder brisket rump hamburger. Pork belly kevin shoulder prosciutto ribeye pork chop chicken
+            strip steak pig.
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="onOpenView()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
 
 </ion-content>

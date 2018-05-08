@@ -1,5 +1,5 @@
-<ion-split-pane [when]="whichPage()">
-  <ion-menu  [content]="content" >
+<ion-split-pane [when]="whichPage()" >
+  <ion-menu  [content]="content">
 
     <ion-header>
       <ion-toolbar color="primary">
@@ -9,19 +9,33 @@
 
     <ion-content class="outer-content">
 
-      <ion-list>
+      <ion-item-group>
+        <ion-item-divider color="light">Navigation</ion-item-divider>
 
-        <button ion-item icon-left (click)="onLoad(notificationPage)">
+        <button ion-item icon-left (click)="onLoad(profilePage)">
+          <ion-icon name="person"></ion-icon>
+          {{names}}'s Profile
+        </button>
+
+        <button ion-item icon-left (click)="onLoad(notificationPage)" *ngIf="appearNotification">
           <ion-icon name="notifications"></ion-icon>
           Notification
         </button>
 
-        <button ion-item icon-left (click)="onLoad(reportPage)">
+        <button ion-item icon-left (click)="onLoad(reportPage)" *ngIf="appearDailyReport">
           <ion-icon name="document"></ion-icon>
-          Reports
+          Daily Reports
         </button>
 
-      </ion-list>
+
+        <ion-item-divider color="light">Log Out</ion-item-divider>
+
+        <button ion-item icon-left (click)="onSignOut()" text-center>
+          <ion-icon name="log-out"></ion-icon>
+          Log-out
+        </button>
+
+      </ion-item-group>
 
     </ion-content>
 

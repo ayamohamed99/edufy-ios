@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {root} from "rxjs/util/root";
+import {
+  AlertController, IonicPage, ModalController, NavController, NavParams} from 'ionic-angular';
+import {NotificationNewPage} from "../notification-new/notification-new";
+
 
 
 /**
@@ -17,12 +19,26 @@ import {root} from "rxjs/util/root";
 })
 export class NotificationPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    root.whichPage();
+  users:any =[];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,private alrtCtrl:AlertController, private modalCtrl: ModalController) {
+    this.users = ['ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed'];
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationPage');
+  }
+
+  onSelectCard(index:any){
+    this.alrtCtrl.create( {
+      title: 'Card Number',
+      subTitle: index,
+      buttons: ['OK']
+  }).present();
+  }
+  onOpenView() {
+    let model = this.modalCtrl.create(NotificationNewPage);
+    model.present();
   }
 
 }

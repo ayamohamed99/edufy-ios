@@ -11,14 +11,19 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import {IonicStorageModule} from "@ionic/storage";
 import {NotificationPage} from "../pages/notification/notification";
+import {AccountService} from "../services/account";
+import {ProfilePage} from "../pages/profile/profile";
+import {NotificationNewPage} from "../pages/notification-new/notification-new";
 
 
 
 @NgModule({
   declarations: [
     MyApp,
+    ProfilePage,
     HomePage,
-    NotificationPage
+    NotificationPage,
+    NotificationNewPage
   ],
   imports: [
     BrowserModule,
@@ -29,14 +34,17 @@ import {NotificationPage} from "../pages/notification/notification";
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    ProfilePage,
     HomePage,
-    NotificationPage
+    NotificationPage,
+    NotificationNewPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoginService
+    LoginService,
+    AccountService
   ]
 })
 export class AppModule {}
