@@ -8,11 +8,11 @@
   "proxies": [
     {
       "path":"/oauth",
-      "proxyUrl": "http://192.168.43.125:8080/oauth"
+      "proxyUrl": "http://192.168.1.26:8080/oauth"
     },
     {
       "path":"/authentication",
-      "proxyUrl": "http://192.168.43.125:8080/authentication"
+      "proxyUrl": "http://192.168.1.26:8080/authentication"
     }
 
   ]

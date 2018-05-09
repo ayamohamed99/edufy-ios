@@ -6,7 +6,7 @@
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>New Notification</ion-title>
+    <ion-title>Send New Notification</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -14,6 +14,30 @@
 
 <ion-content padding>
 
+  <rl-tag-input padding
+    [(ngModel)]="topics"
+    [addOnBlur]="false"
+    [autocomplete]="true"
+    [autocompleteItems]="preparedTags"
+    placeholder="To :">
+  </rl-tag-input>
 
+  <ion-input type="text" placeholder="Title"></ion-input>
+
+  <ion-textarea rows="6"  [type]="text" spellcheck placeholder="Details" style="height: 140px" ></ion-textarea>
+
+  <div style="cursor: pointer; height: 100px" class="drop-box ng-pristine ng-valid" ngf-drop="" ngf-select="" ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="false" accept="image/*,video/*,audio/*,text/*,application/*,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel.template.macroEnabled.12,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-excel,application/vnd.ms-excel" ngf-pattern="image/*,video/*,audio/*,text/*,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.ms-excel.template.macroEnabled.12,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation,vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-excel,application/vnd.ms-excel" ngf-max-files="20" ngf-model-invalid="invalidFiles" ngf-keep="true" ngf-max-size="25MB">
+
+    <i class="fa fa-cloud-upload fa-2x" style="color: #D6D6D6;"></i><br>
+        Drop files here or click to upload<br> <span style="color: red;"><b>Max
+				20 files and max file size=25MB</b></span>
+  </div>
 
 </ion-content>
+<ion-footer>
+  <div col-8></div>
+  <div col-4>
+      <button ion-button item-end color="danger" (click)="deleteNotification()">Cancel</button>
+     <button ion-button item-end (click)="sendNotification()">Send</button>
+  </div>
+</ion-footer>

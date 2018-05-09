@@ -130,12 +130,6 @@ export class MyApp {
         this.load.dismiss();
         console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
-        this.alertCtrl.create({
-          title: 'Error!',
-          subTitle: err.statusText,
-          buttons: ['OK']
-        }).present();
-
       },
       () => {
         console.log("LocalStorage: "+localStorage.getItem(this.loginServ.localStorageToken));
@@ -184,12 +178,6 @@ export class MyApp {
         this.load.dismiss();
         console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);;
-        this.alertCtrl.create({
-          title: 'Error!',
-          subTitle: err.statusText,
-          buttons: ['OK']
-        }).present();
-
       });
   }
 
@@ -204,11 +192,6 @@ export class MyApp {
         this.load.dismiss();
         console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
-        this.alertCtrl.create({
-          title: 'Error!',
-          subTitle: err.statusText,
-          buttons: ['OK']
-        }).present();
       },
       () => {
         console.log("The POST observable is now completed.");
@@ -230,11 +213,6 @@ export class MyApp {
         this.load.dismiss();
         console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
-        this.alertCtrl.create({
-          title: 'Error!',
-          subTitle: err.statusText,
-          buttons: ['OK']
-        }).present();
       },
       () => {
         console.log("The POST observable is now completed.");

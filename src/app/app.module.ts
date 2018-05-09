@@ -14,6 +14,8 @@ import {NotificationPage} from "../pages/notification/notification";
 import {AccountService} from "../services/account";
 import {ProfilePage} from "../pages/profile/profile";
 import {NotificationNewPage} from "../pages/notification-new/notification-new";
+import {RlTagInputModule} from "angular2-tag-input/dist";
+import {NotificationService} from "../services/notification";
 
 
 
@@ -29,7 +31,8 @@ import {NotificationNewPage} from "../pages/notification-new/notification-new";
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    RlTagInputModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -44,6 +47,7 @@ import {NotificationNewPage} from "../pages/notification-new/notification-new";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginService,
+    NotificationService,
     AccountService
   ]
 })
