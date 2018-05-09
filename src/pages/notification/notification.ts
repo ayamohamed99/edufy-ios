@@ -23,6 +23,7 @@ export class NotificationPage {
     this.users = ['ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed','ahmed'];
   }
 
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationPage');
   }
