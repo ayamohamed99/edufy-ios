@@ -1,14 +1,14 @@
-import {Component, ViewChild} from '@angular/core';
-import {AlertController, LoadingController, MenuController, Nav, Platform} from 'ionic-angular';
+import {Component, ViewChild } from '@angular/core';
+import { LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
-import {Storage} from "@ionic/storage";
-import {LoginService} from "../services/login_service";
-import {NotificationPage} from "../pages/notification/notification";
-import {AccountService} from "../services/account";
-import {ProfilePage} from "../pages/profile/profile";
+import { Storage } from "@ionic/storage";
+import { LoginService } from "../services/login_service";
+import { NotificationPage } from "../pages/notification/notification";
+import { AccountService } from "../services/account";
+import { ProfilePage } from "../pages/profile/profile";
 
 
 
@@ -40,7 +40,7 @@ export class MyApp {
   appearDailyReport:boolean;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
-              private loginServ:LoginService, private loading:LoadingController, private alertCtrl: AlertController, private accountServ:AccountService) {
+              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

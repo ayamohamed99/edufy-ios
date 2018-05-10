@@ -12,11 +12,11 @@ export class NotificationService{
   localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
   localStoragePassword:string = 'LOCAL_STORAGE_PASSWORD';
 
-  RESTORENOTIFICATIONOPERATIONID = 5;
-  REMOVEARCHIVENOTIFICATIONOPERATIONID = 4;
-  ARCHIVENOTIFICATIONOPERATIONID = 3;
-  APPROVENOTIFICATIONOPERATIONID = 2;
-  UPDATENOTIFICATIONOPERATIONID = 1;
+  RESTORE_NOTIFICATION_OPERATION_ID = 5;
+  REMOVEARCHIVE_NOTIFICATION_OPERATION_ID = 4;
+  ARCHIVE_NOTIFICATION_OPERATION_ID = 3;
+  APPROVE_NOTIFICATION_OPERATION_ID = 2;
+  UPDATE_NOTIFICATION_OPERATION_ID = 1;
 
   constructor(private http: HttpClient,platform:Platform,storage:Storage) {
 
@@ -49,7 +49,9 @@ export class NotificationService{
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    return this.http.get(this.commonUrl+'/webApp.ent?page=' + pageNumber + '&userId=' + userId + '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId=' + tagId,this.httpOptions);
+    return this.http.get(this.commonUrl+'/webApp.ent?page=' + pageNumber + '&userId=' + userId +
+      '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
+      + tagId,this.httpOptions);
   }
 
   updateNotification(id:number,title:string,body:string){
@@ -59,15 +61,18 @@ export class NotificationService{
       "id": id
     };
 
-    return this.http.put(this.commonUrl+'?operationId='+this.UPDATENOTIFICATIONOPERATIONID,newNotification,this.httpOptions);
+    return this.http.put(this.commonUrl+'?operationId='+this.UPDATE_NOTIFICATION_OPERATION_ID,
+      newNotification,this.httpOptions);
   }
 
   deleteNotification(id:string){
-    return this.http.delete(this.commonUrl+'?id='+id,this.httpOptions);
+    return this.http.delete(this.commonUrl+'?id='
+      +id,this.httpOptions);
   }
 
   getNotificationReceivers(notificationId:number){
-    return this.http.get(this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='+notificationId,this.httpOptions);
+    return this.http.get(this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='
+      +notificationId,this.httpOptions);
   }
 
 }

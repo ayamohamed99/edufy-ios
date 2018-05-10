@@ -16,6 +16,7 @@ import {ProfilePage} from "../pages/profile/profile";
 import {NotificationNewPage} from "../pages/notification-new/notification-new";
 import {RlTagInputModule} from "angular2-tag-input/dist";
 import {NotificationService} from "../services/notification";
+import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
 
 
 
@@ -25,7 +26,8 @@ import {NotificationService} from "../services/notification";
     ProfilePage,
     HomePage,
     NotificationPage,
-    NotificationNewPage
+    NotificationNewPage,
+    PopoverNotificationCardPage
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import {NotificationService} from "../services/notification";
     ProfilePage,
     HomePage,
     NotificationPage,
-    NotificationNewPage
+    NotificationNewPage,
+    PopoverNotificationCardPage
   ],
   providers: [
     StatusBar,

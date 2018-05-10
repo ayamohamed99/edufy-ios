@@ -52,7 +52,7 @@ export class HomePage {
         console.log("POST call in error", err);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.statusText,
+          subTitle: err.message,
           buttons: ['OK']
         }).present();
 
@@ -105,7 +105,7 @@ export class HomePage {
         console.log("POST call in error", err);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.statusText,
+          subTitle: err.message,
           buttons: ['OK']
         }).present();
 
@@ -124,7 +124,7 @@ export class HomePage {
         console.log("POST call in error", err);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.statusText,
+          subTitle: err.message,
           buttons: ['OK']
         }).present();
       },
@@ -147,7 +147,7 @@ export class HomePage {
         console.log("POST call in error", err);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.statusText,
+          subTitle: err.message,
           buttons: ['OK']
         }).present();
       },

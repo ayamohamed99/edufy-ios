@@ -50,6 +50,9 @@ export class NotificationNewPage {
     console.log('ionViewDidLoad NotificationNewPage');
   }
 
+  close(){
+    this.viewCtrl.dismiss({name:'dismissed'});
+  }
 
 }
 
