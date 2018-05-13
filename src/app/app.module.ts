@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
-import {LoginService} from "../services/login_service";
+import {LoginService} from "../services/login";
 import {HttpClientModule} from "@angular/common/http";
 
 import { MyApp } from './app.component';
@@ -17,6 +17,7 @@ import {NotificationNewPage} from "../pages/notification-new/notification-new";
 import {RlTagInputModule} from "angular2-tag-input/dist";
 import {NotificationService} from "../services/notification";
 import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
+import {SettingsPage} from "../pages/settings/settings";
 
 
 
@@ -27,7 +28,8 @@ import {PopoverNotificationCardPage} from "../pages/notification/popover_notific
     HomePage,
     NotificationPage,
     NotificationNewPage,
-    PopoverNotificationCardPage
+    PopoverNotificationCardPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +45,8 @@ import {PopoverNotificationCardPage} from "../pages/notification/popover_notific
     HomePage,
     NotificationPage,
     NotificationNewPage,
-    PopoverNotificationCardPage
+    PopoverNotificationCardPage,
+    SettingsPage
   ],
   providers: [
     StatusBar,

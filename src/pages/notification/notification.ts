@@ -5,7 +5,7 @@ import {
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
-import {Notifications} from "../../modules/notifications";
+import {Notifications} from "../../modles/notifications";
 
 
 @IonicPage()

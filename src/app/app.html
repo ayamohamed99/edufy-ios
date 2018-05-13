@@ -28,7 +28,12 @@
         </button>
 
 
-        <ion-item-divider color="light">Log Out</ion-item-divider>
+        <ion-item-divider color="light">Tools</ion-item-divider>
+
+        <button ion-item icon-left (click)="onLoad(settingsPage)" text-center>
+          <ion-icon name="cog"></ion-icon>
+          Setting
+        </button>
 
         <button ion-item icon-left (click)="onSignOut()" text-center>
           <ion-icon name="log-out"></ion-icon>

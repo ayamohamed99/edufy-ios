@@ -9,5 +9,6 @@ import {PopoverNotificationCardPage} from "./popovernotificationcard";
   imports: [
     IonicPageModule.forChild(PopoverNotificationCardPage),
   ],
+    
 })
 export class PopoverNotificationCardPageModule {}

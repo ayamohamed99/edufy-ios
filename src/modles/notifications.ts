@@ -1,6 +1,3 @@
-
-
-
 export class Notifications{
   attachmentsList:any = [];
   body:string;
