@@ -104,6 +104,7 @@ export class MyApp {
     }else {
       this.storage.clear();
     }
+    this.menu.close();
     this.rootPage = this.homePage;
   }
 
@@ -122,7 +123,7 @@ export class MyApp {
 
   startLogIn(){
     this.load = this.loading.create({
-      content: 'Please wait...'
+      content: 'Login now...'
     });
     this.load.present();
 

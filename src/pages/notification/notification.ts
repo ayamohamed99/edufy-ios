@@ -18,10 +18,11 @@ export class NotificationPage {
   notifications:Notifications[] = [];
   notificationPage=0;
   loading:any;
+  fristOpen:boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public alrtCtrl:AlertController,
-              public modalCtrl: ModalController,public notiServ:NotificationService,public popoverCtrl: PopoverController,
-              public load:LoadingController) {
+  constructor(private navCtrl: NavController, private navParams: NavParams,private alrtCtrl:AlertController,
+              private modalCtrl: ModalController,private notificationService:NotificationService,
+              private popoverCtrl: PopoverController, private load:LoadingController) {
     this.notificationPage += this.notificationPage + 1;
     this.getNotifications(this.notificationPage,0,0,null,null,null,0);
   }
@@ -43,11 +44,14 @@ export class NotificationPage {
   }
 
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    this.loading = this.load.create({
-      content: 'Please wait...'
-    });
-    this.loading.present();
-    this.notiServ.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
+    if(this.fristOpen) {
+      this.loading = this.load.create({
+        content: 'Loading Notification...'
+      });
+      this.loading.present();
+      this.fristOpen = false;
+    }
+    this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);
         let allData:any = data;
@@ -97,7 +101,7 @@ export class NotificationPage {
 
 
   // updatesNotification(){
-  //   this.notiServ.updateNotification(6094,'test','test').subscribe(
+  //   this.notificationService.updateNotification(6094,'test','test').subscribe(
   //     (data) => {
   //       console.log("Date Is", data);
   //     },
@@ -110,7 +114,7 @@ export class NotificationPage {
   // }
 
   // notificationsReciver(){
-  //   this.notiServ.getNotificationReceivers(6094).subscribe(
+  //   this.notificationService.getNotificationReceivers(6094).subscribe(
   //     (data) => {
   //       console.log("Date Is", data);
   //     },

@@ -18,25 +18,25 @@ export class NotificationService{
   APPROVE_NOTIFICATION_OPERATION_ID = 2;
   UPDATE_NOTIFICATION_OPERATION_ID = 1;
 
-  constructor(private http: HttpClient,platform:Platform,storage:Storage) {
+  constructor(private http: HttpClient,platform:Platform,storage:Storage)
+  {
 
     let subHeader:string;
-    if(platform.is('core')){
+    if(platform.is('core'))
+    {
       subHeader = localStorage.getItem(this.localStorageToken);
     }else {
       storage.get(this.localStorageToken).then(value => subHeader = value);
     }
 
     this.httpOptions =  {headers: new HttpHeaders({
-        // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
-        // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
-        // 'Accept':'application/json',
         'content-type':'application/json',
         'Authorization' : subHeader
       })};
   }
 
-  postNotification(title:string,body:string,attachment:any,notificationRecieversSet:any,selectedTags:any){
+  postNotification(title:string,body:string,attachment:any,notificationRecieversSet:any,selectedTags:any)
+  {
     const newNotification = {
       "title": title,
       "body": body,
@@ -48,13 +48,16 @@ export class NotificationService{
     return this.http.post(this.commonUrl,newNotification,this.httpOptions);
   }
 
-  getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
+  getNotification(pageNumber:number,userId:number,classId:number,approved:string,
+                  archived:string,sent:string,tagId:number)
+  {
     return this.http.get(this.commonUrl+'/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
       + tagId,this.httpOptions);
   }
 
-  updateNotification(id:number,title:string,body:string){
+  updateNotification(id:number,title:string,body:string)
+  {
     const newNotification = {
       "title": title,
       "body": body,
@@ -65,12 +68,14 @@ export class NotificationService{
       newNotification,this.httpOptions);
   }
 
-  deleteNotification(id:string){
+  deleteNotification(id:string)
+  {
     return this.http.delete(this.commonUrl+'?id='
       +id,this.httpOptions);
   }
 
-  getNotificationReceivers(notificationId:number){
+  getNotificationReceivers(notificationId:number)
+  {
     return this.http.get(this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='
       +notificationId,this.httpOptions);
   }

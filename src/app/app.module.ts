@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Network } from '@ionic-native/network';
 
 import {LoginService} from "../services/login";
 import {HttpClientModule} from "@angular/common/http";
@@ -54,7 +55,8 @@ import {SettingsPage} from "../pages/settings/settings";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginService,
     NotificationService,
-    AccountService
+    AccountService,
+    Network
   ]
 })
 export class AppModule {}

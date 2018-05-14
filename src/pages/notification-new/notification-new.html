@@ -14,29 +14,41 @@
 
 <ion-content padding>
 
-  <rl-tag-input padding
+  <rl-tag-input
     [(ngModel)]="topics"
     [addOnBlur]="false"
     [autocomplete]="true"
     [autocompleteItems]="preparedTags"
+    [addOnPaste]="false"
     placeholder="To :">
   </rl-tag-input>
 
-  <ion-input type="text" placeholder="Title"></ion-input>
+  <ion-input type="text" id="titleBox" required placeholder="Title"></ion-input>
 
-  <ion-textarea rows="6"  [type]="text" spellcheck placeholder="Details" ></ion-textarea>
+  <ion-textarea rows="6" [type]="text" spellcheck placeholder="Details" ></ion-textarea>
 
+  <ion-item>
+    <ion-label class="textColor">Select Tag</ion-label>
+    <ion-select [(ngModel)]="tags" multiple interface="popover">
+      <ion-option>Bacon</ion-option>
+      <ion-option>Black Olives</ion-option>
+      <ion-option>Extra Cheese</ion-option>
+      <ion-option>Mushrooms</ion-option>
+      <ion-option>Pepperoni</ion-option>
+      <ion-option>Sausage</ion-option>
 
-
-
+    </ion-select>
+  </ion-item>
 
 
 </ion-content>
 <ion-footer>
-  <div col-8></div>
-  <div col-4>
-      <button ion-button item-end color="danger" (click)="deleteNotification()">Cancel</button>
-     <button ion-button item-end (click)="sendNotification()">Send</button>
+  <ion-row>
+  <div col-xl-8 col-lg-8 col-md-8 col-sm-8 col-4></div>
+  <div col-xl-4 col-lg-4 col-md-4 col-sm-4 col-8>
+      <button ion-button item-end color="danger" (click)="close()">Cancel</button>
+     <button ion-button item-end [disabled]="!activeSend()" (click)="sendNotification()">Send</button>
   </div>
+  </ion-row>
 </ion-footer>
 

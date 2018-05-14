@@ -33,7 +33,7 @@ export class HomePage {
 
   startLogIn(){
     this.load = this.loading.create({
-      content: 'Please wait...'
+      content: 'Login now...'
     });
     this.load.present();
 
