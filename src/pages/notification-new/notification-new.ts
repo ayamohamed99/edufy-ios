@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {IonicPage, ToastController, ViewController} from 'ionic-angular';
+import {IonicPage, Platform, ToastController, ViewController} from 'ionic-angular';
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
 
@@ -28,31 +28,45 @@ export class NotificationNewPage {
     '#CrossPlatform'
   ];
 
-  constructor(public viewCtrl: ViewController,public notiServ:NotificationService, public network:Network,
-              private toastCtrl: ToastController)
+  constructor(public viewCtrl: ViewController,public notiServ:NotificationService, public network:Network,private toastCtrl: ToastController, private platform:Platform)
   {
-    this.isConnected();
+    console.log('NetWork '+network.type);
+
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => console.log('network was disconnected :-('));
+    console.log('Network '+disconnectSubscription );
+
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+      console.log('network connected!');
+      setTimeout(() => {
+        if (this.network.type === 'wifi') {
+          console.log('we got a wifi connection, woohoo!');
+        }
+      }, 3000);
+    });
+    console.log('Network '+connectSubscription );
   }
 
-  isConnected(): boolean {
-    let conntype = this.network.type;
-    return conntype && conntype !== 'unknown' && conntype !== 'none';
-  }
   sendNotification() {
 
-    if(this.isConnected()){
+    if (this.network.type === 'wifi' && !this.platform.is('core')) {
       this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification('debug this mohamed','debug this mohamed please',null,null,null).subscribe(
+      this.notiServ.postNotification('debug this mohamed', 'debug this mohamed please', null, null, null).subscribe(
         (data) => {
           console.log("Date Is", data);
         },
-        err => {
-          console.log("POST call in error", err);
+        err => console.log("POST call in error", err),
+        () => console.log("The POST observable is now completed."));
+    } else if (this.platform.is('core')){
+
+      this.talks.push({name: this.name, topics: this.topics});
+      this.notiServ.postNotification('debug this mohamed', 'debug this mohamed please', null, null, null).subscribe(
+        (data) => {
+          console.log("Date Is", data);
         },
-        () => {
-          console.log("The POST observable is now completed.");
-        });
+        err => console.log("POST call in error", err),
+        () => console.log("The POST observable is now completed."));
     }else{
+
       this.toastCtrl.create({
         message: 'NO Internet connection',
         position: 'bottom',

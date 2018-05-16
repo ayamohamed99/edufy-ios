@@ -7,10 +7,10 @@ import {Storage} from "@ionic/storage";
 export class NotificationService{
 
   commonUrl= '/authentication/notification.ent';
-  httpOptions:any;
-  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+
   localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
   localStoragePassword:string = 'LOCAL_STORAGE_PASSWORD';
+  httpOptions:any;
 
   RESTORE_NOTIFICATION_OPERATION_ID = 5;
   REMOVEARCHIVE_NOTIFICATION_OPERATION_ID = 4;
@@ -21,18 +21,15 @@ export class NotificationService{
   constructor(private http: HttpClient,platform:Platform,storage:Storage)
   {
 
-    let subHeader:string;
-    if(platform.is('core'))
-    {
-      subHeader = localStorage.getItem(this.localStorageToken);
-    }else {
-      storage.get(this.localStorageToken).then(value => subHeader = value);
-    }
+  }
 
-    this.httpOptions =  {headers: new HttpHeaders({
-        'content-type':'application/json',
-        'Authorization' : subHeader
-      })};
+  putHeader(value){
+    this.httpOptions = {
+            headers: new HttpHeaders({
+              'content-type': 'application/json',
+              'Authorization': value
+            })
+    };
   }
 
   postNotification(title:string,body:string,attachment:any,notificationRecieversSet:any,selectedTags:any)
@@ -45,6 +42,7 @@ export class NotificationService{
       "receiversList": notificationRecieversSet,
       "tagsList": selectedTags
     };
+
     return this.http.post(this.commonUrl,newNotification,this.httpOptions);
   }
 
@@ -54,7 +52,7 @@ export class NotificationService{
     let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
       + tagId;
-    return this.http.get(this.commonUrl+st,this.httpOptions);
+    return this.http.get(this.commonUrl + st, this.httpOptions);
   }
 
   updateNotification(id:number,title:string,body:string)
@@ -64,15 +62,13 @@ export class NotificationService{
       "body": body,
       "id": id
     };
-
     return this.http.put(this.commonUrl+'?operationId='+this.UPDATE_NOTIFICATION_OPERATION_ID,
-      newNotification,this.httpOptions);
+            newNotification,this.httpOptions);
   }
 
   deleteNotification(id:string)
   {
-    return this.http.delete(this.commonUrl+'?id='
-      +id,this.httpOptions);
+    return this.http.delete(this.commonUrl+'?id='+id,this.httpOptions);
   }
 
   getNotificationReceivers(notificationId:number)

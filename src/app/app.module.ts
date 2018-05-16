@@ -19,6 +19,7 @@ import {RlTagInputModule} from "angular2-tag-input/dist";
 import {NotificationService} from "../services/notification";
 import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
 import {SettingsPage} from "../pages/settings/settings";
+import {NativeStorage} from "@ionic-native/native-storage";
 
 
 
@@ -56,7 +57,7 @@ import {SettingsPage} from "../pages/settings/settings";
     LoginService,
     NotificationService,
     AccountService,
-    Network
+    Network,NativeStorage
   ]
 })
 export class AppModule {}

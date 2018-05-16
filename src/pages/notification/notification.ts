@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, ModalController, PopoverController
+  AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
 } from 'ionic-angular';
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
 import {Notifications} from "../../modles/notifications";
+import {Storage} from "@ionic/storage";
 
 
 @IonicPage()
@@ -19,11 +20,24 @@ export class NotificationPage {
   notificationPage=1;
   loading:any;
   fristOpen:boolean = true;
+  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
 
-  constructor(private alrtCtrl:AlertController,
+  constructor(private alrtCtrl:AlertController,platform:Platform,storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController) {
-    this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+    if(platform.is('core'))
+    {
+
+      notificationService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+    }else {
+      storage.get(this.localStorageToken).then(
+        val=>{
+          notificationService.putHeader(val);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        });
+    }
+
   }
 
 
@@ -50,6 +64,7 @@ export class NotificationPage {
       this.loading.present();
       this.fristOpen = false;
     }
+
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);

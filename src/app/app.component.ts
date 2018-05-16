@@ -50,16 +50,17 @@ export class MyApp {
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
       }else{
-        storage.ready().then(() => {
+          storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> console.log('ERROR'+err)).catch((err)=> console.log('ERROR'+err));;
+          storage.get(this.loginServ.localStoragePassword).then(
+            value =>{
+              this.password = value
+              if((this.userName != null || this.userName != '') && (this.password != null || this.password != '')){
+                this.startLogIn();
+              }else {
+                this.rootPage = this.homePage;
+              }
 
-          storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value);
-          storage.get(this.loginServ.localStoragePassword).then(value => this.password = value);
-          if((this.userName != null || this.userName != '') && (this.password != null || this.password != '')){
-            this.startLogIn();
-          }else {
-            this.rootPage = this.homePage;
-          }
-        });
+            });
       }
 
       if((this.userName != null || this.userName != '') && (this.password != null || this.password != '') &&
