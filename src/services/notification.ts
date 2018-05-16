@@ -51,9 +51,10 @@ export class NotificationService{
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,
                   archived:string,sent:string,tagId:number)
   {
-    return this.http.get(this.commonUrl+'/webApp.ent?page=' + pageNumber + '&userId=' + userId +
+    let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
-      + tagId,this.httpOptions);
+      + tagId;
+    return this.http.get(this.commonUrl+st,this.httpOptions);
   }
 
   updateNotification(id:number,title:string,body:string)

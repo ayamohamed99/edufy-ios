@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, ModalController, NavController, NavParams, PopoverController
+  AlertController, IonicPage, LoadingController, ModalController, PopoverController
 } from 'ionic-angular';
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
@@ -16,14 +16,13 @@ import {Notifications} from "../../modles/notifications";
 export class NotificationPage {
 
   notifications:Notifications[] = [];
-  notificationPage=0;
+  notificationPage=1;
   loading:any;
   fristOpen:boolean = true;
 
-  constructor(private navCtrl: NavController, private navParams: NavParams,private alrtCtrl:AlertController,
+  constructor(private alrtCtrl:AlertController,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController) {
-    this.notificationPage += this.notificationPage + 1;
     this.getNotifications(this.notificationPage,0,0,null,null,null,0);
   }
 
