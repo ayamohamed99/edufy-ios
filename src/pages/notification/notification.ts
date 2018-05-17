@@ -22,12 +22,10 @@ export class NotificationPage {
   fristOpen:boolean = true;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
 
-  constructor(private alrtCtrl:AlertController,platform:Platform,storage:Storage,
+  constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController) {
-    if(platform.is('core'))
-    {
-
+    if(platform.is('core')) {
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage,0,0,null,null,null,0);
     }else {
@@ -45,11 +43,41 @@ export class NotificationPage {
     console.log('ionViewDidLoad NotificationPage');
   }
 
-  onSelectCard(event:Event){
-    let popover = this.popoverCtrl.create(PopoverNotificationCardPage);
+
+  onSelectCard(event:Event, id:number, title:string, details:string, i:any){
+    let popover = this.popoverCtrl.create(PopoverNotificationCardPage, {id:id, title:title, details:details});
     popover.present({ev: event});
+    popover.onDidDismiss(data => {
+      console.log(data);
+      if(data.done == 'deleteSuccess') {
+
+        console.log(i);
+        this.notifications.splice(i, 1);
+
+      }else if (data.done == 'updateSuccess'){
+
+        console.log(data.done);
+
+      }else if(data.done == 'newSuccess'){
+
+        console.log(data.done);
+
+      }
+    });
   }
 
+  callAgain(){
+    if(this.platform.is('core')) {
+      this.notificationService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+    }else {
+      this.storage.get(this.localStorageToken).then(
+        val=>{
+          this.notificationService.putHeader(val);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        });
+    }
+  }
 
   onOpenView() {
     let model = this.modalCtrl.create(NotificationNewPage);
@@ -74,7 +102,7 @@ export class NotificationPage {
           notify.attachmentsList = value.attachmentslist;
           notify.body = value.body;
           notify.dateTime =  value.dateTime;
-          notify.notificationId = value.notificationId;
+          notify.notificationId = value.id;
           notify.title = value.title;
           notify.receiversList = value.receiversList;
           notify.senderName = value.senderName;
@@ -113,20 +141,6 @@ export class NotificationPage {
   }
 
 
-
-  // updatesNotification(){
-  //   this.notificationService.updateNotification(6094,'test','test').subscribe(
-  //     (data) => {
-  //       console.log("Date Is", data);
-  //     },
-  //     err => {
-  //       console.log("POST call in error", err);
-  //     },
-  //     () => {
-  //       console.log("The POST observable is now completed.");
-  //     });
-  // }
-
   // notificationsReciver(){
   //   this.notificationService.getNotificationReceivers(6094).subscribe(
   //     (data) => {
@@ -139,4 +153,5 @@ export class NotificationPage {
   //       console.log("The POST observable is now completed.");
   //     });
   // }
+
 }
