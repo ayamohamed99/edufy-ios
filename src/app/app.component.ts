@@ -189,7 +189,7 @@ export class MyApp {
       err => {
         this.load.dismiss();
         console.log("POST call in error", err);
-        this.nav.setRoot(this.homePage);;
+        this.nav.setRoot(this.homePage);
       });
   }
 
@@ -214,8 +214,9 @@ export class MyApp {
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
       (data) => {
         console.log("full token Date Is", this.toKenFull);
-        console.log("Date Is", data);
+        console.log("Date Is R", data);
         this.accountServ.setDate(data);
+        this.accountServ.getTags(this.fullToken());
         this.setNameInMenu(this.accountServ.getUserName());
         this.knowFeatures(this.accountServ.getAccountFeature());
         this.load.dismiss();

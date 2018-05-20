@@ -1,0 +1,36 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-buttons end>
+      <button ion-button icon-only (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Edit Notification</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <form #updateForm="ngForm" (ngSubmit)="updateNotify(updateForm)">
+    <ion-list>
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="notificationTitle" name="notifyTitle" id="titleBox" required [value]="notificationTitle" placeholder="Title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-textarea rows="6" [(ngModel)]="notificationDetails" name="notifyDetails" id="detailsBox" [value]="notificationDetails" [type]="text" required placeholder="Details" ></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-col col-6>
+          <button ion-button block item-end [disabled]="!updateForm.form.valid" type="submit">Send</button>
+        </ion-col>
+        <ion-col col-6>
+          <button ion-button block item-end color="danger" (click)="close()">Cancel</button>
+        </ion-col>
+      </ion-item>
+    </ion-list>
+  </form>
+
+</ion-content>
+

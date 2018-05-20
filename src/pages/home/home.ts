@@ -140,6 +140,7 @@ export class HomePage {
         console.log("full token Date Is", this.toKenFull);
         console.log("Date Is", data);
         this.accountServ.setDate(data);
+        this.accountServ.getTags(this.fullToken());
         this.navCtrl.setRoot(ProfilePage);
       },
       err => {

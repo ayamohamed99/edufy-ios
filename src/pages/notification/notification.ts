@@ -7,6 +7,8 @@ import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
 import {Notifications} from "../../modles/notifications";
 import {Storage} from "@ionic/storage";
+import {NotificationEditPage} from "./popover_notification/notification-edit/notification-edit";
+import {AccountService} from "../../services/account";
 
 
 @IonicPage()
@@ -21,21 +23,25 @@ export class NotificationPage {
   loading:any;
   fristOpen:boolean = true;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+  tokenKey:string;
+  tagsArr:any = [];
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
-              private popoverCtrl: PopoverController, private load:LoadingController) {
+              private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService) {
     if(platform.is('core')) {
+      this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage,0,0,null,null,null,0);
     }else {
       storage.get(this.localStorageToken).then(
         val=>{
+          this.tokenKey = val;
           notificationService.putHeader(val);
           this.getNotifications(this.notificationPage,0,0,null,null,null,0);
         });
     }
-
+    this.tagsArr = accService.accountBranchesList;
   }
 
 
@@ -43,40 +49,51 @@ export class NotificationPage {
     console.log('ionViewDidLoad NotificationPage');
   }
 
-
   onSelectCard(event:Event, id:number, title:string, details:string, i:any){
     let popover = this.popoverCtrl.create(PopoverNotificationCardPage, {id:id, title:title, details:details});
-    popover.present({ev: event});
+
     popover.onDidDismiss(data => {
       console.log(data);
-      if(data.done == 'deleteSuccess') {
+      if(data.done === 'deleteSuccess') {
+        this.fristOpen = true;
+        this.notifications.splice(0)
+        this.notificationPage = 1;
 
-        console.log(i);
-        this.notifications.splice(i, 1);
+        this.notificationService.putHeader(this.tokenKey);
+        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
 
-      }else if (data.done == 'updateSuccess'){
-
+      }else if (data.done === 'updateSuccess'){
         console.log(data.done);
+        this.fristOpen = true;
 
-      }else if(data.done == 'newSuccess'){
+        let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
+          details:data.details});
+        model.onDidDismiss(()=>{
+          this.notifications.splice(0)
+          this.notificationPage = 1;
 
+          this.notificationService.putHeader(this.tokenKey);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        });
+        model.present();
+
+      }else if(data.done === 'newSuccess'){
+        this.fristOpen = true;
         console.log(data.done);
+        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details});
+        model.onDidDismiss(()=>{
+          this.notifications.splice(0)
+          this.notificationPage = 1;
+
+          this.notificationService.putHeader(this.tokenKey);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        });
+        model.present();
 
       }
     });
-  }
 
-  callAgain(){
-    if(this.platform.is('core')) {
-      this.notificationService.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-    }else {
-      this.storage.get(this.localStorageToken).then(
-        val=>{
-          this.notificationService.putHeader(val);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-        });
-    }
+    popover.present({ev: event});
   }
 
   onOpenView() {

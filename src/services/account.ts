@@ -12,6 +12,9 @@ export class AccountService{
   private userName:string;
   private userUserName:string;
   private userAddress:string;
+  private _accountBranchesList:any = [];
+  private _tagArry:any = [];
+  private Arry:any = [];
 
   constructor(private http: HttpClient) {}
 
@@ -38,7 +41,27 @@ export class AccountService{
     this.userName = this.value.name;
     this.userUserName = this.value.username;
     this.userAddress = this.value.address;
+    for(let branch of this.value.branchesList){
+      this._accountBranchesList.push(branch.id);
+    }
 
+  }
+
+  getTags(subHeader:string){
+    const httpOptions =  {headers: new HttpHeaders({
+        // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
+        // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
+        // 'Accept':'application/json',
+        // 'content-type':'application/json',
+        'Authorization' : subHeader
+      })};
+    this.http.get('/authentication/tag.ent?branchesIds=' + this._accountBranchesList,httpOptions).subscribe(value => {
+      console.log('Tags : '+value);
+      this.Arry = value;
+      for(let tag of this.Arry){
+        this._tagArry.push(tag.name);
+      }
+    });
   }
 
   getAccountFeature(){
@@ -65,6 +88,20 @@ export class AccountService{
   }
 
 
+  get accountBranchesList(): any {
+    return this._accountBranchesList;
+  }
+
+  set accountBranchesList(value: any) {
+    this._accountBranchesList = value;
+  }
 
 
+  get tagArry(): any {
+    return this._tagArry;
+  }
+
+  set tagArry(value: any) {
+    this._tagArry = value;
+  }
 }

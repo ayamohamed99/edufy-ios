@@ -30,13 +30,7 @@
   <ion-item>
     <ion-label class="textColor">Select Tag</ion-label>
     <ion-select [(ngModel)]="tags" multiple interface="popover">
-      <ion-option>Bacon</ion-option>
-      <ion-option>Black Olives</ion-option>
-      <ion-option>Extra Cheese</ion-option>
-      <ion-option>Mushrooms</ion-option>
-      <ion-option>Pepperoni</ion-option>
-      <ion-option>Sausage</ion-option>
-
+      <ion-option *ngFor="let tag of tagsArr; let i = index" >{{tag}}</ion-option>
     </ion-select>
   </ion-item>
 

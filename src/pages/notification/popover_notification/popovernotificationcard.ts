@@ -5,6 +5,7 @@ import {
 } from 'ionic-angular';
 import {NotificationService} from "../../../services/notification";
 import {Storage} from "@ionic/storage";
+import {NotificationNewPage} from "../../notification-new/notification-new";
 
 @IonicPage()
 @Component({
@@ -46,31 +47,9 @@ export class PopoverNotificationCardPage {
   }
 
   editNotification() {
-    this.loading = this.load.create({
-      content: 'Update this Notification...'
-    });
-    this.loading.present();
-    this.viewCtrl.dismiss({done:'updateSuccess'});
-    // this.notiServ.updateNotification(6094,'test','test').subscribe(
-    //   (data) => {
-    //     console.log("Date Is", data);
-    //
-    //     this.loading.dismiss();
-    //   },
-    //   err => {
-    //     console.log("POST call in error", err);
-    //     this.viewCtrl.dismiss({done:'updateFailed'});
-    //     this.loading.dismiss();
-    //     this.alrtCtrl.create( {
-    //       title: 'Error',
-    //       subTitle: err.message,
-    //       buttons: ['OK']
-    //     }).present();
-    //   },
-    //   () => {
-    //     console.log("The POST observable is now completed.");
-    //   });
-    this.loading.dismiss();
+    this.viewCtrl.dismiss({done:'updateSuccess',id:this.notificationID,title:this.notificationTitle,
+      details:this.notificationDetails});
+
     console.log("id: "+this.notificationID+", title: "+this.notificationTitle+", Details: "+this.notificationDetails);
   }
 
@@ -120,72 +99,8 @@ export class PopoverNotificationCardPage {
 
 
   newNotification(){
-    this.loading = this.load.create({
-      content: 'Sending this Notification again...'
-    });
-
-    this.loading.present();
-
     this.viewCtrl.dismiss({done:'newSuccess'});
-
-    // this.notiServ.postNotification('debug this mohamed', 'debug this mohamed please', null, null, null).subscribe(
-    //   (data) => {
-    //     console.log("Date Is", data);
-    //
-    //     this.loading.dismiss();
-
-    //   },
-    //   err => {
-    //     console.log("POST call in error", err);
-    //     this.loading.dismiss();
-    //     this.viewCtrl.dismiss({done:'newFailed'});
-    //     this.alrtCtrl.create( {
-    //       title: 'Error',
-    //       subTitle: err.message,
-    //       buttons: ['OK']
-    //     }).present();
-    //   },
-    //   () => {
-    //         console.log("The POST observable is now completed.");
-    //   });
-
-    this.loading.dismiss();
     console.log("title: "+this.notificationTitle+", Details: "+this.notificationDetails);
   }
-
-
-  presentPrompt() {
-    let alert = this.alertCtrl.create({
-      title: 'Login',
-      inputs: [
-        {
-          name: 'username',
-          placeholder: 'Username'
-        },
-        {
-          name: 'password',
-          placeholder: 'Password',
-          type: 'password'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Login',
-          handler: data => {
-            console.log(data.username, data.password);
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
 
 }

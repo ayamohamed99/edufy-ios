@@ -20,6 +20,7 @@ import {NotificationService} from "../services/notification";
 import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
 import {SettingsPage} from "../pages/settings/settings";
 import {NativeStorage} from "@ionic-native/native-storage";
+import {NotificationEditPage} from "../pages/notification/popover_notification/notification-edit/notification-edit";
 
 
 
@@ -31,7 +32,8 @@ import {NativeStorage} from "@ionic-native/native-storage";
     NotificationPage,
     NotificationNewPage,
     PopoverNotificationCardPage,
-    SettingsPage
+    SettingsPage,
+    NotificationEditPage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +50,8 @@ import {NativeStorage} from "@ionic-native/native-storage";
     NotificationPage,
     NotificationNewPage,
     PopoverNotificationCardPage,
-    SettingsPage
+    SettingsPage,
+    NotificationEditPage
   ],
   providers: [
     StatusBar,

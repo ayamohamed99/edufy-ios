@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {IonicPage, Platform, ToastController, ViewController} from 'ionic-angular';
+import {IonicPage, NavParams, Platform, ToastController, ViewController} from 'ionic-angular';
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
+import {AccountService} from "../../services/account";
 
 
 @IonicPage()
@@ -11,6 +12,8 @@ import { Network } from '@ionic-native/network';
 })
 export class NotificationNewPage {
   topics = [];
+  Title:string;
+  Details:string;
   name: string;
   talks = [];
   tags = [];
@@ -28,8 +31,17 @@ export class NotificationNewPage {
     '#CrossPlatform'
   ];
 
-  constructor(public viewCtrl: ViewController,public notiServ:NotificationService, public network:Network,private toastCtrl: ToastController, private platform:Platform)
+  tagsArr = [];
+
+  constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
+              public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService)
   {
+
+    this.tagsArr = accServ.tagArry;
+    this.Title =this.navParams.get('title');
+    this.Details=this.navParams.get('details');
+
+
     console.log('NetWork '+network.type);
 
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => console.log('network was disconnected :-('));
