@@ -77,6 +77,11 @@ export class NotificationService{
       +notificationId,this.httpOptions);
   }
 
+  getClassList(){
+    return this.http.get('/authentication/class.ent?view=NOTIFICATION' +
+      '&operationId=' + this.APPROVE_NOTIFICATION_OPERATION_ID,this.httpOptions);
+  }
+
 }
 
 

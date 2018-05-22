@@ -42,6 +42,9 @@ export class NotificationPage {
         });
     }
     this.tagsArr = accService.accountBranchesList;
+    this.notificationService.getClassList().subscribe((data)=>{
+      console.log(data);
+    });
   }
 
 
