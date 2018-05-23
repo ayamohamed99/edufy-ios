@@ -11,7 +11,7 @@ import {AccountService} from "../../services/account";
   templateUrl: 'notification-new.html',
 })
 export class NotificationNewPage {
-  topics = [];
+  sendTo = [];
   Title:string;
   Details:string;
   name: string;
@@ -61,8 +61,8 @@ export class NotificationNewPage {
   sendNotification() {
 
     if (this.network.type === 'wifi' && !this.platform.is('core')) {
-      this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification('debug this mohamed', 'debug this mohamed please', null, null, null).subscribe(
+      // this.talks.push({name: this.name, topics: this.topics});
+      this.notiServ.postNotification(this.Title, this.Details, null, null, this.tags).subscribe(
         (data) => {
           console.log("Date Is", data);
         },
@@ -70,8 +70,8 @@ export class NotificationNewPage {
         () => console.log("The POST observable is now completed."));
     } else if (this.platform.is('core')){
 
-      this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification('debug this mohamed', 'debug this mohamed please', null, null, null).subscribe(
+      // this.talks.push({name: this.name, topics: this.topics});
+      this.notiServ.postNotification(this.Title, this.Details, null, null, this.tags).subscribe(
         (data) => {
           console.log("Date Is", data);
         },
@@ -86,12 +86,9 @@ export class NotificationNewPage {
         closeButtonText:'OK',
 
       }).present();
+
     }
 
-  }
-
-  deleteNotification(){
-    this.talks.push({name: this.name, topics: this.topics});
   }
 
   close(){
@@ -101,5 +98,6 @@ export class NotificationNewPage {
   activeSend(){
     return true;
   }
+
 }
 

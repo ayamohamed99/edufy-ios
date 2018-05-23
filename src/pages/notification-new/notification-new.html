@@ -15,7 +15,7 @@
 <ion-content padding>
 
   <rl-tag-input
-    [(ngModel)]="topics"
+    [(ngModel)]="sendTo"
     [addOnBlur]="false"
     [autocomplete]="true"
     [autocompleteItems]="preparedTags"
@@ -23,9 +23,9 @@
     placeholder="To :">
   </rl-tag-input>
 
-  <ion-input type="text" id="titleBox" required placeholder="Title"></ion-input>
+  <ion-input type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></ion-input>
 
-  <ion-textarea rows="6" [type]="text" spellcheck placeholder="Details" ></ion-textarea>
+  <ion-textarea rows="6" [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></ion-textarea>
 
   <ion-item>
     <ion-label class="textColor">Select Tag</ion-label>

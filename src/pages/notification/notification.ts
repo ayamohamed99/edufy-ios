@@ -29,11 +29,15 @@ export class NotificationPage {
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService) {
+
     if(platform.is('core')) {
+
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+
     }else {
+
       storage.get(this.localStorageToken).then(
         val=>{
           this.tokenKey = val;
@@ -41,10 +45,13 @@ export class NotificationPage {
           this.getNotifications(this.notificationPage,0,0,null,null,null,0);
         });
     }
+
     this.tagsArr = accService.accountBranchesList;
     this.notificationService.getClassList().subscribe((data)=>{
       console.log(data);
-    });
+    },
+      err=> console.log(err));
+
   }
 
 
