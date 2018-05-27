@@ -14,14 +14,18 @@
 
 <ion-content padding>
 
-  <rl-tag-input
-    [(ngModel)]="sendTo"
-    [addOnBlur]="false"
-    [autocomplete]="true"
-    [autocompleteItems]="preparedTags"
-    [addOnPaste]="false"
-    placeholder="To :">
-  </rl-tag-input>
+  <!--<rl-tag-input-->
+    <!--[(ngModel)]="sendTo"-->
+    <!--(ngModelChange)="checkArray(selectedTag)"-->
+    <!--[addOnBlur]="false"-->
+    <!--[autocomplete]="true"-->
+    <!--[autocompleteItems]="preparedTags"-->
+    <!--placeholder="To :">-->
+  <!--</rl-tag-input>-->
+
+
+
+
 
   <ion-input type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></ion-input>
 
@@ -30,7 +34,7 @@
   <ion-item>
     <ion-label class="textColor">Select Tag</ion-label>
     <ion-select [(ngModel)]="tags" multiple interface="popover">
-      <ion-option *ngFor="let tag of tagsArr; let i = index" >{{tag}}</ion-option>
+      <ion-option *ngFor="let tag of tagsArr" >{{tag}}</ion-option>
     </ion-select>
   </ion-item>
 

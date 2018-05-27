@@ -3,6 +3,8 @@ import {IonicPage, NavParams, Platform, ToastController, ViewController} from 'i
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
 import {AccountService} from "../../services/account";
+import {Classes} from "../../modles/classes";
+import {Students} from "../../modles/students";
 
 
 @IonicPage()
@@ -17,21 +19,13 @@ export class NotificationNewPage {
   name: string;
   talks = [];
   tags = [];
-  preparedTags = [
-    '#Ionic',
-    '#Angular',
-    '#Javascript',
-    '#Java',
-    '#Swift',
-    '#Android',
-    '#IOS',
-    '#Objective C',
-    '#Mobile',
-    '#Hybrid',
-    '#CrossPlatform'
-  ];
+  preparedTags = [ 'All Classes'];
 
   tagsArr = [];
+
+  allClasses = [];
+  allStudentNames=[];
+  allStudentsDetails=[];
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService)
@@ -40,7 +34,19 @@ export class NotificationNewPage {
     this.tagsArr = accServ.tagArry;
     this.Title =this.navParams.get('title');
     this.Details=this.navParams.get('details');
+    this.allClasses=this.navParams.get('classesList');
+    this.allStudentNames=this.navParams.get('studetsNameList');
+    this.allStudentsDetails=this.navParams.get('studentsdetailsList');
 
+    let classes = new Classes();
+    for (classes of this.allClasses){
+      this.preparedTags.push(classes.className);
+    }
+
+    let student = new Students();
+    for(student of this.allStudentsDetails) {
+      this.preparedTags.push(student.studentName);
+    }
 
     console.log('NetWork '+network.type);
 
@@ -62,7 +68,7 @@ export class NotificationNewPage {
 
     if (this.network.type === 'wifi' && !this.platform.is('core')) {
       // this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification(this.Title, this.Details, null, null, this.tags).subscribe(
+      this.notiServ.postNotification(this.Title, this.Details, null, this.sendTo, this.tags).subscribe(
         (data) => {
           console.log("Date Is", data);
         },
@@ -71,12 +77,16 @@ export class NotificationNewPage {
     } else if (this.platform.is('core')){
 
       // this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification(this.Title, this.Details, null, null, this.tags).subscribe(
+      this.notiServ.postNotification(this.Title, this.Details, null, null, null).subscribe(
         (data) => {
           console.log("Date Is", data);
         },
-        err => console.log("POST call in error", err),
-        () => console.log("The POST observable is now completed."));
+        err => {
+          console.log("POST call in error", err)
+        },
+            () =>{
+          console.log("The POST observable is now completed.")
+        });
     }else{
 
       this.toastCtrl.create({
@@ -96,8 +106,26 @@ export class NotificationNewPage {
   }
 
   activeSend(){
-    return true;
+    if(this.sendTo.length <= 0){
+      return false;
+    }else{
+      return true;
+    }
   }
+
+  checkArray(){
+    if(this.sendTo.some(x => x === "All Classes")){
+      this.sendTo.splice(0);
+      this.sendTo.push('All Classes')
+    }
+  }
+
+
+
+
+
+
+
 
 }
 

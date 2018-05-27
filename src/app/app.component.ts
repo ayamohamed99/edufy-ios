@@ -238,7 +238,8 @@ export class MyApp {
 
   knowFeatures(data:any){
     this.appearNotification = data.notificationActivated;
-    this.appearDailyReport = data.dailyReportActivated;
+    this.appearDailyReport = false;
+    // this.appearDailyReport = data.dailyReportActivated;
   }
 }
 
