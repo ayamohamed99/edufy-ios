@@ -9,6 +9,9 @@ import {Notifications} from "../../modles/notifications";
 import {Storage} from "@ionic/storage";
 import {NotificationEditPage} from "./popover_notification/notification-edit/notification-edit";
 import {AccountService} from "../../services/account";
+import {Classes} from "../../modles/classes";
+import {StudentsService} from "../../services/students";
+import {Students} from "../../modles/students";
 
 
 @IonicPage()
@@ -26,16 +29,20 @@ export class NotificationPage {
   tokenKey:string;
   tagsArr:any = [];
 
+  classes = [];
+  studentsName:any = [];
+  studentwithClass:any = [];
+
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
-              private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService) {
+              private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
+              private studentService:StudentsService) {
 
     if(platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-
     }else {
 
       storage.get(this.localStorageToken).then(
@@ -47,13 +54,25 @@ export class NotificationPage {
     }
 
     this.tagsArr = accService.accountBranchesList;
-    this.notificationService.getClassList().subscribe((data)=>{
-      console.log(data);
+    this.notificationService.getClassList().subscribe((value)=>{
+      let allData:any = value;
+      for(let data of allData){
+        let item = new Classes();
+        console.log(value);
+        item.classId = data.id;
+        item.className = this.fullString(data.grade.name, data.name);
+
+
+        this.classes.push(item);
+      }
     },
       err=> console.log(err));
 
   }
 
+  fullString(fristPart:string, secoundPart:string){
+    return fristPart+' '+secoundPart;
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationPage');
@@ -64,9 +83,12 @@ export class NotificationPage {
 
     popover.onDidDismiss(data => {
       console.log(data);
+      if(data == null) {
+        console.log('dissmiss');
+      }else{
       if(data.done === 'deleteSuccess') {
         this.fristOpen = true;
-        this.notifications.splice(0)
+        this.notifications.splice(0);
         this.notificationPage = 1;
 
         this.notificationService.putHeader(this.tokenKey);
@@ -79,7 +101,7 @@ export class NotificationPage {
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
           details:data.details});
         model.onDidDismiss(()=>{
-          this.notifications.splice(0)
+          this.notifications.splice(0);
           this.notificationPage = 1;
 
           this.notificationService.putHeader(this.tokenKey);
@@ -90,9 +112,10 @@ export class NotificationPage {
       }else if(data.done === 'newSuccess'){
         this.fristOpen = true;
         console.log(data.done);
-        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details});
+        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
+          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
         model.onDidDismiss(()=>{
-          this.notifications.splice(0)
+          this.notifications.splice(0);
           this.notificationPage = 1;
 
           this.notificationService.putHeader(this.tokenKey);
@@ -101,13 +124,15 @@ export class NotificationPage {
         model.present();
 
       }
+      }
     });
 
     popover.present({ev: event});
   }
 
   onOpenView() {
-    let model = this.modalCtrl.create(NotificationNewPage);
+    let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
+      studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
     model.present();
   }
 
@@ -136,7 +161,21 @@ export class NotificationPage {
 
           this.notifications.push(notify);
         }
-        this.loading.dismiss();
+
+        if(this.platform.is('core')) {
+
+          this.tokenKey = localStorage.getItem(this.localStorageToken);
+          this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+          this.getAllStudent();
+        }else {
+
+          this.storage.get(this.localStorageToken).then(
+            val=>{
+              this.tokenKey = val;
+              this.studentService.putHeader(val);
+              this.getAllStudent();
+            });
+        }
       },
       err => {
         console.log("POST call in error", err);
@@ -167,6 +206,46 @@ export class NotificationPage {
     })
   }
 
+  getAllStudent(){
+    this.studentService.getAllStudents('Notification').subscribe(
+      (val)=>{
+       console.log(val);
+       let data:any = val;
+       for (let value of data){
+         let students=new Students();
+
+         students.branchId = value.branchId;
+         students.classesId = value.classes.id;
+         students.ClassName = value.classes.name;
+         students.gradeId = value.classes.grade.id;
+         students.gradeName = value.classes.grade.name;
+         students.studentId = value.id;
+         students.studentName = value.name;
+         students.studentAddress = value.address;
+         students.classGradName = this.fullString(value.classes.grade.name, value.classes.name);
+
+         this.studentsName.push(value.name);
+         this.studentwithClass.push(students);
+         console.log(students);
+       }
+
+       console.log(this.studentwithClass.count);
+
+       console.log(this.studentsName);
+
+        console.log(this.studentwithClass);
+       this.loading.dismiss();
+      },
+      err=>{
+        console.log('GetAllStudent Error: '+err);
+        this.alrtCtrl.create( {
+          title: 'Error',
+          subTitle: 'Something went wrong, please refresh the page',
+          buttons: ['OK']
+        }).present();
+        this.loading.dismiss();
+      });
+  }
 
   // notificationsReciver(){
   //   this.notificationService.getNotificationReceivers(6094).subscribe(

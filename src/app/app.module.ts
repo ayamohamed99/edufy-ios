@@ -21,6 +21,7 @@ import {PopoverNotificationCardPage} from "../pages/notification/popover_notific
 import {SettingsPage} from "../pages/settings/settings";
 import {NativeStorage} from "@ionic-native/native-storage";
 import {NotificationEditPage} from "../pages/notification/popover_notification/notification-edit/notification-edit";
+import {StudentsService} from "../services/students";
 
 
 
@@ -60,7 +61,8 @@ import {NotificationEditPage} from "../pages/notification/popover_notification/n
     LoginService,
     NotificationService,
     AccountService,
-    Network,NativeStorage
+    Network,NativeStorage,
+    StudentsService
   ]
 })
 export class AppModule {}
