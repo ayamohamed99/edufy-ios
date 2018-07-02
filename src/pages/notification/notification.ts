@@ -61,7 +61,8 @@ export class NotificationPage {
         console.log(value);
         item.classId = data.id;
         item.className = this.fullString(data.grade.name, data.name);
-
+        item.branchId = data.branch.id;
+        item.branchName = data.branch.name;
 
         this.classes.push(item);
       }

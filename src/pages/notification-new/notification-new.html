@@ -14,14 +14,16 @@
 
 <ion-content padding>
 
-  <!--<rl-tag-input-->
-    <!--[(ngModel)]="sendTo"-->
-    <!--(ngModelChange)="checkArray(selectedTag)"-->
-    <!--[addOnBlur]="false"-->
-    <!--[autocomplete]="true"-->
-    <!--[autocompleteItems]="preparedTags"-->
-    <!--placeholder="To :">-->
-  <!--</rl-tag-input>-->
+  <rl-tag-input
+    [(ngModel)]="sendTo"
+    (ngModelChange)="checkArray(selectedTag)"
+    [addOnBlur]="false"
+    [autocomplete]="true"
+    [autocompleteOprations]="autocompleteArray"
+    [autocompleteItems]="preparedTags"
+    placeholder="To :">
+  </rl-tag-input>
+
 
 
 
@@ -37,6 +39,16 @@
       <ion-option *ngFor="let tag of tagsArr" >{{tag}}</ion-option>
     </ion-select>
   </ion-item>
+
+  <div style="height: 16px; background-color: white"></div>
+
+  <ion-slides pager style="height: 50%; padding: 8px">
+
+    <ion-slide *ngFor="let item of attachmentsList">
+      <ion-img ></ion-img>
+    </ion-slide>
+
+  </ion-slides>
 
 
 </ion-content>

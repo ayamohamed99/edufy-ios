@@ -5,6 +5,7 @@ import { Network } from '@ionic-native/network';
 import {AccountService} from "../../services/account";
 import {Classes} from "../../modles/classes";
 import {Students} from "../../modles/students";
+import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 
 
 @IonicPage()
@@ -13,20 +14,19 @@ import {Students} from "../../modles/students";
   templateUrl: 'notification-new.html',
 })
 export class NotificationNewPage {
-  sendTo = [];
+  sendTo:any[] = [];
   Title:string;
   Details:string;
   name: string;
-  talks = [];
   tags = [];
-  preparedTags = [ 'All Classes'];
+  preparedTags:any = [];
 
   tagsArr = [];
 
   allClasses = [];
   allStudentNames=[];
   allStudentsDetails=[];
-
+  autocompleteArray:AutoCompleteOps<Students>;
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService)
   {
@@ -38,15 +38,35 @@ export class NotificationNewPage {
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
 
+    this.preparedTags.push( {studentId:0, studentName:"All Classes"} );
+
     let classes = new Classes();
     for (classes of this.allClasses){
-      this.preparedTags.push(classes.className);
+      this.preparedTags.push(classes);
     }
 
+
     let student = new Students();
-    for(student of this.allStudentsDetails) {
-      this.preparedTags.push(student.studentName);
+    for (student of this.allStudentsDetails){
+      this.preparedTags.push(student);
     }
+
+    this.autocompleteArray = {
+      toString: item => {
+        if(item.studentId === 0){
+          return item.studentName
+        }else{
+          if(item instanceof Classes){
+            return item.className+", "+item.branchName;
+          }else{
+            return item.studentName+", "+item.classGradName;
+          }
+
+        }
+      },
+      searchIn: ["classAll","className","studentName"]
+      // searchIn: (item, inputValue) => {return item.studentName.indexOf(inputValue) > -1}
+    };
 
     console.log('NetWork '+network.type);
 
@@ -114,9 +134,9 @@ export class NotificationNewPage {
   }
 
   checkArray(){
-    if(this.sendTo.some(x => x === "All Classes")){
+    if(this.sendTo.some(x => x === {studentId:0, studentName:"All Classes"}  )){
       this.sendTo.splice(0);
-      this.sendTo.push('All Classes')
+      this.sendTo.push( {studentId:0, studentName:"All Classes"} )
     }
   }
 

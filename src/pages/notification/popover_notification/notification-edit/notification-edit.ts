@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AlertController, IonicPage, LoadingController, NavController, NavParams, ViewController} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {NotificationService} from "../../../../services/notification";
+import {FormControl} from '@angular/forms';
 
 
 @IonicPage()
@@ -14,6 +15,8 @@ export class NotificationEditPage {
   notificationID:number;
   notificationTitle:string;
   notificationDetails:string;
+  myControl = new FormControl();
+  options: string[] = ['One', 'Two', 'Three'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
               public load:LoadingController, public alrtCtrl:AlertController, public notiServ:NotificationService) {
