@@ -27,6 +27,10 @@ export class NotificationNewPage {
   allStudentNames=[];
   allStudentsDetails=[];
   autocompleteArray:AutoCompleteOps<Students>;
+
+  attachmentButtonName:string = "Add New Attachment";
+  attachmentArray:any;
+
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService)
   {
@@ -52,20 +56,35 @@ export class NotificationNewPage {
     }
 
     this.autocompleteArray = {
+
       toString: item => {
         if(item.studentId === 0){
           return item.studentName
         }else{
           if(item instanceof Classes){
-            return item.className+", "+item.branchName;
+            return item.className;
           }else{
-            return item.studentName+", "+item.classGradName;
+            return item.studentName;
           }
 
         }
       },
-      searchIn: ["classAll","className","studentName"]
       // searchIn: (item, inputValue) => {return item.studentName.indexOf(inputValue) > -1}
+      searchIn: ["classAll","className","studentName"],
+      groupByHeader: item => {
+        if(item.studentId === 0){
+          return item.studentName
+        }else{
+          if(item instanceof Classes){
+            return item.branchName;
+          }else{
+            return item.classGradName;
+          }
+
+        }
+      }
+
+
     };
 
     console.log('NetWork '+network.type);
@@ -134,9 +153,19 @@ export class NotificationNewPage {
   }
 
   checkArray(){
-    if(this.sendTo.some(x => x === {studentId:0, studentName:"All Classes"}  )){
+    if(this.sendTo.some(x => x.studentId === 0)){
       this.sendTo.splice(0);
       this.sendTo.push( {studentId:0, studentName:"All Classes"} )
+    }
+
+    console.log(this.sendTo);
+  }
+
+  buttonName(){
+    if(this.attachmentArray.length === 0){
+      this.attachmentButtonName = "Add New Attachment";
+    }else{
+      this.attachmentButtonName = "Add Another Attachment";
     }
   }
 
