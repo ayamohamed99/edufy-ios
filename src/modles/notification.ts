@@ -1,4 +1,4 @@
-export class Notifications{
+export class Notification{
   attachmentsList:any = [];
   body:string;
   dateTime:string;

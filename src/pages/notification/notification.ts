@@ -5,13 +5,13 @@ import {
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
-import {Notifications} from "../../modles/notifications";
+import {Notification} from "../../modles/notification";
 import {Storage} from "@ionic/storage";
 import {NotificationEditPage} from "./popover_notification/notification-edit/notification-edit";
 import {AccountService} from "../../services/account";
-import {Classes} from "../../modles/classes";
+import {Class} from "../../modles/class";
 import {StudentsService} from "../../services/students";
-import {Students} from "../../modles/students";
+import {Student} from "../../modles/student";
 
 
 @IonicPage()
@@ -21,7 +21,7 @@ import {Students} from "../../modles/students";
 })
 export class NotificationPage {
 
-  notifications:Notifications[] = [];
+  notifications:Notification[] = [];
   notificationPage=1;
   loading:any;
   fristOpen:boolean = true;
@@ -57,12 +57,15 @@ export class NotificationPage {
     this.notificationService.getClassList().subscribe((value)=>{
       let allData:any = value;
       for(let data of allData){
-        let item = new Classes();
+        let item = new Class();
         console.log(value);
         item.classId = data.id;
-        item.className = this.fullString(data.grade.name, data.name);
-        item.branchId = data.branch.id;
-        item.branchName = data.branch.name;
+        item.className = data.name;
+        item.grade.gradeId = data.grade.id;
+        item.grade.gradeName = data.grade.name;
+        item.branch.branchId = data.branch.id;
+        item.branch.branchName = data.branch.name;
+        item.branch.managerId = data.branch.managerId;
 
         this.classes.push(item);
       }
@@ -151,7 +154,7 @@ export class NotificationPage {
         console.log("Date Is", data);
         let allData:any = data;
         for (let value of allData){
-          let notify = new Notifications;
+          let notify = new Notification;
           notify.attachmentsList = value.attachmentslist;
           notify.body = value.body;
           notify.dateTime =  value.dateTime;
@@ -207,23 +210,25 @@ export class NotificationPage {
     })
   }
 
+
   getAllStudent(){
     this.studentService.getAllStudents('Notification').subscribe(
       (val)=>{
        console.log(val);
        let data:any = val;
        for (let value of data){
-         let students=new Students();
+         let students = new Student();
 
-         students.branchId = value.branchId;
-         students.classesId = value.classes.id;
-         students.ClassName = value.classes.name;
-         students.gradeId = value.classes.grade.id;
-         students.gradeName = value.classes.grade.name;
+         students.studentClass.classId = value.classes.id;
+         students.studentClass.className = value.classes.name;
+         students.studentClass.grade.gradeId = value.classes.grade.id;
+         students.studentClass.grade.gradeName = value.classes.grade.name;
+         students.studentClass.branch.branchId = value.classes.branch.id;
+         students.studentClass.branch.branchName = value.classes.branch.name;
+         students.studentClass.branch.managerId = value.classes.branch.managerId;
          students.studentId = value.id;
          students.studentName = value.name;
          students.studentAddress = value.address;
-         students.classGradName = this.fullString(value.classes.grade.name, value.classes.name);
 
          this.studentsName.push(value.name);
          this.studentwithClass.push(students);

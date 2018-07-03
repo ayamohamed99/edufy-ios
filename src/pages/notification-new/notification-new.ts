@@ -3,9 +3,10 @@ import {IonicPage, NavParams, Platform, ToastController, ViewController} from 'i
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
 import {AccountService} from "../../services/account";
-import {Classes} from "../../modles/classes";
-import {Students} from "../../modles/students";
+import {Class} from "../../modles/class";
+import {Student} from "../../modles/student";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
+import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
 
 
 @IonicPage()
@@ -20,16 +21,18 @@ export class NotificationNewPage {
   name: string;
   tags = [];
   preparedTags:any = [];
+  allStudentList:any[] = [];
 
   tagsArr = [];
 
   allClasses = [];
   allStudentNames=[];
   allStudentsDetails=[];
-  autocompleteArray:AutoCompleteOps<Students>;
+  autocompleteArray:AutoCompleteOps<any>;
 
   attachmentButtonName:string = "Add New Attachment";
   attachmentArray:any;
+  chooseAllClasses:any[] = [];
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService)
@@ -42,48 +45,57 @@ export class NotificationNewPage {
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
 
-    this.preparedTags.push( {studentId:0, studentName:"All Classes"} );
+    //+++++++++All Classes+++++++++
+    let autoShownAllClasses = new Autocomplete_shown_array();
+    autoShownAllClasses.id = -1;
+    autoShownAllClasses.name = "All Class";
+    autoShownAllClasses.dataList=this.chooseAllClasses;
 
-    let classes = new Classes();
-    for (classes of this.allClasses){
-      this.preparedTags.push(classes);
+    //+++++++++Classes+++++++++
+
+    for (let classes of this.allClasses){
+      let autoShownClasses = new Autocomplete_shown_array();
+      autoShownClasses.id = classes.classId;
+      autoShownClasses.name = classes.grade.gradeName+" "+classes.className;
+      autoShownClasses.type = "Class";
+      autoShownClasses.header = classes.branch.branchName;
+
+      for (let studentForClass of this.allStudentsDetails){
+
+        let autoShownstudentForClass = new Autocomplete_shown_array();
+        autoShownstudentForClass.id = studentForClass.studentId;
+        autoShownstudentForClass.name =studentForClass.studentName ;
+        autoShownstudentForClass.type = "Student";
+
+        if(studentForClass.studentClass.classId == classes.classId) {
+          autoShownClasses.dataList.push(autoShownstudentForClass);
+        }
+      }
+
+      this.chooseAllClasses.push(autoShownClasses);
+      this.preparedTags.push(autoShownClasses);
     }
 
+    this.preparedTags.push( autoShownAllClasses);
 
-    let student = new Students();
-    for (student of this.allStudentsDetails){
-      this.preparedTags.push(student);
+
+
+    //++++++++++++++Students+++++++++++++++++++++
+    for (let student of this.allStudentsDetails){
+      let autoShownStudents = new Autocomplete_shown_array();
+      autoShownStudents.id = student.studentId;
+      autoShownStudents.name = student.studentName;
+      autoShownStudents.type = "Student";
+      autoShownStudents.header = student.studentClass.grade.gradeName+" "+student.studentClass.className;
+      this.preparedTags.push(autoShownStudents);
     }
 
     this.autocompleteArray = {
 
-      toString: item => {
-        if(item.studentId === 0){
-          return item.studentName
-        }else{
-          if(item instanceof Classes){
-            return item.className;
-          }else{
-            return item.studentName;
-          }
-
-        }
-      },
+      toString: item => item.name,
       // searchIn: (item, inputValue) => {return item.studentName.indexOf(inputValue) > -1}
-      searchIn: ["classAll","className","studentName"],
-      groupByHeader: item => {
-        if(item.studentId === 0){
-          return item.studentName
-        }else{
-          if(item instanceof Classes){
-            return item.branchName;
-          }else{
-            return item.classGradName;
-          }
-
-        }
-      }
-
+      searchIn: ["name"],
+      groupByHeader: item => {if(item.header == null){return ""}else{return item.header}}
 
     };
 
@@ -153,16 +165,39 @@ export class NotificationNewPage {
   }
 
   checkArray(){
-    if(this.sendTo.some(x => x.studentId === 0)){
+    if(this.sendTo.some(x => x.id === -1)){
       this.sendTo.splice(0);
-      this.sendTo.push( {studentId:0, studentName:"All Classes"} )
+      let autoShownAllClasses = new Autocomplete_shown_array();
+      autoShownAllClasses.id = -1;
+      autoShownAllClasses.name = "All Class";
+      autoShownAllClasses.dataList=this.chooseAllClasses;
+      this.sendTo.push(autoShownAllClasses)
+    }else if(this.sendTo.some(x => x.type === "Class") && this.sendTo.some(y => y.type === "Student") ){
+      let TempClassessArray:any[] = [];
+      for(let selectedClasses of this.sendTo){
+        if(selectedClasses.type == "Class"){
+          TempClassessArray.push(selectedClasses);
+        }
+      }
+
+      for(let selected of this.sendTo){
+        if(selected.type === "Student"){
+          for(let temp of TempClassessArray) {
+            for(let tempStudent of temp.dataList){
+              if(tempStudent.id == selected.id){
+                this.sendTo.splice(this.sendTo.indexOf(selected),1);
+              }
+            }
+          }
+        }
+      }
     }
 
     console.log(this.sendTo);
   }
 
   buttonName(){
-    if(this.attachmentArray.length === 0){
+    if(this.attachmentArray.size === 0){
       this.attachmentButtonName = "Add New Attachment";
     }else{
       this.attachmentButtonName = "Add Another Attachment";
