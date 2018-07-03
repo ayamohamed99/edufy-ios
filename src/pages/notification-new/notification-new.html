@@ -36,11 +36,12 @@
   <ion-item>
     <ion-label class="textColor">Select Tag</ion-label>
     <ion-select [(ngModel)]="tags" multiple interface="popover">
-      <ion-option *ngFor="let tag of tagsArr" >{{tag}}</ion-option>
+      <ion-option *ngFor="let tag of tagsArr" >{{tag.name}}</ion-option>
     </ion-select>
   </ion-item>
 
   <button ion-button block outline (click)="buttonName()">{{attachmentButtonName}}</button>
+
   <div style="height: 16px; background-color: white"></div>
 
   <ion-slides pager style="height: 50%; padding: 8px">

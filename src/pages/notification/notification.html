@@ -20,7 +20,7 @@
               <img src="../../assets/imgs/profile.png">
             </ion-avatar>
             <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-            <button item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body, i)" class="buttonShape">
+            <button item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
               <ion-icon name="more" class="buttonShape" ></ion-icon>
             </button>
           </ion-item>

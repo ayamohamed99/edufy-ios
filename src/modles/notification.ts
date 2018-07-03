@@ -1,12 +1,13 @@
 export class Notification{
-  attachmentsList:any = [];
+  attachmentsList:any[] = [];
   body:string;
   dateTime:string;
   notificationId:number;
   title:string;
-  receiversList:any = [];
+  receiversList:any[] = [];
   senderName:string;
-
+  tagsList:any[] = [];
+  tagsListName:any[] = [];
 
   constructor(){}
 

@@ -59,7 +59,7 @@ export class AccountService{
       console.log('Tags : '+value);
       this.Arry = value;
       for(let tag of this.Arry){
-        this._tagArry.push(tag.name);
+        this._tagArry.push(tag);
       }
     });
   }

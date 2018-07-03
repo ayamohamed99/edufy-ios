@@ -82,7 +82,7 @@ export class NotificationPage {
     console.log('ionViewDidLoad NotificationPage');
   }
 
-  onSelectCard(event:Event, id:number, title:string, details:string, i:any){
+  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
     let popover = this.popoverCtrl.create(PopoverNotificationCardPage, {id:id, title:title, details:details});
 
     popover.onDidDismiss(data => {
@@ -117,7 +117,7 @@ export class NotificationPage {
         this.fristOpen = true;
         console.log(data.done);
         let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
-          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
+          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:reciversList,tagList:tagsList});
         model.onDidDismiss(()=>{
           this.notifications.splice(0);
           this.notificationPage = 1;
@@ -138,6 +138,17 @@ export class NotificationPage {
     let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
       studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
     model.present();
+
+    model.onDidDismiss(data => {
+      if(data.name =="dismissed&SENT"){
+        this.fristOpen = true;
+        this.notifications.splice(0);
+        this.notificationPage = 1;
+
+        this.notificationService.putHeader(this.tokenKey);
+        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+      }
+    });
   }
 
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
@@ -162,6 +173,10 @@ export class NotificationPage {
           notify.title = value.title;
           notify.receiversList = value.receiversList;
           notify.senderName = value.senderName;
+          notify.tagsList = value.tagsList;
+          if(value.tagsList != null) {
+            notify.tagsListName = value.tagsList.name;
+          }
 
           this.notifications.push(notify);
         }
