@@ -30,20 +30,18 @@
 
             <div style="height: 16px; background-color: white"></div>
 
-            <ion-slides pager style="height: 300px; padding: 8px">
+            <ion-slides pager style="height: 300px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+              <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
+                <img justify-content-center src="item.url" *ngIf="item.type == 'IMAGE'">
+                <img justify-content-center src="../../assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                <img justify-content-center src="../../assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                <img justify-content-center src="../../assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                <img justify-content-center src="../../assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                <img justify-content-center src="../../assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                <img justify-content-center src="../../assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                <img justify-content-center src="../../assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'Video'">
 
-              <ion-slide>
-                <h2>Slide 1</h2>
               </ion-slide>
-
-              <ion-slide>
-                <h2>Slide 2</h2>
-              </ion-slide>
-
-              <ion-slide>
-                <h2>Slide 3</h2>
-              </ion-slide>
-
             </ion-slides>
 
           </ion-card-content>

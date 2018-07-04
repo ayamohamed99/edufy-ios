@@ -73,6 +73,11 @@ export class NotificationService{
 
   getNotificationReceivers(notificationId:number)
   {
+    return this.http.get(this.commonUrl+'/getCloneReceiever.ent?notificationId='
+      +notificationId,this.httpOptions);
+  }
+
+  getSeencount(notificationId:number){
     return this.http.get(this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='
       +notificationId,this.httpOptions);
   }

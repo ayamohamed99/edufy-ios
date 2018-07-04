@@ -23,15 +23,15 @@ export class NotificationNewPage {
   Title:string;
   Details:string;
   name: string;
-  tags = [];
+  tags:any[] = [];
   preparedTags:any = [];
   allStudentList:any[] = [];
   updateTags:any[]=[];
-  tagsArr = [];
+  tagsArr:any[] = [];
 
-  allClasses = [];
-  allStudentNames=[];
-  allStudentsDetails=[];
+  allClasses:Class[] = [];
+  allStudentNames:any[]=[];
+  allStudentsDetails:any[]=[];
   autocompleteArray:AutoCompleteOps<any>;
 
   attachmentButtonName:string = "Add New Attachment";
@@ -46,12 +46,20 @@ export class NotificationNewPage {
     this.tagsArr = accServ.tagArry;
     this.Title =this.navParams.get('title');
     this.Details=this.navParams.get('details');
-    this.allClasses=this.navParams.get('classesList');
+
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
-    this.sendTo = this.navParams.get('recieverList');
+    let reciverArray = this.navParams.get('recieverList');
     this.tags = this.navParams.get('tagList');
-
+    if(reciverArray) {
+      for (let temp of reciverArray) {
+        let autoShownReciever = new Autocomplete_shown_array();
+        autoShownReciever.id = temp.id;
+        autoShownReciever.name = temp.name;
+        autoShownReciever.type = temp.type;
+        this.sendTo.push(autoShownReciever);
+      }
+    }
 
     //+++++++++All Classes+++++++++
     let autoShownAllClasses = new Autocomplete_shown_array();
@@ -60,33 +68,20 @@ export class NotificationNewPage {
     autoShownAllClasses.dataList=this.chooseAllClasses;
 
     //+++++++++Classes+++++++++
-
+    this.allClasses=this.navParams.get('classesList');
     for (let classes of this.allClasses){
       let autoShownClasses = new Autocomplete_shown_array();
       autoShownClasses.id = classes.classId;
       autoShownClasses.name = classes.grade.gradeName+" "+classes.className;
       autoShownClasses.type = "Class";
       autoShownClasses.header = classes.branch.branchName;
-
-      for (let studentForClass of this.allStudentsDetails){
-
-        let autoShownstudentForClass = new Autocomplete_shown_array();
-        autoShownstudentForClass.id = studentForClass.studentId;
-        autoShownstudentForClass.name =studentForClass.studentName ;
-        autoShownstudentForClass.type = "Student";
-
-        if(studentForClass.studentClass.classId == classes.classId) {
-          autoShownClasses.dataList.push(autoShownstudentForClass);
-        }
-      }
-
       this.chooseAllClasses.push(autoShownClasses);
       this.preparedTags.push(autoShownClasses);
     }
 
     this.preparedTags.push( autoShownAllClasses);
 
-
+    console.log("see", this.preparedTags);
 
     //++++++++++++++Students+++++++++++++++++++++
     for (let student of this.allStudentsDetails){
@@ -97,6 +92,7 @@ export class NotificationNewPage {
       autoShownStudents.header = student.studentClass.grade.gradeName+" "+student.studentClass.className;
       this.preparedTags.push(autoShownStudents);
     }
+    console.log("see2", this.preparedTags);
 
     this.autocompleteArray = {
 
@@ -159,7 +155,7 @@ export class NotificationNewPage {
       content: ""
     });
 
-    if (this.network.type === 'wifi' && !this.platform.is('core')) {
+    if (!this.platform.is('core')) {
       loading.present();
       this.notiServ.postNotification(this.Title, this.Details, null, RecieverArray, SelectedTags).subscribe(
         (data) => {
@@ -190,16 +186,6 @@ export class NotificationNewPage {
             () =>{
           console.log("The POST observable is now completed.")
         });
-    }else{
-
-      this.toastCtrl.create({
-        message: 'NO Internet connection',
-        position: 'bottom',
-        showCloseButton:true,
-        closeButtonText:'OK',
-
-      }).present();
-
     }
 
   }
@@ -209,7 +195,7 @@ export class NotificationNewPage {
   }
 
   activeSend(){
-    if((this.sendTo.length > 0) && this.Title && this.Details){
+    if(this.sendTo && (this.sendTo.length > 0) && this.Title && this.Details){
       return true;
     }else{
       return false;
@@ -217,50 +203,42 @@ export class NotificationNewPage {
   }
 
   checkArray(){
-    if(this.sendTo.some(x => x.id === -1))
-    {
-      this.sendTo.splice(0);
-      let autoShownAllClasses = new Autocomplete_shown_array();
-      autoShownAllClasses.id = -1;
-      autoShownAllClasses.name = "All Class";
-      autoShownAllClasses.dataList=this.chooseAllClasses;
-      this.sendTo.push(autoShownAllClasses)
-    }
-    else if(this.sendTo.some(x => x.type === "Class") && this.sendTo.some(y => y.type === "Student") )
-    {
-      let TempClassessArray:any[] = [];
-      for(let selectedClasses of this.sendTo)
-      {
-        if(selectedClasses.type == "Class")
-        {
-          TempClassessArray.push(selectedClasses);
-        }
+    if(this.sendTo) {
+      if (this.sendTo.some(x => x.id === -1)) {
+        this.sendTo.splice(0);
+        let autoShownAllClasses = new Autocomplete_shown_array();
+        autoShownAllClasses.id = -1;
+        autoShownAllClasses.name = "All Class";
+        autoShownAllClasses.dataList = this.chooseAllClasses;
+        this.sendTo.push(autoShownAllClasses)
       }
+      else if (this.sendTo.some(x => x.type === "Class") && this.sendTo.some(y => y.type === "Student")) {
+        let TempClassessArray: any[] = [];
+        for (let selectedClasses of this.sendTo) {
+          if (selectedClasses.type == "Class") {
+            TempClassessArray.push(selectedClasses);
+          }
+        }
 
-      for(let selected of this.sendTo)
-      {
-        if(selected.type === "Student")
-        {
-          for(let temp of TempClassessArray)
-          {
-            for(let tempStudent of temp.dataList)
-            {
-              if(tempStudent.id == selected.id)
-              {
-                let index = this.sendTo.indexOf(selected);
-                this.sendTo.splice(index,1);
+        for (let selected of this.sendTo) {
+          if (selected.type === "Student") {
+            for (let temp of TempClassessArray) {
+              for (let tempStudent of temp.dataList) {
+                if (tempStudent.id == selected.id) {
+                  let index = this.sendTo.indexOf(selected);
+                  this.sendTo.splice(index, 1);
+                }
               }
             }
           }
         }
       }
     }
-
     console.log(this.sendTo);
   }
 
   buttonName(){
-    if(this.attachmentArray.size === 0){
+    if(!this.attachmentArray && this.attachmentArray.size === 0){
       this.attachmentButtonName = "Add New Attachment";
     }else{
       this.attachmentButtonName = "Add Another Attachment";

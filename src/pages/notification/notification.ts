@@ -12,6 +12,7 @@ import {AccountService} from "../../services/account";
 import {Class} from "../../modles/class";
 import {StudentsService} from "../../services/students";
 import {Student} from "../../modles/student";
+import {AttachmentList} from "../../modles/attachmentlist";
 
 
 @IonicPage()
@@ -27,51 +28,33 @@ export class NotificationPage {
   fristOpen:boolean = true;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   tokenKey:string;
-  tagsArr:any = [];
+  tagsArr:any[] = [];
 
-  classes = [];
-  studentsName:any = [];
-  studentwithClass:any = [];
+  classes:any[] = [];
+  studentsName:any[] = [];
+  studentwithClass:any[] = [];
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService) {
 
-    if(platform.is('core')) {
+    if (platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-    }else {
+      this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+    } else {
 
       storage.get(this.localStorageToken).then(
-        val=>{
+        val => {
           this.tokenKey = val;
           notificationService.putHeader(val);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+          this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
         });
     }
 
     this.tagsArr = accService.accountBranchesList;
-    this.notificationService.getClassList().subscribe((value)=>{
-      let allData:any = value;
-      for(let data of allData){
-        let item = new Class();
-        console.log(value);
-        item.classId = data.id;
-        item.className = data.name;
-        item.grade.gradeId = data.grade.id;
-        item.grade.gradeName = data.grade.name;
-        item.branch.branchId = data.branch.id;
-        item.branch.branchName = data.branch.name;
-        item.branch.managerId = data.branch.managerId;
-
-        this.classes.push(item);
-      }
-    },
-      err=> console.log(err));
-
   }
 
   fullString(fristPart:string, secoundPart:string){
@@ -116,17 +99,38 @@ export class NotificationPage {
       }else if(data.done === 'newSuccess'){
         this.fristOpen = true;
         console.log(data.done);
-        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
-          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:reciversList,tagList:tagsList});
-        model.onDidDismiss(()=>{
-          this.notifications.splice(0);
-          this.notificationPage = 1;
-
-          this.notificationService.putHeader(this.tokenKey);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        this.loading = this.load.create({
+          content: ""
         });
-        model.present();
+        this.loading.present();
+        this.notificationService.getNotificationReceivers(id).subscribe(
+              (data) => {
+                this.loading.dismiss();
+                console.log("Date Is", data);
+                let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
+                  studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:data,
+                  tagList:tagsList});
+                model.onDidDismiss(()=>{
+                  this.notifications.splice(0);
+                  this.notificationPage = 1;
 
+                  this.notificationService.putHeader(this.tokenKey);
+                  this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+                });
+                model.present();
+              },
+              err => {
+                console.log("POST call in error", err);
+                this.loading.dismiss();
+                this.alrtCtrl.create( {
+                  title: 'Error',
+                  subTitle: err.message,
+                  buttons: ['OK']
+                }).present();
+              },
+              () => {
+                console.log("The POST observable is now completed.");
+              });
       }
       }
     });
@@ -166,7 +170,15 @@ export class NotificationPage {
         let allData:any = data;
         for (let value of allData){
           let notify = new Notification;
-          notify.attachmentsList = value.attachmentslist;
+          for(let item of value.attachmentsList){
+            let attach = new AttachmentList();
+            attach.id=item.id;
+            attach.name=item.name;
+            attach.type=item.type;
+            attach.url=item.url;
+            notify.attachmentsList.push(attach);
+          }
+
           notify.body = value.body;
           notify.dateTime =  value.dateTime;
           notify.notificationId = value.id;
@@ -185,6 +197,7 @@ export class NotificationPage {
 
           this.tokenKey = localStorage.getItem(this.localStorageToken);
           this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+          this.getAllClasses();
           this.getAllStudent();
         }else {
 
@@ -192,6 +205,7 @@ export class NotificationPage {
             val=>{
               this.tokenKey = val;
               this.studentService.putHeader(val);
+              this.getAllClasses();
               this.getAllStudent();
             });
         }
@@ -225,6 +239,33 @@ export class NotificationPage {
     })
   }
 
+  getAllClasses(){
+    this.notificationService.getClassList().subscribe((value) => {
+        let allData: any = value;
+        for (let data of allData) {
+          let item = new Class();
+          console.log(value);
+          item.classId = data.id;
+          item.className = data.name;
+          item.grade.gradeId = data.grade.id;
+          item.grade.gradeName = data.grade.name;
+          item.branch.branchId = data.branch.id;
+          item.branch.branchName = data.branch.name;
+          item.branch.managerId = data.branch.managerId;
+
+          this.classes.push(item);
+        }
+      },
+      err =>{
+      console.log(err);
+        this.alrtCtrl.create( {
+          title: 'Error',
+          subTitle: 'Something went wrong, please refresh the page',
+          buttons: ['OK']
+        }).present();
+        this.loading.dismiss();
+    });
+  }
 
   getAllStudent(){
     this.studentService.getAllStudents('Notification').subscribe(
@@ -250,7 +291,7 @@ export class NotificationPage {
          console.log(students);
        }
 
-       console.log(this.studentwithClass.count);
+       console.log(this.studentwithClass.length);
 
        console.log(this.studentsName);
 
@@ -268,8 +309,16 @@ export class NotificationPage {
       });
   }
 
-  // notificationsReciver(){
-  //   this.notificationService.getNotificationReceivers(6094).subscribe(
+  onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    this.alrtCtrl.create( {
+      title: 'Atachment',
+      subTitle: 'Name:'+attachmentName+'id:'+attachmentId+'Type:'+attachmentType+'URL:'+attachmentURL,
+      buttons: ['OK']
+    }).present();
+  }
+
+  // getSeencount(){
+  //   this.notificationService.getSeencount(6094).subscribe(
   //     (data) => {
   //       console.log("Date Is", data);
   //     },
