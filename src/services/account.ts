@@ -1,9 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Url_domain} from "../modles/url_domain";
 
 @Injectable()
 export class AccountService{
 
+  DomainUrl:Url_domain;
   private value:any = [];
   private accountFeature:any = [];
   private userRole:any = [];
@@ -16,7 +18,9 @@ export class AccountService{
   private _tagArry:any = [];
   private Arry:any = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.DomainUrl=new Url_domain();
+  }
 
   getAccountRoles(subHeader:string){
 
@@ -28,7 +32,7 @@ export class AccountService{
             'Authorization' : subHeader
           })};
 
-    return this.http.post('/authentication/authenticator.ent?operationId=3', null, httpOptions);
+    return this.http.post(this.DomainUrl.Domain+'/authentication/authenticator.ent?operationId=3', null, httpOptions);
   }
 
   setDate(data:any){
@@ -55,7 +59,7 @@ export class AccountService{
         // 'content-type':'application/json',
         'Authorization' : subHeader
       })};
-    this.http.get('/authentication/tag.ent?branchesIds=' + this._accountBranchesList,httpOptions).subscribe(value => {
+    this.http.get(this.DomainUrl.Domain+'/authentication/tag.ent?branchesIds=' + this._accountBranchesList,httpOptions).subscribe(value => {
       console.log('Tags : '+value);
       this.Arry = value;
       for(let tag of this.Arry){

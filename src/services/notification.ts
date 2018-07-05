@@ -2,10 +2,12 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Platform} from "ionic-angular";
 import {Storage} from "@ionic/storage";
+import {Url_domain} from "../modles/url_domain";
 
 @Injectable()
 export class NotificationService{
 
+  DomainUrl:Url_domain;
   commonUrl= '/authentication/notification.ent';
 
   localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
@@ -20,13 +22,13 @@ export class NotificationService{
 
   constructor(private http: HttpClient,platform:Platform,storage:Storage)
   {
-
+    this.DomainUrl = new Url_domain;
   }
 
   putHeader(value){
     this.httpOptions = {
             headers: new HttpHeaders({
-              'content-type': 'application/json',
+              'content-type':'application/json',
               'Authorization': value
             })
     };
@@ -43,16 +45,17 @@ export class NotificationService{
       "tagsList": selectedTags
     };
 
-    return this.http.post(this.commonUrl,newNotification,this.httpOptions);
+    return this.http.post(this.DomainUrl.Domain+this.commonUrl,newNotification,this.httpOptions);
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,
                   archived:string,sent:string,tagId:number)
   {
+    console.log('Domain',this.DomainUrl.Domain);
     let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
       + tagId;
-    return this.http.get(this.commonUrl + st, this.httpOptions);
+    return this.http.get(this.DomainUrl.Domain+this.commonUrl + st, this.httpOptions);
   }
 
   updateNotification(id:number,title:string,body:string)
@@ -62,28 +65,28 @@ export class NotificationService{
       "body": body,
       "id": id
     };
-    return this.http.put(this.commonUrl+'?operationId='+this.UPDATE_NOTIFICATION_OPERATION_ID,
+    return this.http.put(this.DomainUrl.Domain+this.commonUrl+'?operationId='+this.UPDATE_NOTIFICATION_OPERATION_ID,
             newNotification,this.httpOptions);
   }
 
   deleteNotification(id:string)
   {
-    return this.http.delete(this.commonUrl+'?id='+id,this.httpOptions);
+    return this.http.delete(this.DomainUrl.Domain+this.commonUrl+'?id='+id,this.httpOptions);
   }
 
   getNotificationReceivers(notificationId:number)
   {
-    return this.http.get(this.commonUrl+'/getCloneReceiever.ent?notificationId='
+    return this.http.get(this.DomainUrl.Domain+this.commonUrl+'/getCloneReceiever.ent?notificationId='
       +notificationId,this.httpOptions);
   }
 
   getSeencount(notificationId:number){
-    return this.http.get(this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='
+    return this.http.get(this.DomainUrl.Domain+this.commonUrl+'/webApp.ent/getSeencount.ent?notificationIds='
       +notificationId,this.httpOptions);
   }
 
   getClassList(){
-    return this.http.get('/authentication/class.ent?view=NOTIFICATION' +
+    return this.http.get(this.DomainUrl.Domain+'/authentication/class.ent?view=NOTIFICATION' +
       '&operationId=' + this.APPROVE_NOTIFICATION_OPERATION_ID,this.httpOptions);
   }
 

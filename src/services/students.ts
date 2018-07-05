@@ -1,24 +1,29 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Url_domain} from "../modles/url_domain";
 
 @Injectable()
 export class StudentsService{
 
   httpOptions:any;
+  DomainUrl:Url_domain;
 
-  constructor(public http:HttpClient){}
+  constructor(public http:HttpClient){this.DomainUrl = new Url_domain;}
 
   putHeader(value){
     this.httpOptions = {
       headers: new HttpHeaders({
-        'content-type': 'application/json',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
+        'Accept':'application/json',
+        'content-type':'application/json',
         'Authorization': value
       })
     };
   }
 
   getAllStudents(fromPage:string){
-    return this.http.get('/authentication/student.ent?operationId=7& name='+fromPage,this.httpOptions);
+    return this.http.get(this.DomainUrl.Domain+'/authentication/student.ent?operationId=7& name='+fromPage,this.httpOptions);
   }
 
 }

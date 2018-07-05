@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import 'rxjs/add/operator/map';
+import {Url_domain} from "../modles/url_domain";
 
 @Injectable()
 export class LoginService {
@@ -9,17 +10,18 @@ export class LoginService {
   localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
   localStoragePassword:string = 'LOCAL_STORAGE_PASSWORD';
   accessToken:string;
+  DomainUrl:Url_domain;
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {this.DomainUrl = new Url_domain;}
 
   postlogin(username: string, password: string) {
-    return this.http.post('/oauth/token?grant_type=password&client_id=my-trusted-client&password='
+    return this.http.post(this.DomainUrl.Domain+'/oauth/token?grant_type=password&client_id=my-trusted-client&password='
       + password + '&username=' + username, null);
   }
 
   authenticateUserByRefreshToken(refreshToken:string){
-    return this.http.get('/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
+    return this.http.get(this.DomainUrl.Domain+'/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
       +refreshToken);
   }
 
@@ -32,7 +34,7 @@ export class LoginService {
         // 'content-type':'application/json',
         'Authorization' : subHeader
       })};
-    return this.http.get('/authentication/manage.ent?access-token=' + accessToken,httpOptions);
+    return this.http.get(this.DomainUrl.Domain+'/authentication/manage.ent?access-token=' + accessToken,httpOptions);
   }
 
 

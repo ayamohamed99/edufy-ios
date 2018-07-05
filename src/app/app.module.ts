@@ -23,6 +23,10 @@ import {NativeStorage} from "@ionic-native/native-storage";
 import {NotificationEditPage} from "../pages/notification/popover_notification/notification-edit/notification-edit";
 import {StudentsService} from "../services/students";
 
+import { File } from '@ionic-native/file';
+import { FileTransfer } from '@ionic-native/file-transfer'
+import { DocumentViewer } from '@ionic-native/document-viewer';
+import { Media } from '@ionic-native/media';
 
 
 @NgModule({
@@ -62,7 +66,11 @@ import {StudentsService} from "../services/students";
     NotificationService,
     AccountService,
     Network,NativeStorage,
-    StudentsService
+    StudentsService,
+    File,
+    DocumentViewer,
+    FileTransfer,
+    Media
   ]
 })
 export class AppModule {}

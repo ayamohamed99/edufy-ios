@@ -13,7 +13,10 @@ import {Class} from "../../modles/class";
 import {StudentsService} from "../../services/students";
 import {Student} from "../../modles/student";
 import {AttachmentList} from "../../modles/attachmentlist";
-
+import {File, FileEntry} from '@ionic-native/file';
+import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
+import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
+import {Media,MediaObject} from "@ionic-native/media";
 
 @IonicPage()
 @Component({
@@ -37,7 +40,8 @@ export class NotificationPage {
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
-              private studentService:StudentsService) {
+              private studentService:StudentsService, private document: DocumentViewer, private file: File,
+              private transfer: FileTransfer, public audio: Media) {
 
     if (platform.is('core')) {
 
@@ -312,11 +316,112 @@ export class NotificationPage {
   onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
     this.alrtCtrl.create( {
       title: 'Atachment',
-      subTitle: 'Name:'+attachmentName+'id:'+attachmentId+'Type:'+attachmentType+'URL:'+attachmentURL,
-      buttons: ['OK']
+      subTitle: 'What are you want to do with this file!',
+      buttons: [
+        {
+          text: 'Download',
+          handler: () => {
+            console.log('Download clicked');
+            this.loading = this.load.create({
+              content: ""
+            });
+            this.loading.present();
+            if(attachmentType == "PDF"){
+              this.downloadPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
+            }
+            else if(attachmentType == "AUDIO"){
+
+            }
+          }
+        },
+        {
+          text: 'Download & Open',
+          handler: () => {
+            console.log('Download & Open clicked');
+            this.loading = this.load.create({
+              content: ""
+            });
+            this.loading.present();
+            if(attachmentType == "PDF"){
+              this.DownloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
+
+            }else if(attachmentType == "AUDIO"){
+              this.loading.dismiss();
+
+              let path = this.file.dataDirectory;
+              const transfer = this.transfer.create();
+              transfer.download(attachmentURL,
+                path + attachmentName).then(entry => {
+                  let song: MediaObject = this.audio.create(entry.nativeURL);
+                  song.play();
+                },
+                err => {
+                  console.log(JSON.stringify(err));
+                });
+
+
+
+            }
+          }
+        }
+      ]
     }).present();
   }
 
+  DownloadOpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    let path = null;
+
+    if (this.platform.is('ios')) {
+      path = this.file.documentsDirectory;
+    } else if (this.platform.is('android')) {
+      path = this.file.dataDirectory;
+    }
+
+    const transfer = this.transfer.create();
+    transfer.download(attachmentURL,
+      path + attachmentName).then(entry => {
+      this.loading.dismiss();
+      let url = entry.toURL();
+      const options: DocumentViewerOptions = {
+        title: attachmentName
+      };
+      this.document.viewDocument(url, 'application/pdf', options);
+    }).catch(reason => {
+      this.alrtCtrl.create( {
+        title: 'Error',
+        subTitle: reason,
+        buttons: ['OK']
+      }).present();
+      this.loading.dismiss();
+    });
+  }
+
+  downloadPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    let path = null;
+
+    if (this.platform.is('ios')) {
+      path = this.file.documentsDirectory;
+    } else if (this.platform.is('android')) {
+      path = this.file.dataDirectory;
+    }
+
+    const transfer = this.transfer.create();
+    transfer.download(attachmentURL,
+      path + attachmentName).then(entry => {
+
+      this.loading.dismiss();
+
+    }).catch(reason => {
+
+      this.alrtCtrl.create( {
+        title: 'Error',
+        subTitle: reason,
+        buttons: ['OK']
+      }).present();
+
+      this.loading.dismiss();
+    });
+  }
   // getSeencount(){
   //   this.notificationService.getSeencount(6094).subscribe(
   //     (data) => {

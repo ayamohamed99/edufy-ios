@@ -17,7 +17,7 @@
         <ion-card>
           <ion-item>
             <ion-avatar item-start>
-              <img src="../../assets/imgs/profile.png">
+              <img src="assets/imgs/profile.png">
             </ion-avatar>
             <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
             <button item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
@@ -32,15 +32,19 @@
 
             <ion-slides pager style="height: 300px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
               <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
-                <img justify-content-center src="item.url" *ngIf="item.type == 'IMAGE'">
-                <img justify-content-center src="../../assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                <img justify-content-center src="../../assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                <img justify-content-center src="../../assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                <img justify-content-center src="../../assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                <img justify-content-center src="../../assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                <img justify-content-center src="../../assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                <img justify-content-center src="../../assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'Video'">
-
+                <div padding-bottom="50px" padding-top="-20px">
+                <div padding="20px" padding-top="0px" padding-bottom="40px">
+                  <ion-img class="imageSlide" justify-content-center src="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
+                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
+                </div>
+                <h3 padding-bottom="20px">{{item.name.substring(17)}}</h3>
+                </div>
               </ion-slide>
             </ion-slides>
 

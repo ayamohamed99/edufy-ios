@@ -4,18 +4,6 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  },
-  "proxies": [
-    {
-      "path":"/oauth",
-      "proxyUrl": "http://192.168.1.2:8080/oauth"
-    },
-    {
-      "path":"/authentication",
-      "proxyUrl": "http://192.168.1.2:8080/authentication"
-    }
-
-  ],
-  "Production":"104.198.175.198"
+  }
 }
 
