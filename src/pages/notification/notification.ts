@@ -36,6 +36,8 @@ export class NotificationPage {
   classes:any[] = [];
   studentsName:any[] = [];
   studentwithClass:any[] = [];
+  SongDownloaded:Boolean = false;
+  song: MediaObject;
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
@@ -330,7 +332,7 @@ export class NotificationPage {
               this.downloadPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
             }
             else if(attachmentType == "AUDIO"){
-
+              this.downloadSong(attachmentName,attachmentId,attachmentType,attachmentURL);
             }
           }
         },
@@ -343,24 +345,10 @@ export class NotificationPage {
             });
             this.loading.present();
             if(attachmentType == "PDF"){
-              this.DownloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
+              this.downloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
 
             }else if(attachmentType == "AUDIO"){
-              this.loading.dismiss();
-
-              let path = this.file.dataDirectory;
-              const transfer = this.transfer.create();
-              transfer.download(attachmentURL,
-                path + attachmentName).then(entry => {
-                  let song: MediaObject = this.audio.create(entry.nativeURL);
-                  song.play();
-                },
-                err => {
-                  console.log(JSON.stringify(err));
-                });
-
-
-
+              this.downloadOpenSong(attachmentName,attachmentId,attachmentType,attachmentURL);
             }
           }
         }
@@ -368,7 +356,7 @@ export class NotificationPage {
     }).present();
   }
 
-  DownloadOpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+  downloadOpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
     let path = null;
 
     if (this.platform.is('ios')) {
@@ -422,6 +410,55 @@ export class NotificationPage {
       this.loading.dismiss();
     });
   }
+
+  downloadOpenSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    let path = this.file.dataDirectory;
+    const transfer = this.transfer.create();
+    transfer.download(attachmentURL,
+      path + attachmentName).then(entry => {
+        this.loading.dismiss();
+        this.SongDownloaded = true;
+        this.song = this.audio.create(entry.nativeURL);
+        this.song.play();
+      },
+      err => {
+        console.log(JSON.stringify(err));
+      });
+  }
+
+  downloadSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    let path = this.file.dataDirectory;
+    const transfer = this.transfer.create();
+    transfer.download(attachmentURL,
+      path + attachmentName).catch(reason => {
+
+      this.alrtCtrl.create( {
+        title: 'Error',
+        subTitle: reason,
+        buttons: ['OK']
+      }).present();
+
+      this.loading.dismiss();
+    });
+  }
+
+  /////music player
+  onPlayMusic(){
+      this.song.play();
+  }
+  onPauseMusic(){
+      this.song.pause();
+  }
+  onStopMusic(){
+      this.song.stop();
+  }
+  onCloseMusic(){
+    if(!this.song || this.song.play()) {
+      this.song.stop();
+    }
+    this.SongDownloaded = true;
+  }
+
   // getSeencount(){
   //   this.notificationService.getSeencount(6094).subscribe(
   //     (data) => {

@@ -6,9 +6,19 @@ page-notification {
     padding: 0px;
   }
 
-  imageSlide{
-    width: 100vmax;
-    height: 100vmax;
+  .imgAttach{
+    min-width: 200px;
+    min-height: 200px;
+    background: #eee0;
   }
 
+  .btn-on {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    min-width: 50px;
+    min-height: 50px;
+    background: #eee0;
+  }
 }

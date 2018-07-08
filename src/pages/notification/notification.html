@@ -32,18 +32,16 @@
 
             <ion-slides pager style="height: 300px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
               <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
-                <div padding-bottom="50px" padding-top="-20px">
-                <div padding="20px" padding-top="0px" padding-bottom="40px">
-                  <ion-img class="imageSlide" justify-content-center src="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
-                  <ion-img class="imageSlide" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
-                </div>
-                <h3 padding-bottom="20px">{{item.name.substring(17)}}</h3>
+                <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
+                <div>
+                  <ion-img class="imgAttach" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
+                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
                 </div>
               </ion-slide>
             </ion-slides>
@@ -59,9 +57,35 @@
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-fab bottom right>
+  <ion-fab bottom right style="padding-bottom: 60px">
     <button ion-fab mini (click)="onOpenView()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
 </ion-content>
+
+<ion-footer style="background-color: white" *ngIf="!SongDownloaded">
+  <ion-row>
+  <div col-2>
+    <button round ion-button icon-only (click)="onPlayMusic()">
+      <ion-icon><img src="assets/imgs/play-button.png"/></ion-icon>
+    </button>
+  </div>
+  <div col-2>
+    <button round ion-button icon-only (click)="onPauseMusic()">
+      <ion-icon><img src="assets/imgs/pause-button.png"/></ion-icon>
+    </button>
+  </div>
+  <div col-2>
+    <button round ion-button icon-only (click)="onStopMusic()">
+      <ion-icon><img src="assets/imgs/stop-button.png"/></ion-icon>
+    </button>
+  </div>
+  <div col-4></div>
+  <div col-2>
+    <button round ion-button icon-only (click)="onCloseMusic()">
+      <ion-icon><img src="assets/imgs/cancel-button.png"/></ion-icon>
+    </button>
+  </div>
+  </ion-row>
+</ion-footer>
 

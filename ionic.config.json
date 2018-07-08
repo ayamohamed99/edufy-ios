@@ -4,6 +4,22 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "proxies": [
+    {
+      "path":"/oauth",
+      "proxyUrl": "http://104.198.175.198/oauth"
+    },
+    {
+      "path":"/authentication",
+      "proxyUrl": "http://104.198.175.198/authentication"
+    },
+    {
+      "path":"/entrepreware.com",
+      "proxyUrl": "http://104.198.175.198/"
+    }
+
+  ],
+  "Production":"104.198.175.198"
 }
 
