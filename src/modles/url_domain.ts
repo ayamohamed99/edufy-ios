@@ -10,12 +10,18 @@ export class Url_domain{
   //      proxy
   // "proxies": [
   //   {
-  //     "path": "/oauth",
+  //     "path":"/oauth",
   //     "proxyUrl": "http://104.198.175.198/oauth"
   //   },
   //   {
-  //     "path": "/authentication",
+  //     "path":"/authentication",
   //     "proxyUrl": "http://104.198.175.198/authentication"
+  //   },
+  //   {
+  //     "path":"/entrepreware.com",
+  //     "proxyUrl": "http://104.198.175.198/"
   //   }
-  //   ]
+  //
+  //   ],
+  // "Production":"104.198.175.198"
 }

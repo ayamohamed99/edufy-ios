@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
 } from 'ionic-angular';
@@ -17,13 +17,14 @@ import {File, FileEntry} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
 import {Media,MediaObject} from "@ionic-native/media";
+import { FileOpener } from '@ionic-native/file-opener';
 
 @IonicPage()
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html',
 })
-export class NotificationPage {
+export class NotificationPage implements OnInit{
 
   notifications:Notification[] = [];
   notificationPage=1;
@@ -36,14 +37,20 @@ export class NotificationPage {
   classes:any[] = [];
   studentsName:any[] = [];
   studentwithClass:any[] = [];
-  SongDownloaded:Boolean = false;
   song: MediaObject;
+  slideEl: HTMLElement;
+
+  ngOnInit(){
+    this.slideEl = document.getElementById('slideFooter');
+    this.slideEl.className = "slider";
+    this.slideEl.classList.toggle('closed');
+  }
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
-              private transfer: FileTransfer, public audio: Media) {
+              private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener) {
 
     if (platform.is('core')) {
 
@@ -337,16 +344,17 @@ export class NotificationPage {
           }
         },
         {
-          text: 'Download & Open',
+          text: 'Open',
           handler: () => {
-            console.log('Download & Open clicked');
+            console.log('Open clicked');
             this.loading = this.load.create({
               content: ""
             });
             this.loading.present();
             if(attachmentType == "PDF"){
-              this.downloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
+              // this.downloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
 
+              this.OpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
             }else if(attachmentType == "AUDIO"){
               this.downloadOpenSong(attachmentName,attachmentId,attachmentType,attachmentURL);
             }
@@ -356,6 +364,12 @@ export class NotificationPage {
     }).present();
   }
 
+
+  OpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+    this.fileOpener.open(attachmentURL, 'application/pdf')
+      .then(() => console.log('File is opened'))
+      .catch(e => console.log('Error opening file', e));
+  }
   downloadOpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
     let path = null;
 
@@ -416,8 +430,8 @@ export class NotificationPage {
     const transfer = this.transfer.create();
     transfer.download(attachmentURL,
       path + attachmentName).then(entry => {
+        this.slideEl.classList.toggle('closed');
         this.loading.dismiss();
-        this.SongDownloaded = true;
         this.song = this.audio.create(entry.nativeURL);
         this.song.play();
       },
@@ -444,19 +458,26 @@ export class NotificationPage {
 
   /////music player
   onPlayMusic(){
+    if(this.song) {
       this.song.play();
+    }
   }
   onPauseMusic(){
+    if(this.song) {
       this.song.pause();
+    }
   }
   onStopMusic(){
-      this.song.stop();
-  }
-  onCloseMusic(){
-    if(!this.song || this.song.play()) {
+    if(this.song && this.song.play()) {
       this.song.stop();
     }
-    this.SongDownloaded = true;
+  }
+  onCloseMusic(){
+    if(this.song && this.song.play()) {
+      this.song.stop();
+    }
+
+    this.slideEl.classList.toggle('closed');
   }
 
   // getSeencount(){

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, NavParams, Platform, ToastController,
-  ViewController
+  ViewController,ActionSheetController
 } from 'ionic-angular';
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
@@ -40,7 +40,7 @@ export class NotificationNewPage {
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService,
-              private alertCtrl:AlertController, private loadingCtrl:LoadingController)
+              private alertCtrl:AlertController, private loadingCtrl:LoadingController, public actionSheetCtrl: ActionSheetController)
   {
 
     this.tagsArr = accServ.tagArry;
@@ -238,7 +238,9 @@ export class NotificationNewPage {
   }
 
   buttonName(){
-    if(!this.attachmentArray && this.attachmentArray.size === 0){
+    this.presentActionSheet();
+
+    if(!this.attachmentArray){
       this.attachmentButtonName = "Add New Attachment";
     }else{
       this.attachmentButtonName = "Add Another Attachment";
@@ -268,7 +270,40 @@ export class NotificationNewPage {
   }
 
 
+  presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Choose type of attachment',
+      buttons: [
+        {
+          text: 'Image',
+          handler: () => {
+            console.log('Image clicked');
+          }
+        },
+        {
+          text: 'Audio',
+          handler: () => {
+            console.log('Audio clicked');
+          }
+        },
+        {
+          text: 'Document',
+          handler: () => {
+            console.log('Document clicked');
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'destructive',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
 
+    actionSheet.present();
+  }
 
 }
 

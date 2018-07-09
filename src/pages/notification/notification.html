@@ -15,15 +15,16 @@
     <ion-row>
       <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
         <ion-card>
-          <ion-item>
+          <ion-item style="background-color: lightgray">
             <ion-avatar item-start>
               <img src="assets/imgs/profile.png">
             </ion-avatar>
             <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-            <button item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
-              <ion-icon name="more" class="buttonShape" ></ion-icon>
+            <button style="background-color: lightgray" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
+              <ion-icon style="background-color: lightgray" name="more" class="buttonShape" ></ion-icon>
             </button>
           </ion-item>
+          <div style="height: 5px;"></div>
           <ion-card-content>
             <h1>{{notify.title}}</h1>
             <p>{{notify.body}}</p>
@@ -34,7 +35,7 @@
               <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
                 <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
                 <div>
-                  <ion-img class="imgAttach" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
+                  <ion-img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
                   <ion-img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
                   <ion-img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
                   <ion-img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
@@ -57,13 +58,13 @@
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-fab bottom right style="padding-bottom: 60px">
+  <ion-fab bottom right>
     <button ion-fab mini (click)="onOpenView()"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
 </ion-content>
 
-<ion-footer style="background-color: white" *ngIf="!SongDownloaded">
+<ion-footer id="slideFooter" style="background-color: white">
   <ion-row>
   <div col-2>
     <button round ion-button icon-only (click)="onPlayMusic()">
