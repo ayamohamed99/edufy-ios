@@ -15,8 +15,8 @@ import {Student} from "../../modles/student";
 import {AttachmentList} from "../../modles/attachmentlist";
 import {File, FileEntry} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
-import {FileTransfer, FileTransferObject} from '@ionic-native/file-transfer';
-import {Media,MediaObject} from "@ionic-native/media";
+import {FileTransfer} from '@ionic-native/file-transfer';
+import {Media} from "@ionic-native/media";
 import { FileOpener } from '@ionic-native/file-opener';
 
 @IonicPage()
@@ -24,7 +24,7 @@ import { FileOpener } from '@ionic-native/file-opener';
   selector: 'page-notification',
   templateUrl: 'notification.html',
 })
-export class NotificationPage implements OnInit{
+export class NotificationPage{
 
   notifications:Notification[] = [];
   notificationPage=1;
@@ -37,14 +37,6 @@ export class NotificationPage implements OnInit{
   classes:any[] = [];
   studentsName:any[] = [];
   studentwithClass:any[] = [];
-  song: MediaObject;
-  slideEl: HTMLElement;
-
-  ngOnInit(){
-    this.slideEl = document.getElementById('slideFooter');
-    this.slideEl.className = "slider";
-    this.slideEl.classList.toggle('closed');
-  }
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
@@ -351,12 +343,9 @@ export class NotificationPage implements OnInit{
               content: ""
             });
             this.loading.present();
-            if(attachmentType == "PDF"){
-              // this.downloadOpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
-
-              this.OpenPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
-            }else if(attachmentType == "AUDIO"){
-              this.downloadOpenSong(attachmentName,attachmentId,attachmentType,attachmentURL);
+            if(attachmentName) {
+              let exType: string = attachmentName.toString().slice(0, attachmentName.length - 3);
+              this.OpenFiles(attachmentName, attachmentId, attachmentType, attachmentURL,exType);
             }
           }
         }
@@ -365,12 +354,8 @@ export class NotificationPage implements OnInit{
   }
 
 
-  OpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    this.fileOpener.open(attachmentURL, 'application/pdf')
-      .then(() => console.log('File is opened'))
-      .catch(e => console.log('Error opening file', e));
-  }
-  downloadOpenPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
+  OpenFiles(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,extinstion:any){
+
     let path = null;
 
     if (this.platform.is('ios')) {
@@ -387,7 +372,17 @@ export class NotificationPage implements OnInit{
       const options: DocumentViewerOptions = {
         title: attachmentName
       };
-      this.document.viewDocument(url, 'application/pdf', options);
+      this.fileOpener.open(url, 'application/'+extinstion)
+        .then(() => console.log('File is opened'))
+        .catch(e => {
+          console.log(e);
+          this.alrtCtrl.create( {
+            title: 'Error',
+            subTitle: e,
+            buttons: ['OK']
+          }).present();
+          this.loading.dismiss();
+        });
     }).catch(reason => {
       this.alrtCtrl.create( {
         title: 'Error',
@@ -425,21 +420,6 @@ export class NotificationPage implements OnInit{
     });
   }
 
-  downloadOpenSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    let path = this.file.dataDirectory;
-    const transfer = this.transfer.create();
-    transfer.download(attachmentURL,
-      path + attachmentName).then(entry => {
-        this.slideEl.classList.toggle('closed');
-        this.loading.dismiss();
-        this.song = this.audio.create(entry.nativeURL);
-        this.song.play();
-      },
-      err => {
-        console.log(JSON.stringify(err));
-      });
-  }
-
   downloadSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
     let path = this.file.dataDirectory;
     const transfer = this.transfer.create();
@@ -454,30 +434,6 @@ export class NotificationPage implements OnInit{
 
       this.loading.dismiss();
     });
-  }
-
-  /////music player
-  onPlayMusic(){
-    if(this.song) {
-      this.song.play();
-    }
-  }
-  onPauseMusic(){
-    if(this.song) {
-      this.song.pause();
-    }
-  }
-  onStopMusic(){
-    if(this.song && this.song.play()) {
-      this.song.stop();
-    }
-  }
-  onCloseMusic(){
-    if(this.song && this.song.play()) {
-      this.song.stop();
-    }
-
-    this.slideEl.classList.toggle('closed');
   }
 
   // getSeencount(){

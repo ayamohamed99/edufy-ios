@@ -29,9 +29,9 @@
             <h1>{{notify.title}}</h1>
             <p>{{notify.body}}</p>
 
-            <div style="height: 16px; background-color: white"></div>
+            <div style="height: 8px; background-color: white"></div>
 
-            <ion-slides pager style="height: 300px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+            <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
               <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
                 <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
                 <div>
@@ -63,30 +63,4 @@
   </ion-fab>
 
 </ion-content>
-
-<ion-footer id="slideFooter" style="background-color: white">
-  <ion-row>
-  <div col-2>
-    <button round ion-button icon-only (click)="onPlayMusic()">
-      <ion-icon><img src="assets/imgs/play-button.png"/></ion-icon>
-    </button>
-  </div>
-  <div col-2>
-    <button round ion-button icon-only (click)="onPauseMusic()">
-      <ion-icon><img src="assets/imgs/pause-button.png"/></ion-icon>
-    </button>
-  </div>
-  <div col-2>
-    <button round ion-button icon-only (click)="onStopMusic()">
-      <ion-icon><img src="assets/imgs/stop-button.png"/></ion-icon>
-    </button>
-  </div>
-  <div col-4></div>
-  <div col-2>
-    <button round ion-button icon-only (click)="onCloseMusic()">
-      <ion-icon><img src="assets/imgs/cancel-button.png"/></ion-icon>
-    </button>
-  </div>
-  </ion-row>
-</ion-footer>
 

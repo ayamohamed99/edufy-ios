@@ -1,5 +1,9 @@
 page-home {
 
+  ion-fab[top] {
+    top: 30px;
+  }
+
   .login-container {
     display: -webkit-flex;
     -webkit-flex-direction: column;
