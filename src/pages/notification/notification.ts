@@ -345,6 +345,8 @@ export class NotificationPage{
             this.loading.present();
             if(attachmentName) {
               let exType: string = attachmentName.toString().slice(0, attachmentName.length - 3);
+              console.log(exType);
+              console.log(attachmentName.toString().slice(0, attachmentName.length - 3));
               this.OpenFiles(attachmentName, attachmentId, attachmentType, attachmentURL,exType);
             }
           }
@@ -378,7 +380,7 @@ export class NotificationPage{
           console.log(e);
           this.alrtCtrl.create( {
             title: 'Error',
-            subTitle: e,
+            subTitle: 'Something went wrong try again later.',
             buttons: ['OK']
           }).present();
           this.loading.dismiss();
@@ -435,6 +437,8 @@ export class NotificationPage{
       this.loading.dismiss();
     });
   }
+
+
 
   // getSeencount(){
   //   this.notificationService.getSeencount(6094).subscribe(
