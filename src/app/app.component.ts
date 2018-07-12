@@ -11,8 +11,7 @@ import { AccountService } from "../services/account";
 import { ProfilePage } from "../pages/profile/profile";
 import {SettingsPage} from "../pages/settings/settings";
 
-
-
+declare var window:any;
 
 @Component({
   templateUrl: 'app.html'
@@ -46,6 +45,7 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      console.log(window);
       if(platform.is('core')){
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
@@ -53,7 +53,7 @@ export class MyApp {
           storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> console.log('ERROR'+err)).catch((err)=> console.log('ERROR'+err));;
           storage.get(this.loginServ.localStoragePassword).then(
             value =>{
-              this.password = value
+              this.password = value;
               if((this.userName != null || this.userName != '') && (this.password != null || this.password != '')){
                 this.startLogIn();
               }else {

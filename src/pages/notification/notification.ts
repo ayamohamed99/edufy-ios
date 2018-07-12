@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
 } from 'ionic-angular';
@@ -13,11 +13,14 @@ import {Class} from "../../modles/class";
 import {StudentsService} from "../../services/students";
 import {Student} from "../../modles/student";
 import {AttachmentList} from "../../modles/attachmentlist";
-import {File, FileEntry} from '@ionic-native/file';
+import {File} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 import {FileTransfer} from '@ionic-native/file-transfer';
 import {Media} from "@ionic-native/media";
 import { FileOpener } from '@ionic-native/file-opener';
+import {Transfer, TransferObject} from '@ionic-native/transfer';
+
+declare var cordova: any;
 
 @IonicPage()
 @Component({
@@ -42,7 +45,8 @@ export class NotificationPage{
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
-              private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener) {
+              private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
+              private transferF: Transfer) {
 
     if (platform.is('core')) {
 
@@ -332,6 +336,8 @@ export class NotificationPage{
             }
             else if(attachmentType == "AUDIO"){
               this.downloadSong(attachmentName,attachmentId,attachmentType,attachmentURL);
+            }else if(attachmentType == "IMAGE"){
+              this.downloadFile(attachmentName.substring(17),attachmentId,attachmentType,attachmentURL);
             }
           }
         },
@@ -344,10 +350,10 @@ export class NotificationPage{
             });
             this.loading.present();
             if(attachmentName) {
-              let exType: string = attachmentName.toString().slice(0, attachmentName.length - 3);
+              let exType: string = attachmentName.toString().slice(attachmentName.length - 3);
               console.log(exType);
-              console.log(attachmentName.toString().slice(0, attachmentName.length - 3));
-              this.OpenFiles(attachmentName, attachmentId, attachmentType, attachmentURL,exType);
+              console.log(attachmentName.toString().slice(attachmentName.length - 3));
+              this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL,exType);
             }
           }
         }
@@ -374,6 +380,7 @@ export class NotificationPage{
       const options: DocumentViewerOptions = {
         title: attachmentName
       };
+      console.log(path + attachmentName);
       this.fileOpener.open(url, 'application/'+extinstion)
         .then(() => console.log('File is opened'))
         .catch(e => {
@@ -386,6 +393,7 @@ export class NotificationPage{
           this.loading.dismiss();
         });
     }).catch(reason => {
+      console.log(path + attachmentName);
       this.alrtCtrl.create( {
         title: 'Error',
         subTitle: reason,
@@ -437,6 +445,70 @@ export class NotificationPage{
       this.loading.dismiss();
     });
   }
+
+
+
+
+  downloadFile(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any) {
+
+    let storageDirectory = null;
+
+    if (this.platform.is('ios')) {
+      storageDirectory = this.file.syncedDataDirectory;
+    } else if (this.platform.is('android')) {
+      storageDirectory = this.file.externalRootDirectory;
+    }
+
+    this.platform.ready().then(() => {
+
+      const fileTransfer: TransferObject = this.transferF.create();
+
+      const imageLocation = attachmentURL;
+
+      fileTransfer.download(imageLocation, storageDirectory + attachmentName).then((entry) => {
+
+        const alertSuccess = this.alrtCtrl.create({
+          title: `Download Succeeded!`,
+          subTitle: `${attachmentName} was successfully downloaded to: ${entry.toURL()}`,
+          buttons: ['Ok']
+        });
+
+        alertSuccess.present();
+
+      }, (error) => {
+
+        const alertFailure = this.alrtCtrl.create({
+          title: `Download Failed!`,
+          subTitle: `${attachmentName} was not successfully downloaded. Error code: ${error.code}`,
+          buttons: ['Ok']
+        });
+
+        alertFailure.present();
+
+      });
+
+    });
+
+  }
+    // var fileTransfer = new window.FileTransfer;
+    // let path = this.file.dataDirectory+name;
+    // var uri = encodeURI(url);
+    //
+    // fileTransfer.download(
+    //   uri,
+    //   path,
+    //   function(entry) {
+    //     console.log("download complete: " + entry.toURL());
+    //     console.log(uri);
+    //     console.log(path);
+    //   },
+    //   function(error) {
+    //     console.log("download error source " + error.source);
+    //     console.log("download error target " + error.target);
+    //     console.log("download error code" + error.code);
+    //   },
+    //   false,);
+
 
 
 

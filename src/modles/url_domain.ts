@@ -24,4 +24,6 @@ export class Url_domain{
   //
   //   ],
   // "Production":"104.198.175.198"
+  // ionic cordova emulate ios --livereload -c --target="iPhone-X, 11.4”
+  
 }
