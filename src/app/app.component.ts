@@ -136,7 +136,7 @@ export class MyApp {
         this.values = data;
         this.accessToken = this.values.refreshToken.value;
         console.log("this.accessToken", this.accessToken);
-        this.refreToken();
+        this.refreshToken();
       },
       err => {
         this.load.dismiss();
@@ -154,7 +154,7 @@ export class MyApp {
     return 'Bearer ' +this.token;
   }
 
-  refreToken(){
+  refreshToken(){
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
       (data) => {
         console.log("Refresh :  ", data);
@@ -184,7 +184,7 @@ export class MyApp {
           }
         }
 
-        this.managAccount();
+        this.manageAccount();
       },
       err => {
         this.load.dismiss();
@@ -194,7 +194,7 @@ export class MyApp {
   }
 
 
-  managAccount(){
+  manageAccount(){
     this.loginServ.authenticateUserManager(this.token,this.toKenFull).subscribe(
       (data) => {
         console.log("full token ", data);
@@ -238,7 +238,7 @@ export class MyApp {
 
   knowFeatures(data:any){
     this.appearNotification = data.notificationActivated;
-    this.appearDailyReport = false;
+    this.appearDailyReport = true;
     // this.appearDailyReport = data.dailyReportActivated;
   }
 }

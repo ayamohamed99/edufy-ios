@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Platform} from "ionic-angular";
 import {Storage} from "@ionic/storage";
-import {Url_domain} from "../modles/url_domain";
+import {Url_domain} from "../models/url_domain";
 
 @Injectable()
 export class NotificationService{

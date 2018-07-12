@@ -45,7 +45,7 @@ export class HomePage {
         this.values = data;
         this.accessToken = this.values.refreshToken.value;
         console.log("this.accessToken", this.accessToken);
-        this.refreToken();
+        this.refreshToken();
       },
       err => {
         this.load.dismiss();
@@ -68,7 +68,7 @@ export class HomePage {
     return 'Bearer ' +this.token;
   }
 
-  refreToken(){
+  refreshToken(){
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
       (data) => {
         console.log("Refresh :  ", data);

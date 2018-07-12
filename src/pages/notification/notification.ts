@@ -5,14 +5,14 @@ import {
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
-import {Notification} from "../../modles/notification";
+import {Notification} from "../../models/notification";
 import {Storage} from "@ionic/storage";
 import {NotificationEditPage} from "./popover_notification/notification-edit/notification-edit";
 import {AccountService} from "../../services/account";
-import {Class} from "../../modles/class";
+import {Class} from "../../models/class";
 import {StudentsService} from "../../services/students";
-import {Student} from "../../modles/student";
-import {AttachmentList} from "../../modles/attachmentlist";
+import {Student} from "../../models/student";
+import {AttachmentList} from "../../models/attachmentlist";
 import {File, FileEntry} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 import {FileTransfer} from '@ionic-native/file-transfer';

@@ -6,11 +6,11 @@ import {
 import {NotificationService} from "../../services/notification";
 import { Network } from '@ionic-native/network';
 import {AccountService} from "../../services/account";
-import {Class} from "../../modles/class";
-import {Student} from "../../modles/student";
+import {Class} from "../../models/class";
+import {Student} from "../../models/student";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
-import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
-import {Send_student_notification} from "../../modles/send_student_notification";
+import {Autocomplete_shown_array} from "../../models/autocomplete_shown_array";
+import {Send_student_notification} from "../../models/send_student_notification";
 
 
 @IonicPage()

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Url_domain} from "../modles/url_domain";
+import {Url_domain} from "../models/url_domain";
 
 @Injectable()
 export class StudentsService{
