@@ -11,6 +11,8 @@ import {Student} from "../../modles/student";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
 import {Send_student_notification} from "../../modles/send_student_notification";
+import { Storage } from "@ionic/storage";
+
 
 
 @IonicPage()
@@ -19,6 +21,7 @@ import {Send_student_notification} from "../../modles/send_student_notification"
   templateUrl: 'notification-new.html',
 })
 export class NotificationNewPage {
+  wifiUploadKey = 'WIFI_UPLOAD';
   sendTo:any[] = [];
   Title:string;
   Details:string;
@@ -35,12 +38,13 @@ export class NotificationNewPage {
   autocompleteArray:AutoCompleteOps<any>;
 
   attachmentButtonName:string = "Add New Attachment";
-  attachmentArray:any;
+  attachmentArray:any[] = [];
   chooseAllClasses:any[] = [];
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService,
-              private alertCtrl:AlertController, private loadingCtrl:LoadingController, public actionSheetCtrl: ActionSheetController)
+              private alertCtrl:AlertController, private loadingCtrl:LoadingController,
+              public actionSheetCtrl: ActionSheetController, private storage:Storage)
   {
 
     this.tagsArr = accServ.tagArry;
@@ -120,6 +124,24 @@ export class NotificationNewPage {
   }
 
   sendNotification() {
+
+    let wifiUpload;
+
+    this.storage.get(this.wifiUploadKey).then(
+      value => {
+        if(value == 'true'){
+          wifiUpload = true;
+        }else{
+          wifiUpload = false;
+        }
+      },
+      (err)=> {
+        console.log('ERROR'+err)
+      })
+      .catch((err)=>{
+        console.log('ERROR'+err)
+  });
+
 
     let RecieverArray:any[] = [];
 
@@ -278,18 +300,21 @@ export class NotificationNewPage {
           text: 'Image',
           handler: () => {
             console.log('Image clicked');
+            this.chooseFileOnPlatform();
           }
         },
         {
           text: 'Audio',
           handler: () => {
             console.log('Audio clicked');
+            this.chooseFileOnPlatform();
           }
         },
         {
           text: 'Document',
           handler: () => {
             console.log('Document clicked');
+            this.chooseFileOnPlatform();
           }
         },
         {
@@ -303,6 +328,22 @@ export class NotificationNewPage {
     });
 
     actionSheet.present();
+  }
+
+  chooseFileOnPlatform(){
+    if(this.platform.is('ios')){
+      this.iosFilePicker();
+    }else if (this.platform.is('android')){
+      this.androidFileChooser();
+    }
+  }
+
+  androidFileChooser(){
+
+  }
+
+  iosFilePicker(){
+
   }
 
 }

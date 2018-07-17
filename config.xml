@@ -94,6 +94,8 @@
     <allow-navigation href="http://192.168.43.123:8100" />
     <allow-navigation href="http://192.168.43.123:8101" />
     <allow-navigation href="http://192.168.1.9:8100" />
+    <allow-navigation href="http://192.168.1.5:8100" />
+    <allow-navigation href="http://192.168.1.5:8101" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.0.0" />
     <engine name="ios" spec="4.5.4" />

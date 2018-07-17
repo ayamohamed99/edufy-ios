@@ -367,9 +367,9 @@ export class NotificationPage{
     let path = null;
 
     if (this.platform.is('ios')) {
-      path = this.file.documentsDirectory;
+      path = this.file.tempDirectory;
     } else if (this.platform.is('android')) {
-      path = this.file.dataDirectory;
+      path = this.file.cacheDirectory;
     }
 
     const transfer = this.transfer.create();
@@ -454,9 +454,9 @@ export class NotificationPage{
     let storageDirectory = null;
 
     if (this.platform.is('ios')) {
-      storageDirectory = this.file.syncedDataDirectory;
+      storageDirectory = this.file.documentsDirectory;
     } else if (this.platform.is('android')) {
-      storageDirectory = this.file.externalRootDirectory;
+      storageDirectory = this.file.externalRootDirectory+'/Download/';
     }
 
     this.platform.ready().then(() => {

@@ -49,10 +49,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("POST call in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
 
@@ -102,10 +102,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("POST call in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
 
@@ -121,10 +121,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("POST call in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
       },
@@ -145,10 +145,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("POST call in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
       },

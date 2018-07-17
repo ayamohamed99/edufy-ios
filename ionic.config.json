@@ -5,22 +5,21 @@
   "integrations": {
     "cordova": {}
   },
-  "proxies": [
-    {
-      "path":"/oauth",
-      "proxyUrl": "http://104.198.175.198/oauth"
-    },
-    {
-      "path":"/authentication",
-      "proxyUrl": "http://104.198.175.198/authentication"
-    },
-    {
-      "path":"/entrepreware.com",
-      "proxyUrl": "http://104.198.175.198/"
-    }
+   "proxies": [
+     {
+       "path":"/oauth",
+       "proxyUrl": "http://192.168.1.2:8080/oauth"
+     },
+     {
+       "path":"/authentication",
+       "proxyUrl": "http://192.168.1.2:8080/authentication"
+     },
+     {
+       "path":"/entrepreware.com",
+       "proxyUrl": "http://104.198.175.198/"
+     }
 
-  ],
-  "Production":"104.198.175.198"
+     ],
+   "Production":"104.198.175.198"
 
 }
-

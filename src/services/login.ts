@@ -7,6 +7,7 @@ import {Url_domain} from "../modles/url_domain";
 export class LoginService {
 
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+  localStorageAccessToken:string = 'LOCAL_STORAGE_ACCESS_TOKEN';
   localStorageUserName:string = 'LOCAL_STORAGE_USERNAME';
   localStoragePassword:string = 'LOCAL_STORAGE_PASSWORD';
   accessToken:string;

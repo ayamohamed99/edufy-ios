@@ -30,6 +30,7 @@ import { Media } from '@ionic-native/media';
 import {PhotoViewer} from "@ionic-native/photo-viewer";
 import {FileOpener} from "@ionic-native/file-opener";
 import {Transfer, TransferObject} from '@ionic-native/transfer';
+import {LogoutService} from "../services/logout";
 
 
 
@@ -67,6 +68,7 @@ import {Transfer, TransferObject} from '@ionic-native/transfer';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoginService,
+    LogoutService,
     NotificationService,
     AccountService,
     Network,NativeStorage,

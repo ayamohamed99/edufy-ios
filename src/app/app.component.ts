@@ -1,5 +1,5 @@
-import {Component, ViewChild } from '@angular/core';
-import { LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { AlertController, LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -9,13 +9,15 @@ import { LoginService } from "../services/login";
 import { NotificationPage } from "../pages/notification/notification";
 import { AccountService } from "../services/account";
 import { ProfilePage } from "../pages/profile/profile";
-import {SettingsPage} from "../pages/settings/settings";
+import { SettingsPage } from "../pages/settings/settings";
+import { LogoutService } from "../services/logout";
 
 declare var window:any;
 
 @Component({
   templateUrl: 'app.html'
 })
+
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
@@ -41,7 +43,8 @@ export class MyApp {
   appearDailyReport:boolean;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
-              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService) {
+              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
+              private logout:LogoutService, private alertCtrl: AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -99,14 +102,56 @@ export class MyApp {
 
 
   onSignOut(){
-    console.log('log-out');
-    if(this.platform.is('core')) {
-      localStorage.clear();
-    }else {
-      this.storage.clear();
+    this.load = this.loading.create({
+      content: 'Wait please ...'
+    });
+    this.load.present();
+
+    let plat=this.platform.is('core');
+
+    if(plat){
+      let token = localStorage.getItem(this.loginServ.localStorageToken);
+      this.logout.putHeader(token);
+    }else{
+      this.storage.get(this.loginServ.localStorageToken).then(
+        value => {
+          this.logout.putHeader(value);
+          this.logoutMethod();
+        })
+
     }
-    this.menu.close();
-    this.rootPage = this.homePage;
+
+
+  }
+
+
+  logoutMethod(){
+    this.logout.postlogout(null,null,null).subscribe(
+      (data) => {
+        console.log("LogOut", data);
+        this.load.dismiss();
+        if(this.platform.is('core')) {
+          localStorage.clear();
+        }else {
+          this.storage.clear();
+        }
+        this.menu.close();
+        this.nav.setRoot(this.homePage);
+      },
+      err => {
+        this.load.dismiss();
+        console.log("error logout", err.message);
+        if(this.platform.is('core')) {
+          localStorage.clear();
+        }else {
+          this.storage.clear();
+        }
+        this.menu.close();
+        this.nav.setRoot(this.homePage);
+      },
+      () => {
+        console.log("The Logout observable is now completed.");
+      });
   }
 
 
@@ -171,6 +216,7 @@ export class MyApp {
         {
 
           localStorage.setItem(this.loginServ.localStorageToken, this.fullToken());
+          localStorage.setItem(this.loginServ.localStorageAccessToken, this.token);
           localStorage.setItem(this.loginServ.localStorageUserName, this.userName);
           localStorage.setItem(this.loginServ.localStoragePassword, this.password);
 

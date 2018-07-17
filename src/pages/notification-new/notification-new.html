@@ -44,12 +44,20 @@
 
   <div style="height: 16px; background-color: white"></div>
 
-  <ion-slides pager style="height: 50%; padding: 8px">
-
-    <ion-slide *ngFor="let item of attachmentsList">
-      <ion-img ></ion-img>
-    </ion-slide>
-
+      <ion-slides pager style="height: 316px; padding: 8px" *ngIf="attachmentsList && attachmentsList.length>0" >
+        <ion-slide *ngFor="let item of attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
+          <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
+          <div>
+            <ion-img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
+            <ion-img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
+          </div>
+        </ion-slide>
   </ion-slides>
 
 
