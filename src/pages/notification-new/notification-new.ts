@@ -12,6 +12,9 @@ import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-auto
 import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
 import {Send_student_notification} from "../../modles/send_student_notification";
 import { Storage } from "@ionic/storage";
+import { IOSFilePicker } from '@ionic-native/file-picker';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 
 
@@ -44,7 +47,8 @@ export class NotificationNewPage {
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService,
               private alertCtrl:AlertController, private loadingCtrl:LoadingController,
-              public actionSheetCtrl: ActionSheetController, private storage:Storage)
+              public actionSheetCtrl: ActionSheetController, private storage:Storage,
+              private fromGallery: Camera, private androidFile: FileChooser, private iosFile: IOSFilePicker)
   {
 
     this.tagsArr = accServ.tagArry;
@@ -294,26 +298,19 @@ export class NotificationNewPage {
 
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose type of attachment',
+      title: 'Choose From',
       buttons: [
         {
-          text: 'Image',
+          text: 'Gallery',
           handler: () => {
-            console.log('Image clicked');
-            this.chooseFileOnPlatform();
+            console.log('Gallery clicked');
+            this.chooseImageFromGallery(this.fromGallery.MediaType.ALLMEDIA, true);
           }
         },
         {
-          text: 'Audio',
+          text: 'Other File',
           handler: () => {
-            console.log('Audio clicked');
-            this.chooseFileOnPlatform();
-          }
-        },
-        {
-          text: 'Document',
-          handler: () => {
-            console.log('Document clicked');
+            console.log('File Manager clicked');
             this.chooseFileOnPlatform();
           }
         },
@@ -325,9 +322,7 @@ export class NotificationNewPage {
           }
         }
       ]
-    });
-
-    actionSheet.present();
+    }).present();
   }
 
   chooseFileOnPlatform(){
@@ -339,11 +334,35 @@ export class NotificationNewPage {
   }
 
   androidFileChooser(){
-
+    this.androidFile.open()
+      .then(uri => console.log(uri))
+      .catch(e => console.log(e));
   }
 
   iosFilePicker(){
+    this.iosFile.pickFile()
+      .then(uri => console.log(uri))
+      .catch(err => console.log('Error', err));
+  }
 
+  chooseImageFromGallery(sourceType: number, editable: boolean){
+    this.fromGallery.getPicture({
+      sourceType: sourceType,
+      allowEdit: editable,
+      destinationType: this.fromGallery.DestinationType.FILE_URI,
+      mediaType:this.fromGallery.MediaType.ALLMEDIA,
+      saveToPhotoAlbum: false,
+      correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
+    }).then((imageData) => {
+      console.log('IMAGEDATA:'+imageData);
+      console.log(`IMAGEDATA: -> ${JSON.stringify(imageData)}`);
+      //fix for android, remove query string from end of file_uri or crashes android //
+      imageData = imageData.split('?')[0];
+      let filename = imageData.replace(/^.*[\\\/]/, '');
+
+    }, (err) => {
+      console.log(`ERROR -> ${JSON.stringify(err)}`);
+    });
   }
 
 }

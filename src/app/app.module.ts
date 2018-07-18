@@ -31,6 +31,9 @@ import {PhotoViewer} from "@ionic-native/photo-viewer";
 import {FileOpener} from "@ionic-native/file-opener";
 import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {LogoutService} from "../services/logout";
+import { Camera } from '@ionic-native/camera';
+import { FileChooser } from '@ionic-native/file-chooser';
+import { IOSFilePicker } from '@ionic-native/file-picker';
 
 
 
@@ -79,7 +82,10 @@ import {LogoutService} from "../services/logout";
     Media,
     PhotoViewer,
     FileOpener,
-    Transfer
+    Transfer,
+    Camera,
+    FileChooser,
+    IOSFilePicker
   ]
 })
 export class AppModule {}
