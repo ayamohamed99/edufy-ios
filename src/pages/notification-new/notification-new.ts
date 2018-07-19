@@ -266,7 +266,7 @@ export class NotificationNewPage {
   buttonName(){
     this.presentActionSheet();
 
-    if(!this.attachmentArray){
+    if(this.attachmentArray.length === 0){
       this.attachmentButtonName = "Add New Attachment";
     }else{
       this.attachmentButtonName = "Add Another Attachment";
@@ -297,32 +297,7 @@ export class NotificationNewPage {
 
 
   presentActionSheet() {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose From',
-      buttons: [
-        {
-          text: 'Gallery',
-          handler: () => {
-            console.log('Gallery clicked');
-            this.chooseImageFromGallery(this.fromGallery.MediaType.ALLMEDIA, true);
-          }
-        },
-        {
-          text: 'Other File',
-          handler: () => {
-            console.log('File Manager clicked');
-            this.chooseFileOnPlatform();
-          }
-        },
-        {
-          text: 'Cancel',
-          role: 'destructive',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    }).present();
+    this.chooseFileOnPlatform();
   }
 
   chooseFileOnPlatform(){
@@ -335,34 +310,26 @@ export class NotificationNewPage {
 
   androidFileChooser(){
     this.androidFile.open()
-      .then(uri => console.log(uri))
-      .catch(e => console.log(e));
+      .then(
+        uri => {
+          console.log(uri);
+        }
+      )
+      .catch(e =>{
+        console.log("Android Error",e);
+      });
   }
 
   iosFilePicker(){
     this.iosFile.pickFile()
-      .then(uri => console.log(uri))
-      .catch(err => console.log('Error', err));
-  }
-
-  chooseImageFromGallery(sourceType: number, editable: boolean){
-    this.fromGallery.getPicture({
-      sourceType: sourceType,
-      allowEdit: editable,
-      destinationType: this.fromGallery.DestinationType.FILE_URI,
-      mediaType:this.fromGallery.MediaType.ALLMEDIA,
-      saveToPhotoAlbum: false,
-      correctOrientation: true //this needs to be true to get a file:/// FILE_URI, otherwise android does not return a file uri. Yep.
-    }).then((imageData) => {
-      console.log('IMAGEDATA:'+imageData);
-      console.log(`IMAGEDATA: -> ${JSON.stringify(imageData)}`);
-      //fix for android, remove query string from end of file_uri or crashes android //
-      imageData = imageData.split('?')[0];
-      let filename = imageData.replace(/^.*[\\\/]/, '');
-
-    }, (err) => {
-      console.log(`ERROR -> ${JSON.stringify(err)}`);
-    });
+      .then(
+        uri => {
+          console.log(uri);
+        }
+      )
+      .catch(e =>{
+        console.log("IOS Error",e);
+      });
   }
 
 }

@@ -331,14 +331,7 @@ export class NotificationPage{
               content: ""
             });
             this.loading.present();
-            if(attachmentType == "PDF"){
-              this.downloadPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
-            }
-            else if(attachmentType == "AUDIO"){
-              this.downloadSong(attachmentName,attachmentId,attachmentType,attachmentURL);
-            }else if(attachmentType == "IMAGE"){
-              this.downloadFile(attachmentName.substring(17),attachmentId,attachmentType,attachmentURL);
-            }
+            this.downloadFile(attachmentName.substring(17),attachmentId,attachmentType,attachmentURL);
           }
         },
         {
@@ -403,52 +396,6 @@ export class NotificationPage{
     });
   }
 
-  downloadPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    let path = null;
-
-    if (this.platform.is('ios')) {
-      path = this.file.documentsDirectory;
-    } else if (this.platform.is('android')) {
-      path = this.file.dataDirectory;
-    }
-
-    const transfer = this.transfer.create();
-    transfer.download(attachmentURL,
-      path + attachmentName).then(entry => {
-
-      this.loading.dismiss();
-
-    }).catch(reason => {
-
-      this.alrtCtrl.create( {
-        title: 'Error',
-        subTitle: reason,
-        buttons: ['OK']
-      }).present();
-
-      this.loading.dismiss();
-    });
-  }
-
-  downloadSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    let path = this.file.dataDirectory;
-    const transfer = this.transfer.create();
-    transfer.download(attachmentURL,
-      path + attachmentName).catch(reason => {
-
-      this.alrtCtrl.create( {
-        title: 'Error',
-        subTitle: reason,
-        buttons: ['OK']
-      }).present();
-
-      this.loading.dismiss();
-    });
-  }
-
-
-
-
   downloadFile(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any) {
 
     let storageDirectory = null;
@@ -463,9 +410,9 @@ export class NotificationPage{
 
       const fileTransfer: TransferObject = this.transferF.create();
 
-      const imageLocation = attachmentURL;
+      const fileLocation = attachmentURL;
 
-      fileTransfer.download(imageLocation, storageDirectory + attachmentName).then((entry) => {
+      fileTransfer.download(fileLocation, storageDirectory + attachmentName).then((entry) => {
 
         const alertSuccess = this.alrtCtrl.create({
           title: `Download Succeeded!`,
