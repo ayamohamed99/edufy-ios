@@ -8,14 +8,15 @@ import { Network } from '@ionic-native/network';
 import {AccountService} from "../../services/account";
 import {Class} from "../../modles/class";
 import {Student} from "../../modles/student";
-import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
 import {Send_student_notification} from "../../modles/send_student_notification";
 import { Storage } from "@ionic/storage";
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { FileChooser } from '@ionic-native/file-chooser';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-
+import { Camera } from '@ionic-native/camera';
+import {File} from "@ionic-native/file";
+import firebase from "firebase";
+import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 
 
 @IonicPage()
@@ -45,10 +46,10 @@ export class NotificationNewPage {
   chooseAllClasses:any[] = [];
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
-              public network:Network,private toastCtrl: ToastController, private platform:Platform, private accServ:AccountService,
-              private alertCtrl:AlertController, private loadingCtrl:LoadingController,
-              public actionSheetCtrl: ActionSheetController, private storage:Storage,
-              private fromGallery: Camera, private androidFile: FileChooser, private iosFile: IOSFilePicker)
+              public network:Network,private toastCtrl: ToastController, private platform:Platform,
+              private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingController,
+              public actionSheetCtrl: ActionSheetController, private storage:Storage, private fromGallery: Camera,
+              private androidFile: FileChooser, private iosFile: IOSFilePicker, private file:File)
   {
 
     this.tagsArr = accServ.tagArry;
@@ -311,11 +312,34 @@ export class NotificationNewPage {
   androidFileChooser(){
     this.androidFile.open()
       .then(
-        uri => {
-          console.log(uri);
+        (uri) => {
+          alert(uri);
+
+          this.file.resolveLocalFilesystemUrl(uri)
+            .then(
+            (url) => {
+              alert(JSON.stringify(url));
+
+              let dirPath = url.nativeURL;
+
+              let dirPathSegment = dirPath.split('/');  //break string into array
+              dirPathSegment.pop();  //remove its last element
+              dirPath = dirPathSegment.join('/');
+
+              this.file.readAsArrayBuffer(dirPath, url.name)
+                .then(async (readUrl) => {
+                  await this.uploadToStorage(readUrl, url.name);
+                })
+                .catch();
+            }
+          ).catch(
+            (e) =>{
+              console.log("File :",e);
+            });
+
         }
       )
-      .catch(e =>{
+      .catch((e) =>{
         console.log("Android Error",e);
       });
   }
@@ -330,6 +354,21 @@ export class NotificationNewPage {
       .catch(e =>{
         console.log("IOS Error",e);
       });
+  }
+
+
+  async uploadToStorage(readUrl, name){
+    // let blob = new Blob([readUrl], {type:"image/jpg"});
+
+    let blob = new Blob([readUrl]);
+
+    let storage = firebase.storage();
+
+    storage.ref("entrepreware/"+name).put(blob).then( (d)=> {
+      alert(d);
+    }).catch( (e) => {
+      alert(JSON.stringify(e));
+    });
   }
 
 }

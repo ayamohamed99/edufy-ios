@@ -34,8 +34,18 @@ import {LogoutService} from "../services/logout";
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { IOSFilePicker } from '@ionic-native/file-picker';
+import firebase from "firebase";
 
+let config = {
+  apiKey: "AIzaSyB-TFqHXer5N1i5-wVobwNmk10DTfUqupM",
+  authDomain: "chef-ba9ee.firebaseapp.com",
+  databaseURL: "https://chef-ba9ee.firebaseio.com",
+  projectId: "chef-ba9ee",
+  storageBucket: "chef-ba9ee.appspot.com",
+  messagingSenderId: "319544452391"
+};
 
+firebase.initializeApp(config);
 
 @NgModule({
   declarations: [
