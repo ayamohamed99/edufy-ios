@@ -57,7 +57,7 @@ export class MyApp {
           storage.get(this.loginServ.localStoragePassword).then(
             value =>{
               this.password = value;
-              if((this.userName != null || this.userName != '') && (this.password != null || this.password != '')){
+              if((this.userName && this.userName != '') && (this.password && this.password != '')){
                 this.startLogIn();
               }else {
                 this.rootPage = this.homePage;
@@ -66,7 +66,7 @@ export class MyApp {
             });
       }
 
-      if((this.userName != null || this.userName != '') && (this.password != null || this.password != '') &&
+      if((this.userName && this.userName != '') && (this.password && this.password != '') &&
         platform.is('core')){
         this.startLogIn();
       }else {

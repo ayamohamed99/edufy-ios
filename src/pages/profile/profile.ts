@@ -24,10 +24,25 @@ export class ProfilePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService) {
     this.name = accountServ.getUserName();
-      this.userName = accountServ.getUserUserName();
-      this.userPhone = accountServ.getUserTelephone();
-      this.userMail = accountServ.getUserEmail();
-      this.userAddress = accountServ.getUserAddress();
+    this.userName = accountServ.getUserUserName();
+    this.userPhone = accountServ.getUserTelephone();
+    this.userMail = accountServ.getUserEmail();
+    this.userAddress = accountServ.getUserAddress();
+    if(!this.name || this.name == ""){
+      this.name = "No Name";
+    }
+    if(!this.userName || this.userName == ""){
+      this.userName = "No User Name";
+    }
+    if(!this.userPhone || this.userPhone == ""){
+      this.userPhone = "No Phone";
+    }
+    if(!this.userMail || this.userMail == ""){
+      this.userMail = "No Mail";
+    }
+    if(!this.userAddress || this.userAddress == ""){
+      this.userAddress = "No Address";
+    }
   }
 
   onCore(){

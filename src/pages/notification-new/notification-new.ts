@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, NavParams, Platform, ToastController,
   ViewController,ActionSheetController
@@ -14,9 +14,12 @@ import { Storage } from "@ionic/storage";
 import { IOSFilePicker } from '@ionic-native/file-picker';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { Camera } from '@ionic-native/camera';
-import {File} from "@ionic-native/file";
+import {File, FileEntry} from "@ionic-native/file";
 import firebase from "firebase";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
+import {FileUploadOptions} from "@ionic-native/transfer";
+import {NgForm} from "@angular/forms";
+import {AttachmentList} from "../../modles/attachmentlist";
 
 
 @IonicPage()
@@ -25,6 +28,7 @@ import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-auto
   templateUrl: 'notification-new.html',
 })
 export class NotificationNewPage {
+  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   wifiUploadKey = 'WIFI_UPLOAD';
   sendTo:any[] = [];
   Title:string;
@@ -44,6 +48,8 @@ export class NotificationNewPage {
   attachmentButtonName:string = "Add New Attachment";
   attachmentArray:any[] = [];
   chooseAllClasses:any[] = [];
+
+  @ViewChild('file') inputEl: ElementRef;
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform,
@@ -115,7 +121,7 @@ export class NotificationNewPage {
     console.log('NetWork '+network.type);
 
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => console.log('network was disconnected :-('));
-    console.log('Network '+disconnectSubscription );
+    console.log('Network '+disconnectSubscription);
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
       console.log('network connected!');
@@ -125,7 +131,21 @@ export class NotificationNewPage {
         }
       }, 3000);
     });
-    console.log('Network '+connectSubscription );
+    console.log('Network '+connectSubscription);
+
+    let tokenKey;
+    if (platform.is('core')) {
+
+      tokenKey = localStorage.getItem(this.localStorageToken);
+      this.notiServ.putHeader(localStorage.getItem(this.localStorageToken));
+    } else {
+
+      storage.get(this.localStorageToken).then(
+        val => {
+          tokenKey = val;
+          this.notiServ.putHeader(val);
+        });
+    }
   }
 
   sendNotification() {
@@ -264,18 +284,6 @@ export class NotificationNewPage {
     console.log(this.sendTo);
   }
 
-  buttonName(){
-    this.presentActionSheet();
-
-    if(this.attachmentArray.length === 0){
-      this.attachmentButtonName = "Add New Attachment";
-    }else{
-      this.attachmentButtonName = "Add Another Attachment";
-    }
-  }
-
-
-
   presentConfirm(err:string) {
     let alert = this.alertCtrl.create({
       title: 'Error',
@@ -297,79 +305,79 @@ export class NotificationNewPage {
   }
 
 
-  presentActionSheet() {
-    this.chooseFileOnPlatform();
-  }
-
-  chooseFileOnPlatform(){
-    if(this.platform.is('ios')){
-      this.iosFilePicker();
-    }else if (this.platform.is('android')){
-      this.androidFileChooser();
-    }
-  }
-
-  androidFileChooser(){
-    this.androidFile.open()
-      .then(
-        (uri) => {
-          alert(uri);
-
-          this.file.resolveLocalFilesystemUrl(uri)
-            .then(
-            (url) => {
-              alert(JSON.stringify(url));
-
-              let dirPath = url.nativeURL;
-
-              let dirPathSegment = dirPath.split('/');  //break string into array
-              dirPathSegment.pop();  //remove its last element
-              dirPath = dirPathSegment.join('/');
-
-              this.file.readAsArrayBuffer(dirPath, url.name)
-                .then(async (readUrl) => {
-                  await this.uploadToStorage(readUrl, url.name);
-                })
-                .catch();
-            }
-          ).catch(
-            (e) =>{
-              console.log("File :",e);
-            });
-
-        }
-      )
-      .catch((e) =>{
-        console.log("Android Error",e);
-      });
-  }
-
-  iosFilePicker(){
-    this.iosFile.pickFile()
-      .then(
-        uri => {
-          console.log(uri);
-        }
-      )
-      .catch(e =>{
-        console.log("IOS Error",e);
-      });
-  }
 
 
-  async uploadToStorage(readUrl, name){
-    // let blob = new Blob([readUrl], {type:"image/jpg"});
+  // async uploadToStorage(readUrl, name, type){
+  //   // let blob = new Blob([readUrl], {type:"image/jpg"});
+  //
+  //   let typeString = "application/"+type;
+  //
+  //   let blob = new Blob([readUrl], {type:typeString});
+  //
+  //   this.notiServ.postAttachment(blob).subscribe(
+  //     s => console.log("ddd",JSON.stringify(s)),
+  //     e => console.log("ddd",JSON.stringify(e))
+  //   );
 
-    let blob = new Blob([readUrl]);
 
-    let storage = firebase.storage();
-
-    storage.ref("entrepreware/"+name).put(blob).then( (d)=> {
-      alert(d);
-    }).catch( (e) => {
-      alert(JSON.stringify(e));
+    // let storage = firebase.storage();
+    //
+    // storage.ref("edufyTeacher/"+name).put(blob)
+    //   .then( (d)=> {
+    //   alert("send res"+JSON.stringify(d));
+    //   console.log("ddd",JSON.stringify(d));
+    // }).catch( (e) => {
+    //
+    //
+    //   alert("err"+JSON.stringify(e));
+    //   storage.ref("edufyTeacher/"+name).getDownloadURL().then(url =>{
+    //     console.log(JSON.stringify(url));
+    //   }).catch(
+    //     (e) => {
+    //       alert("link err : "+JSON.stringify(e));
+    //     });
+    //
+    //   console.log("storage err : ",JSON.stringify(e));
+    // });
+  // }
+  filesChange(){
+    let loading = this.loadingCtrl.create({
+      content: ""
     });
-  }
 
+    let inputEl: HTMLInputElement = this.inputEl.nativeElement;
+    let fileCount: number = inputEl.files.length;
+    if (fileCount > 0) { // a file was selected
+      for (let i = 0; i < fileCount; i++) {
+        let formData = new FormData();
+        formData.append('file', inputEl.files.item(i));
+        this.notiServ.postAttachment(formData).subscribe(
+          s=> {
+            console.log('Success post => ' + JSON.stringify(s));
+            let allData:any = s;
+            let attach = new AttachmentList();
+            attach.name = allData.name;
+            attach.type = allData.type;
+            attach.url = allData.url;
+            this.attachmentArray.push(attach);
+            loading.dismiss();
+          },
+              e=> {
+            console.log('error post => '+JSON.stringify(e));
+                this.alertCtrl.create( {
+                  title: 'Error',
+                  subTitle: 'Can\'t upload the attachment, please try later',
+                  buttons: ['OK']
+                }).present();
+                loading.dismiss();
+
+          }
+        );
+      }
+
+      // do whatever you do...
+      // subscribe to observable to listen for response
+    }
+    }
 }
 

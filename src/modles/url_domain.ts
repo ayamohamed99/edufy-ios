@@ -21,9 +21,11 @@ export class Url_domain{
   //     "path":"/entrepreware.com",
   //     "proxyUrl": "http://104.198.175.198/"
   //   }
-  //
   //   ],
   // "Production":"104.198.175.198"
-  // ionic cordova emulate ios --livereload -c --target="iPhone-X, 11.4"
+  // ionic cordova emulate ios --livereload -c --target="iPhone-5s, 11.4"
+  // <preference name="iosPersistentFileLocation" value="Library" />
+  // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
+
 
 }

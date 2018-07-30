@@ -20,6 +20,8 @@ export class NotificationService{
   APPROVE_NOTIFICATION_OPERATION_ID = 2;
   UPDATE_NOTIFICATION_OPERATION_ID = 1;
 
+  val:any;
+
   constructor(private http: HttpClient,platform:Platform,storage:Storage)
   {
     this.DomainUrl = new Url_domain;
@@ -32,6 +34,7 @@ export class NotificationService{
               'Authorization': value
             })
     };
+    this.val = value;
   }
 
   postNotification(title:string, body:string, attachment:any, notificationRecieversSet:any, selectedTags:any)
@@ -88,6 +91,19 @@ export class NotificationService{
   getClassList(){
     return this.http.get(this.DomainUrl.Domain+'/authentication/class.ent?view=NOTIFICATION' +
       '&operationId=' + this.APPROVE_NOTIFICATION_OPERATION_ID,this.httpOptions);
+  }
+
+  postAttachment(data){
+    console.log('val =>'+JSON.stringify(this.val));
+    let option = {
+      headers: new HttpHeaders({
+        'optional-header':'header-value',
+        'Authorization': this.val
+      })
+    };
+    return this.http.post(this.DomainUrl.Domain+'/authentication/uploadDownload.ent?view=NOTIFICATION',
+      data,
+      option);
   }
 
 }
