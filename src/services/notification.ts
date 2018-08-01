@@ -37,7 +37,7 @@ export class NotificationService{
     this.val = value;
   }
 
-  postNotification(title:string, body:string, attachment:any, notificationRecieversSet:any, selectedTags:any)
+  postNotification(title:string, body:string, attachment, notificationRecieversSet:any, selectedTags:any)
   {
     const newNotification = {
       "title": title,

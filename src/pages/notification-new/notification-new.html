@@ -40,26 +40,34 @@
     </ion-select>
   </ion-item>
 
+  <div style="height: 16px; background-color: white"></div>
+
   <button ion-button block outline class="fileContainer">
     Choose Files
     <input type="file" multiple #file (change)="filesChange()">
   </button>
 
-  <div style="height: 16px; background-color: white"></div>
+  <div >
+    <ion-label text-center style="color: #f53d3d" *ngIf="showSupportFiles">
+      The following files is only supported <br> (Image,PDF,Word,Excel,Powerpoint,Audio,Video,Text)
+    </ion-label>
+  </div>
 
       <ion-slides pager style="height: 316px; padding: 8px" *ngIf="attachmentArray && attachmentArray.length > 0" >
-        <ion-slide *ngFor="let item of attachmentArray" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
+        <ion-slide *ngFor="let item of attachmentArray; index as i">
           <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
-          <div>
-            <ion-icon style="" name="close-circle"></ion-icon>
-            <ion-img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
-            <ion-img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
+          <div id="containerDev">
+            <button id="buttonOnImg" icon-only (click)="deleteAttach(i)"><ion-icon name="close-circle"></ion-icon></button>
+            <ion-img class="imgUrlPost" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
+            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
+             item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
+             && item.type != 'VIDEO'"></ion-img>
           </div>
         </ion-slide>
   </ion-slides>

@@ -5,23 +5,23 @@
        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title text-center>Notification</ion-title>
+    <ion-title text-center>Notifications</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content>
+<ion-content class="contentColor">
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
         <ion-card>
-          <ion-item style="background-color: lightgray">
+          <ion-item style="background-color: white">
             <ion-avatar item-start>
               <img src="assets/imgs/profile.png">
             </ion-avatar>
             <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-            <button style="background-color: lightgray" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
-              <ion-icon style="background-color: lightgray" name="more" class="buttonShape" ></ion-icon>
+            <button style="background-color: #eee0" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
+              <ion-icon style="background-color: #eee0" name="more" class="buttonShape" ></ion-icon>
             </button>
           </ion-item>
           <div style="height: 5px;"></div>

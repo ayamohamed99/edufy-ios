@@ -15,11 +15,11 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { Camera } from '@ionic-native/camera';
 import {File, FileEntry} from "@ionic-native/file";
-import firebase from "firebase";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 import {FileUploadOptions} from "@ionic-native/transfer";
 import {NgForm} from "@angular/forms";
 import {AttachmentList} from "../../modles/attachmentlist";
+import {Postattachment} from "../../modles/postattachment";
 
 
 @IonicPage()
@@ -48,6 +48,10 @@ export class NotificationNewPage {
   attachmentButtonName:string = "Add New Attachment";
   attachmentArray:any[] = [];
   chooseAllClasses:any[] = [];
+  fileTypes=["jpg","jpeg","png","gif","ico","bmp","webp","tiff","pdf","txt","xls","xlsx","doc","docx","ppt","pptx","mp4","flv",
+  "avi","mov","wmv","mp3","wma"];
+  showSupportFiles:boolean;
+  wifiUpload:boolean;
 
   @ViewChild('file') inputEl: ElementRef;
 
@@ -57,7 +61,7 @@ export class NotificationNewPage {
               public actionSheetCtrl: ActionSheetController, private storage:Storage, private fromGallery: Camera,
               private androidFile: FileChooser, private iosFile: IOSFilePicker, private file:File)
   {
-
+    this.showSupportFiles = false;
     this.tagsArr = accServ.tagArry;
     this.Title =this.navParams.get('title');
     this.Details=this.navParams.get('details');
@@ -105,6 +109,7 @@ export class NotificationNewPage {
       autoShownStudents.name = student.studentName;
       autoShownStudents.type = "Student";
       autoShownStudents.header = student.studentClass.grade.gradeName+" "+student.studentClass.className;
+      autoShownStudents.studentClassId = student.studentClass.classId;
       this.preparedTags.push(autoShownStudents);
     }
     console.log("see2", this.preparedTags);
@@ -117,21 +122,6 @@ export class NotificationNewPage {
       groupByHeader: item => {if(item.header == null){return ""}else{return item.header}}
 
     };
-
-    console.log('NetWork '+network.type);
-
-    let disconnectSubscription = this.network.onDisconnect().subscribe(() => console.log('network was disconnected :-('));
-    console.log('Network '+disconnectSubscription);
-
-    let connectSubscription = this.network.onConnect().subscribe(() => {
-      console.log('network connected!');
-      setTimeout(() => {
-        if (this.network.type === 'wifi') {
-          console.log('we got a wifi connection, woohoo!');
-        }
-      }, 3000);
-    });
-    console.log('Network '+connectSubscription);
 
     let tokenKey;
     if (platform.is('core')) {
@@ -146,31 +136,30 @@ export class NotificationNewPage {
           this.notiServ.putHeader(val);
         });
     }
-  }
-
-  sendNotification() {
-
-    let wifiUpload;
 
     this.storage.get(this.wifiUploadKey).then(
       value => {
         if(value == 'true'){
-          wifiUpload = true;
+          this.wifiUpload = true;
         }else{
-          wifiUpload = false;
+          this.wifiUpload = false;
         }
       },
       (err)=> {
-        console.log('ERROR'+err)
+        console.log('ERROR'+err);
+        this.wifiUpload = false;
       })
       .catch((err)=>{
-        console.log('ERROR'+err)
-  });
+        console.log('ERROR'+err);
+        this.wifiUpload = false;
+      });
+  }
 
+  sendNotification() {
 
     let RecieverArray:any[] = [];
 
-    if(this.sendTo.some(x => x.id === -1))
+    if(this.sendTo && this.sendTo.some(x => x.id === -1))
     {
       for(let temp of this.sendTo){
         for(let sub of temp.dataList){
@@ -192,47 +181,48 @@ export class NotificationNewPage {
     }
 
     let SelectedTags:any[]=[];
-    for(let tag of this.tags){
-      for(let tagArr of this.tagsArr)
-      if(tagArr.name === tag){
-        SelectedTags.push(tagArr);
+    if(this.tags) {
+      for (let tag of this.tags) {
+        for (let tagArr of this.tagsArr)
+          if (tagArr.name === tag) {
+            SelectedTags.push(tagArr);
+          }
       }
     }
-    let loading = this.loadingCtrl.create({
-      content: ""
+
+
+
+    this.network.onDisconnect().subscribe((e) => {
+      console.log(JSON.stringify(e));
+      let alert = this.alertCtrl.create({
+        title: '',
+        message: "Your internet is not working please check it and will continue upload after the phone connect to the internet again",
+        buttons:["ok"]
+      });
+      alert.present();
     });
 
+
     if (!this.platform.is('core')) {
-      loading.present();
-      this.notiServ.postNotification(this.Title, this.Details, null, RecieverArray, SelectedTags).subscribe(
-        (data) => {
-          console.log("Date Is", data);
-          loading.dismiss();
-          this.viewCtrl.dismiss({name:'dismissed&SENT'});
-        },
-        err => {
-          console.log("POST call in error", err);
-          loading.dismiss();
-          this.presentConfirm(err);
-          },
-        () => console.log("The POST observable is now completed."));
+
+      this.network.onConnect().subscribe(() => {
+        console.log('network connected!');
+        setTimeout(() => {
+
+          this.uploadFromMobile(RecieverArray,SelectedTags);
+
+        }, 3000);
+      });
+
     } else if (this.platform.is('core')){
-      loading.present();
-      // this.talks.push({name: this.name, topics: this.topics});
-      this.notiServ.postNotification(this.Title, this.Details, null, RecieverArray, SelectedTags).subscribe(
-        (data) => {
-          console.log("Date Is", data);
-          loading.dismiss();
-          this.viewCtrl.dismiss({name:'dismissed&SENT'});
-        },
-        err => {
-          console.log("POST call in error", err);
-            loading.dismiss();
-          this.presentConfirm(err);
-        },
-            () =>{
-          console.log("The POST observable is now completed.")
-        });
+      this.network.onConnect().subscribe(() => {
+        console.log('network connected!');
+        setTimeout(() => {
+
+          this.uploadFromWeb(RecieverArray,SelectedTags);
+
+        }, 3000);
+      });
     }
 
   }
@@ -269,13 +259,11 @@ export class NotificationNewPage {
 
         for (let selected of this.sendTo) {
           if (selected.type === "Student") {
-            for (let temp of TempClassessArray) {
-              for (let tempStudent of temp.dataList) {
-                if (tempStudent.id == selected.id) {
+            for (let tempClass of TempClassessArray) {
+                if (tempClass.id == selected.studentClassId) {
                   let index = this.sendTo.indexOf(selected);
                   this.sendTo.splice(index, 1);
                 }
-              }
             }
           }
         }
@@ -304,80 +292,140 @@ export class NotificationNewPage {
     alert.present();
   }
 
-
-
-
-  // async uploadToStorage(readUrl, name, type){
-  //   // let blob = new Blob([readUrl], {type:"image/jpg"});
-  //
-  //   let typeString = "application/"+type;
-  //
-  //   let blob = new Blob([readUrl], {type:typeString});
-  //
-  //   this.notiServ.postAttachment(blob).subscribe(
-  //     s => console.log("ddd",JSON.stringify(s)),
-  //     e => console.log("ddd",JSON.stringify(e))
-  //   );
-
-
-    // let storage = firebase.storage();
-    //
-    // storage.ref("edufyTeacher/"+name).put(blob)
-    //   .then( (d)=> {
-    //   alert("send res"+JSON.stringify(d));
-    //   console.log("ddd",JSON.stringify(d));
-    // }).catch( (e) => {
-    //
-    //
-    //   alert("err"+JSON.stringify(e));
-    //   storage.ref("edufyTeacher/"+name).getDownloadURL().then(url =>{
-    //     console.log(JSON.stringify(url));
-    //   }).catch(
-    //     (e) => {
-    //       alert("link err : "+JSON.stringify(e));
-    //     });
-    //
-    //   console.log("storage err : ",JSON.stringify(e));
-    // });
-  // }
   filesChange(){
+    let inputEl: HTMLInputElement = this.inputEl.nativeElement;
+    let fileCount: number = inputEl.files.length;
+    let faildFilesNamesSize:any[]=[];
+    let faildFilesNameseExtantion:any[]=[];
+    if (fileCount > 0) { // a file was selected
+      for (let i = 0; i < fileCount; i++) {
+        let num:number = inputEl.files.item(i).size;
+        let fileName = inputEl.files.item(i).name;
+        let fileExtintion:string = fileName.slice(fileName.length - 4);
+        fileExtintion = fileExtintion.replace('.', '');
+        if(num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
+          let formData = new FormData();
+          formData.append('file', inputEl.files.item(i));
+          this.uploadAttach(formData);
+        }else if(num > 26214400){
+          faildFilesNamesSize.push(inputEl.files.item(i).name);
+        }else{
+          faildFilesNameseExtantion.push(inputEl.files.item(i).name);
+        }
+      }
+      }
+      if(faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length <= 0){
+      alert('Can\'t upload files name: '+faildFilesNamesSize.join(',')+' because it is bigger than 25 Mb');
+      }else if(faildFilesNamesSize.length <= 0 && faildFilesNameseExtantion.length > 0){
+        this.showSupportFiles=true;
+        alert('Can\'t upload files name: '+faildFilesNameseExtantion.join(',')+' because it is not supported');
+      }else if (faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length > 0){
+        this.showSupportFiles=true;
+        alert('Can\'t upload files name: '+faildFilesNamesSize.join(',')+' because it is bigger than 25 Mb and' +
+          ' files name: '+faildFilesNameseExtantion.join(',')+' because it is not supported.');
+      }
+    }
+
+    async uploadAttach(formData){
+      let loading = this.loadingCtrl.create({
+        content: ""
+      });
+      await this.notiServ.postAttachment(formData).subscribe(
+        s=> {
+          console.log('Success post => ' + JSON.stringify(s));
+          let allData:any = s;
+          let attach = new Postattachment();
+          attach.name = allData.name;
+          attach.type = allData.type;
+          attach.url = allData.url;
+          attach.uploadDate = allData.date;
+          this.attachmentArray.push(attach);
+          loading.dismiss();
+          return true;
+        },
+        e=> {
+          console.log('error post => '+JSON.stringify(e));
+          this.alertCtrl.create( {
+            title: 'Error',
+            subTitle: 'Can\'t upload the attachment, please try later',
+            buttons: ['OK']
+          }).present();
+          loading.dismiss();
+          return true;
+        }
+      );
+    }
+
+  deleteAttach(attachIndex:any){
+    let alert = this.alertCtrl.create({
+      title: 'Alert',
+      message: 'Are you sure that you want to delete this attachment?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Delete',
+          role: 'destructive',
+          handler: () => {
+            this.attachmentArray.splice(attachIndex, 1);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
+
+  uploadFromMobile(RecieverArray,SelectedTags){
     let loading = this.loadingCtrl.create({
       content: ""
     });
 
-    let inputEl: HTMLInputElement = this.inputEl.nativeElement;
-    let fileCount: number = inputEl.files.length;
-    if (fileCount > 0) { // a file was selected
-      for (let i = 0; i < fileCount; i++) {
-        let formData = new FormData();
-        formData.append('file', inputEl.files.item(i));
-        this.notiServ.postAttachment(formData).subscribe(
-          s=> {
-            console.log('Success post => ' + JSON.stringify(s));
-            let allData:any = s;
-            let attach = new AttachmentList();
-            attach.name = allData.name;
-            attach.type = allData.type;
-            attach.url = allData.url;
-            this.attachmentArray.push(attach);
-            loading.dismiss();
-          },
-              e=> {
-            console.log('error post => '+JSON.stringify(e));
-                this.alertCtrl.create( {
-                  title: 'Error',
-                  subTitle: 'Can\'t upload the attachment, please try later',
-                  buttons: ['OK']
-                }).present();
-                loading.dismiss();
-
-          }
-        );
-      }
-
-      // do whatever you do...
-      // subscribe to observable to listen for response
+    if(this.wifiUpload && this.network.type != 'wifi'){
+      this.presentConfirm('You have been activated upload by \"WiFi only\", so close it or open wifi then try again');
+    }else {
+      loading.present();
+      this.notiServ.postNotification(this.Title, this.Details, this.attachmentArray, RecieverArray, SelectedTags).subscribe(
+        (data) => {
+          console.log("Date Is", data);
+          loading.dismiss();
+          this.viewCtrl.dismiss({name: 'dismissed&SENT'});
+        },
+        err => {
+          console.log("POST call in error", err);
+          loading.dismiss();
+          this.presentConfirm(err);
+        },
+        () => console.log("The POST observable is now completed."));
     }
-    }
+  }
+
+  uploadFromWeb(RecieverArray,SelectedTags){
+    let loading = this.loadingCtrl.create({
+      content: ""
+    });
+
+    loading.present();
+    // this.talks.push({name: this.name, topics: this.topics});
+    this.notiServ.postNotification(this.Title, this.Details, this.attachmentArray, RecieverArray, SelectedTags).subscribe(
+      (data) => {
+        console.log("Date Is", data);
+        loading.dismiss();
+        this.viewCtrl.dismiss({name:'dismissed&SENT'});
+      },
+      err => {
+        console.log("POST call in error", err);
+        loading.dismiss();
+        this.presentConfirm(err);
+      },
+      () =>{
+        console.log("The POST observable is now completed.")
+      });
+
+  }
+
 }
 

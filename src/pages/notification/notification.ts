@@ -167,7 +167,7 @@ export class NotificationPage{
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
     if(this.fristOpen) {
       this.loading = this.load.create({
-        content: 'Loading Notification...'
+        content: 'Loading Notifications...'
       });
       this.loading.present();
       this.fristOpen = false;

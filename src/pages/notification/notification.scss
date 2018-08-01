@@ -1,5 +1,9 @@
 page-notification {
 
+  .contentColor{
+    background: #e5e5e5;
+  }
+
   buttonShape{
     background-color: transparent;
     margin: 10px;
@@ -16,6 +20,11 @@ page-notification {
      min-height: 200px;
      background: #eee0;
    }
+
+  ion-img{
+    background: #eee0;
+  }
+
   .card-md {
     border-radius: 10px;
   }
