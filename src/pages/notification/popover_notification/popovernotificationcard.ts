@@ -10,11 +10,7 @@ import {NotificationNewPage} from "../../notification-new/notification-new";
 @IonicPage()
 @Component({
   selector: 'page-popovernotificationcard',
-  template: '<ion-list>\n' +
-  '      <button ion-item (click)="editNotification()">Edit</button>\n' +
-  '      <button ion-item (click)="deleteNotification()">Delete</button>\n' +
-  '      <button ion-item (click)="newNotification()">Edit as new</button>\n' +
-  '    </ion-list>'
+  templateUrl: 'popovernotificationcard.html',
 })
 export class PopoverNotificationCardPage {
   loading:any;

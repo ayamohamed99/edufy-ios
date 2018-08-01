@@ -1,0 +1,41 @@
+page-popovernotificationcard{
+  ion-popover {
+    width: 110px;
+  }
+
+  .popover-content{
+    width: 110px;
+  }
+
+  .popover-md .popover-content{
+    width: 110px;
+  }
+
+  ion-list{
+    width: 150px;height: 120px;
+  }
+}
+.popover-md .popover-content{
+  width: 150px;
+  border-radius:10px;
+}
+.popover-lg .popover-content{
+  border-radius:10px;
+  width: 150px;
+}
+.popover-xl .popover-content{
+  width: 150px;
+  border-radius:10px;
+}
+.popover-sm .popover-content{
+  width: 150px;
+  border-radius:10px;
+}
+.popover-xs .popover-content{
+   width: 150px;
+  border-radius:10px;
+}
+.popover-ios .popover-content{
+  width: 150px;
+  border-radius:10px;
+}

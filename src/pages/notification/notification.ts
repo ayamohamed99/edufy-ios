@@ -96,12 +96,14 @@ export class NotificationPage{
 
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
           details:data.details});
-        model.onDidDismiss(()=>{
-          this.notifications.splice(0);
-          this.notificationPage = 1;
+        model.onDidDismiss(data=>{
+          if(data.name != "dismissed") {
+            this.notifications.splice(0);
+            this.notificationPage = 1;
 
-          this.notificationService.putHeader(this.tokenKey);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+            this.notificationService.putHeader(this.tokenKey);
+            this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+          }
         });
         model.present();
 

@@ -26,31 +26,31 @@ page-notification {
   }
 
   .card-md {
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   .card-lg{
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   .card-xl{
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   .card-sm{
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   .card-xs{
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   .card-ios {
-    border-radius: 10px;
+    border-radius: 15px;
   }
 
   ion-card{
-    border-radius: 10px;
+    border-radius: 15px;
   }
   .btn-on {
     position: absolute;
@@ -76,5 +76,9 @@ page-notification {
 
   ion-fab[bottom] {
     bottom: 40px;
+  }
+
+  .popover-md .popover-content {
+    width: 110px;
   }
 }

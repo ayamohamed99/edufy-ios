@@ -38,11 +38,10 @@ export class NotificationEditPage {
       content: 'Update this Notification...'
     });
     loading.present();
-    this.viewCtrl.dismiss({done:'updateSuccess'});
     this.notiServ.updateNotification(this.notificationID,form.value.notifyTitle,form.value.notifyDetails).subscribe(
       (data) => {
         console.log("Date Is", data);
-
+        this.viewCtrl.dismiss({done:'updateSuccess'});
         loading.dismiss();
       },
       err => {

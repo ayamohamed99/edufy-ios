@@ -14,6 +14,7 @@
 
 <ion-content padding>
 
+
   <rl-tag-input
     [(ngModel)]="sendTo"
     (ngModelChange)="checkArray(selectedTag)"
@@ -26,12 +27,13 @@
 
 
 
-
-
-
+  <ion-item>
   <ion-input type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></ion-input>
+  </ion-item>
 
+  <ion-item>
   <ion-textarea rows="6" [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></ion-textarea>
+  </ion-item>
 
   <ion-item>
     <ion-label class="textColor">Select Tag</ion-label>

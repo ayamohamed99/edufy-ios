@@ -52,6 +52,7 @@ export class NotificationNewPage {
   "avi","mov","wmv","mp3","wma"];
   showSupportFiles:boolean;
   wifiUpload:boolean;
+  placeHolder:string;
 
   @ViewChild('file') inputEl: ElementRef;
 
@@ -61,6 +62,7 @@ export class NotificationNewPage {
               public actionSheetCtrl: ActionSheetController, private storage:Storage, private fromGallery: Camera,
               private androidFile: FileChooser, private iosFile: IOSFilePicker, private file:File)
   {
+    this.placeHolder = "To :";
     this.showSupportFiles = false;
     this.tagsArr = accServ.tagArry;
     this.Title =this.navParams.get('title');

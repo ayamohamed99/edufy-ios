@@ -10,8 +10,6 @@
     <ion-content class="outer-content">
 
       <ion-item-group>
-        <ion-item-divider color="light">Navigation</ion-item-divider>
-
         <button ion-item icon-left (click)="onLoad(profilePage)">
           <ion-icon name="person" small></ion-icon>
           {{names}}'s Profile
@@ -30,12 +28,12 @@
 
         <ion-item-divider color="light">Tools</ion-item-divider>
 
-        <button ion-item icon-left (click)="onLoad(settingsPage)" text-center>
+        <button ion-item icon-left (click)="onLoad(settingsPage)">
           <ion-icon name="cog" small></ion-icon>
           Setting
         </button>
 
-        <button ion-item icon-left (click)="onSignOut()" text-center>
+        <button ion-item icon-left (click)="onSignOut()">
           <ion-icon name="log-out" small></ion-icon>
           Log-out
         </button>
