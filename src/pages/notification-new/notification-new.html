@@ -59,16 +59,16 @@
         <ion-slide *ngFor="let item of attachmentArray; index as i">
           <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
           <div class="container">
-            <ion-img class="imgUrlPost" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
-            <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
+            <img class="imgUrlPost" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+            <img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
              item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
-             && item.type != 'VIDEO'"></ion-img>
+             && item.type != 'VIDEO'">
             <button class="buttonOnImg" icon-only (click)="deleteAttach(i)"><ion-icon name="close-circle"></ion-icon></button>
           </div>
         </ion-slide>
