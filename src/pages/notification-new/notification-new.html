@@ -58,8 +58,7 @@
       <ion-slides pager style="height: 316px; padding: 8px" *ngIf="attachmentArray && attachmentArray.length > 0" >
         <ion-slide *ngFor="let item of attachmentArray; index as i">
           <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
-          <div id="containerDev">
-            <button id="buttonOnImg" icon-only (click)="deleteAttach(i)"><ion-icon name="close-circle"></ion-icon></button>
+          <div class="container">
             <ion-img class="imgUrlPost" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
             <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
             <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
@@ -70,6 +69,7 @@
             <ion-img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
              item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
              && item.type != 'VIDEO'"></ion-img>
+            <button class="buttonOnImg" icon-only (click)="deleteAttach(i)"><ion-icon name="close-circle"></ion-icon></button>
           </div>
         </ion-slide>
   </ion-slides>

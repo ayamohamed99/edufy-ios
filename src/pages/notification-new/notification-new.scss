@@ -1,8 +1,10 @@
 page-notification-new {
 
   .imgAttachPost{
-    min-width: 200px;
-    min-height: 200px;
+    width: 200px;
+    height: 200px;
+    left: 18%;
+    position: absolute;
     background: #eee0;
   }
   .imgUrlPost{
@@ -92,14 +94,19 @@ page-notification-new {
   }
 
 
-  #containerDev {
+
+
+  .container {
     width: 100%;
     min-height: 210px;
-    overflow: visible;
     position: relative;
   }
+  .container ion-img {
+    width: 100%;
+    min-height: 210px;
+  }
 
-  #buttonOnImg {
+  .container .buttonOnImg {
     position: absolute;
     top: 10px;
     right: 10px;
