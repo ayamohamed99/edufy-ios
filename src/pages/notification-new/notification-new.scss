@@ -4,7 +4,7 @@ page-notification-new {
     width: 200px;
     height: 200px;
     left: 18%;
-    position: absolute;
+    //position: absolute;
     background: #eee0;
   }
   .imgUrlPost{
@@ -100,6 +100,7 @@ page-notification-new {
     width: 100%;
     min-height: 210px;
     position: relative;
+    text-align: -webkit-center;
   }
   .container ion-img {
     width: 100%;
