@@ -8,11 +8,11 @@
    "proxies": [
      {
        "path":"/oauth",
-       "proxyUrl": "http://104.198.175.198/oauth"
+       "proxyUrl": "http://192.168.1.5:8080/oauth"
      },
      {
        "path":"/authentication",
-       "proxyUrl": "http://104.198.175.198/authentication"
+       "proxyUrl": "http://192.168.1.5:8080/authentication"
      },
      {
        "path":"/uploadDownload",

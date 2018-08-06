@@ -294,44 +294,46 @@ export class NotificationNewPage {
     alert.present();
   }
 
-  filesChange(){
+  filesChange() {
+
     let inputEl: HTMLInputElement = this.inputEl.nativeElement;
     let fileCount: number = inputEl.files.length;
-    let faildFilesNamesSize:any[]=[];
-    let faildFilesNameseExtantion:any[]=[];
+    let faildFilesNamesSize: any[] = [];
+    let faildFilesNameseExtantion: any[] = [];
     if (fileCount > 0) { // a file was selected
       for (let i = 0; i < fileCount; i++) {
-        let num:number = inputEl.files.item(i).size;
+        let num: number = inputEl.files.item(i).size;
         let fileName = inputEl.files.item(i).name;
-        let fileExtintion:string = fileName.slice(fileName.length - 4);
+        let fileExtintion: string = fileName.slice(fileName.length - 4);
         fileExtintion = fileExtintion.replace('.', '');
-        if(num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
+        if (num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
           let formData = new FormData();
           formData.append('file', inputEl.files.item(i));
           this.uploadAttach(formData);
-        }else if(num > 26214400){
+        } else if (num > 26214400) {
           faildFilesNamesSize.push(inputEl.files.item(i).name);
-        }else{
+        } else {
           faildFilesNameseExtantion.push(inputEl.files.item(i).name);
         }
       }
-      }
-      if(faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length <= 0){
-      alert('Can\'t upload files name: '+faildFilesNamesSize.join(',')+' because it is bigger than 25 Mb');
-      }else if(faildFilesNamesSize.length <= 0 && faildFilesNameseExtantion.length > 0){
-        this.showSupportFiles=true;
-        alert('Can\'t upload files name: '+faildFilesNameseExtantion.join(',')+' because it is not supported');
-      }else if (faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length > 0){
-        this.showSupportFiles=true;
-        alert('Can\'t upload files name: '+faildFilesNamesSize.join(',')+' because it is bigger than 25 Mb and' +
-          ' files name: '+faildFilesNameseExtantion.join(',')+' because it is not supported.');
-      }
     }
+    if (faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length <= 0) {
+      alert('Can\'t upload files name: ' + faildFilesNamesSize.join(',') + ' because it is bigger than 25 Mb');
+    } else if (faildFilesNamesSize.length <= 0 && faildFilesNameseExtantion.length > 0) {
+      this.showSupportFiles = true;
+      alert('Can\'t upload files name: ' + faildFilesNameseExtantion.join(',') + ' because it is not supported');
+    } else if (faildFilesNamesSize.length > 0 && faildFilesNameseExtantion.length > 0) {
+      this.showSupportFiles = true;
+      alert('Can\'t upload files name: ' + faildFilesNamesSize.join(',') + ' because it is bigger than 25 Mb and' +
+        ' files name: ' + faildFilesNameseExtantion.join(',') + ' because it is not supported.');
+    }
+  }
 
     async uploadAttach(formData){
       let loading = this.loadingCtrl.create({
         content: ""
       });
+      loading.present();
       await this.notiServ.postAttachment(formData).subscribe(
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
