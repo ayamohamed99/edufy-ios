@@ -39,7 +39,6 @@ export class NotificationNewPage {
   allStudentList:any[] = [];
   updateTags:any[]=[];
   tagsArr:any[] = [];
-
   allClasses:Class[] = [];
   allStudentNames:any[]=[];
   allStudentsDetails:any[]=[];
@@ -295,7 +294,6 @@ export class NotificationNewPage {
   }
 
   filesChange() {
-
     let inputEl: HTMLInputElement = this.inputEl.nativeElement;
     let fileCount: number = inputEl.files.length;
     let faildFilesNamesSize: any[] = [];
@@ -307,9 +305,16 @@ export class NotificationNewPage {
         let fileExtintion: string = fileName.slice(fileName.length - 4);
         fileExtintion = fileExtintion.replace('.', '');
         if (num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
-          let formData = new FormData();
-          formData.append('file', inputEl.files.item(i));
-          this.uploadAttach(formData);
+              let file: File = inputEl.files.item(i);
+              let fileType = this.getFileType(file.name);
+              if(fileType == "IMAGE"){
+                this.readFile(file);
+              } else {
+                let attach = new Postattachment();
+                attach.name = file.name;
+                attach.type = fileType;
+                this.attachmentArray.push(attach);
+              }
         } else if (num > 26214400) {
           faildFilesNamesSize.push(inputEl.files.item(i).name);
         } else {
@@ -327,6 +332,78 @@ export class NotificationNewPage {
       alert('Can\'t upload files name: ' + faildFilesNamesSize.join(',') + ' because it is bigger than 25 Mb and' +
         ' files name: ' + faildFilesNameseExtantion.join(',') + ' because it is not supported.');
     }
+  }
+
+  getFileType(fileName) {
+    let pos = fileName.lastIndexOf('.');
+    let extension = fileName.substring(pos + 1);
+
+    switch (extension.toLowerCase()) {
+      case "jpg":
+        return "IMAGE";
+      case "jpeg":
+        return "IMAGE";
+      case "png":
+        return "IMAGE";
+      case "gif":
+        return "IMAGE";
+      case "ico":
+        return "IMAGE";
+      case "bmp":
+        return "IMAGE";
+      case "webp":
+        return "IMAGE";
+      case "tiff":
+        return "IMAGE";
+
+      case "pdf":
+        return "PDF";
+
+      case "txt":
+        return "TXT";
+
+      case "xls":
+        return "EXCEL";
+      case "xlsx":
+        return "EXCEL";
+      case "doc":
+      case "docx":
+        return "WORD";
+      case "ppt":
+      case "pptx":
+        return "POWERPOINT";
+      case "mp4":
+        return "VIDEO";
+      case "flv":
+        return "VIDEO";
+      case "avi":
+        return "VIDEO";
+      case "mov":
+        return "VIDEO";
+      case "wmv":
+        return "VIDEO";
+      case "mp3":
+        return "AUDIO";
+      case "wma":
+        return "AUDIO";
+      default:
+        return "OTHER";
+    }
+  }
+
+  readFile(file: File){
+    let that = this;
+    let reader = new FileReader();
+    reader.onloadend = function(e){
+      // you can perform an action with readed data here
+      console.log(reader.result);
+      let attach = new Postattachment();
+      attach.name = file.name;
+      attach.type = "IMAGE";
+      attach.url = reader.result;
+      that.attachmentArray.push(attach);
+    };
+    reader.readAsDataURL(file);
   }
 
     async uploadAttach(formData){
