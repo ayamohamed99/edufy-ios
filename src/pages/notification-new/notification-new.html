@@ -46,7 +46,7 @@
 
   <button ion-button block outline class="fileContainer">
     Choose Files
-    <input type="file" multiple #file (change)="filesChange()">
+    <input type="file" multiple #file id="inputFiles" (change)="filesChange()">
   </button>
 
   <div >
@@ -57,9 +57,9 @@
 
       <ion-slides pager style="height: 316px; padding: 8px" *ngIf="attachmentArray && attachmentArray.length > 0" >
         <ion-slide *ngFor="let item of attachmentArray; index as i">
-          <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
+          <h3 padding-top="20px">{{item.name}}</h3>
           <div class="container">
-            <img class="imgUrlPost" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+            <img justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
             <img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
             <img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
             <img class="imgAttachPost" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">

@@ -1,22 +1,8 @@
 {
-  "name": "Edufy",
+  "name": "Edufy Teachers",
+  "app_id": "",
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular",
-  "proxies": [
-    {
-      "path": "/oauth",
-      "proxyUrl": "http://104.198.175.198/oauth"
-    },
-    {
-      "path": "/authentication",
-      "proxyUrl": "http://104.198.175.198/authentication"
-    },
-    {
-      "path": "/uploadDownload",
-      "proxyUrl": "http://192.168.1.2:8080/uploadDownload"
-    }
-  ],
-  "Production": "104.198.175.198"
+  "type": "ionic-angular"
 }

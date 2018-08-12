@@ -11,18 +11,16 @@ import {Student} from "../../modles/student";
 import {Autocomplete_shown_array} from "../../modles/autocomplete_shown_array";
 import {Send_student_notification} from "../../modles/send_student_notification";
 import { Storage } from "@ionic/storage";
-import { IOSFilePicker } from '@ionic-native/file-picker';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { Camera } from '@ionic-native/camera';
-import {File, FileEntry} from "@ionic-native/file";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 import {FileUploadOptions} from "@ionic-native/transfer";
 import {NgForm} from "@angular/forms";
 import {AttachmentList} from "../../modles/attachmentlist";
 import {Postattachment} from "../../modles/postattachment";
+import { BackgroundMode } from '@ionic-native/background-mode';
+import {NativeStorage} from "@ionic-native/native-storage";
+import {Pendingnotification} from "../../modles/pendingnotification";
 
 
-@IonicPage()
 @Component({
   selector: 'page-notification-new',
   templateUrl: 'notification-new.html',
@@ -52,15 +50,26 @@ export class NotificationNewPage {
   showSupportFiles:boolean;
   wifiUpload:boolean;
   placeHolder:string;
+  arrayFormData:any[]=[];
+  arrayToPostAttachment:any[]=[];
+  pendingNotification:any[]=[];
 
   @ViewChild('file') inputEl: ElementRef;
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingController,
-              public actionSheetCtrl: ActionSheetController, private storage:Storage, private fromGallery: Camera,
-              private androidFile: FileChooser, private iosFile: IOSFilePicker, private file:File)
+              public actionSheetCtrl: ActionSheetController, private storage:Storage,private backgroundMode:BackgroundMode)
   {
+      this.backgroundMode.enable();
+
+    if(this.backgroundMode.isEnabled()){
+      console.log('backgroundMode isEnabled');
+    }
+
+    this.backgroundMode.on("activate").subscribe((s)=>{ console.log('background activate:',s); });
+      this.network.onConnect().subscribe((e) => {console.log('network:',e);});
+    this.wifiUpload = false;
     this.placeHolder = "To :";
     this.showSupportFiles = false;
     this.tagsArr = accServ.tagArry;
@@ -157,7 +166,7 @@ export class NotificationNewPage {
   }
 
   sendNotification() {
-
+    debugger;
     let RecieverArray:any[] = [];
 
     if(this.sendTo && this.sendTo.some(x => x.id === -1))
@@ -166,7 +175,13 @@ export class NotificationNewPage {
         for(let sub of temp.dataList){
           let ssn = new Send_student_notification();
           ssn.id = sub.id;
-          ssn.type = sub.type;
+          if(sub.type == "STUDENT") {
+            ssn.type = "Student";
+          }else if(sub.type == "CLASS") {
+            ssn.type = "Class";
+          }else{
+            ssn.type = sub.type;
+          }
           ssn.name = sub.name;
           RecieverArray.push(ssn);
         }
@@ -175,7 +190,13 @@ export class NotificationNewPage {
       for(let temp of this.sendTo){
         let ssn = new Send_student_notification();
         ssn.id = temp.id;
-        ssn.type = temp.type;
+        if(temp.type == "STUDENT") {
+          ssn.type = "Student";
+        }else if(temp.type == "CLASS") {
+          ssn.type = "Class";
+        }else{
+          ssn.type = temp.type;
+        }
         ssn.name = temp.name;
         RecieverArray.push(ssn);
       }
@@ -204,26 +225,14 @@ export class NotificationNewPage {
     });
 
 
-    if (!this.platform.is('core')) {
-
-      this.network.onConnect().subscribe(() => {
-        console.log('network connected!');
-        setTimeout(() => {
-
-          this.uploadFromMobile(RecieverArray,SelectedTags);
-
-        }, 3000);
-      });
-
-    } else if (this.platform.is('core')){
-      this.network.onConnect().subscribe(() => {
-        console.log('network connected!');
-        setTimeout(() => {
+    if (this.platform.is('core')){
 
           this.uploadFromWeb(RecieverArray,SelectedTags);
 
-        }, 3000);
-      });
+    }else{
+
+      this.uploadFromMobile(RecieverArray,SelectedTags);
+
     }
 
   }
@@ -305,13 +314,18 @@ export class NotificationNewPage {
         let fileExtintion: string = fileName.slice(fileName.length - 4);
         fileExtintion = fileExtintion.replace('.', '');
         if (num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
+          let formData = new FormData();
+          formData.append('file', inputEl.files.item(i));
+          console.log(JSON.stringify(formData));
+          this.arrayFormData.push(formData);
+          // this.uploadAttach(formData);
               let file: File = inputEl.files.item(i);
               let fileType = this.getFileType(file.name);
               if(fileType == "IMAGE"){
                 this.readFile(file);
               } else {
                 let attach = new Postattachment();
-                attach.name = file.name;
+                attach.name = fileName;
                 attach.type = fileType;
                 this.attachmentArray.push(attach);
               }
@@ -415,12 +429,15 @@ export class NotificationNewPage {
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
           let allData:any = s;
+          if(allData.data != null){
+            allData = JSON.parse(allData.data);
+          }
           let attach = new Postattachment();
           attach.name = allData.name;
           attach.type = allData.type;
           attach.url = allData.url;
           attach.uploadDate = allData.date;
-          this.attachmentArray.push(attach);
+          this.arrayToPostAttachment.push(attach);
           loading.dismiss();
           return true;
         },
@@ -461,38 +478,84 @@ export class NotificationNewPage {
 
 
   uploadFromMobile(RecieverArray,SelectedTags){
+    debugger;
     let loading = this.loadingCtrl.create({
       content: ""
     });
 
-    if(this.wifiUpload && this.network.type != 'wifi'){
-      this.presentConfirm('You have been activated upload by \"WiFi only\", so close it or open wifi then try again');
-    }else {
+    for(let temp of this.pendingNotification){
+      if (temp.attachmentsList) {
+        for (let formData in temp.attachmentsList) {
+          this.uploadAttach(formData);
+        }
+      }
+    }
+
+    if((this.wifiUpload && this.network.type != 'wifi') || this.network.onDisconnect()){
+      debugger;
+      alert('You have been activated upload by \"WiFi only\"');
+
+      this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
+      this.backgroundMode.on("activate").subscribe((s)=>{
+        debugger;
+        loading.dismiss();
+        this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
+        console.log('network:',this.network.type);
+          debugger;
+          this.getNotificationINStorage();
+      });
+
+      this.network.onConnect().subscribe((e) => {
+        loading.dismiss();
+        this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
+        console.log('network:',e);
+        if (this.network.type == 'wifi') {
+          console.log('network:onlineWithWifi');
+            this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
+            this.getNotificationINStorage();
+          }
+        });
+
+
+    }else{
+
+
       loading.present();
-      this.notiServ.postNotification(this.Title, this.Details, this.attachmentArray, RecieverArray, SelectedTags).subscribe(
+      if(this.arrayFormData) {
+        for (let formData in this.arrayFormData) {
+          this.uploadAttach(formData);
+        }
+      }
+      this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
         (data) => {
-          console.log("Date Is", data);
+          debugger;
+          console.log("POST without wait Date Is", JSON.stringify(data));
           loading.dismiss();
           this.viewCtrl.dismiss({name: 'dismissed&SENT'});
         },
         err => {
-          console.log("POST call in error", err);
+          debugger;
+          console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
           loading.dismiss();
-          this.presentConfirm(err);
-        },
-        () => console.log("The POST observable is now completed."));
+          this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+        });
     }
   }
 
-  uploadFromWeb(RecieverArray,SelectedTags){
+  uploadFromWeb(RecieverArray,SelectedTags) {
     let loading = this.loadingCtrl.create({
       content: ""
     });
 
     loading.present();
+    if(this.arrayFormData) {
+      for (let formData in this.arrayFormData) {
+        this.uploadAttach(formData);
+      }
+    }
     // this.talks.push({name: this.name, topics: this.topics});
-    this.notiServ.postNotification(this.Title, this.Details, this.attachmentArray, RecieverArray, SelectedTags).subscribe(
-      (data) => {
+    this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+      data => {
         console.log("Date Is", data);
         loading.dismiss();
         this.viewCtrl.dismiss({name:'dismissed&SENT'});
@@ -501,12 +564,127 @@ export class NotificationNewPage {
         console.log("POST call in error", err);
         loading.dismiss();
         this.presentConfirm(err);
-      },
-      () =>{
-        console.log("The POST observable is now completed.")
       });
-
   }
 
+  async saveTheNewNotificationFrist(RecieverArray,SelectedTags){
+    this.storage.get('Notifications').then(
+      data => {
+        let pendingNotification:any[] = [];
+        let notis: any = data;
+        if (notis) {
+          for (let temp of notis) {
+            let PN = new Pendingnotification();
+              PN.title = temp.title;
+              PN.body = temp.body;
+              PN.attachmentsList = temp.attachmentsList;
+              PN.tagsList = temp.tagsList;
+              PN.receiversList = temp.receiversList;
+              pendingNotification.push(PN);
+          }
+        }
+        this.storage.remove('Notifications');
+        let PN = new Pendingnotification();
+        PN.title = this.Title;
+        PN.body = this.Details;
+        PN.attachmentsList = this.arrayFormData;
+        PN.tagsList = SelectedTags;
+        PN.receiversList = RecieverArray;
+        pendingNotification.push(PN);
+
+        this.storage.set('Notifications',pendingNotification);
+
+      });
+  }
+
+  async getNotificationINStorage(){
+    let pendingNotification:any[];
+    await this.storage.get('Notifications').then(
+      data =>{
+        let notis:any = data;
+        if(notis) {
+          for (let temp of notis) {
+            let PN = new Pendingnotification();
+              PN.title = temp.title;
+              PN.body = temp.body;
+              PN.attachmentsList = temp.attachmentsList;
+              PN.tagsList = temp.tagsList;
+              PN.receiversList = temp.receiversList;
+              pendingNotification.push(PN);
+          }
+        }
+        this.network.onConnect().subscribe((e) => {
+          console.log('network:',e);
+          if (this.network.type == 'wifi') {
+            console.log('network:onlineWithWifi');
+            for(let temp of this.pendingNotification){
+              if (temp.attachmentsList) {
+                for (let formData in temp.attachmentsList) {
+                  this.uploadAttach(formData);
+                }
+              }
+              this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+
+            }
+          }
+        },error2 => {
+          console.log("error onConnent: ",error2);
+        });
+        }).catch(e=>{
+          console.log('error: ',JSON.stringify(JSON.parse(e)));
+    });
+  }
+
+  async SendNotificationBackground(title, details, postAttachment, RecieverArray, SelectedTags){
+    let sentNotify:any[]=[];
+    await this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
+      (data) => {
+        console.log("network POST wait to call Date Is", JSON.stringify(data));
+        let PN = new Pendingnotification();
+        PN.title = title;
+        PN.body = details;
+        PN.attachmentsList = postAttachment;
+        PN.tagsList = RecieverArray;
+        PN.receiversList = SelectedTags;
+        sentNotify.push(PN);
+      },
+      err => {
+        console.log("network POST wait to call error", JSON.stringify(err));
+        this.presentConfirm(err);
+      },
+      () => {
+        this.deleteFromStorage(sentNotify);
+      });
+  }
+
+
+  async deleteFromStorage(sentNotify){
+    let pendingNotification:any[] = [];
+    await this.storage.get('Notifications').then(
+      data =>{
+        let notis = data;
+        if(notis) {
+          for (let temp of notis) {
+            let PN = new Pendingnotification();
+            let found = false;
+            sentNotify.some( x => { found = true;});
+            if(!found){
+              PN.title = temp.title;
+              PN.body = temp.body;
+              PN.attachmentsList = temp.attachmentsList;
+              PN.tagsList = temp.tagsList;
+              PN.receiversList = temp.receiversList;
+              pendingNotification.push(PN);
+            }
+          }
+        }
+        this.storage.remove("Notifications");
+        this.storage.set("Notifications", pendingNotification);
+
+
+      });
+  }
 }
+
+
 

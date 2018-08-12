@@ -29,7 +29,7 @@
             <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
               <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
                 <h3>{{item.name.substring(17)}}</h3>
-                <div style="text-align: -webkit-center;">
+                <div style="text-align: -webkit-center;/">
                   <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
                   <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
                   <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
@@ -51,6 +51,7 @@
             <img src="assets/imgs/profile.png">
           </ion-avatar>
           <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+            <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
           </ion-item>
         </ion-card>
       </ion-col>

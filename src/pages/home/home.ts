@@ -5,6 +5,10 @@ import {LoginService} from "../../services/login";
 import {Storage} from "@ionic/storage";
 import {AccountService} from "../../services/account";
 import {ProfilePage} from "../profile/profile";
+import {Pendingnotification} from "../../modles/pendingnotification";
+import {Network} from "@ionic-native/network";
+import {NotificationService} from "../../services/notification";
+import {Postattachment} from "../../modles/postattachment";
 
 @Component({
   selector: 'page-home',
@@ -22,7 +26,8 @@ export class HomePage {
   load:any;
 
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
-    , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService) {}
+    , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
+              private network:Network, private notiServ:NotificationService) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -41,15 +46,17 @@ export class HomePage {
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
       (data) => {
-        console.log("POST call successful value returned in body", data);
+        console.log("POST call successful value returned in body", JSON.stringify(data));
         this.values = data;
+        console.log("successful data ", JSON.stringify(this.values));
+        console.log("refToken", this.values.refreshToken.value);
         this.accessToken = this.values.refreshToken.value;
-        console.log("this.accessToken", this.accessToken);
+        console.log("accessToken", this.accessToken);
         this.refreToken();
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err.message);
+        console.log("startLogIn in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -102,7 +109,7 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err.message);
+        console.log("refreToken in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -121,7 +128,7 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err.message);
+        console.log("managAccount in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -145,7 +152,7 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err.message);
+        console.log("accountInfo in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -156,6 +163,5 @@ export class HomePage {
         console.log("The POST observable is now completed.");
       });
   }
-
 
 }

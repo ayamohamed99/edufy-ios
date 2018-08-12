@@ -31,9 +31,9 @@ import {PhotoViewer} from "@ionic-native/photo-viewer";
 import {FileOpener} from "@ionic-native/file-opener";
 import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {LogoutService} from "../services/logout";
-import { Camera } from '@ionic-native/camera';
-import { FileChooser } from '@ionic-native/file-chooser';
-import { IOSFilePicker } from '@ionic-native/file-picker';
+
+import { BackgroundMode } from '@ionic-native/background-mode';
+import { HTTP } from '@ionic-native/http';
 
 
 @NgModule({
@@ -82,9 +82,8 @@ import { IOSFilePicker } from '@ionic-native/file-picker';
     PhotoViewer,
     FileOpener,
     Transfer,
-    Camera,
-    FileChooser,
-    IOSFilePicker
+    BackgroundMode,
+    HTTP
   ]
 })
 export class AppModule {}

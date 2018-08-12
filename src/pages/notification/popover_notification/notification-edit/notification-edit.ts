@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import {AlertController, IonicPage, LoadingController, NavController, NavParams, ViewController} from 'ionic-angular';
+import {
+  AlertController, IonicPage, LoadingController, NavController, NavParams, Platform,
+  ViewController
+} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {NotificationService} from "../../../../services/notification";
 import {FormControl} from '@angular/forms';
 
 
-@IonicPage()
 @Component({
   selector: 'page-notification-edit',
   templateUrl: 'notification-edit.html',
@@ -19,7 +21,7 @@ export class NotificationEditPage {
   options: string[] = ['One', 'Two', 'Three'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
-              public load:LoadingController, public alrtCtrl:AlertController, public notiServ:NotificationService) {
+              public load:LoadingController, public alrtCtrl:AlertController, public notiServ:NotificationService,private platform:Platform) {
     this.notificationID=this.navParams.get('id');
     this.notificationTitle =this.navParams.get('title');
     this.notificationDetails=this.navParams.get('details');
@@ -58,4 +60,5 @@ export class NotificationEditPage {
         console.log("The POST observable is now completed.");
       });
   }
+
 }

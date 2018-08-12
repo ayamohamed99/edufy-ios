@@ -164,7 +164,6 @@ export class MyApp {
 
 
 
-
 //All services For Auto login
 
   startLogIn(){

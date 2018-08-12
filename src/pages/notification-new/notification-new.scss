@@ -1,18 +1,5 @@
 page-notification-new {
 
-  .imgAttachPost{
-    width: 200px;
-    height: 200px;
-    left: 18%;
-    //position: absolute;
-    background: #eee0;
-  }
-  .imgUrlPost{
-    min-width: 100%;
-    height: 200px;
-    background: #eee0;
-  }
-
   ion-img{
     background: #eee0;
   }
@@ -103,8 +90,7 @@ page-notification-new {
     text-align: -webkit-center;
   }
   .container img {
-    width: 100%;
-    min-height: 210px;
+    height: 210px;
   }
 
   .container .buttonOnImg {
@@ -120,6 +106,13 @@ page-notification-new {
   .text-input{
     margin-left: 0px;
     margin-right: 0px;
+  }
+  .container .imgAttachPost{
+    width: 200px;
+    height: 200px;
+    left: 18%;
+    //position: absolute;
+    background: #eee0;
   }
 
 }

@@ -1,6 +1,10 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Url_domain} from "../modles/url_domain";
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+
 
 @Injectable()
 export class AccountService{
@@ -17,6 +21,7 @@ export class AccountService{
   private _accountBranchesList:any = [];
   private _tagArry:any = [];
   private Arry:any = [];
+  thisCore:boolean;
 
   constructor(private http: HttpClient) {
     this.DomainUrl=new Url_domain();
@@ -31,13 +36,15 @@ export class AccountService{
             // 'content-type':'application/json',
             'Authorization' : subHeader
           })};
-
-    return this.http.post(this.DomainUrl.Domain+'/authentication/authenticator.ent?operationId=3', null, httpOptions);
+      return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', null, httpOptions);
   }
 
   setDate(data:any){
 
     this.value = data;
+    if(this.value.data != null){
+      this.value = JSON.parse(this.value.data);
+    }
     this.accountFeature = this.value.accountFeatures;
     this.userRole = this.value.userRoles;
     this.userTelephone = this.value.telephone;
@@ -59,13 +66,14 @@ export class AccountService{
         // 'content-type':'application/json',
         'Authorization' : subHeader
       })};
-    this.http.get(this.DomainUrl.Domain+'/authentication/tag.ent?branchesIds=' + this._accountBranchesList,httpOptions).subscribe(value => {
-      console.log('Tags : '+value);
-      this.Arry = value;
-      for(let tag of this.Arry){
-        this._tagArry.push(tag);
-      }
-    });
+
+      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this._accountBranchesList, httpOptions).subscribe(value => {
+        console.log('Tags : ' + value);
+        this.Arry = value;
+        for (let tag of this.Arry) {
+          this._tagArry.push(tag);
+        }
+      });
   }
 
   getAccountFeature(){

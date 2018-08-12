@@ -19,10 +19,10 @@ import {FileTransfer} from '@ionic-native/file-transfer';
 import {Media} from "@ionic-native/media";
 import { FileOpener } from '@ionic-native/file-opener';
 import {Transfer, TransferObject} from '@ionic-native/transfer';
+import {Pendingnotification} from "../../modles/pendingnotification";
 
 declare var cordova: any;
 
-@IonicPage()
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html',
@@ -32,7 +32,7 @@ export class NotificationPage{
   notifications:Notification[] = [];
   notificationPage=1;
   loading:any;
-  fristOpen:boolean = true;
+  fristOpen:boolean;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   tokenKey:string;
   tagsArr:any[] = [];
@@ -46,15 +46,15 @@ export class NotificationPage{
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
-              private transferF: Transfer) {
-
+              private transferF: Transfer, private accountServ:AccountService) {
+    this.fristOpen = true;
     if (platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
     } else {
-
+      this.getPendingNotification();
       storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
@@ -114,39 +114,43 @@ export class NotificationPage{
           content: ""
         });
         this.loading.present();
-        this.notificationService.getNotificationReceivers(id).subscribe(
-              (data) => {
-                this.loading.dismiss();
-                console.log("Date Is", data);
-                let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
-                  studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:data,
-                  tagList:tagsList});
-                model.onDidDismiss(()=>{
-                  this.notifications.splice(0);
-                  this.notificationPage = 1;
-
-                  this.notificationService.putHeader(this.tokenKey);
-                  this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-                });
-                model.present();
-              },
-              err => {
-                console.log("POST call in error", err);
-                this.loading.dismiss();
-                this.alrtCtrl.create( {
-                  title: 'Error',
-                  subTitle: err.message,
-                  buttons: ['OK']
-                }).present();
-              },
-              () => {
-                console.log("The POST observable is now completed.");
-              });
+        this.getNotificationReciver(id, title, details,reciversList,tagsList, i);
       }
       }
     });
 
     popover.present({ev: event});
+  }
+
+  getNotificationReciver(id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
+    this.notificationService.getNotificationReceivers(id).subscribe(
+      (data) => {
+        this.loading.dismiss();
+        console.log("Date Is", data);
+        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
+          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:data,
+          tagList:tagsList});
+        model.onDidDismiss(()=>{
+          this.notifications.splice(0);
+          this.notificationPage = 1;
+
+          this.notificationService.putHeader(this.tokenKey);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        });
+        model.present();
+      },
+      err => {
+        console.log("POST call in error", err);
+        this.loading.dismiss();
+        this.alrtCtrl.create( {
+          title: 'Error',
+          subTitle: err.message,
+          buttons: ['OK']
+        }).present();
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
   }
 
   onOpenView() {
@@ -172,9 +176,11 @@ export class NotificationPage{
         content: 'Loading Notifications...'
       });
       this.loading.present();
-      this.fristOpen = false;
     }
+    this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
+  }
 
+  getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);
@@ -205,20 +211,24 @@ export class NotificationPage{
         }
 
         if(this.platform.is('core')) {
-
-          this.tokenKey = localStorage.getItem(this.localStorageToken);
-          this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-          this.getAllClasses();
-          this.getAllStudent();
+          if(this.fristOpen) {
+            this.tokenKey = localStorage.getItem(this.localStorageToken);
+            this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+            this.getAllClasses();
+            this.getAllStudent();
+            this.fristOpen = false;
+          }
         }else {
-
-          this.storage.get(this.localStorageToken).then(
-            val=>{
-              this.tokenKey = val;
-              this.studentService.putHeader(val);
-              this.getAllClasses();
-              this.getAllStudent();
-            });
+          if (this.fristOpen) {
+            this.storage.get(this.localStorageToken).then(
+              val => {
+                this.tokenKey = val;
+                this.studentService.putHeader(val);
+                this.getAllClasses();
+                this.getAllStudent();
+                this.fristOpen = false;
+              });
+          }
         }
       },
       err => {
@@ -263,51 +273,51 @@ export class NotificationPage{
           item.branch.branchId = data.branch.id;
           item.branch.branchName = data.branch.name;
           item.branch.managerId = data.branch.managerId;
-
           this.classes.push(item);
         }
+        this.getAllStudent();
       },
       err =>{
-      console.log(err);
+        console.log(err);
         this.alrtCtrl.create( {
           title: 'Error',
           subTitle: 'Something went wrong, please refresh the page',
           buttons: ['OK']
         }).present();
         this.loading.dismiss();
-    });
+      });
   }
 
   getAllStudent(){
     this.studentService.getAllStudents('Notification').subscribe(
       (val)=>{
-       console.log(val);
-       let data:any = val;
-       for (let value of data){
-         let students = new Student();
+        console.log(val);
+        let data:any = val;
+        for (let value of data){
+          let students = new Student();
 
-         students.studentClass.classId = value.classes.id;
-         students.studentClass.className = value.classes.name;
-         students.studentClass.grade.gradeId = value.classes.grade.id;
-         students.studentClass.grade.gradeName = value.classes.grade.name;
-         students.studentClass.branch.branchId = value.classes.branch.id;
-         students.studentClass.branch.branchName = value.classes.branch.name;
-         students.studentClass.branch.managerId = value.classes.branch.managerId;
-         students.studentId = value.id;
-         students.studentName = value.name;
-         students.studentAddress = value.address;
+          students.studentClass.classId = value.classes.id;
+          students.studentClass.className = value.classes.name;
+          students.studentClass.grade.gradeId = value.classes.grade.id;
+          students.studentClass.grade.gradeName = value.classes.grade.name;
+          students.studentClass.branch.branchId = value.classes.branch.id;
+          students.studentClass.branch.branchName = value.classes.branch.name;
+          students.studentClass.branch.managerId = value.classes.branch.managerId;
+          students.studentId = value.id;
+          students.studentName = value.name;
+          students.studentAddress = value.address;
 
-         this.studentsName.push(value.name);
-         this.studentwithClass.push(students);
-         console.log(students);
-       }
+          this.studentsName.push(value.name);
+          this.studentwithClass.push(students);
+          console.log(students);
+        }
 
-       console.log(this.studentwithClass.length);
+        console.log(this.studentwithClass.length);
 
-       console.log(this.studentsName);
+        console.log(this.studentsName);
 
         console.log(this.studentwithClass);
-       this.loading.dismiss();
+        this.loading.dismiss();
       },
       err=>{
         console.log('GetAllStudent Error: '+err);
@@ -439,24 +449,40 @@ export class NotificationPage{
     });
 
   }
-    // var fileTransfer = new window.FileTransfer;
-    // let path = this.file.dataDirectory+name;
-    // var uri = encodeURI(url);
-    //
-    // fileTransfer.download(
-    //   uri,
-    //   path,
-    //   function(entry) {
-    //     console.log("download complete: " + entry.toURL());
-    //     console.log(uri);
-    //     console.log(path);
-    //   },
-    //   function(error) {
-    //     console.log("download error source " + error.source);
-    //     console.log("download error target " + error.target);
-    //     console.log("download error code" + error.code);
-    //   },
-    //   false,);
+
+
+  async getPendingNotification(){
+    let pendingNotification:any[]=[];
+    await this.storage.get('Notifications').then(
+      data => {
+        let notis = data;
+        if (notis) {
+          for (let temp of notis) {
+            let PN = new Pendingnotification();
+            PN.title = temp.title;
+            PN.body = temp.body;
+            PN.attachmentsList = temp.attachmentsList;
+            PN.tagsList = temp.tagsList;
+            PN.receiversList = temp.receiversList;
+            pendingNotification.push(PN);
+          }
+        }
+
+        if(pendingNotification){
+          for(let showPN of pendingNotification){
+            let notify = new Notification;
+            notify.senderName = this.accountServ.getUserName();
+            notify.title = showPN.title;
+            notify.body = showPN.body;
+            notify.attachmentsList = showPN.attachmentsList;
+            notify.tagsList = showPN.tagsList;
+            notify.receiversList = showPN.receiversList;
+            notify.pending = "pending";
+            this.notifications.push(notify);
+          }
+        }
+      });
+  }
 
 
 

@@ -7,7 +7,6 @@ import {NotificationService} from "../../../services/notification";
 import {Storage} from "@ionic/storage";
 import {NotificationNewPage} from "../../notification-new/notification-new";
 
-@IonicPage()
 @Component({
   selector: 'page-popovernotificationcard',
   templateUrl: 'popovernotificationcard.html',
@@ -91,8 +90,6 @@ export class PopoverNotificationCardPage {
       ]
     }).present();
   }
-
-
 
   newNotification(){
     this.viewCtrl.dismiss({done:'newSuccess'});

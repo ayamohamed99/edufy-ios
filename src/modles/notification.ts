@@ -8,6 +8,7 @@ export class Notification{
   senderName:string;
   tagsList:any[] = [];
   tagsListName:any[] = [];
+  pending:any;
 
   constructor(){}
 
