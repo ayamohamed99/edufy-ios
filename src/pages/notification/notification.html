@@ -18,7 +18,7 @@
           <ion-item style="background-color: white">
 
             <h1>{{notify.title}}</h1>
-            <button style="background-color: #eee0" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
+            <button style="background-color: #eee0" *ngIf="notify.pending != 'pending'" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
               <ion-icon style="background-color: #eee0" name="more" class="buttonShape" ></ion-icon>
             </button>
           </ion-item>

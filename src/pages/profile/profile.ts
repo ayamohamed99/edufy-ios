@@ -27,6 +27,8 @@ export class ProfilePage {
   userAddress:string;
   pendingNotification:any[]=[];
   arrayToPostAttachment:any[]=[];
+  wifiUploadKey = 'WIFI_UPLOAD';
+  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService
   ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
@@ -49,6 +51,18 @@ export class ProfilePage {
     }
     if(!this.userAddress || this.userAddress == ""){
       this.userAddress = "No Address";
+    }
+
+    if (platform.is('core')) {
+
+      notiServ.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getNotificationINStorage();
+    } else {
+      storage.get(this.localStorageToken).then(
+        val => {
+          notiServ.putHeader(val);
+          this.getNotificationINStorage();
+        });
     }
   }
 
@@ -73,11 +87,10 @@ export class ProfilePage {
   }
 
   async getNotificationINStorage(){
-    let pendingNotification:any[];
     await this.storage.get('Notifications').then(
       data =>{
         let notis:any = data;
-        if(notis) {
+        if(notis.length >0) {
           for (let temp of notis) {
             let PN = new Pendingnotification();
             PN.title = temp.title;
@@ -85,34 +98,51 @@ export class ProfilePage {
             PN.attachmentsList = temp.attachmentsList;
             PN.tagsList = temp.tagsList;
             PN.receiversList = temp.receiversList;
-            pendingNotification.push(PN);
+            this.pendingNotification.push(PN);
           }
         }
-        this.network.onConnect().subscribe((e) => {
-          console.log('network:',e);
-          if (this.network.type == 'wifi') {
-            console.log('network:onlineWithWifi');
-            for(let temp of this.pendingNotification){
-              if (temp.attachmentsList) {
-                for (let formData in temp.attachmentsList) {
-                  this.uploadAttach(formData);
+        this.storage.get(this.wifiUploadKey).then(
+          wi=> {
+            let wifiUpload:any = wi.wifi;
+            let WIFIOn:boolean = false;
+            if(wifiUpload){
+              WIFIOn = true;
+            }
+            if (WIFIOn && this.network.type == 'wifi') {
+              console.log('network:onlineWithWifi');
+              if(this.pendingNotification.length > 0) {
+                for (let temp of this.pendingNotification) {
+                  if (temp.attachmentsList) {
+                    for (let formData in temp.attachmentsList) {
+                      this.uploadAttach(formData);
+                    }
+                  }
+                  this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+
                 }
               }
-              this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+            }else if(!WIFIOn){
+              for (let temp of this.pendingNotification) {
+                if (temp.attachmentsList) {
+                  for (let formData in temp.attachmentsList) {
+                    this.uploadAttach(formData);
+                  }
+                }
+                this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
 
+              }
             }
-          }
-        },error2 => {
-          console.log("error onConnent: ",error2);
+          }).catch(e=>{
+          console.log('error store: ',JSON.stringify(e));
         });
       }).catch(e=>{
-      console.log('error: ',JSON.stringify(JSON.parse(e)));
+      console.log('error noti store: ',JSON.stringify(e));
     });
   }
 
-  async SendNotificationBackground(title, details, postAttachment, RecieverArray, SelectedTags){
+   SendNotificationBackground(title, details, postAttachment, RecieverArray, SelectedTags){
     let sentNotify:any[]=[];
-    await this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
+     this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
       (data) => {
         console.log("network POST wait to call Date Is", JSON.stringify(data));
         let PN = new Pendingnotification();

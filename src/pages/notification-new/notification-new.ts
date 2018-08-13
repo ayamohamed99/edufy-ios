@@ -149,7 +149,8 @@ export class NotificationNewPage {
 
     this.storage.get(this.wifiUploadKey).then(
       value => {
-        if(value == 'true'){
+        let val = value;
+        if(val.wifi){
           this.wifiUpload = true;
         }else{
           this.wifiUpload = false;
@@ -429,9 +430,6 @@ export class NotificationNewPage {
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
           let allData:any = s;
-          if(allData.data != null){
-            allData = JSON.parse(allData.data);
-          }
           let attach = new Postattachment();
           attach.name = allData.name;
           attach.type = allData.type;
@@ -479,57 +477,46 @@ export class NotificationNewPage {
 
   uploadFromMobile(RecieverArray,SelectedTags){
     debugger;
-    let loading = this.loadingCtrl.create({
-      content: ""
-    });
 
-    for(let temp of this.pendingNotification){
-      if (temp.attachmentsList) {
-        for (let formData in temp.attachmentsList) {
-          this.uploadAttach(formData);
+    if(this.wifiUpload && !(this.network.type == 'wifi')){
+      alert('You have been activated upload by \"WiFi only\"');
+      for(let temp of this.pendingNotification){
+        if (temp.attachmentsList) {
+          for (let formData in temp.attachmentsList) {
+            this.uploadAttach(formData);
+          }
         }
       }
-    }
-
-    if((this.wifiUpload && this.network.type != 'wifi') || this.network.onDisconnect()){
-      debugger;
-      alert('You have been activated upload by \"WiFi only\"');
-
+      this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
       this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
       this.backgroundMode.on("activate").subscribe((s)=>{
-        debugger;
-        loading.dismiss();
-        this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
         console.log('network:',this.network.type);
-          debugger;
           this.getNotificationINStorage();
       });
 
-      this.network.onConnect().subscribe((e) => {
-        loading.dismiss();
-        this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
-        console.log('network:',e);
-        if (this.network.type == 'wifi') {
-          console.log('network:onlineWithWifi');
-            this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
-            this.getNotificationINStorage();
-          }
-        });
-
-
     }else{
 
-
+      let loading = this.loadingCtrl.create({
+        content: ""
+      });
       loading.present();
       if(this.arrayFormData) {
         for (let formData in this.arrayFormData) {
           this.uploadAttach(formData);
         }
       }
+      let sentNotify:any[]=[];
       this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
         (data) => {
           debugger;
           console.log("POST without wait Date Is", JSON.stringify(data));
+          let PN = new Pendingnotification();
+          PN.title = this.Title;
+          PN.body = this.Details;
+          PN.attachmentsList = this.arrayToPostAttachment;
+          PN.tagsList = SelectedTags;
+          PN.receiversList = RecieverArray;
+          sentNotify.push(PN);
           loading.dismiss();
           this.viewCtrl.dismiss({name: 'dismissed&SENT'});
         },
@@ -538,6 +525,8 @@ export class NotificationNewPage {
           console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
           loading.dismiss();
           this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+        },()=>{
+          this.deleteFromStorage(sentNotify);
         });
     }
   }
@@ -598,7 +587,6 @@ export class NotificationNewPage {
   }
 
   async getNotificationINStorage(){
-    let pendingNotification:any[];
     await this.storage.get('Notifications').then(
       data =>{
         let notis:any = data;
@@ -610,28 +598,30 @@ export class NotificationNewPage {
               PN.attachmentsList = temp.attachmentsList;
               PN.tagsList = temp.tagsList;
               PN.receiversList = temp.receiversList;
-              pendingNotification.push(PN);
+              this.pendingNotification.push(PN);
           }
         }
         this.network.onConnect().subscribe((e) => {
           console.log('network:',e);
           if (this.network.type == 'wifi') {
             console.log('network:onlineWithWifi');
-            for(let temp of this.pendingNotification){
-              if (temp.attachmentsList) {
-                for (let formData in temp.attachmentsList) {
-                  this.uploadAttach(formData);
+            if(this.pendingNotification.length > 0) {
+              for (let temp of this.pendingNotification) {
+                if (temp.attachmentsList) {
+                  for (let formData in temp.attachmentsList) {
+                    this.uploadAttach(formData);
+                  }
                 }
-              }
-              this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
 
+              }
             }
           }
         },error2 => {
           console.log("error onConnent: ",error2);
         });
         }).catch(e=>{
-          console.log('error: ',JSON.stringify(JSON.parse(e)));
+          console.log('error: ',JSON.stringify(e));
     });
   }
 

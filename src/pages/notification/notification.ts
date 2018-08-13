@@ -54,7 +54,6 @@ export class NotificationPage{
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
     } else {
-      this.getPendingNotification();
       storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
@@ -166,6 +165,8 @@ export class NotificationPage{
 
         this.notificationService.putHeader(this.tokenKey);
         this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+      }else if(data.name =="dismissed&NOTSENT"){
+        this.fristOpen = true;
       }
     });
   }
@@ -181,6 +182,9 @@ export class NotificationPage{
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
+    if(this.notifications.length = 0){
+      this.getPendingNotification();
+    }
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);

@@ -16,8 +16,11 @@
 
   <ion-list>
     <ion-item>
-      <ion-label> Upload with wifi only</ion-label>
-      <ion-toggle [checked]="wifiUpload" (click)="ifCheckedWifi()"></ion-toggle>
+      <ion-label item-start> Upload with wifi only</ion-label>
+      <ion-checkbox item-end [(ngModel)]="wifiUpload" (click)="ifCheckedWifi()"></ion-checkbox>
+    </ion-item>
+    <ion-item>
+      <ion-label> {{temp}}</ion-label>
     </ion-item>
   </ion-list>
 
