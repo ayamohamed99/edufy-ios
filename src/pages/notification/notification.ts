@@ -56,6 +56,7 @@ export class NotificationPage{
     } else {
       storage.get(this.localStorageToken).then(
         val => {
+            this.getPendingNotification();
           this.tokenKey = val;
           notificationService.putHeader(val);
           this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
@@ -82,7 +83,7 @@ export class NotificationPage{
         console.log('dissmiss');
       }else{
       if(data.done === 'deleteSuccess') {
-        this.fristOpen = true;
+        this.fristOpen = false;
         this.notifications.splice(0);
         this.notificationPage = 1;
 
@@ -91,7 +92,7 @@ export class NotificationPage{
 
       }else if (data.done === 'updateSuccess'){
         console.log(data.done);
-        this.fristOpen = true;
+        this.fristOpen = false;
 
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
           details:data.details});
@@ -107,7 +108,7 @@ export class NotificationPage{
         model.present();
 
       }else if(data.done === 'newSuccess'){
-        this.fristOpen = true;
+        this.fristOpen = false;
         console.log(data.done);
         this.loading = this.load.create({
           content: ""
@@ -159,14 +160,14 @@ export class NotificationPage{
 
     model.onDidDismiss(data => {
       if(data.name =="dismissed&SENT"){
-        this.fristOpen = true;
+        this.fristOpen = false;
         this.notifications.splice(0);
         this.notificationPage = 1;
 
         this.notificationService.putHeader(this.tokenKey);
         this.getNotifications(this.notificationPage,0,0,null,null,null,0);
       }else if(data.name =="dismissed&NOTSENT"){
-        this.fristOpen = true;
+        this.fristOpen = false;
       }
     });
   }
@@ -182,9 +183,6 @@ export class NotificationPage{
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    if(this.notifications.length = 0){
-      this.getPendingNotification();
-    }
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);
@@ -359,7 +357,42 @@ export class NotificationPage{
             });
             this.loading.present();
             if(attachmentName) {
-              let exType: string = attachmentName.toString().slice(attachmentName.length - 3);
+              let exType: string;
+              let pos = attachmentName.lastIndexOf('.');
+              let extension = attachmentName.substring(pos + 1);
+              if(attachmentType == "IMAGE"){
+                exType = "image/"+extension;
+              }else if(attachmentType == "PDF"){
+                exType = "application/"+extension;
+              }else if(attachmentType == "WORD"){
+                if(extension == "doc") {
+                  exType = "application/msword";
+                }else{
+                  exType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                }
+              }else if(attachmentType == "EXCEL"){
+                if(extension == "xls") {
+                  exType = "application/vnd.ms-excel";
+                }else{
+                  exType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                }
+              }else if(attachmentType == "POWERPOINT"){
+                if(extension == "ppt") {
+                  exType = "application/vnd.ms-powerpoint";
+                }else{
+                  exType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                }
+            }else if(attachmentType == "AUDIO"){
+                exType = "audio/"+extension;
+              }else if(attachmentType == "VIDEO"){
+                exType = "video/"+extension;
+              }else if(extension == "3gp"){
+                exType = "video/"+extension;
+              }else if(extension == "txt"){
+                exType = "text/plain";
+              }else{
+                exType = "application/"+extension;
+              }
               console.log(exType);
               console.log(attachmentName.toString().slice(attachmentName.length - 3));
               this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL,exType);
@@ -376,9 +409,9 @@ export class NotificationPage{
     let path = null;
 
     if (this.platform.is('ios')) {
-      path = this.file.tempDirectory;
+      path = this.file.documentsDirectory;
     } else if (this.platform.is('android')) {
-      path = this.file.cacheDirectory;
+      path = this.file.externalRootDirectory+'/Download/';
     }
 
     const transfer = this.transfer.create();
@@ -390,22 +423,36 @@ export class NotificationPage{
         title: attachmentName
       };
       console.log(path + attachmentName);
-      this.fileOpener.open(url, 'application/'+extinstion)
+      this.fileOpener.open(url, extinstion)
         .then(() => console.log('File is opened'))
         .catch(e => {
           console.log(e);
+          let error:string;
+          if(e.message.includes("Activity not found")){
+            error = "There is no app to open this file";
+          }else{
+            error = 'Something went wrong try again later.'+JSON.stringify(e);
+          }
+
           this.alrtCtrl.create( {
             title: 'Error',
-            subTitle: 'Something went wrong try again later.',
+            subTitle: error,
             buttons: ['OK']
           }).present();
           this.loading.dismiss();
         });
     }).catch(reason => {
       console.log(path + attachmentName);
+      console.log("REASON"+reason.exception);
+      let error:string = '';
+      if(reason.exception.includes("Permission")){
+        error = "Edufy need permission to access storage";
+      }else{
+        error =reason.exception;
+      }
       this.alrtCtrl.create( {
         title: 'Error',
-        subTitle: reason,
+        subTitle: error,
         buttons: ['OK']
       }).present();
       this.loading.dismiss();
@@ -429,10 +476,10 @@ export class NotificationPage{
       const fileLocation = attachmentURL;
 
       fileTransfer.download(fileLocation, storageDirectory + attachmentName).then((entry) => {
-
+        this.loading.dismiss();
         const alertSuccess = this.alrtCtrl.create({
-          title: `Download Succeeded!`,
-          subTitle: `${attachmentName} was successfully downloaded to: ${entry.toURL()}`,
+          title: `Download Success`,
+          subTitle: `${attachmentName} was successfully downloaded.`,
           buttons: ['Ok']
         });
 
