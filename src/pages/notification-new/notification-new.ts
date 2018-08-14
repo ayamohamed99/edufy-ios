@@ -487,7 +487,7 @@ export class NotificationNewPage {
           }
         }
       }
-      this.viewCtrl.dismiss({name: 'dismissed&NOTSENT'});
+      this.viewCtrl.dismiss({name: 'dismissed&SENT'});
       this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
       this.backgroundMode.on("activate").subscribe((s)=>{
         console.log('network:',this.network.type);
