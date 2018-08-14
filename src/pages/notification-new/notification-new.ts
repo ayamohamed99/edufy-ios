@@ -213,19 +213,6 @@ export class NotificationNewPage {
       }
     }
 
-
-
-    this.network.onDisconnect().subscribe((e) => {
-      console.log(JSON.stringify(e));
-      let alert = this.alertCtrl.create({
-        title: '',
-        message: "Your internet is not working please check it and will continue upload after the phone connect to the internet again",
-        buttons:["ok"]
-      });
-      alert.present();
-    });
-
-
     if (this.platform.is('core')){
 
           this.uploadFromWeb(RecieverArray,SelectedTags);
@@ -319,7 +306,7 @@ export class NotificationNewPage {
           formData.append('file', inputEl.files.item(i));
           console.log(JSON.stringify(formData));
           this.arrayFormData.push(formData);
-          // this.uploadAttach(formData);
+           // this.uploadAttach(formData);
               let file: File = inputEl.files.item(i);
               let fileType = this.getFileType(file.name);
               if(fileType == "IMAGE"){
@@ -421,12 +408,8 @@ export class NotificationNewPage {
     reader.readAsDataURL(file);
   }
 
-    async uploadAttach(formData){
-      let loading = this.loadingCtrl.create({
-        content: ""
-      });
-      loading.present();
-      await this.notiServ.postAttachment(formData).subscribe(
+     uploadAttach(formData){
+       return this.notiServ.postAttachment(formData).toPromise().then(
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
           let allData:any = s;
@@ -436,8 +419,6 @@ export class NotificationNewPage {
           attach.url = allData.url;
           attach.uploadDate = allData.date;
           this.arrayToPostAttachment.push(attach);
-          loading.dismiss();
-          return true;
         },
         e=> {
           console.log('error post => '+JSON.stringify(e));
@@ -446,8 +427,6 @@ export class NotificationNewPage {
             subTitle: 'Can\'t upload the attachment, please try later',
             buttons: ['OK']
           }).present();
-          loading.dismiss();
-          return true;
         }
       );
     }
@@ -478,15 +457,8 @@ export class NotificationNewPage {
   uploadFromMobile(RecieverArray,SelectedTags){
     debugger;
 
-    if(this.wifiUpload && !(this.network.type == 'wifi')){
+    if((this.wifiUpload && !(this.network.type == 'wifi') )|| this.network.type ==  "none"){
       alert('You have been activated upload by \"WiFi only\"');
-      for(let temp of this.pendingNotification){
-        if (temp.attachmentsList) {
-          for (let formData in temp.attachmentsList) {
-            this.uploadAttach(formData);
-          }
-        }
-      }
       this.viewCtrl.dismiss({name: 'dismissed&SENT'});
       this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
       this.backgroundMode.on("activate").subscribe((s)=>{
@@ -501,33 +473,63 @@ export class NotificationNewPage {
       });
       loading.present();
       if(this.arrayFormData) {
-        for (let formData in this.arrayFormData) {
-          this.uploadAttach(formData);
+        let promisesArray = [];
+        for (let index = 0; index <this.arrayFormData.length; index++) {
+          let form: FormData = this.arrayFormData[index];
+          promisesArray.push(this.uploadAttach(form));
         }
-      }
-      let sentNotify:any[]=[];
-      this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
-        (data) => {
-          debugger;
-          console.log("POST without wait Date Is", JSON.stringify(data));
-          let PN = new Pendingnotification();
-          PN.title = this.Title;
-          PN.body = this.Details;
-          PN.attachmentsList = this.arrayToPostAttachment;
-          PN.tagsList = SelectedTags;
-          PN.receiversList = RecieverArray;
-          sentNotify.push(PN);
-          loading.dismiss();
-          this.viewCtrl.dismiss({name: 'dismissed&SENT'});
-        },
-        err => {
-          debugger;
-          console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
-          loading.dismiss();
-          this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
-        },()=>{
-          this.deleteFromStorage(sentNotify);
+        Promise.all(promisesArray).then( data=> {
+          let sentNotify:any[]=[];
+          this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+            (data) => {
+              debugger;
+              console.log("POST without wait Date Is", JSON.stringify(data));
+              let PN = new Pendingnotification();
+              PN.title = this.Title;
+              PN.body = this.Details;
+              PN.attachmentsList = this.arrayToPostAttachment;
+              PN.tagsList = SelectedTags;
+              PN.receiversList = RecieverArray;
+              sentNotify.push(PN);
+              loading.dismiss();
+              this.viewCtrl.dismiss({name: 'dismissed&SENT'});
+            },
+            err => {
+              debugger;
+              console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
+              loading.dismiss();
+              this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+            },()=>{
+              this.deleteFromStorage(sentNotify);
+            });
+        }).catch( e=>{
+          console.log("Promises Error: "+e);
         });
+      }else {
+        let sentNotify: any[] = [];
+        this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+          (data) => {
+            debugger;
+            console.log("POST without wait Date Is", JSON.stringify(data));
+            let PN = new Pendingnotification();
+            PN.title = this.Title;
+            PN.body = this.Details;
+            PN.attachmentsList = this.arrayToPostAttachment;
+            PN.tagsList = SelectedTags;
+            PN.receiversList = RecieverArray;
+            sentNotify.push(PN);
+            loading.dismiss();
+            this.viewCtrl.dismiss({name: 'dismissed&SENT'});
+          },
+          err => {
+            debugger;
+            console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
+            loading.dismiss();
+            this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+          }, () => {
+            this.deleteFromStorage(sentNotify);
+          });
+      }
     }
   }
 
@@ -538,41 +540,58 @@ export class NotificationNewPage {
 
     loading.present();
     if(this.arrayFormData) {
-      for (let formData in this.arrayFormData) {
-        this.uploadAttach(formData);
+      let promisesArray = [];
+      for (let index = 0; index < this.arrayFormData.length; index++) {
+        let form: FormData = this.arrayFormData[index];
+        promisesArray.push(this.uploadAttach(form));
       }
-    }
-    // this.talks.push({name: this.name, topics: this.topics});
-    this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
-      data => {
-        console.log("Date Is", data);
-        loading.dismiss();
-        this.viewCtrl.dismiss({name:'dismissed&SENT'});
-      },
-      err => {
-        console.log("POST call in error", err);
-        loading.dismiss();
-        this.presentConfirm(err);
+      Promise.all(promisesArray).then(data => {
+        // this.talks.push({name: this.name, topics: this.topics});
+        this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+          data => {
+            console.log("Date Is", data);
+            loading.dismiss();
+            this.viewCtrl.dismiss({name: 'dismissed&SENT'});
+          },
+          err => {
+            console.log("POST call in error", err);
+            loading.dismiss();
+            this.presentConfirm(err);
+          });
       });
+    }else{
+      this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+        data => {
+          console.log("Date Is", data);
+          loading.dismiss();
+          this.viewCtrl.dismiss({name: 'dismissed&SENT'});
+        },
+        err => {
+          console.log("POST call in error", err);
+          loading.dismiss();
+          this.presentConfirm(err);
+        });
+    }
   }
 
   async saveTheNewNotificationFrist(RecieverArray,SelectedTags){
     this.storage.get('Notifications').then(
       data => {
-        let pendingNotification:any[] = [];
+        let pendingNotification: any[] = [];
         let notis: any = data;
         if (notis) {
           for (let temp of notis) {
             let PN = new Pendingnotification();
-              PN.title = temp.title;
-              PN.body = temp.body;
-              PN.attachmentsList = temp.attachmentsList;
-              PN.tagsList = temp.tagsList;
-              PN.receiversList = temp.receiversList;
-              pendingNotification.push(PN);
+            PN.title = temp.title;
+            PN.body = temp.body;
+            PN.attachmentsList = temp.attachmentsList;
+            PN.tagsList = temp.tagsList;
+            PN.receiversList = temp.receiversList;
+            pendingNotification.push(PN);
           }
+          this.storage.remove('Notifications');
         }
-        this.storage.remove('Notifications');
+
         let PN = new Pendingnotification();
         PN.title = this.Title;
         PN.body = this.Details;
@@ -581,7 +600,9 @@ export class NotificationNewPage {
         PN.receiversList = RecieverArray;
         pendingNotification.push(PN);
 
-        this.storage.set('Notifications',pendingNotification);
+        this.storage.set('Notifications',pendingNotification).catch(err=>{
+          console.log("DATA Error: "+err);
+        });
 
       });
   }
@@ -589,31 +610,41 @@ export class NotificationNewPage {
   async getNotificationINStorage(){
     await this.storage.get('Notifications').then(
       data =>{
-        let notis:any = data;
-        if(notis) {
-          for (let temp of notis) {
-            let PN = new Pendingnotification();
-              PN.title = temp.title;
-              PN.body = temp.body;
-              PN.attachmentsList = temp.attachmentsList;
-              PN.tagsList = temp.tagsList;
-              PN.receiversList = temp.receiversList;
-              this.pendingNotification.push(PN);
-          }
-        }
+
         this.network.onConnect().subscribe((e) => {
           console.log('network:',e);
           if (this.network.type == 'wifi') {
+
+            let notis:any = data;
+            if(notis) {
+              for (let temp of notis) {
+                let PN = new Pendingnotification();
+                PN.title = temp.title;
+                PN.body = temp.body;
+                PN.attachmentsList = temp.attachmentsList;
+                PN.tagsList = temp.tagsList;
+                PN.receiversList = temp.receiversList;
+                this.pendingNotification.push(PN);
+              }
+            }
+
             console.log('network:onlineWithWifi');
             if(this.pendingNotification.length > 0) {
               for (let temp of this.pendingNotification) {
                 if (temp.attachmentsList) {
-                  for (let formData in temp.attachmentsList) {
-                    this.uploadAttach(formData);
+                  let promisesArray = [];
+                  for (let index = 0; index < temp.attachmentsList.length; index++) {
+                    let form: FormData = temp.attachmentsList[index];
+                    promisesArray.push(this.uploadAttach(form));
                   }
+                  Promise.all(promisesArray).then(data => {
+                    this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                  }).catch(e => {
+                    console.log("error" + e);
+                  });
+                }else{
+                  this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
                 }
-                this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
-
               }
             }
           }

@@ -113,23 +113,37 @@ export class ProfilePage {
               if(this.pendingNotification.length > 0) {
                 for (let temp of this.pendingNotification) {
                   if (temp.attachmentsList) {
-                    for (let formData in temp.attachmentsList) {
-                      this.uploadAttach(formData);
+                    let promisesArray = [];
+                    for (let index = 0; index < temp.attachmentsList.length; index++) {
+                      let form: FormData = temp.attachmentsList[index];
+                      promisesArray.push(this.uploadAttach(form));
                     }
+                    Promise.all(promisesArray).then(data => {
+                      this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                    }).catch(e => {
+                      console.log("error" + e);
+                    });
+                  }else {
+                    this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
                   }
-                  this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
-
                 }
               }
             }else if(!WIFIOn){
               for (let temp of this.pendingNotification) {
                 if (temp.attachmentsList) {
-                  for (let formData in temp.attachmentsList) {
-                    this.uploadAttach(formData);
+                  let promisesArray = [];
+                  for (let index = 0; index < temp.attachmentsList.length; index++) {
+                    let form: FormData = temp.attachmentsList[index];
+                    promisesArray.push(this.uploadAttach(form));
                   }
+                  Promise.all(promisesArray).then(data => {
+                    this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                  }).catch(e => {
+                    console.log("error" + e);
+                  });
+                }else {
+                  this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
                 }
-                this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
-
               }
             }
           }).catch(e=>{
@@ -189,8 +203,8 @@ export class ProfilePage {
       });
   }
 
-  async uploadAttach(formData){
-    await this.notiServ.postAttachment(formData).subscribe(
+   uploadAttach(formData){
+     this.notiServ.postAttachment(formData).toPromise().then(
       s=> {
         console.log('Success post => ' + JSON.stringify(s));
         let allData:any = s;
@@ -209,7 +223,7 @@ export class ProfilePage {
         console.log('error post => '+JSON.stringify(e));
         return true;
       }
-    );
+    ).catch(e=>{console.log("ERR:"+e)});
   }
 
 }

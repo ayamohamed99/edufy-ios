@@ -20,6 +20,7 @@ import {Media} from "@ionic-native/media";
 import { FileOpener } from '@ionic-native/file-opener';
 import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {Pendingnotification} from "../../modles/pendingnotification";
+import {Network} from "@ionic-native/network";
 
 declare var cordova: any;
 
@@ -40,13 +41,14 @@ export class NotificationPage{
   classes:any[] = [];
   studentsName:any[] = [];
   studentwithClass:any[] = [];
+  loadNow:boolean = false;
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
-              private transferF: Transfer, private accountServ:AccountService) {
+              private transferF: Transfer, private accountServ:AccountService,private network:Network) {
     this.fristOpen = true;
     if (platform.is('core')) {
 
@@ -84,6 +86,7 @@ export class NotificationPage{
       }else{
       if(data.done === 'deleteSuccess') {
         this.fristOpen = false;
+        this.loadNow = true;
         this.notifications.splice(0);
         this.notificationPage = 1;
 
@@ -93,7 +96,7 @@ export class NotificationPage{
       }else if (data.done === 'updateSuccess'){
         console.log(data.done);
         this.fristOpen = false;
-
+        this.loadNow = true;
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
           details:data.details});
         model.onDidDismiss(data=>{
@@ -109,6 +112,7 @@ export class NotificationPage{
 
       }else if(data.done === 'newSuccess'){
         this.fristOpen = false;
+        this.loadNow = true;
         console.log(data.done);
         this.loading = this.load.create({
           content: ""
@@ -160,20 +164,32 @@ export class NotificationPage{
 
     model.onDidDismiss(data => {
       if(data.name =="dismissed&SENT"){
-        this.fristOpen = false;
-        this.notifications.splice(0);
-        this.notificationPage = 1;
+          this.fristOpen = false;
+        this.loadNow = true;
+          this.notifications.splice(0);
+          this.notificationPage = 1;
+          this.getPendingNotification();
+          this.notificationService.putHeader(this.tokenKey);
+          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
 
-        this.notificationService.putHeader(this.tokenKey);
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
       }else if(data.name =="dismissed&NOTSENT"){
         this.fristOpen = false;
+        this.loadNow = true;
+        let TempNotify:any[]=[];
+        for (let notify of this.notifications){
+          TempNotify.push(notify);
+        }
+        this.notifications.splice(0);
+        this.getPendingNotification();
+        for(let temp of TempNotify){
+          this.notifications.push(temp);
+        }
       }
     });
   }
 
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    if(this.fristOpen) {
+    if(this.fristOpen || this.loadNow) {
       this.loading = this.load.create({
         content: 'Loading Notifications...'
       });
