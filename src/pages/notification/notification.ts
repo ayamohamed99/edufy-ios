@@ -259,6 +259,8 @@ export class NotificationPage{
                 this.getAllStudent();
                 this.fristOpen = false;
               });
+          }else{
+            this.loading.dismiss();
           }
         }
       },
