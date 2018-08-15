@@ -69,7 +69,7 @@
             <img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
              item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
              && item.type != 'VIDEO'">
-            <button class="buttonOnImg" icon-only (click)="deleteAttach(i)"><ion-icon name="close-circle"></ion-icon></button>
+           <ion-icon name="close-circle" class="buttonOnImg" (click)="deleteAttach(i)"></ion-icon>
           </div>
         </ion-slide>
   </ion-slides>

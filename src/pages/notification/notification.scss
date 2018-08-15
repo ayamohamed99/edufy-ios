@@ -4,12 +4,14 @@ page-notification {
     background: #e5e5e5;
   }
 
-  buttonShape{
-    background-color: transparent;
+  .buttonShape{
+    background: #eee0;
     margin: 10px;
     padding: 0px;
   }
-
+  .buttonShape .button {
+    background: #ffffff00;
+  }
   .imgAttach{
     height: 200px;
     background: #eee0;
@@ -60,6 +62,9 @@ page-notification {
     background: #eee0;
   }
 
+  button{
+    background: #eee0;
+  }
   .slider {
     overflow-y: hidden;
     max-height: 100px; /* approximate max height */

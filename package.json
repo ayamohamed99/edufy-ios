@@ -23,6 +23,7 @@
     "@angular/material": "github:angular/material2-builds",
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
+    "@ionic-native/android-permissions": "^4.11.0",
     "@ionic-native/background-mode": "^4.11.0",
     "@ionic-native/core": "^4.9.1",
     "@ionic-native/document-viewer": "^4.9.1",
@@ -45,6 +46,7 @@
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-advanced-http": "^1.11.1",
+    "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-document-viewer": "^0.9.10",
@@ -90,7 +92,8 @@
       "com-sarriaroman-photoviewer": {},
       "cordova-plugin-file-opener2": {},
       "cordova-plugin-advanced-http": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-android-permissions": {}
     },
     "platforms": [
       "browser",

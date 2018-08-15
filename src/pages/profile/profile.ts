@@ -115,7 +115,9 @@ export class ProfilePage {
                   if (temp.attachmentsList) {
                     let promisesArray = [];
                     for (let index = 0; index < temp.attachmentsList.length; index++) {
-                      let form: FormData = temp.attachmentsList[index];
+                      // let form: FormData = temp.attachmentsList[index];
+                      let form = new FormData();
+                      form.append('file', temp.attachmentsList[index]);
                       promisesArray.push(this.uploadAttach(form));
                     }
                     Promise.all(promisesArray).then(data => {
@@ -133,7 +135,9 @@ export class ProfilePage {
                 if (temp.attachmentsList) {
                   let promisesArray = [];
                   for (let index = 0; index < temp.attachmentsList.length; index++) {
-                    let form: FormData = temp.attachmentsList[index];
+                    // let form: FormData = temp.attachmentsList[index];
+                    let form = new FormData();
+                    form.append('file', temp.attachmentsList[index]);
                     promisesArray.push(this.uploadAttach(form));
                   }
                   Promise.all(promisesArray).then(data => {

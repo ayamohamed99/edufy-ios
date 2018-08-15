@@ -35,6 +35,8 @@ import {LogoutService} from "../services/logout";
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { HTTP } from '@ionic-native/http';
 
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 
 @NgModule({
   declarations: [
@@ -83,7 +85,8 @@ import { HTTP } from '@ionic-native/http';
     FileOpener,
     Transfer,
     BackgroundMode,
-    HTTP
+    HTTP,
+    AndroidPermissions
   ]
 })
 export class AppModule {}

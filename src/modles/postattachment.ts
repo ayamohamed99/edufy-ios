@@ -3,4 +3,6 @@ export class Postattachment{
   type:string;
   url:string;
   uploadDate:string;
+  file:any;
+  imgLoc:any;
 }

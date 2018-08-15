@@ -14,7 +14,7 @@ import { Storage } from "@ionic/storage";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
 import {FileUploadOptions} from "@ionic-native/transfer";
 import {NgForm} from "@angular/forms";
-import {AttachmentList} from "../../modles/attachmentlist";
+import {Attachment} from "../../modles/attachment";
 import {Postattachment} from "../../modles/postattachment";
 import { BackgroundMode } from '@ionic-native/background-mode';
 import {NativeStorage} from "@ionic-native/native-storage";
@@ -53,7 +53,8 @@ export class NotificationNewPage {
   arrayFormData:any[]=[];
   arrayToPostAttachment:any[]=[];
   pendingNotification:any[]=[];
-
+  subscribtion;
+  ifOpenWIFIANDNOTGOTOBACKGROUND;
   @ViewChild('file') inputEl: ElementRef;
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
@@ -75,7 +76,7 @@ export class NotificationNewPage {
     this.tagsArr = accServ.tagArry;
     this.Title =this.navParams.get('title');
     this.Details=this.navParams.get('details');
-
+    this.sendTo.splice(0);this.preparedTags.splice(0);
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
     let reciverArray = this.navParams.get('recieverList');
@@ -305,16 +306,19 @@ export class NotificationNewPage {
           let formData = new FormData();
           formData.append('file', inputEl.files.item(i));
           console.log(JSON.stringify(formData));
-          this.arrayFormData.push(formData);
+          this.arrayFormData.push(inputEl.files.item(i));
            // this.uploadAttach(formData);
               let file: File = inputEl.files.item(i);
+
               let fileType = this.getFileType(file.name);
               if(fileType == "IMAGE"){
+
                 this.readFile(file);
               } else {
                 let attach = new Postattachment();
                 attach.name = fileName;
                 attach.type = fileType;
+                attach.file = inputEl.files.item(i);
                 this.attachmentArray.push(attach);
               }
         } else if (num > 26214400) {
@@ -403,6 +407,7 @@ export class NotificationNewPage {
       attach.name = file.name;
       attach.type = "IMAGE";
       attach.url = reader.result;
+      attach.file = file;
       that.attachmentArray.push(attach);
     };
     reader.readAsDataURL(file);
@@ -445,6 +450,7 @@ export class NotificationNewPage {
           role: 'destructive',
           handler: () => {
             this.attachmentArray.splice(attachIndex, 1);
+            this.arrayFormData.splice(attachIndex,1);
           }
         }
       ]
@@ -465,6 +471,9 @@ export class NotificationNewPage {
         console.log('network:',this.network.type);
           this.getNotificationINStorage();
       });
+      this.ifOpenWIFIANDNOTGOTOBACKGROUND = this.network.onConnect().subscribe(s=>{
+        this.getNotificationINStorageNOTINBACKGROUND();
+      });
 
     }else{
 
@@ -475,7 +484,9 @@ export class NotificationNewPage {
       if(this.arrayFormData) {
         let promisesArray = [];
         for (let index = 0; index <this.arrayFormData.length; index++) {
-          let form: FormData = this.arrayFormData[index];
+          // let form: FormData = this.arrayFormData[index];
+          let form = new FormData();
+          form.append('file', this.arrayFormData[index]);
           promisesArray.push(this.uploadAttach(form));
         }
         Promise.all(promisesArray).then( data=> {
@@ -542,7 +553,9 @@ export class NotificationNewPage {
     if(this.arrayFormData) {
       let promisesArray = [];
       for (let index = 0; index < this.arrayFormData.length; index++) {
-        let form: FormData = this.arrayFormData[index];
+        // let form: FormData = this.arrayFormData[index];
+        let form = new FormData();
+        form.append('file', this.arrayFormData[index]);
         promisesArray.push(this.uploadAttach(form));
       }
       Promise.all(promisesArray).then(data => {
@@ -584,6 +597,7 @@ export class NotificationNewPage {
             let PN = new Pendingnotification();
             PN.title = temp.title;
             PN.body = temp.body;
+
             PN.attachmentsList = temp.attachmentsList;
             PN.tagsList = temp.tagsList;
             PN.receiversList = temp.receiversList;
@@ -610,11 +624,9 @@ export class NotificationNewPage {
   async getNotificationINStorage(){
     await this.storage.get('Notifications').then(
       data =>{
-
-        this.network.onConnect().subscribe((e) => {
+        this.subscribtion = this.network.onConnect().subscribe((e) => {
           console.log('network:',e);
           if (this.network.type == 'wifi') {
-
             let notis:any = data;
             if(notis) {
               for (let temp of notis) {
@@ -634,7 +646,9 @@ export class NotificationNewPage {
                 if (temp.attachmentsList) {
                   let promisesArray = [];
                   for (let index = 0; index < temp.attachmentsList.length; index++) {
-                    let form: FormData = temp.attachmentsList[index];
+                    // let form: FormData = temp.attachmentsList[index];
+                    let form = new FormData();
+                    form.append('file', temp.attachmentsList[index]);
                     promisesArray.push(this.uploadAttach(form));
                   }
                   Promise.all(promisesArray).then(data => {
@@ -647,6 +661,7 @@ export class NotificationNewPage {
                 }
               }
             }
+            this.subscribtion.unsubscribe();
           }
         },error2 => {
           console.log("error onConnent: ",error2);
@@ -704,6 +719,52 @@ export class NotificationNewPage {
 
 
       });
+  }
+
+
+  async getNotificationINStorageNOTINBACKGROUND(){
+    await this.storage.get('Notifications').then(
+      data =>{
+          if (this.network.type == 'wifi') {
+            let notis:any = data;
+            if(notis) {
+              for (let temp of notis) {
+                let PN = new Pendingnotification();
+                PN.title = temp.title;
+                PN.body = temp.body;
+                PN.attachmentsList = temp.attachmentsList;
+                PN.tagsList = temp.tagsList;
+                PN.receiversList = temp.receiversList;
+                this.pendingNotification.push(PN);
+              }
+            }
+
+            console.log('network:onlineWithWifi');
+            if(this.pendingNotification.length > 0) {
+              for (let temp of this.pendingNotification) {
+                if (temp.attachmentsList) {
+                  let promisesArray = [];
+                  for (let index = 0; index < temp.attachmentsList.length; index++) {
+                    // let form: FormData = temp.attachmentsList[index];
+                    let form = new FormData();
+                    form.append('file', temp.attachmentsList[index]);
+                    promisesArray.push(this.uploadAttach(form));
+                  }
+                  Promise.all(promisesArray).then(data => {
+                    this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                  }).catch(e => {
+                    console.log("error" + e);
+                  });
+                }else{
+                  this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                }
+              }
+            }
+            this.ifOpenWIFIANDNOTGOTOBACKGROUND.unsubscribe();
+          }
+      }).catch(e=>{
+      console.log('error: ',JSON.stringify(e));
+    });
   }
 }
 

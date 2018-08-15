@@ -12,7 +12,7 @@ import {AccountService} from "../../services/account";
 import {Class} from "../../modles/class";
 import {StudentsService} from "../../services/students";
 import {Student} from "../../modles/student";
-import {AttachmentList} from "../../modles/attachmentlist";
+import {Attachment} from "../../modles/attachment";
 import {File} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 import {FileTransfer} from '@ionic-native/file-transfer';
@@ -21,6 +21,7 @@ import { FileOpener } from '@ionic-native/file-opener';
 import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {Pendingnotification} from "../../modles/pendingnotification";
 import {Network} from "@ionic-native/network";
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 declare var cordova: any;
 
@@ -48,7 +49,8 @@ export class NotificationPage{
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
-              private transferF: Transfer, private accountServ:AccountService,private network:Network) {
+              private transferF: Transfer, private accountServ:AccountService,private network:Network,
+              private androidPermissions: AndroidPermissions) {
     this.fristOpen = true;
     if (platform.is('core')) {
 
@@ -63,6 +65,17 @@ export class NotificationPage{
           notificationService.putHeader(val);
           this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
         });
+    }
+    if (platform.is('android')) {
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => {
+          console.log('Has permission?',result.hasPermission);
+          if(!result.hasPermission){
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
+          }
+        },
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
     }
 
     this.tagsArr = accService.accountBranchesList;
@@ -206,7 +219,7 @@ export class NotificationPage{
         for (let value of allData){
           let notify = new Notification;
           for(let item of value.attachmentsList){
-            let attach = new AttachmentList();
+            let attach = new Attachment();
             attach.id=item.id;
             attach.name=item.name;
             attach.type=item.type;
@@ -348,75 +361,77 @@ export class NotificationPage{
       });
   }
 
-  onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    this.alrtCtrl.create( {
-      title: 'Atachment',
-      subTitle: 'What are you want to do with this file!',
-      buttons: [
-        {
-          text: 'Download',
-          handler: () => {
-            console.log('Download clicked');
-            this.loading = this.load.create({
-              content: ""
-            });
-            this.loading.present();
-            this.downloadFile(attachmentName.substring(17),attachmentId,attachmentType,attachmentURL);
-          }
-        },
-        {
-          text: 'Open',
-          handler: () => {
-            console.log('Open clicked');
-            this.loading = this.load.create({
-              content: ""
-            });
-            this.loading.present();
-            if(attachmentName) {
-              let exType: string;
-              let pos = attachmentName.lastIndexOf('.');
-              let extension = attachmentName.substring(pos + 1);
-              if(attachmentType == "IMAGE"){
-                exType = "image/"+extension;
-              }else if(attachmentType == "PDF"){
-                exType = "application/"+extension;
-              }else if(attachmentType == "WORD"){
-                if(extension == "doc") {
-                  exType = "application/msword";
-                }else{
-                  exType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,pending:any){
+    if(pending!="pending") {
+      this.alrtCtrl.create({
+        title: 'Atachment',
+        subTitle: 'What are you want to do with this file!',
+        buttons: [
+          {
+            text: 'Download',
+            handler: () => {
+              console.log('Download clicked');
+              this.loading = this.load.create({
+                content: ""
+              });
+              this.loading.present();
+              this.downloadFile(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL);
+            }
+          },
+          {
+            text: 'Open',
+            handler: () => {
+              console.log('Open clicked');
+              this.loading = this.load.create({
+                content: ""
+              });
+              this.loading.present();
+              if (attachmentName) {
+                let exType: string;
+                let pos = attachmentName.lastIndexOf('.');
+                let extension = attachmentName.substring(pos + 1);
+                if (attachmentType == "IMAGE") {
+                  exType = "image/" + extension;
+                } else if (attachmentType == "PDF") {
+                  exType = "application/" + extension;
+                } else if (attachmentType == "WORD") {
+                  if (extension == "doc") {
+                    exType = "application/msword";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                  }
+                } else if (attachmentType == "EXCEL") {
+                  if (extension == "xls") {
+                    exType = "application/vnd.ms-excel";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                  }
+                } else if (attachmentType == "POWERPOINT") {
+                  if (extension == "ppt") {
+                    exType = "application/vnd.ms-powerpoint";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                  }
+                } else if (attachmentType == "AUDIO") {
+                  exType = "audio/" + extension;
+                } else if (attachmentType == "VIDEO") {
+                  exType = "video/" + extension;
+                } else if (extension == "3gp") {
+                  exType = "video/" + extension;
+                } else if (extension == "txt") {
+                  exType = "text/plain";
+                } else {
+                  exType = "application/" + extension;
                 }
-              }else if(attachmentType == "EXCEL"){
-                if(extension == "xls") {
-                  exType = "application/vnd.ms-excel";
-                }else{
-                  exType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                }
-              }else if(attachmentType == "POWERPOINT"){
-                if(extension == "ppt") {
-                  exType = "application/vnd.ms-powerpoint";
-                }else{
-                  exType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-                }
-            }else if(attachmentType == "AUDIO"){
-                exType = "audio/"+extension;
-              }else if(attachmentType == "VIDEO"){
-                exType = "video/"+extension;
-              }else if(extension == "3gp"){
-                exType = "video/"+extension;
-              }else if(extension == "txt"){
-                exType = "text/plain";
-              }else{
-                exType = "application/"+extension;
+                console.log(exType);
+                console.log(attachmentName.toString().slice(attachmentName.length - 3));
+                this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL, exType);
               }
-              console.log(exType);
-              console.log(attachmentName.toString().slice(attachmentName.length - 3));
-              this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL,exType);
             }
           }
-        }
-      ]
-    }).present();
+        ]
+      }).present();
+    }
   }
 
 
@@ -541,7 +556,16 @@ export class NotificationPage{
             notify.senderName = this.accountServ.getUserName();
             notify.title = showPN.title;
             notify.body = showPN.body;
-            notify.attachmentsList = showPN.attachmentsList;
+            notify.attachmentsList = [];
+            for(let temp of showPN.attachmentsList){
+              let attach = new Attachment();
+              attach.name = temp.name;
+              attach.type = this.getFileType(temp.name);
+              if(attach.type == "IMAGE"){
+               attach.url = this.readFile(temp);
+              }
+              notify.attachmentsList.push(attach);
+            }
             notify.tagsList = showPN.tagsList;
             notify.receiversList = showPN.receiversList;
             notify.pending = "pending";
@@ -551,7 +575,70 @@ export class NotificationPage{
       });
   }
 
+  getFileType(fileName) {
+    let pos = fileName.lastIndexOf('.');
+    let extension = fileName.substring(pos + 1);
 
+    switch (extension.toLowerCase()) {
+      case "jpg":
+        return "IMAGE";
+      case "jpeg":
+        return "IMAGE";
+      case "png":
+        return "IMAGE";
+      case "gif":
+        return "IMAGE";
+      case "ico":
+        return "IMAGE";
+      case "bmp":
+        return "IMAGE";
+      case "webp":
+        return "IMAGE";
+      case "tiff":
+        return "IMAGE";
+
+      case "pdf":
+        return "PDF";
+
+      case "txt":
+        return "TXT";
+
+      case "xls":
+        return "EXCEL";
+      case "xlsx":
+        return "EXCEL";
+      case "doc":
+      case "docx":
+        return "WORD";
+      case "ppt":
+      case "pptx":
+        return "POWERPOINT";
+      case "mp4":
+        return "VIDEO";
+      case "flv":
+        return "VIDEO";
+      case "avi":
+        return "VIDEO";
+      case "mov":
+        return "VIDEO";
+      case "wmv":
+        return "VIDEO";
+      case "mp3":
+        return "AUDIO";
+      case "wma":
+        return "AUDIO";
+      default:
+        return "OTHER";
+    }
+
+  }
+  readFile(file: File){
+    let reader = new FileReader();
+     reader.onloadend = function(e){
+      return reader.result;
+    };
+    reader.readAsDataURL(reader.result);
+  }
 
 
   // getSeencount(){
