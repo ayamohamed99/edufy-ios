@@ -161,7 +161,7 @@ export class NotificationPage{
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
-          subTitle: err.message,
+          subTitle: "Please, check the internet and try again",
           buttons: ['OK']
         }).present();
       },
@@ -269,7 +269,7 @@ export class NotificationPage{
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
-          subTitle: err.message,
+          subTitle: "Please, check the internet and try again",
           buttons: ['OK']
         }).present();
       },

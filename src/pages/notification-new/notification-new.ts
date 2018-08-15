@@ -414,6 +414,7 @@ export class NotificationNewPage {
   }
 
      uploadAttach(formData){
+    let errorAppear:boolean;
        return this.notiServ.postAttachment(formData).toPromise().then(
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
@@ -427,11 +428,14 @@ export class NotificationNewPage {
         },
         e=> {
           console.log('error post => '+JSON.stringify(e));
-          this.alertCtrl.create( {
-            title: 'Error',
-            subTitle: 'Can\'t upload the attachment, please try later',
-            buttons: ['OK']
-          }).present();
+          if(errorAppear) {
+            errorAppear = false;
+            this.alertCtrl.create({
+              title: 'Error',
+              subTitle: 'Can\'t upload the attachment, please try later',
+              buttons: ['OK']
+            }).present();
+          }
         }
       );
     }
@@ -463,7 +467,7 @@ export class NotificationNewPage {
   uploadFromMobile(RecieverArray,SelectedTags){
     debugger;
 
-    if((this.wifiUpload && !(this.network.type == 'wifi') )|| this.network.type ==  "none"){
+    if((this.wifiUpload && !(this.network.type == 'wifi') )|| (this.wifiUpload && this.network.type ==  "none")){
       alert('You have been activated upload by \"WiFi only\"');
       this.viewCtrl.dismiss({name: 'dismissed&SENT'});
       this.saveTheNewNotificationFrist(RecieverArray,SelectedTags);
@@ -493,7 +497,6 @@ export class NotificationNewPage {
           let sentNotify:any[]=[];
           this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
             (data) => {
-              debugger;
               console.log("POST without wait Date Is", JSON.stringify(data));
               let PN = new Pendingnotification();
               PN.title = this.Title;
@@ -506,10 +509,9 @@ export class NotificationNewPage {
               this.viewCtrl.dismiss({name: 'dismissed&SENT'});
             },
             err => {
-              debugger;
               console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
               loading.dismiss();
-              this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+              this.presentConfirm("Please check the internet and try again");
             },()=>{
               this.deleteFromStorage(sentNotify);
             });
@@ -536,7 +538,7 @@ export class NotificationNewPage {
             debugger;
             console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
             loading.dismiss();
-            this.presentConfirm(JSON.parse(JSON.stringify(err.error)));
+            this.presentConfirm("Please, check the internet then try again");
           }, () => {
             this.deleteFromStorage(sentNotify);
           });
@@ -582,7 +584,7 @@ export class NotificationNewPage {
         err => {
           console.log("POST call in error", err);
           loading.dismiss();
-          this.presentConfirm(err);
+          this.presentConfirm("Please, check the internet then try again");
         });
     }
   }
@@ -686,7 +688,6 @@ export class NotificationNewPage {
       },
       err => {
         console.log("network POST wait to call error", JSON.stringify(err));
-        this.presentConfirm(err);
       },
       () => {
         this.deleteFromStorage(sentNotify);
