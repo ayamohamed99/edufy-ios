@@ -43,6 +43,11 @@ export class NotificationPage{
   studentsName:any[] = [];
   studentwithClass:any[] = [];
   loadNow:boolean = false;
+  NewNotification:boolean = true;
+  editId;
+  editTitle;
+  editDetails;
+  editTags;
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
@@ -131,6 +136,7 @@ export class NotificationPage{
           content: ""
         });
         this.loading.present();
+        this.NewNotification = false;
         this.getNotificationReciver(id, title, details,reciversList,tagsList, i);
       }
       }
@@ -144,17 +150,11 @@ export class NotificationPage{
       (data) => {
         this.loading.dismiss();
         console.log("Date Is", data);
-        let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
-          studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:data,
-          tagList:tagsList});
-        model.onDidDismiss(()=>{
-          this.notifications.splice(0);
-          this.notificationPage = 1;
-
-          this.notificationService.putHeader(this.tokenKey);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-        });
-        model.present();
+        this.editId = id;
+        this.editTitle = title;
+        this.editDetails = details;
+        this.editTags = tagsList;
+        this.getAllDataThenNavigate();
       },
       err => {
         console.log("POST call in error", err);
@@ -171,34 +171,8 @@ export class NotificationPage{
   }
 
   onOpenView() {
-    let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
-      studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
-    model.present();
-
-    model.onDidDismiss(data => {
-      if(data.name =="dismissed&SENT"){
-          this.fristOpen = false;
-        this.loadNow = true;
-          this.notifications.splice(0);
-          this.notificationPage = 1;
-          this.getPendingNotification();
-          this.notificationService.putHeader(this.tokenKey);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-
-      }else if(data.name =="dismissed&NOTSENT"){
-        this.fristOpen = false;
-        this.loadNow = true;
-        let TempNotify:any[]=[];
-        for (let notify of this.notifications){
-          TempNotify.push(notify);
-        }
-        this.notifications.splice(0);
-        this.getPendingNotification();
-        for(let temp of TempNotify){
-          this.notifications.push(temp);
-        }
-      }
-    });
+    this.NewNotification = true;
+    this.getAllDataThenNavigate();
   }
 
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
@@ -240,29 +214,7 @@ export class NotificationPage{
 
           this.notifications.push(notify);
         }
-
-        if(this.platform.is('core')) {
-          if(this.fristOpen) {
-            this.tokenKey = localStorage.getItem(this.localStorageToken);
-            this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-            this.getAllClasses();
-            this.getAllStudent();
-            this.fristOpen = false;
-          }
-        }else {
-          if (this.fristOpen) {
-            this.storage.get(this.localStorageToken).then(
-              val => {
-                this.tokenKey = val;
-                this.studentService.putHeader(val);
-                this.getAllClasses();
-                this.getAllStudent();
-                this.fristOpen = false;
-              });
-          }else{
-            this.loading.dismiss();
-          }
-        }
+        this.loading.dismiss();
       },
       err => {
         console.log("POST call in error", err);
@@ -350,6 +302,53 @@ export class NotificationPage{
         console.log(this.studentsName);
 
         console.log(this.studentwithClass);
+
+        if(this.NewNotification){
+
+          let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
+            studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
+          model.present();
+
+          model.onDidDismiss(data => {
+            if(data.name =="dismissed&SENT"){
+              this.fristOpen = false;
+              this.loadNow = true;
+              this.notifications.splice(0);
+              this.notificationPage = 1;
+              this.getPendingNotification();
+              this.notificationService.putHeader(this.tokenKey);
+              this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+
+            }else if(data.name =="dismissed&NOTSENT"){
+              this.fristOpen = false;
+              this.loadNow = true;
+              let TempNotify:any[]=[];
+              for (let notify of this.notifications){
+                TempNotify.push(notify);
+              }
+              this.notifications.splice(0);
+              this.getPendingNotification();
+              for(let temp of TempNotify){
+                this.notifications.push(temp);
+              }
+            }
+          });
+
+        }else{
+
+          let model = this.modalCtrl.create(NotificationNewPage,{id:this.editId,title:this.editTitle, details:this.editDetails,
+            classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
+            ,recieverList:data, tagList:this.editTags});
+          model.onDidDismiss(()=>{
+            this.notifications.splice(0);
+            this.notificationPage = 1;
+
+            this.notificationService.putHeader(this.tokenKey);
+            this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+          });
+          model.present();
+
+        }
         this.loading.dismiss();
       },
       err=>{
@@ -640,6 +639,26 @@ export class NotificationPage{
       return reader.result;
     };
     reader.readAsDataURL(reader.result);
+  }
+
+  getAllDataThenNavigate(){
+    this.loading = this.load.create({
+      content: ""
+    });
+    this.loading.present();
+    if(this.platform.is('core')) {
+      this.tokenKey = localStorage.getItem(this.localStorageToken);
+      this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getAllClasses();
+    }else {
+      this.storage.get(this.localStorageToken).then(
+        val => {
+          this.tokenKey = val;
+          this.studentService.putHeader(val);
+          this.getAllClasses();
+          this.fristOpen = false;
+        });
+    }
   }
 
 
