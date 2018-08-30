@@ -24,5 +24,8 @@ export class Url_domain{
   // <preference name="iosPersistentFileLocation" value="Library" />
   // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
   // keytool -genkey -v -keystore edufy_teachers.jks -keyalg RSA -keysize 2048 -validity 10000 -alias edufy_teachers
-  // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks edufyTeachers.apk edufy_teachers
+  // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks app-release-unsigned.apk edufy_teachers
+  //PASSWORD : @Entrepreware123
+  //zipalign -v 4 app-release-unsigned.apk edufyTeachers.apk
+  //apksigner verify edufyTeachers.apk
 }
