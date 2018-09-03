@@ -1,18 +1,83 @@
-<!--
-  Generated template for the ReportPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>report</ion-title>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title text-center>{{pageName}}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
+
+
+  <div *ngIf="true">
+
+    <button class="collapsible">Class Name</button>
+
+    <div class="contant">
+
+      <div>
+        <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-bottom: 10px"></ion-checkbox>
+        <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;">All</ion-label>
+      </div>
+
+
+      <ion-card style="height: 50px;padding: 5px; display:inline-block;">
+
+        <ion-row>
+
+          <ion-checkbox mode="ios" item-start style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>
+
+          <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">
+            <img style="border-radius: 100px;" src="assets/imgs/profile.png">
+          </ion-avatar>
+
+          <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">Mohammedddddddddddddddddddd Ali</ion-label>
+
+          <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="true">Pending</label>
+          <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Approved</label>
+          <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Finalized</label>
+
+        </ion-row>
+
+      </ion-card>
+
+    </div>
+
+  </div>
+
+
+
+  <div *ngIf="true">
+
+    <div>
+    <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-bottom: 10px"></ion-checkbox>
+      <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;">All</ion-label>
+    </div>
+
+
+    <ion-card style="height: 50px;padding: 5px; display:inline-block;">
+
+      <ion-row>
+
+        <ion-checkbox mode="ios" item-start style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>
+
+        <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">
+          <img style="border-radius: 100px;" src="assets/imgs/profile.png">
+        </ion-avatar>
+
+        <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">Mohammedddddddddddddddddddd Ali</ion-label>
+
+        <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="true">Pending</label>
+        <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Approved</label>
+        <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Finalized</label>
+
+      </ion-row>
+
+  </ion-card>
+  </div>
 
 </ion-content>

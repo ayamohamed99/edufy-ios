@@ -1,5 +1,5 @@
-import {Component, ViewChild } from '@angular/core';
-import { LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { AlertController, LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -9,14 +9,16 @@ import { LoginService } from "../services/login";
 import { NotificationPage } from "../pages/notification/notification";
 import { AccountService } from "../services/account";
 import { ProfilePage } from "../pages/profile/profile";
-import {SettingsPage} from "../pages/settings/settings";
+import { SettingsPage } from "../pages/settings/settings";
+import { LogoutService } from "../services/logout";
+import {ReportPage} from "../pages/report/report";
 
-
-
+declare var window:any;
 
 @Component({
   templateUrl: 'app.html'
 })
+
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
@@ -26,26 +28,32 @@ export class MyApp {
   homePage = HomePage;
   notificationPage = NotificationPage;
   settingsPage = SettingsPage;
-  reportPage:any;
+  reportPage = ReportPage;
 
   userName:string;
   password:string;
   accessToken:string;
-  refreshToken:string;
+  // refreshToken:string;
   token:string;
   values:any =[];
   toKenFull:string;
   load:any;
   names:string;
 
-  appearNotification:boolean;
-  appearDailyReport:boolean;
+  appearNotification:boolean = false;
+  appearDailyReport:boolean = false;
+  appearCustomReport:boolean = false;
+  customReportList:any = [];
+
+  elementByClass:any = [];
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
-              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService) {
+              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
+              private logout:LogoutService, private alertCtrl: AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      console.log(window);
       if(platform.is('core')){
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
@@ -53,8 +61,8 @@ export class MyApp {
           storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> console.log('ERROR'+err)).catch((err)=> console.log('ERROR'+err));;
           storage.get(this.loginServ.localStoragePassword).then(
             value =>{
-              this.password = value
-              if((this.userName != null || this.userName != '') && (this.password != null || this.password != '')){
+              this.password = value;
+              if((this.userName && this.userName != '') && (this.password && this.password != '')){
                 this.startLogIn();
               }else {
                 this.rootPage = this.homePage;
@@ -63,7 +71,7 @@ export class MyApp {
             });
       }
 
-      if((this.userName != null || this.userName != '') && (this.password != null || this.password != '') &&
+      if((this.userName && this.userName != '') && (this.password && this.password != '') &&
         platform.is('core')){
         this.startLogIn();
       }else {
@@ -75,9 +83,42 @@ export class MyApp {
   }
 
   public whichPage(){
+
+
+    var coll = document.getElementsByClassName("collopsible");
+    var i;
+
+    let foundBefore;
+
+    for (i = 0; i < coll.length; i++) {
+     this.elementByClass.find(x =>{
+       if(x === coll[i]){
+         foundBefore=true;
+       }else{
+         foundBefore=false;
+       }
+     });
+
+      if(!foundBefore) {
+        coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        });
+        this.elementByClass.push(coll[i]);
+      }
+    }
+
+
+
     this.view=this.nav.getActive();
     this.setNameInMenu(this.accountServ.getUserName());
     this.knowFeatures(this.accountServ.getAccountFeature());
+    this.knowCustomReport(this.accountServ.getCustomReportsList());
     if(this.view && this.platform.is('core') && this.platform.width() > 992){
       if(this.view.name == 'HomePage' && this.platform.is('core')){
         console.log(this.view.name);
@@ -97,18 +138,81 @@ export class MyApp {
     this.menu.close();
   }
 
-
-  onSignOut(){
-    console.log('log-out');
-    if(this.platform.is('core')) {
-      localStorage.clear();
-    }else {
-      this.storage.clear();
-    }
+  onLoadReport(page:any, pageName:any, reportId:any){
+    this.nav.setRoot(page);
+    this.accountServ.reportPage = pageName;
+    this.accountServ.reportId = reportId;
     this.menu.close();
-    this.rootPage = this.homePage;
   }
 
+  onSignOut(){
+    this.load = this.loading.create({
+      content: 'Wait please ...'
+    });
+    this.load.present();
+
+    let plat=this.platform.is('core');
+
+    if(plat){
+      let token = localStorage.getItem(this.loginServ.localStorageToken);
+      this.logout.putHeader(token);
+      if(this.platform.is('core')) {
+        localStorage.clear();
+      }else {
+        this.storage.clear();
+      }
+      this.load.dismiss();
+      this.menu.close();
+      this.nav.setRoot(this.homePage);
+    }else{
+      this.storage.get(this.loginServ.localStorageToken).then(
+        value => {
+          this.logout.putHeader(value);
+          // this.logoutMethod();
+          if(this.platform.is('core')) {
+            localStorage.clear();
+          }else {
+            this.storage.clear();
+          }
+          this.load.dismiss();
+          this.menu.close();
+          this.nav.setRoot(this.homePage);
+        })
+
+    }
+
+
+  }
+
+
+  logoutMethod(){
+    this.logout.postlogout(null,null,null).subscribe(
+      (data) => {
+        console.log("LogOut", data);
+        this.load.dismiss();
+        if(this.platform.is('core')) {
+          localStorage.clear();
+        }else {
+          this.storage.clear();
+        }
+        this.menu.close();
+        this.nav.setRoot(this.homePage);
+      },
+      err => {
+        this.load.dismiss();
+        console.log("error logout", err.message);
+        if(this.platform.is('core')) {
+          localStorage.clear();
+        }else {
+          this.storage.clear();
+        }
+        this.menu.close();
+        this.nav.setRoot(this.homePage);
+      },
+      () => {
+        console.log("The Logout observable is now completed.");
+      });
+  }
 
 
 
@@ -171,6 +275,7 @@ export class MyApp {
         {
 
           localStorage.setItem(this.loginServ.localStorageToken, this.fullToken());
+          localStorage.setItem(this.loginServ.localStorageAccessToken, this.token);
           localStorage.setItem(this.loginServ.localStorageUserName, this.userName);
           localStorage.setItem(this.loginServ.localStoragePassword, this.password);
 
@@ -216,11 +321,12 @@ export class MyApp {
         console.log("full token Date Is", this.toKenFull);
         console.log("Date Is R", data);
         this.accountServ.setDate(data);
-        this.accountServ.getTags(this.fullToken());
-        this.setNameInMenu(this.accountServ.getUserName());
-        this.knowFeatures(this.accountServ.getAccountFeature());
-        this.load.dismiss();
-        this.nav.setRoot(this.profilePage);
+        // this.accountServ.getTags(this.fullToken());
+        this.CustomReport();
+        // this.setNameInMenu(this.accountServ.getUserName());
+        // this.knowFeatures(this.accountServ.getAccountFeature());
+        // this.load.dismiss();
+        // this.nav.setRoot(this.profilePage);
       },
       err => {
         this.load.dismiss();
@@ -238,8 +344,41 @@ export class MyApp {
 
   knowFeatures(data:any){
     this.appearNotification = data.notificationActivated;
-    this.appearDailyReport = true;
-    // this.appearDailyReport = data.dailyReportActivated;
+    this.appearDailyReport = data.dailyReportActivated;
   }
+
+  knowCustomReport(data){
+    let customReports:any = [];
+    customReports = data;
+    if(customReports.length > 0){
+      this.appearCustomReport = true;
+      this.customReportList = data;
+    }
+  }
+
+  CustomReport(){
+    this.accountServ.getCustomReports(this.toKenFull).subscribe(
+      (data) => {
+        console.log("full token Date Is", this.toKenFull);
+        console.log("Date Is CustomReport", data);
+        this.accountServ.setCustomReport(data);
+        this.accountServ.getTags(this.fullToken());
+        this.setNameInMenu(this.accountServ.getUserName());
+        this.knowFeatures(this.accountServ.getAccountFeature());
+        this.knowCustomReport(this.accountServ.getCustomReportsList());
+        this.load.dismiss();
+        this.nav.setRoot(this.profilePage);
+      },
+      err => {
+        this.load.dismiss();
+        console.log("POST call in error", err);
+        this.nav.setRoot(this.homePage);
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
+  }
+
+
 }
 

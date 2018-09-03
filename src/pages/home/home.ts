@@ -5,6 +5,10 @@ import {LoginService} from "../../services/login";
 import {Storage} from "@ionic/storage";
 import {AccountService} from "../../services/account";
 import {ProfilePage} from "../profile/profile";
+import {Pendingnotification} from "../../models/pendingnotification";
+import {Network} from "@ionic-native/network";
+import {NotificationService} from "../../services/notification";
+import {Postattachment} from "../../models/postattachment";
 
 @Component({
   selector: 'page-home',
@@ -20,9 +24,11 @@ export class HomePage {
   values:any =[];
   toKenFull:string;
   load:any;
+  elementByClass:any = [];
 
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
-    , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService) {}
+    , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
+              private network:Network, private notiServ:NotificationService) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -41,18 +47,20 @@ export class HomePage {
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
       (data) => {
-        console.log("POST call successful value returned in body", data);
+        console.log("POST call successful value returned in body", JSON.stringify(data));
         this.values = data;
+        console.log("successful data ", JSON.stringify(this.values));
+        console.log("refToken", this.values.refreshToken.value);
         this.accessToken = this.values.refreshToken.value;
-        console.log("this.accessToken", this.accessToken);
-        this.refreshToken();
+        console.log("accessToken", this.accessToken);
+        this.refreToken();
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("startLogIn in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
 
@@ -68,7 +76,7 @@ export class HomePage {
     return 'Bearer ' +this.token;
   }
 
-  refreshToken(){
+  refreToken(){
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
       (data) => {
         console.log("Refresh :  ", data);
@@ -102,10 +110,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("refreToken in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
 
@@ -121,10 +129,10 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("managAccount in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
       },
@@ -136,19 +144,20 @@ export class HomePage {
   accountInfo(){
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
       (data) => {
-        this.load.dismiss();
+        // this.load.dismiss();
         console.log("full token Date Is", this.toKenFull);
         console.log("Date Is", data);
         this.accountServ.setDate(data);
-        this.accountServ.getTags(this.fullToken());
-        this.navCtrl.setRoot(ProfilePage);
+        // this.accountServ.getTags(this.fullToken());
+        // this.navCtrl.setRoot(ProfilePage);
+        this.CustomReport();
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
+        console.log("accountInfo in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
-          subTitle: err.message,
+          subTitle: "Wrong Username or Password",
           buttons: ['OK']
         }).present();
       },
@@ -157,5 +166,29 @@ export class HomePage {
       });
   }
 
+
+  CustomReport(){
+    this.accountServ.getCustomReports(this.toKenFull).subscribe(
+      (data) => {
+        console.log("full token Date Is", this.toKenFull);
+        console.log("Date Is CustomReport", data);
+        this.load.dismiss();
+        this.accountServ.setCustomReport(data);
+        this.accountServ.getTags(this.fullToken());
+        this.navCtrl.setRoot(ProfilePage);
+      },
+      err => {
+        this.load.dismiss();
+        console.log("accountInfo in error", err.message);
+        this.alertCtrl.create({
+          title: 'Error!',
+          subTitle: "Wrong Username or Password",
+          buttons: ['OK']
+        }).present();
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
+  }
 
 }

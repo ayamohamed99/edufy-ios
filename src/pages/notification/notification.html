@@ -1,53 +1,56 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-buttons start>
+    <ion-buttons left>
       <button ion-button icon-only menuToggle>
        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title text-center>Notification</ion-title>
+    <ion-title text-center>Notifications</ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content>
+<ion-content class="contentColor">
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
         <ion-card>
-          <ion-item style="background-color: lightgray">
-            <ion-avatar item-start>
-              <img src="assets/imgs/profile.png">
-            </ion-avatar>
-            <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-            <button style="background-color: lightgray" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape">
-              <ion-icon style="background-color: lightgray" name="more" class="buttonShape" ></ion-icon>
-            </button>
-          </ion-item>
-          <div style="height: 5px;"></div>
-          <ion-card-content>
+          <ion-item style="background-color: white">
+
             <h1>{{notify.title}}</h1>
-            <p>{{notify.body}}</p>
-
-            <div style="height: 8px; background-color: white"></div>
-
+              <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending'" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+          </ion-item>
+          <div style="padding-left: 16px;">
+            <h2 style="color: gray">{{notify.body}}</h2>
+          </div>
+          <ion-card-content>
             <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
-              <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url)">
-                <h3 padding-top="20px">{{item.name.substring(17)}}</h3>
-                <div>
-                  <ion-img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'"></ion-img>
-                  <ion-img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'"></ion-img>
+              <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                <h3>{{item.name.substring(17)}}</h3>
+                <div style="text-align: -webkit-center;/">
+                  <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                  <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
                 </div>
               </ion-slide>
             </ion-slides>
 
           </ion-card-content>
+
+          <div style="height: 8px; background-color: white"></div>
+
+          <ion-item>
+          <ion-avatar item-start>
+            <img src="assets/imgs/profile.png">
+          </ion-avatar>
+          <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+            <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+          </ion-item>
         </ion-card>
       </ion-col>
     </ion-row>

@@ -10,8 +10,6 @@
     <ion-content class="outer-content">
 
       <ion-item-group>
-        <ion-item-divider color="light">Navigation</ion-item-divider>
-
         <button ion-item icon-left (click)="onLoad(profilePage)">
           <ion-icon name="person" small></ion-icon>
           {{names}}'s Profile
@@ -19,29 +17,39 @@
 
         <button ion-item icon-left (click)="onLoad(notificationPage)" *ngIf="appearNotification">
           <ion-icon name="notifications" small></ion-icon>
-          Notification
+          Notifications
         </button>
 
-        <button ion-item icon-left (click)="onLoad(reportPage)" *ngIf="appearDailyReport">
+        <button ion-item icon-left (click)="onLoadReport(reportPage, 'Daily Report',-1)" *ngIf="appearDailyReport">
           <ion-icon name="document" small></ion-icon>
           Daily Reports
         </button>
 
+        <button class="collopsible" color="light" *ngIf="appearCustomReport">
+          <ion-icon icon-left style="padding-right: 5px" name="ios-copy"></ion-icon>
+          Reports
+        </button>
+
+        <div class="contont">
+          <button ion-item icon-left *ngFor="let itm of customReportList"  (click)="onLoadReport(reportPage, itm.name, itm.id)">
+            <ion-icon name="document" small></ion-icon>
+            {{itm.name}}
+          </button>
+        </div>
 
         <ion-item-divider color="light">Tools</ion-item-divider>
 
-        <button ion-item icon-left (click)="onLoad(settingsPage)" text-center>
+        <button ion-item icon-left (click)="onLoad(settingsPage)">
           <ion-icon name="cog" small></ion-icon>
           Setting
         </button>
 
-        <button ion-item icon-left (click)="onSignOut()" text-center>
+        <button ion-item icon-left (click)="onSignOut()">
           <ion-icon name="log-out" small></ion-icon>
           Log-out
         </button>
 
       </ion-item-group>
-
     </ion-content>
 
   </ion-menu>

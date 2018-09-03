@@ -1,10 +1,10 @@
 {
-  "name": "Edufy",
-  "app_id": "",
-  "type": "ionic-angular",
+  "name": "Edufy Teachers",
   "integrations": {
     "cordova": {}
   },
+  "type": "ionic-angular",
+  "app_id": "",
   "proxies": [
     {
       "path":"/oauth",
@@ -13,14 +13,6 @@
     {
       "path":"/authentication",
       "proxyUrl": "http://104.198.175.198/authentication"
-    },
-    {
-      "path":"/entrepreware.com",
-      "proxyUrl": "http://104.198.175.198/"
     }
-
-  ],
-  "Production":"104.198.175.198"
-
+  ]
 }
-

@@ -24,12 +24,12 @@
         <ion-textarea rows="6" [(ngModel)]="notificationDetails" name="notifyDetails" id="detailsBox" [value]="notificationDetails" [type]="text" required placeholder="Details" ></ion-textarea>
       </ion-item>
       <ion-item>
-        <ion-col col-6>
-          <button ion-button block item-end [disabled]="!updateForm.form.valid" type="submit">Send</button>
-        </ion-col>
-        <ion-col col-6>
-          <button ion-button block item-end color="danger" (click)="close()">Cancel</button>
-        </ion-col>
+        <ion-row>
+          <button ion-button block item-end [disabled]="!updateForm.form.valid" type="submit">Edit</button>
+        </ion-row>
+        <ion-row>
+          <button ion-button block item-end color="danger" type="reset" (click)="close()">Cancel</button>
+        </ion-row>
       </ion-item>
     </ion-list>
   </form>

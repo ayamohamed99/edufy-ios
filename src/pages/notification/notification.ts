@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
 } from 'ionic-angular';
@@ -12,14 +12,19 @@ import {AccountService} from "../../services/account";
 import {Class} from "../../models/class";
 import {StudentsService} from "../../services/students";
 import {Student} from "../../models/student";
-import {AttachmentList} from "../../models/attachmentlist";
-import {File, FileEntry} from '@ionic-native/file';
+import {Attachment} from "../../models/attachment";
+import {File} from '@ionic-native/file';
 import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
 import {FileTransfer} from '@ionic-native/file-transfer';
 import {Media} from "@ionic-native/media";
 import { FileOpener } from '@ionic-native/file-opener';
+import {Transfer, TransferObject} from '@ionic-native/transfer';
+import {Pendingnotification} from "../../models/pendingnotification";
+import {Network} from "@ionic-native/network";
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
-@IonicPage()
+declare var cordova: any;
+
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html',
@@ -29,7 +34,7 @@ export class NotificationPage{
   notifications:Notification[] = [];
   notificationPage=1;
   loading:any;
-  fristOpen:boolean = true;
+  fristOpen:boolean;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   tokenKey:string;
   tagsArr:any[] = [];
@@ -37,26 +42,45 @@ export class NotificationPage{
   classes:any[] = [];
   studentsName:any[] = [];
   studentwithClass:any[] = [];
+  loadNow:boolean = false;
+  NewNotification:boolean = true;
+  editId;
+  editTitle;
+  editDetails;
+  editTags;
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
-              private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener) {
-
+              private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
+              private transferF: Transfer, private accountServ:AccountService,private network:Network,
+              private androidPermissions: AndroidPermissions) {
+    this.fristOpen = true;
     if (platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
     } else {
-
       storage.get(this.localStorageToken).then(
         val => {
+            this.getPendingNotification();
           this.tokenKey = val;
           notificationService.putHeader(val);
           this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
         });
+    }
+    if (platform.is('android')) {
+      this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
+        result => {
+          console.log('Has permission?',result.hasPermission);
+          if(!result.hasPermission){
+            this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
+          }
+        },
+        err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE)
+      );
     }
 
     this.tagsArr = accService.accountBranchesList;
@@ -79,7 +103,8 @@ export class NotificationPage{
         console.log('dissmiss');
       }else{
       if(data.done === 'deleteSuccess') {
-        this.fristOpen = true;
+        this.fristOpen = false;
+        this.loadNow = true;
         this.notifications.splice(0);
         this.notificationPage = 1;
 
@@ -88,54 +113,31 @@ export class NotificationPage{
 
       }else if (data.done === 'updateSuccess'){
         console.log(data.done);
-        this.fristOpen = true;
-
+        this.fristOpen = false;
+        this.loadNow = true;
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
           details:data.details});
-        model.onDidDismiss(()=>{
-          this.notifications.splice(0);
-          this.notificationPage = 1;
+        model.onDidDismiss(data=>{
+          if(data.name != "dismissed") {
+            this.notifications.splice(0);
+            this.notificationPage = 1;
 
-          this.notificationService.putHeader(this.tokenKey);
-          this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+            this.notificationService.putHeader(this.tokenKey);
+            this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+          }
         });
         model.present();
 
       }else if(data.done === 'newSuccess'){
-        this.fristOpen = true;
+        this.fristOpen = false;
+        this.loadNow = true;
         console.log(data.done);
         this.loading = this.load.create({
           content: ""
         });
         this.loading.present();
-        this.notificationService.getNotificationReceivers(id).subscribe(
-              (data) => {
-                this.loading.dismiss();
-                console.log("Date Is", data);
-                let model = this.modalCtrl.create(NotificationNewPage,{id:id,title:title, details:details, classesList:this.classes,
-                  studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass,recieverList:data,
-                  tagList:tagsList});
-                model.onDidDismiss(()=>{
-                  this.notifications.splice(0);
-                  this.notificationPage = 1;
-
-                  this.notificationService.putHeader(this.tokenKey);
-                  this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-                });
-                model.present();
-              },
-              err => {
-                console.log("POST call in error", err);
-                this.loading.dismiss();
-                this.alrtCtrl.create( {
-                  title: 'Error',
-                  subTitle: err.message,
-                  buttons: ['OK']
-                }).present();
-              },
-              () => {
-                console.log("The POST observable is now completed.");
-              });
+        this.NewNotification = false;
+        this.getNotificationReciver(id, title, details,reciversList,tagsList, i);
       }
       }
     });
@@ -143,32 +145,47 @@ export class NotificationPage{
     popover.present({ev: event});
   }
 
+  getNotificationReciver(id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
+    this.notificationService.getNotificationReceivers(id).subscribe(
+      (data) => {
+        this.loading.dismiss();
+        console.log("Date Is", data);
+        this.editId = id;
+        this.editTitle = title;
+        this.editDetails = details;
+        this.editTags = tagsList;
+        this.getAllDataThenNavigate();
+      },
+      err => {
+        console.log("POST call in error", err);
+        this.loading.dismiss();
+        this.alrtCtrl.create( {
+          title: 'Error',
+          subTitle: "Please, check the internet and try again",
+          buttons: ['OK']
+        }).present();
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
+  }
+
   onOpenView() {
-    let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
-      studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
-    model.present();
-
-    model.onDidDismiss(data => {
-      if(data.name =="dismissed&SENT"){
-        this.fristOpen = true;
-        this.notifications.splice(0);
-        this.notificationPage = 1;
-
-        this.notificationService.putHeader(this.tokenKey);
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
-      }
-    });
+    this.NewNotification = true;
+    this.getAllDataThenNavigate();
   }
 
   getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    if(this.fristOpen) {
+    if(this.fristOpen || this.loadNow) {
       this.loading = this.load.create({
-        content: 'Loading Notification...'
+        content: 'Loading Notifications...'
       });
       this.loading.present();
-      this.fristOpen = false;
     }
+    this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
+  }
 
+  getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
         console.log("Date Is", data);
@@ -176,7 +193,7 @@ export class NotificationPage{
         for (let value of allData){
           let notify = new Notification;
           for(let item of value.attachmentsList){
-            let attach = new AttachmentList();
+            let attach = new Attachment();
             attach.id=item.id;
             attach.name=item.name;
             attach.type=item.type;
@@ -197,30 +214,14 @@ export class NotificationPage{
 
           this.notifications.push(notify);
         }
-
-        if(this.platform.is('core')) {
-
-          this.tokenKey = localStorage.getItem(this.localStorageToken);
-          this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-          this.getAllClasses();
-          this.getAllStudent();
-        }else {
-
-          this.storage.get(this.localStorageToken).then(
-            val=>{
-              this.tokenKey = val;
-              this.studentService.putHeader(val);
-              this.getAllClasses();
-              this.getAllStudent();
-            });
-        }
+        this.loading.dismiss();
       },
       err => {
         console.log("POST call in error", err);
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
-          subTitle: err.message,
+          subTitle: "Please, check the internet and try again",
           buttons: ['OK']
         }).present();
       },
@@ -257,51 +258,98 @@ export class NotificationPage{
           item.branch.branchId = data.branch.id;
           item.branch.branchName = data.branch.name;
           item.branch.managerId = data.branch.managerId;
-
           this.classes.push(item);
         }
+        this.getAllStudent();
       },
       err =>{
-      console.log(err);
+        console.log(err);
         this.alrtCtrl.create( {
           title: 'Error',
           subTitle: 'Something went wrong, please refresh the page',
           buttons: ['OK']
         }).present();
         this.loading.dismiss();
-    });
+      });
   }
 
   getAllStudent(){
     this.studentService.getAllStudents('Notification').subscribe(
       (val)=>{
-       console.log(val);
-       let data:any = val;
-       for (let value of data){
-         let students = new Student();
+        console.log(val);
+        let data:any = val;
+        for (let value of data){
+          let students = new Student();
 
-         students.studentClass.classId = value.classes.id;
-         students.studentClass.className = value.classes.name;
-         students.studentClass.grade.gradeId = value.classes.grade.id;
-         students.studentClass.grade.gradeName = value.classes.grade.name;
-         students.studentClass.branch.branchId = value.classes.branch.id;
-         students.studentClass.branch.branchName = value.classes.branch.name;
-         students.studentClass.branch.managerId = value.classes.branch.managerId;
-         students.studentId = value.id;
-         students.studentName = value.name;
-         students.studentAddress = value.address;
+          students.studentClass.classId = value.classes.id;
+          students.studentClass.className = value.classes.name;
+          students.studentClass.grade.gradeId = value.classes.grade.id;
+          students.studentClass.grade.gradeName = value.classes.grade.name;
+          students.studentClass.branch.branchId = value.classes.branch.id;
+          students.studentClass.branch.branchName = value.classes.branch.name;
+          students.studentClass.branch.managerId = value.classes.branch.managerId;
+          students.studentId = value.id;
+          students.studentName = value.name;
+          students.studentAddress = value.address;
 
-         this.studentsName.push(value.name);
-         this.studentwithClass.push(students);
-         console.log(students);
-       }
+          this.studentsName.push(value.name);
+          this.studentwithClass.push(students);
+          console.log(students);
+        }
 
-       console.log(this.studentwithClass.length);
+        console.log(this.studentwithClass.length);
 
-       console.log(this.studentsName);
+        console.log(this.studentsName);
 
         console.log(this.studentwithClass);
-       this.loading.dismiss();
+
+        if(this.NewNotification){
+
+          let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
+            studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
+          model.present();
+
+          model.onDidDismiss(data => {
+            if(data.name =="dismissed&SENT"){
+              this.fristOpen = false;
+              this.loadNow = true;
+              this.notifications.splice(0);
+              this.notificationPage = 1;
+              this.getPendingNotification();
+              this.notificationService.putHeader(this.tokenKey);
+              this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+
+            }else if(data.name =="dismissed&NOTSENT"){
+              this.fristOpen = false;
+              this.loadNow = true;
+              let TempNotify:any[]=[];
+              for (let notify of this.notifications){
+                TempNotify.push(notify);
+              }
+              this.notifications.splice(0);
+              this.getPendingNotification();
+              for(let temp of TempNotify){
+                this.notifications.push(temp);
+              }
+            }
+          });
+
+        }else{
+
+          let model = this.modalCtrl.create(NotificationNewPage,{id:this.editId,title:this.editTitle, details:this.editDetails,
+            classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
+            ,recieverList:data, tagList:this.editTags});
+          model.onDidDismiss(()=>{
+            this.notifications.splice(0);
+            this.notificationPage = 1;
+
+            this.notificationService.putHeader(this.tokenKey);
+            this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+          });
+          model.present();
+
+        }
+        this.loading.dismiss();
       },
       err=>{
         console.log('GetAllStudent Error: '+err);
@@ -314,45 +362,77 @@ export class NotificationPage{
       });
   }
 
-  onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    this.alrtCtrl.create( {
-      title: 'Atachment',
-      subTitle: 'What are you want to do with this file!',
-      buttons: [
-        {
-          text: 'Download',
-          handler: () => {
-            console.log('Download clicked');
-            this.loading = this.load.create({
-              content: ""
-            });
-            this.loading.present();
-            if(attachmentType == "PDF"){
-              this.downloadPdf(attachmentName,attachmentId,attachmentType,attachmentURL);
+  onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,pending:any){
+    if(pending!="pending") {
+      this.alrtCtrl.create({
+        title: 'Atachment',
+        subTitle: 'What are you want to do with this file!',
+        buttons: [
+          {
+            text: 'Download',
+            handler: () => {
+              console.log('Download clicked');
+              this.loading = this.load.create({
+                content: ""
+              });
+              this.loading.present();
+              this.downloadFile(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL);
             }
-            else if(attachmentType == "AUDIO"){
-              this.downloadSong(attachmentName,attachmentId,attachmentType,attachmentURL);
+          },
+          {
+            text: 'Open',
+            handler: () => {
+              console.log('Open clicked');
+              this.loading = this.load.create({
+                content: ""
+              });
+              this.loading.present();
+              if (attachmentName) {
+                let exType: string;
+                let pos = attachmentName.lastIndexOf('.');
+                let extension = attachmentName.substring(pos + 1);
+                if (attachmentType == "IMAGE") {
+                  exType = "image/" + extension;
+                } else if (attachmentType == "PDF") {
+                  exType = "application/" + extension;
+                } else if (attachmentType == "WORD") {
+                  if (extension == "doc") {
+                    exType = "application/msword";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                  }
+                } else if (attachmentType == "EXCEL") {
+                  if (extension == "xls") {
+                    exType = "application/vnd.ms-excel";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                  }
+                } else if (attachmentType == "POWERPOINT") {
+                  if (extension == "ppt") {
+                    exType = "application/vnd.ms-powerpoint";
+                  } else {
+                    exType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                  }
+                } else if (attachmentType == "AUDIO") {
+                  exType = "audio/" + extension;
+                } else if (attachmentType == "VIDEO") {
+                  exType = "video/" + extension;
+                } else if (extension == "3gp") {
+                  exType = "video/" + extension;
+                } else if (extension == "txt") {
+                  exType = "text/plain";
+                } else {
+                  exType = "application/" + extension;
+                }
+                console.log(exType);
+                console.log(attachmentName.toString().slice(attachmentName.length - 3));
+                this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL, exType);
+              }
             }
           }
-        },
-        {
-          text: 'Open',
-          handler: () => {
-            console.log('Open clicked');
-            this.loading = this.load.create({
-              content: ""
-            });
-            this.loading.present();
-            if(attachmentName) {
-              let exType: string = attachmentName.toString().slice(0, attachmentName.length - 3);
-              console.log(exType);
-              console.log(attachmentName.toString().slice(0, attachmentName.length - 3));
-              this.OpenFiles(attachmentName, attachmentId, attachmentType, attachmentURL,exType);
-            }
-          }
-        }
-      ]
-    }).present();
+        ]
+      }).present();
+    }
   }
 
 
@@ -363,7 +443,7 @@ export class NotificationPage{
     if (this.platform.is('ios')) {
       path = this.file.documentsDirectory;
     } else if (this.platform.is('android')) {
-      path = this.file.dataDirectory;
+      path = this.file.externalRootDirectory+'/Download/';
     }
 
     const transfer = this.transfer.create();
@@ -374,70 +454,212 @@ export class NotificationPage{
       const options: DocumentViewerOptions = {
         title: attachmentName
       };
-      this.fileOpener.open(url, 'application/'+extinstion)
+      console.log(path + attachmentName);
+      this.fileOpener.open(url, extinstion)
         .then(() => console.log('File is opened'))
         .catch(e => {
           console.log(e);
+          let error:string;
+          if(e.message.includes("Activity not found")){
+            error = "There is no app to open this file";
+          }else{
+            error = 'Something went wrong try again later.'+JSON.stringify(e);
+          }
+
           this.alrtCtrl.create( {
             title: 'Error',
-            subTitle: 'Something went wrong try again later.',
+            subTitle: error,
             buttons: ['OK']
           }).present();
           this.loading.dismiss();
         });
     }).catch(reason => {
+      console.log(path + attachmentName);
+      console.log("REASON"+reason.exception);
+      let error:string = '';
+      if(reason.exception.includes("Permission")){
+        error = "Edufy need permission to access storage";
+      }else{
+        error =reason.exception;
+      }
       this.alrtCtrl.create( {
         title: 'Error',
-        subTitle: reason,
+        subTitle: error,
         buttons: ['OK']
       }).present();
       this.loading.dismiss();
     });
   }
 
-  downloadPdf(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    let path = null;
+  downloadFile(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any) {
+
+    let storageDirectory = null;
 
     if (this.platform.is('ios')) {
-      path = this.file.documentsDirectory;
+      storageDirectory = this.file.documentsDirectory;
     } else if (this.platform.is('android')) {
-      path = this.file.dataDirectory;
+      storageDirectory = this.file.externalRootDirectory+'/Download/';
     }
 
-    const transfer = this.transfer.create();
-    transfer.download(attachmentURL,
-      path + attachmentName).then(entry => {
+    this.platform.ready().then(() => {
 
-      this.loading.dismiss();
+      const fileTransfer: TransferObject = this.transferF.create();
 
-    }).catch(reason => {
+      const fileLocation = attachmentURL;
 
-      this.alrtCtrl.create( {
-        title: 'Error',
-        subTitle: reason,
-        buttons: ['OK']
-      }).present();
+      fileTransfer.download(fileLocation, storageDirectory + attachmentName).then((entry) => {
+        this.loading.dismiss();
+        const alertSuccess = this.alrtCtrl.create({
+          title: `Download Success`,
+          subTitle: `${attachmentName} was successfully downloaded.`,
+          buttons: ['Ok']
+        });
 
-      this.loading.dismiss();
+        alertSuccess.present();
+
+      }, (error) => {
+
+        const alertFailure = this.alrtCtrl.create({
+          title: `Download Failed!`,
+          subTitle: `${attachmentName} was not successfully downloaded. Error code: ${error.code}`,
+          buttons: ['Ok']
+        });
+
+        alertFailure.present();
+
+      });
+
     });
+
   }
 
-  downloadSong(attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any){
-    let path = this.file.dataDirectory;
-    const transfer = this.transfer.create();
-    transfer.download(attachmentURL,
-      path + attachmentName).catch(reason => {
 
-      this.alrtCtrl.create( {
-        title: 'Error',
-        subTitle: reason,
-        buttons: ['OK']
-      }).present();
+  async getPendingNotification(){
+    let pendingNotification:any[]=[];
+    await this.storage.get('Notifications').then(
+      data => {
+        let notis = data;
+        if (notis) {
+          for (let temp of notis) {
+            let PN = new Pendingnotification();
+            PN.title = temp.title;
+            PN.body = temp.body;
+            PN.attachmentsList = temp.attachmentsList;
+            PN.tagsList = temp.tagsList;
+            PN.receiversList = temp.receiversList;
+            pendingNotification.push(PN);
+          }
+        }
 
-      this.loading.dismiss();
-    });
+        if(pendingNotification){
+          for(let showPN of pendingNotification){
+            let notify = new Notification;
+            notify.senderName = this.accountServ.getUserName();
+            notify.title = showPN.title;
+            notify.body = showPN.body;
+            notify.attachmentsList = [];
+            for(let temp of showPN.attachmentsList){
+              let attach = new Attachment();
+              attach.name = temp.name;
+              attach.type = this.getFileType(temp.name);
+              if(attach.type == "IMAGE"){
+               attach.url = this.readFile(temp);
+              }
+              notify.attachmentsList.push(attach);
+            }
+            notify.tagsList = showPN.tagsList;
+            notify.receiversList = showPN.receiversList;
+            notify.pending = "pending";
+            this.notifications.push(notify);
+          }
+        }
+      });
   }
 
+  getFileType(fileName) {
+    let pos = fileName.lastIndexOf('.');
+    let extension = fileName.substring(pos + 1);
+
+    switch (extension.toLowerCase()) {
+      case "jpg":
+        return "IMAGE";
+      case "jpeg":
+        return "IMAGE";
+      case "png":
+        return "IMAGE";
+      case "gif":
+        return "IMAGE";
+      case "ico":
+        return "IMAGE";
+      case "bmp":
+        return "IMAGE";
+      case "webp":
+        return "IMAGE";
+      case "tiff":
+        return "IMAGE";
+
+      case "pdf":
+        return "PDF";
+
+      case "txt":
+        return "TXT";
+
+      case "xls":
+        return "EXCEL";
+      case "xlsx":
+        return "EXCEL";
+      case "doc":
+      case "docx":
+        return "WORD";
+      case "ppt":
+      case "pptx":
+        return "POWERPOINT";
+      case "mp4":
+        return "VIDEO";
+      case "flv":
+        return "VIDEO";
+      case "avi":
+        return "VIDEO";
+      case "mov":
+        return "VIDEO";
+      case "wmv":
+        return "VIDEO";
+      case "mp3":
+        return "AUDIO";
+      case "wma":
+        return "AUDIO";
+      default:
+        return "OTHER";
+    }
+
+  }
+  readFile(file: File){
+    let reader = new FileReader();
+     reader.onloadend = function(e){
+      return reader.result;
+    };
+    reader.readAsDataURL(reader.result);
+  }
+
+  getAllDataThenNavigate(){
+    this.loading = this.load.create({
+      content: ""
+    });
+    this.loading.present();
+    if(this.platform.is('core')) {
+      this.tokenKey = localStorage.getItem(this.localStorageToken);
+      this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getAllClasses();
+    }else {
+      this.storage.get(this.localStorageToken).then(
+        val => {
+          this.tokenKey = val;
+          this.studentService.putHeader(val);
+          this.getAllClasses();
+          this.fristOpen = false;
+        });
+    }
+  }
 
 
   // getSeencount(){

@@ -86,3 +86,42 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+.collopsible {
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+  padding: 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.6rem;
+}
+
+.active, .collopsible:hover {
+  background-color: #e2e2e2;
+}
+
+.collopsible:after {
+  content: '\002B';
+  color: #000000;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.contont {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 18px;
+  padding-right: 0px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}

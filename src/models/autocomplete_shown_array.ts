@@ -4,4 +4,5 @@ export class Autocomplete_shown_array{
   name:string;
   header:string;
   dataList:any[]=[];
+  studentClassId:any;
 }
