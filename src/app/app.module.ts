@@ -37,6 +37,8 @@ import { HTTP } from '@ionic-native/http';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import {ReportPage} from "../pages/report/report";
+import {ClassesService} from "../services/classes";
+import {DailyReportService} from "../services/dailyreport";
 
 
 @NgModule({
@@ -89,7 +91,9 @@ import {ReportPage} from "../pages/report/report";
     Transfer,
     BackgroundMode,
     HTTP,
-    AndroidPermissions
+    AndroidPermissions,
+    ClassesService,
+    DailyReportService
   ]
 })
 export class AppModule {}

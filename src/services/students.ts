@@ -28,9 +28,15 @@ export class StudentsService{
     };
   }
 
-  getAllStudents(fromPage:string){
-      return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId=7&name=' +
+  getAllStudents(operationId,fromPage:string){
+      return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId='+operationId+'&name=' +
         fromPage, this.httpOptions);
+  }
+
+  getAllStudentsForReport(operationId,id,date){
+    return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId=' + operationId + '&id=' + id
+      + '&date=' + date,
+      this.httpOptions);
   }
 
 }

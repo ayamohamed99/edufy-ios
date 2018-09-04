@@ -22,6 +22,7 @@ import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {Pendingnotification} from "../../models/pendingnotification";
 import {Network} from "@ionic-native/network";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import {ClassesService} from "../../services/classes";
 
 declare var cordova: any;
 
@@ -55,7 +56,7 @@ export class NotificationPage{
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
               private transferF: Transfer, private accountServ:AccountService,private network:Network,
-              private androidPermissions: AndroidPermissions) {
+              private androidPermissions: AndroidPermissions,private classesServ:ClassesService) {
     this.fristOpen = true;
     if (platform.is('core')) {
 
@@ -246,7 +247,7 @@ export class NotificationPage{
   }
 
   getAllClasses(){
-    this.notificationService.getClassList().subscribe((value) => {
+    this.classesServ.getClassList("NOTIFICATION",2).subscribe((value) => {
         let allData: any = value;
         for (let data of allData) {
           let item = new Class();
@@ -274,7 +275,7 @@ export class NotificationPage{
   }
 
   getAllStudent(){
-    this.studentService.getAllStudents('Notification').subscribe(
+    this.studentService.getAllStudents(7,'Notification').subscribe(
       (val)=>{
         console.log(val);
         let data:any = val;
@@ -649,12 +650,14 @@ export class NotificationPage{
     if(this.platform.is('core')) {
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getAllClasses();
     }else {
       this.storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
           this.studentService.putHeader(val);
+          this.classesServ.putHeader(val);
           this.getAllClasses();
           this.fristOpen = false;
         });

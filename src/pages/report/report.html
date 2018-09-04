@@ -12,6 +12,10 @@
 
 <ion-content padding>
 
+  <ion-row>
+    <ion-label text-center style="display:inline-block;-webkit-text-fill-color: #8e8e8e;font-weight: bold;
+     width: 100%; font-size: 20px">{{SelectedDate}}</ion-label>
+  </ion-row>
 
   <div *ngIf="true">
 
@@ -20,8 +24,10 @@
     <div class="contant">
 
       <div>
-        <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-bottom: 10px"></ion-checkbox>
-        <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;">All</ion-label>
+        <ion-row>
+          <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-top: 8px"></ion-checkbox>
+          <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
+        </ion-row>
       </div>
 
 
@@ -54,8 +60,10 @@
   <div *ngIf="true">
 
     <div>
-    <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-bottom: 10px"></ion-checkbox>
-      <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;">All</ion-label>
+      <ion-row>
+        <ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-top: 8px"></ion-checkbox>
+        <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
+      </ion-row>
     </div>
 
 

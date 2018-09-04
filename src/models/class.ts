@@ -7,6 +7,7 @@ export class Class{
   className:string;
   grade:Grade = new Grade();
   branch:Branch = new Branch();
+  studentsList:any[] = [];
 
   constructor() {
   }
