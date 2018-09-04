@@ -12,14 +12,12 @@
 
 <ion-content padding>
 
-  <ion-row>
-    <ion-label text-center style="display:inline-block;-webkit-text-fill-color: #8e8e8e;font-weight: bold;
-     width: 100%; font-size: 20px">{{SelectedDate}}</ion-label>
-  </ion-row>
+  <div *ngIf="classesList.length > 1">
 
-  <div *ngIf="true">
-
-    <button class="collapsible">Class Name</button>
+    <div style="padding-bottom: 10px" *ngFor="let itm of classesList; let i = index">
+    <button class="collapsible" (mouseover)="getAllStudent(itm.classId,i)" (click)="closeOther(i)">
+      {{itm.grade.gradeName}} {{itm.className}}
+    </button>
 
     <div class="contant">
 
@@ -31,7 +29,7 @@
       </div>
 
 
-      <ion-card style="height: 50px;padding: 5px; display:inline-block;">
+      <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of studentsList">
 
         <ion-row>
 
@@ -41,7 +39,7 @@
             <img style="border-radius: 100px;" src="assets/imgs/profile.png">
           </ion-avatar>
 
-          <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">Mohammedddddddddddddddddddd Ali</ion-label>
+          <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>
 
           <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="true">Pending</label>
           <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Approved</label>
@@ -52,12 +50,12 @@
       </ion-card>
 
     </div>
-
+    </div>
   </div>
 
 
 
-  <div *ngIf="true">
+  <div *ngIf="classesList.length == 1">
 
     <div>
       <ion-row>
@@ -86,6 +84,12 @@
       </ion-row>
 
   </ion-card>
+  </div>
+
+  <div *ngIf="classesList.length < 1">
+    <ion-row>
+      <ion-label style="-webkit-text-fill-color: #707070">You have no role on any class</ion-label>
+    </ion-row>
   </div>
 
 </ion-content>

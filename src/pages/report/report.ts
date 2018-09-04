@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AlertController, IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {StudentsService} from "../../services/students";
@@ -14,26 +14,36 @@ import {Storage} from "@ionic/storage";
 })
 export class ReportPage {
 
-  tokenKey:any;
-  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
-  pageName:string;
-  SelectedDate:string;
-  viewName:string;
-  classOpId:any;
-  studentOpId:any;
-  classesList:any = [];
-  studentsList:any = [];
+  tokenKey: any;
+  localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
+  pageName: string;
+  todayDate: string;
+  viewName: string;
+  classOpId: any;
+  studentOpId: any;
+  classesList: any = [];
+  studentsList: any = [];
+  clickedAdded: any = [];
+  foundBefore:boolean = true;
+  openCloseNumber:any = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountServ:AccountService,
-              public studentsServ:StudentsService, public classesServ:ClassesService, public alrtCtrl:AlertController,
-              public loadCtrl:LoadingController, public platform:Platform, public storage:Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public accountServ: AccountService,
+              public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
+              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage) {
     this.pageName = this.accountServ.reportPage;
-    this.SelectedDate = "04-09-2018";
-    if(this.accountServ.reportId == -1){
+    const date = new Date().toISOString().substring(0, 10);
+    var dateData = date.split('-');
+    var year = dateData [0];
+    var month = dateData [1];
+    var day = dateData [2];
+    this.todayDate = day + "-" + month + "-" + year;
+
+    console.log("Today is: " + this.todayDate);
+    if (this.accountServ.reportId == -1) {
       this.viewName = "DAILY_REPORT";
       this.classOpId = 4;
       this.studentOpId = 8;
-    }else{
+    } else {
       this.viewName = "REPORT";
       this.classOpId = 5;
       this.studentOpId = 10;
@@ -57,29 +67,15 @@ export class ReportPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad '+this.accountServ.reportPage+"its id : "+this.accountServ.reportId);
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null;
-        } else {
-          content.style.maxHeight = content.scrollHeight + "px";
-        }
-      });
-    }
+    console.log('ionViewDidLoad ' + this.accountServ.reportPage + "its id : " + this.accountServ.reportId);
   }
 
-  getAllClasses(){
+  getAllClasses() {
     let loadingC = this.loadCtrl.create({
       content: "wait, load classes"
     });
     loadingC.present();
-    this.classesServ.getClassList(this.viewName,this.classOpId).subscribe((value) => {
+    this.classesServ.getClassList(this.viewName, this.classOpId, this.todayDate, null, null).subscribe((value) => {
         let allData: any = value;
         console.log(allData);
         for (let data of allData) {
@@ -92,37 +88,42 @@ export class ReportPage {
           item.branch.branchId = data.branch.id;
           item.branch.branchName = data.branch.name;
           item.branch.managerId = data.branch.managerId;
+          item.studentsList = data.studentsList;
           this.classesList.push(item);
         }
+        this.foundBefore = true;
         loadingC.dismiss();
-        if(this.classesList.length == 1){
+        if (this.classesList.length == 1) {
           this.getAllStudent(allData.id);
         }
-
       },
-      err =>{
+      err => {
         console.log(err);
-        this.alrtCtrl.create( {
+        this.alrtCtrl.create({
           title: 'Error',
           subTitle: 'Can\'t load your classes, please refresh the page.',
           buttons: ['OK']
         }).present();
         loadingC.dismiss();
+      },
+      () => {
+
       });
   }
 
 
-  getAllStudent(classId){
+  getAllStudent(classId,index) {
+    this.studentsList = [];
     let loadingS = this.loadCtrl.create({
       content: "wait, load students"
     });
     loadingS.present();
-    this.studentsServ.getAllStudentsForReport(this.studentOpId,classId,"Date").subscribe(
-      (val)=>{
+    this.studentsServ.getAllStudentsForReport(this.studentOpId, classId, this.todayDate).subscribe(
+      (val) => {
         console.log(val);
-        let data:any = val;
+        let data: any = val;
         console.log(data);
-        for (let value of data){
+        for (let value of data) {
           let students = new Student();
 
           students.studentClass.classId = value.classes.id;
@@ -137,17 +138,63 @@ export class ReportPage {
           students.studentAddress = value.address;
           this.studentsList.push(students);
         }
+        this.openNewClass(index);
         loadingS.dismiss();
       },
-      err=>{
-        console.log('GetAllStudent Error: '+err);
-        this.alrtCtrl.create( {
+      err => {
+        console.log('GetAllStudent Error: ' + err);
+        this.alrtCtrl.create({
           title: 'Error',
           subTitle: 'Can\'t load your students, please refresh the page.',
           buttons: ['OK']
         }).present();
         loadingS.dismiss();
+      },
+      ()=>{
       });
   }
+
+    openNewClass(index){
+      this.openCloseNumber=0;
+      var coll = document.getElementsByClassName("collapsible");
+      coll[index].classList.toggle("active");
+      var content = coll[index].nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+      this.clickedAdded.push(coll[index]);
+    }
+
+    closeOther(index){
+      this.openCloseNumber++;
+      var coll = document.getElementsByClassName("collapsible");
+
+      let temp;
+      for(temp=0; temp<coll.length; temp++){
+        if(temp!=index){
+          if(coll[temp].classList.length > 1) {
+            coll[temp].classList.toggle('active');
+            let content = coll[temp].nextElementSibling;
+            if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            }
+          }
+        }else if(temp == index && this.openCloseNumber != 1){
+          this.openCloseNumber--;
+          coll[temp].classList.toggle('active');
+          let content = coll[temp].nextElementSibling;
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+          }
+        }
+      }
+    }
+
 
 }

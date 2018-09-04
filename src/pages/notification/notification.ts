@@ -247,7 +247,7 @@ export class NotificationPage{
   }
 
   getAllClasses(){
-    this.classesServ.getClassList("NOTIFICATION",2).subscribe((value) => {
+    this.classesServ.getClassList("NOTIFICATION",2,null,null,null).subscribe((value) => {
         let allData: any = value;
         for (let data of allData) {
           let item = new Class();

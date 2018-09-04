@@ -40,6 +40,8 @@ import {ReportPage} from "../pages/report/report";
 import {ClassesService} from "../services/classes";
 import {DailyReportService} from "../services/dailyreport";
 
+import { DatePicker } from '@ionic-native/date-picker';
+
 
 @NgModule({
   declarations: [
@@ -93,7 +95,8 @@ import {DailyReportService} from "../services/dailyreport";
     HTTP,
     AndroidPermissions,
     ClassesService,
-    DailyReportService
+    DailyReportService,
+    DatePicker
   ]
 })
 export class AppModule {}

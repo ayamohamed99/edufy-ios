@@ -29,9 +29,20 @@ export class ClassesService{
   }
 
 
-  getClassList(viewName,opId){
-    return this.http.get(this.DomainUrl.Domain + '/authentication/class.ent?view='+viewName +
-      '&operationId='+opId, this.httpOptions);
+  getClassList(viewName,opId,date,id,branchId){
+
+    let URL = this.DomainUrl.Domain + '/authentication/class.ent?view='+viewName+'&operationId='+opId;
+    if(id!=null){
+      URL += '&id='+id;
+    }
+    if(date!=null){
+      URL += '&date='+date;
+    }
+    if(branchId!=null){
+      URL += '&branchId='+branchId;
+    }
+
+    return this.http.get(URL, this.httpOptions);
   }
 
 }
