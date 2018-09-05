@@ -56,7 +56,6 @@ export class NotificationService{
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved:string, archived:string,sent:string,tagId:number) {
-    console.log('Domain',this.DomainUrl.Domain);
     let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
       + tagId;
@@ -98,7 +97,6 @@ export class NotificationService{
 
 
   postAttachment(data){
-    console.log('val =>'+JSON.stringify(this.val));
     let option = {
       headers: new HttpHeaders({
         'optional-header':'header-value',

@@ -1,4 +1,12 @@
 page-report {
+  .contentColor{
+    background: #e5e5e5;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 0 0px 16px;
+    background: #e5e5e5;
+  }
 
   .collapsible {
     background-color: #438df7;
@@ -35,15 +43,15 @@ page-report {
 
   .active:after{
     -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    transform: rotate(270deg);
+    //-moz-transform: rotate(270deg);
+    //transform: rotate(270deg);
   }
 
   .contant {
     padding: 0 18px;
-    max-height: 0;
+    height: 0;
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
+    transition: height 0.2s ease-out;
     background-color: #f1f1f1;
   }
 

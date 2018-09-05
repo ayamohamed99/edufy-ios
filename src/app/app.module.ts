@@ -42,7 +42,12 @@ import {DailyReportService} from "../services/dailyreport";
 
 import { DatePicker } from '@ionic-native/date-picker';
 
+import {MatExpansionModule , MatAutocompleteModule , MatFormFieldModule} from '@angular/material';
+import {BrowserAnimationBuilder} from "@angular/platform-browser/animations/src/animation_builder";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
+
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule];
 @NgModule({
   declarations: [
     MyApp,
@@ -60,7 +65,10 @@ import { DatePicker } from '@ionic-native/date-picker';
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     IonicStorageModule.forRoot(),
-    RlTagInputModule
+    RlTagInputModule,
+    mods,
+    BrowserAnimationsModule
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [

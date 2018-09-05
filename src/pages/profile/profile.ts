@@ -85,7 +85,6 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
   }
 
   async getNotificationINStorage(){
@@ -111,7 +110,6 @@ export class ProfilePage {
               WIFIOn = true;
             }
             if (WIFIOn && this.network.type == 'wifi') {
-              console.log('network:onlineWithWifi');
               if(this.pendingNotification.length > 0) {
                 for (let temp of this.pendingNotification) {
                   if (temp.attachmentsList) {
@@ -125,7 +123,6 @@ export class ProfilePage {
                     Promise.all(promisesArray).then(data => {
                       this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
                     }).catch(e => {
-                      console.log("error" + e);
                     });
                   }else {
                     this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
@@ -145,7 +142,6 @@ export class ProfilePage {
                   Promise.all(promisesArray).then(data => {
                     this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
                   }).catch(e => {
-                    console.log("error" + e);
                   });
                 }else {
                   this.SendNotificationBackground(temp.title, temp.body, this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
@@ -153,10 +149,8 @@ export class ProfilePage {
               }
             }
           }).catch(e=>{
-          console.log('error store: ',JSON.stringify(e));
         });
       }).catch(e=>{
-      console.log('error noti store: ',JSON.stringify(e));
     });
   }
 
@@ -164,7 +158,6 @@ export class ProfilePage {
     let sentNotify:any[]=[];
      this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
       (data) => {
-        console.log("network POST wait to call Date Is", JSON.stringify(data));
         let PN = new Pendingnotification();
         PN.title = title;
         PN.body = details;
@@ -174,7 +167,6 @@ export class ProfilePage {
         sentNotify.push(PN);
       },
       err => {
-        console.log("network POST wait to call error", JSON.stringify(err));
       },
       () => {
         this.deleteFromStorage(sentNotify);
@@ -212,7 +204,6 @@ export class ProfilePage {
    uploadAttach(formData){
      this.notiServ.postAttachment(formData).toPromise().then(
       s=> {
-        console.log('Success post => ' + JSON.stringify(s));
         let allData:any = s;
         if(allData.data != null){
           allData = JSON.parse(allData.data);
@@ -226,10 +217,9 @@ export class ProfilePage {
         return true;
       },
       e=> {
-        console.log('error post => '+JSON.stringify(e));
         return true;
       }
-    ).catch(e=>{console.log("ERR:"+e)});
+    ).catch(e=>{});
   }
 
 }

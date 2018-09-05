@@ -53,12 +53,11 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      console.log(window);
       if(platform.is('core')){
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
       }else{
-          storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> console.log('ERROR'+err)).catch((err)=> console.log('ERROR'+err));;
+          storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> {}).catch((err)=> {});;
           storage.get(this.loginServ.localStoragePassword).then(
             value =>{
               this.password = value;
@@ -121,7 +120,6 @@ export class MyApp {
     this.knowCustomReport(this.accountServ.getCustomReportsList());
     if(this.view && this.platform.is('core') && this.platform.width() > 992){
       if(this.view.name == 'HomePage' && this.platform.is('core')){
-        console.log(this.view.name);
         return false;
       }else{
         return true;
@@ -188,7 +186,6 @@ export class MyApp {
   logoutMethod(){
     this.logout.postlogout(null,null,null).subscribe(
       (data) => {
-        console.log("LogOut", data);
         this.load.dismiss();
         if(this.platform.is('core')) {
           localStorage.clear();
@@ -200,7 +197,6 @@ export class MyApp {
       },
       err => {
         this.load.dismiss();
-        console.log("error logout", err.message);
         if(this.platform.is('core')) {
           localStorage.clear();
         }else {
@@ -210,7 +206,6 @@ export class MyApp {
         this.nav.setRoot(this.homePage);
       },
       () => {
-        console.log("The Logout observable is now completed.");
       });
   }
 
@@ -236,21 +231,15 @@ export class MyApp {
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
       (data) => {
-        console.log("POST call successful value returned in body", data);
         this.values = data;
         this.accessToken = this.values.refreshToken.value;
-        console.log("this.accessToken", this.accessToken);
         this.refreshToken();
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
       },
       () => {
-        console.log("LocalStorage: "+localStorage.getItem(this.loginServ.localStorageToken));
-        console.log("LocalStorageMobile: "+getToken);
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -261,7 +250,6 @@ export class MyApp {
   refreshToken(){
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
       (data) => {
-        console.log("Refresh :  ", data);
         this.values = data;
         this.token = this.values.value;
         this.toKenFull = this.fullToken();
@@ -293,7 +281,6 @@ export class MyApp {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
       });
   }
@@ -302,24 +289,19 @@ export class MyApp {
   manageAccount(){
     this.loginServ.authenticateUserManager(this.token,this.toKenFull).subscribe(
       (data) => {
-        console.log("full token ", data);
         this.accountInfo();
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
   accountInfo(){
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
       (data) => {
-        console.log("full token Date Is", this.toKenFull);
-        console.log("Date Is R", data);
         this.accountServ.setDate(data);
         // this.accountServ.getTags(this.fullToken());
         this.CustomReport();
@@ -330,11 +312,9 @@ export class MyApp {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -359,8 +339,6 @@ export class MyApp {
   CustomReport(){
     this.accountServ.getCustomReports(this.toKenFull).subscribe(
       (data) => {
-        console.log("full token Date Is", this.toKenFull);
-        console.log("Date Is CustomReport", data);
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
         this.setNameInMenu(this.accountServ.getUserName());
@@ -371,11 +349,9 @@ export class MyApp {
       },
       err => {
         this.load.dismiss();
-        console.log("POST call in error", err);
         this.nav.setRoot(this.homePage);
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 

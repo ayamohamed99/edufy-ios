@@ -7,6 +7,7 @@ export class Student{
   studentName:string;
   studentAddress:string;
   studentClass:Class = new Class();
+  reportChecked:boolean;
 
   constructor() {
   }

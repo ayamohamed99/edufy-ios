@@ -100,7 +100,6 @@ export class AccountService{
       })};
 
       this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this._accountBranchesList, httpOptions).subscribe(value => {
-        console.log('Tags : ' + value);
         this.Arry = value;
         for (let tag of this.Arry) {
           this._tagArry.push(tag);

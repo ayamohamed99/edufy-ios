@@ -28,7 +28,6 @@ export class NotificationEditPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationEditPage');
   }
 
   close(){
@@ -42,12 +41,10 @@ export class NotificationEditPage {
     loading.present();
     this.notiServ.updateNotification(this.notificationID,form.value.notifyTitle,form.value.notifyDetails).subscribe(
       (data) => {
-        console.log("Date Is", data);
         this.viewCtrl.dismiss({done:'updateSuccess'});
         loading.dismiss();
       },
       err => {
-        console.log("POST call in error", err);
         this.viewCtrl.dismiss({done:'updateFailed'});
         loading.dismiss();
         this.alrtCtrl.create( {
@@ -57,7 +54,6 @@ export class NotificationEditPage {
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 

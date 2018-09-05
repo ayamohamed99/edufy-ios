@@ -27,7 +27,6 @@ export class PopoverNotificationCardPage {
     this.notificationTitle = this.navParams.get('title');
     this.notificationDetails = this.navParams.get('details');
 
-    console.log("data is :"+this.notificationID+this.notificationTitle+this.notificationDetails);
 
     let plat=this.platform.is('core');
 
@@ -45,7 +44,6 @@ export class PopoverNotificationCardPage {
     this.viewCtrl.dismiss({done:'updateSuccess',id:this.notificationID,title:this.notificationTitle,
       details:this.notificationDetails});
 
-    console.log("id: "+this.notificationID+", title: "+this.notificationTitle+", Details: "+this.notificationDetails);
   }
 
 
@@ -61,19 +59,16 @@ export class PopoverNotificationCardPage {
         {
           text: 'Delete',
           handler: () => {
-            console.log('Buy clicked');
             this.loading = this.load.create({
               content: 'Delete this Notification...'
             });
             this.loading.present();
             this.notiServ.deleteNotification(this.notificationID.toString()).subscribe(
               (data) => {
-                console.log("Date Is", data);
                 this.loading.dismiss();
                 this.viewCtrl.dismiss({done:'deleteSuccess'});
               },
               err => {
-                console.log("POST call in error", err);
                 this.loading.dismiss();
                 this.alrtCtrl.create( {
                   title: 'Error',
@@ -83,7 +78,6 @@ export class PopoverNotificationCardPage {
                 this.viewCtrl.dismiss({done:'deleteFailed'});
               },
               () => {
-                console.log("The POST observable is now completed.");
               });
           }
         }
@@ -93,7 +87,6 @@ export class PopoverNotificationCardPage {
 
   newNotification(){
     this.viewCtrl.dismiss({done:'newSuccess'});
-    console.log("title: "+this.notificationTitle+", Details: "+this.notificationDetails);
   }
 
 }

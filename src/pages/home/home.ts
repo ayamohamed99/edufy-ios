@@ -33,7 +33,6 @@ export class HomePage {
   login(form:NgForm){
     this.userName = form.value.username;
     this.password = form.value.password;
-    console.log(this.userName +','+ this.password );
     this.startLogIn();
   }
 
@@ -47,17 +46,12 @@ export class HomePage {
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
       (data) => {
-        console.log("POST call successful value returned in body", JSON.stringify(data));
         this.values = data;
-        console.log("successful data ", JSON.stringify(this.values));
-        console.log("refToken", this.values.refreshToken.value);
         this.accessToken = this.values.refreshToken.value;
-        console.log("accessToken", this.accessToken);
         this.refreToken();
       },
       err => {
         this.load.dismiss();
-        console.log("startLogIn in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -66,9 +60,6 @@ export class HomePage {
 
       },
       () => {
-        console.log("LocalStorage: "+localStorage.getItem(this.loginServ.localStorageToken));
-        console.log("LocalStorageMobile: "+getToken);
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -79,7 +70,6 @@ export class HomePage {
   refreToken(){
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
       (data) => {
-        console.log("Refresh :  ", data);
         this.values = data;
         this.token = this.values.value;
         this.toKenFull = this.fullToken();
@@ -110,7 +100,6 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("refreToken in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -124,12 +113,10 @@ export class HomePage {
   managAccount(){
     this.loginServ.authenticateUserManager(this.token,this.toKenFull).subscribe(
       (data) => {
-        console.log("full token ", data);
         this.accountInfo();
       },
       err => {
         this.load.dismiss();
-        console.log("managAccount in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -137,7 +124,6 @@ export class HomePage {
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -145,8 +131,6 @@ export class HomePage {
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
       (data) => {
         // this.load.dismiss();
-        console.log("full token Date Is", this.toKenFull);
-        console.log("Date Is", data);
         this.accountServ.setDate(data);
         // this.accountServ.getTags(this.fullToken());
         // this.navCtrl.setRoot(ProfilePage);
@@ -154,7 +138,6 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("accountInfo in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -162,7 +145,6 @@ export class HomePage {
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -170,8 +152,6 @@ export class HomePage {
   CustomReport(){
     this.accountServ.getCustomReports(this.toKenFull).subscribe(
       (data) => {
-        console.log("full token Date Is", this.toKenFull);
-        console.log("Date Is CustomReport", data);
         this.load.dismiss();
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
@@ -179,7 +159,6 @@ export class HomePage {
       },
       err => {
         this.load.dismiss();
-        console.log("accountInfo in error", err.message);
         this.alertCtrl.create({
           title: 'Error!',
           subTitle: "Wrong Username or Password",
@@ -187,7 +166,6 @@ export class HomePage {
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 

@@ -75,7 +75,6 @@ export class NotificationPage{
     if (platform.is('android')) {
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
         result => {
-          console.log('Has permission?',result.hasPermission);
           if(!result.hasPermission){
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
           }
@@ -92,16 +91,13 @@ export class NotificationPage{
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationPage');
   }
 
   onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
     let popover = this.popoverCtrl.create(PopoverNotificationCardPage, {id:id, title:title, details:details});
 
     popover.onDidDismiss(data => {
-      console.log(data);
       if(data == null) {
-        console.log('dissmiss');
       }else{
       if(data.done === 'deleteSuccess') {
         this.fristOpen = false;
@@ -113,7 +109,6 @@ export class NotificationPage{
         this.getNotifications(this.notificationPage,0,0,null,null,null,0);
 
       }else if (data.done === 'updateSuccess'){
-        console.log(data.done);
         this.fristOpen = false;
         this.loadNow = true;
         let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
@@ -132,7 +127,6 @@ export class NotificationPage{
       }else if(data.done === 'newSuccess'){
         this.fristOpen = false;
         this.loadNow = true;
-        console.log(data.done);
         this.loading = this.load.create({
           content: ""
         });
@@ -150,7 +144,6 @@ export class NotificationPage{
     this.notificationService.getNotificationReceivers(id).subscribe(
       (data) => {
         this.loading.dismiss();
-        console.log("Date Is", data);
         this.editId = id;
         this.editTitle = title;
         this.editDetails = details;
@@ -158,7 +151,6 @@ export class NotificationPage{
         this.getAllDataThenNavigate();
       },
       err => {
-        console.log("POST call in error", err);
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
@@ -167,7 +159,6 @@ export class NotificationPage{
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
@@ -189,7 +180,6 @@ export class NotificationPage{
   getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
-        console.log("Date Is", data);
         let allData:any = data;
         for (let value of allData){
           let notify = new Notification;
@@ -218,7 +208,6 @@ export class NotificationPage{
         this.loading.dismiss();
       },
       err => {
-        console.log("POST call in error", err);
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
@@ -227,12 +216,10 @@ export class NotificationPage{
         }).present();
       },
       () => {
-        console.log("The POST observable is now completed.");
       });
   }
 
   doInfinite(){
-    console.log('Begin async operation');
 
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -240,7 +227,6 @@ export class NotificationPage{
         this.notificationPage += this.notificationPage + 1;
         this.getNotifications(this.notificationPage,0,0,null,null,null,0);
 
-        console.log('Async operation has ended');
         resolve();
       }, 500);
     })
@@ -251,7 +237,6 @@ export class NotificationPage{
         let allData: any = value;
         for (let data of allData) {
           let item = new Class();
-          console.log(value);
           item.classId = data.id;
           item.className = data.name;
           item.grade.gradeId = data.grade.id;
@@ -264,7 +249,6 @@ export class NotificationPage{
         this.getAllStudent();
       },
       err =>{
-        console.log(err);
         this.alrtCtrl.create( {
           title: 'Error',
           subTitle: 'Something went wrong, please refresh the page',
@@ -277,7 +261,6 @@ export class NotificationPage{
   getAllStudent(){
     this.studentService.getAllStudents(7,'Notification').subscribe(
       (val)=>{
-        console.log(val);
         let data:any = val;
         for (let value of data){
           let students = new Student();
@@ -295,14 +278,8 @@ export class NotificationPage{
 
           this.studentsName.push(value.name);
           this.studentwithClass.push(students);
-          console.log(students);
         }
 
-        console.log(this.studentwithClass.length);
-
-        console.log(this.studentsName);
-
-        console.log(this.studentwithClass);
 
         if(this.NewNotification){
 
@@ -353,7 +330,6 @@ export class NotificationPage{
         this.loading.dismiss();
       },
       err=>{
-        console.log('GetAllStudent Error: '+err);
         this.alrtCtrl.create( {
           title: 'Error',
           subTitle: 'Something went wrong, please refresh the page',
@@ -372,7 +348,6 @@ export class NotificationPage{
           {
             text: 'Download',
             handler: () => {
-              console.log('Download clicked');
               this.loading = this.load.create({
                 content: ""
               });
@@ -383,7 +358,6 @@ export class NotificationPage{
           {
             text: 'Open',
             handler: () => {
-              console.log('Open clicked');
               this.loading = this.load.create({
                 content: ""
               });
@@ -425,8 +399,6 @@ export class NotificationPage{
                 } else {
                   exType = "application/" + extension;
                 }
-                console.log(exType);
-                console.log(attachmentName.toString().slice(attachmentName.length - 3));
                 this.OpenFiles(attachmentName.substring(17), attachmentId, attachmentType, attachmentURL, exType);
               }
             }
@@ -455,11 +427,9 @@ export class NotificationPage{
       const options: DocumentViewerOptions = {
         title: attachmentName
       };
-      console.log(path + attachmentName);
       this.fileOpener.open(url, extinstion)
-        .then(() => console.log('File is opened'))
+        .then(() => {})
         .catch(e => {
-          console.log(e);
           let error:string;
           if(e.message.includes("Activity not found")){
             error = "There is no app to open this file";
@@ -475,8 +445,6 @@ export class NotificationPage{
           this.loading.dismiss();
         });
     }).catch(reason => {
-      console.log(path + attachmentName);
-      console.log("REASON"+reason.exception);
       let error:string = '';
       if(reason.exception.includes("Permission")){
         error = "Edufy need permission to access storage";

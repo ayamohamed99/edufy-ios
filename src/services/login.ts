@@ -30,7 +30,6 @@ export class LoginService {
   }
 
   authenticateUserByRefreshToken(refreshToken:string){
-    console.log("Secound service");
       return this.http.get(this.DomainUrl.Domain + '/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
         + refreshToken);
   }
@@ -45,7 +44,6 @@ export class LoginService {
         // 'content-type':'application/json',
         'Authorization' : subHeader
       })};
-    console.log("SubHEADER"+subHeader);
     return this.http.get(this.DomainUrl.Domain + '/authentication/manage.ent?access-token=' + accessToken,httpOptions);
   }
 
