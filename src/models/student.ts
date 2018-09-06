@@ -8,7 +8,8 @@ export class Student{
   studentAddress:string;
   studentClass:Class = new Class();
   reportChecked:boolean;
-
+  reportApproved:boolean;
+  reportFinalized:boolean;
   constructor() {
   }
 }

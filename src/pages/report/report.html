@@ -57,6 +57,9 @@
     <mat-accordion class="example-headers-align">
       <mat-expansion-panel *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList)">
         <mat-expansion-panel-header (click)="waitStudents(itm.classId,i,itm.grade.gradeName+itm.className)">
+          <div>
+            <i class="arrowClass"></i>
+          </div>
           <mat-panel-title>
             {{itm.grade.gradeName}} {{itm.className}}
           </mat-panel-title>

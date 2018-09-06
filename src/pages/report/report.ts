@@ -19,6 +19,7 @@ export class ReportPage {
   tokenKey: any;
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   pageName: string;
+  reportId: any;
   todayDate: string;
   viewName: string;
   classOpId: any;
@@ -56,6 +57,7 @@ export class ReportPage {
       this.viewName = "REPORT";
       this.classOpId = 5;
       this.studentOpId = 10;
+      this.reportId = this.accountServ.reportId;
     }
 
 
@@ -84,7 +86,7 @@ export class ReportPage {
       content: "loading all classes ..."
     });
     loadC.present();
-    this.classesServ.getClassList(this.viewName, this.classOpId, this.todayDate, null, null).subscribe((value) => {
+    this.classesServ.getClassList(this.viewName, this.classOpId, this.todayDate, this.reportId, null).subscribe((value) => {
         let allData: any = value;
         console.log(allData);
         if(allData) {
@@ -113,6 +115,7 @@ export class ReportPage {
       },
       err => {
         console.log(err);
+        this.NoClasses = true;
         this.alrtCtrl.create({
           title: 'Error',
           subTitle: 'Can\'t load your classes, please refresh the page.',
@@ -149,6 +152,8 @@ export class ReportPage {
             students.studentId = value.id;
             students.studentName = value.name;
             students.studentAddress = value.address;
+            students.reportApproved = value.dailyReportApproved;
+            students.reportFinalized = value.dailyReportFinalized;
             this.studentsList.push(students);
           }
         }
@@ -229,4 +234,5 @@ export class ReportPage {
       this.showAllButton = false;
     }
   }
+
 }
