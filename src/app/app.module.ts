@@ -45,9 +45,10 @@ import { DatePicker } from '@ionic-native/date-picker';
 import {MatExpansionModule , MatAutocompleteModule , MatFormFieldModule} from '@angular/material';
 import {BrowserAnimationBuilder} from "@angular/platform-browser/animations/src/animation_builder";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatIconModule} from '@angular/material/icon';
 
 
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule];
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule];
 @NgModule({
   declarations: [
     MyApp,

@@ -81,7 +81,6 @@
   "config": {
     "ionic_copy": "./config/copy.config.js"
   },
-
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},

@@ -8,6 +8,8 @@ export class Class{
   grade:Grade = new Grade();
   branch:Branch = new Branch();
   studentsList:any[] = [];
+  allStudentApproved:boolean = false;
+  allStudentFinalized:boolean = false;
   constructor() {
   }
 }

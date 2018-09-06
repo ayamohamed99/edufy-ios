@@ -6,6 +6,7 @@ import {ClassesService} from "../../services/classes";
 import {Class} from "../../models/class";
 import {Student} from "../../models/student";
 import {Storage} from "@ionic/storage";
+import { DatePicker } from '@ionic-native/date-picker';
 import {MatExpansionPanel} from "@angular/material";
 
 @IonicPage()
@@ -14,13 +15,13 @@ import {MatExpansionPanel} from "@angular/material";
   templateUrl: 'report.html',
 })
 export class ReportPage {
-
-  @ViewChild('epansionPanel') epansionPanel: ElementRef;
   tokenKey: any;
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   pageName: string;
   reportId: any;
   todayDate: string;
+  selectedDate: string;
+  pickerStartDate;
   viewName: string;
   classOpId: any;
   studentOpId: any;
@@ -38,7 +39,7 @@ export class ReportPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
-              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage) {
+              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker) {
     this.isAll = false;
     this.pageName = this.accountServ.reportPage;
     const date = new Date().toISOString().substring(0, 10);
@@ -47,12 +48,14 @@ export class ReportPage {
     var month = dateData [1];
     var day = dateData [2];
     this.todayDate = day + "-" + month + "-" + year;
-
+    this.selectedDate = day + "-" + month + "-" + year;
+    this.pickerStartDate = new Date();
     console.log("Today is: " + this.todayDate);
     if (this.accountServ.reportId == -1) {
       this.viewName = "DAILY_REPORT";
       this.classOpId = 4;
       this.studentOpId = 8;
+      this.reportId = null;
     } else {
       this.viewName = "REPORT";
       this.classOpId = 5;
@@ -86,7 +89,7 @@ export class ReportPage {
       content: "loading all classes ..."
     });
     loadC.present();
-    this.classesServ.getClassList(this.viewName, this.classOpId, this.todayDate, this.reportId, null).subscribe((value) => {
+    this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
         let allData: any = value;
         console.log(allData);
         if(allData) {
@@ -135,7 +138,7 @@ export class ReportPage {
       content: "loading all students of "+name
     });
     loadS.present();
-    return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId, this.todayDate).toPromise().then(
+    return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.todayDate,this.reportId).toPromise().then(
       (val) => {
         let data: any = val;
         console.log(data);
@@ -227,12 +230,47 @@ export class ReportPage {
     }
   }
 
-  whenClosed(studentList){
+  whenClosed(studentList,index){
+    let ref = index;
+    ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down';
+
     this.isAll = false;
     for (let j in studentList) {
       studentList[j].reportChecked = false;
       this.showAllButton = false;
     }
+  }
+
+  whenOpen(index){
+    let ref = index;
+    ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
+  }
+
+  oonClickonMenuCalender(){
+    let today = new Date();
+    this.datePicker.show({
+      date: this.pickerStartDate,
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
+      maxDate: today,
+      allowFutureDates:false
+    }).then(
+      date => {
+        console.log('Got date: ', date);
+        this.pickerStartDate = date;
+        let newDate = date.toISOString().substring(0, 10);
+        var dateData = newDate.split('-');
+        var year = dateData [0];
+        var month = dateData [1];
+        var day = dateData [2];
+        this.selectedDate = day + "-" + month + "-" + year;
+        this.classesList = [];
+        this.getAllClasses();
+      },
+        err =>{
+        console.log('Error occurred while getting date: ', err);
+      }
+    );
   }
 
 }

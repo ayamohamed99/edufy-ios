@@ -29,7 +29,7 @@ export class ClassesService{
   }
 
 
-  getClassList(viewName,opId,date,id,branchId){
+  getClassList(viewName,opId,date,id,branchId,reportId){
 
     let URL = this.DomainUrl.Domain + '/authentication/class.ent?view='+viewName+'&operationId='+opId;
     if(id!=null){
@@ -40,6 +40,9 @@ export class ClassesService{
     }
     if(branchId!=null){
       URL += '&branchId='+branchId;
+    }
+    if(reportId !=null){
+      URL += '&reportId='+reportId;
     }
 
     return this.http.get(URL, this.httpOptions);

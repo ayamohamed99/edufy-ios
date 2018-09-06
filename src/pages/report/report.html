@@ -6,63 +6,26 @@
       </button>
     </ion-buttons>
     <ion-title text-center>{{pageName}}</ion-title>
+    <ion-buttons right>
+      <button ion-button icon-only (click)="oonClickonMenuCalender()">
+        <ion-icon name="md-calendar"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding class="contentColor">
-
-  <!--<div *ngIf="classesList.length > 1">-->
-
-    <!--<div style="padding-bottom: 10px" *ngFor="let itm of classesList; let i = index">-->
-    <!--<button class="collapsible" (click)="waitStudents(itm.classId,i,itm.grade.gradeName+itm.className)">-->
-      <!--{{itm.grade.gradeName}} {{itm.className}}-->
-    <!--</button>-->
-
-    <!--<div class="contant">-->
-
-      <!--<div *ngIf="itm.studentsList > 1">-->
-        <!--<ion-row>-->
-          <!--<ion-checkbox mode="ios" item-start justify-content-center style="display:inline-block;padding-left: 15px; padding-top: 8px"></ion-checkbox>-->
-          <!--<ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>-->
-        <!--</ion-row>-->
-      <!--</div>-->
-
-
-      <!--<ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of itm.studentsList">-->
-
-        <!--<ion-row>-->
-
-          <!--<ion-checkbox mode="ios" item-start style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>-->
-
-          <!--<ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">-->
-            <!--<img style="border-radius: 100px;" src="assets/imgs/profile.png">-->
-          <!--</ion-avatar>-->
-
-          <!--<ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>-->
-
-          <!--<label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="true">Pending</label>-->
-          <!--<label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Approved</label>-->
-          <!--<label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="false">Finalized</label>-->
-
-        <!--</ion-row>-->
-
-      <!--</ion-card>-->
-
-    <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
-
   <div *ngIf="classesList.length > 1">
     <mat-accordion class="example-headers-align">
-      <mat-expansion-panel *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList)">
+      <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef)">
         <mat-expansion-panel-header (click)="waitStudents(itm.classId,i,itm.grade.gradeName+itm.className)">
-          <div>
-            <i class="arrowClass"></i>
-          </div>
           <mat-panel-title>
+            <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
             {{itm.grade.gradeName}} {{itm.className}}
           </mat-panel-title>
+          <mat-panel-description style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved">Approved</mat-panel-description>
+          <mat-panel-description style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>
         </mat-expansion-panel-header>
 
         <div *ngIf="showAllButton">

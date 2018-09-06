@@ -33,9 +33,15 @@ export class StudentsService{
         fromPage, this.httpOptions);
   }
 
-  getAllStudentsForReport(operationId,id,date){
-    return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId=' + operationId + '&id=' + id
-      + '&date=' + date,
+  getAllStudentsForReport(operationId,id,date,reportId){
+    let URL = this.DomainUrl.Domain + '/authentication/student.ent?operationId=' + operationId + '&id=' + id
+      + '&date=' + date;
+
+    if (reportId != null) {
+      URL = URL + '&reportId=' + reportId;
+    }
+
+    return this.http.get(URL,
       this.httpOptions);
   }
 
