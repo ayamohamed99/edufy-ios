@@ -46,9 +46,10 @@ import {MatExpansionModule , MatAutocompleteModule , MatFormFieldModule} from '@
 import {BrowserAnimationBuilder} from "@angular/platform-browser/animations/src/animation_builder";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from '@angular/material/icon';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule];
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule];
 @NgModule({
   declarations: [
     MyApp,

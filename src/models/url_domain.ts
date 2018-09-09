@@ -4,18 +4,18 @@ export class Url_domain{
   // PRODUCTION:"http://104.198.175.198";
   // LOCAL:"http://192.168.1.5:8080";
 
-  Domain = "http://104.198.175.198";
+  Domain = "";
 
 
   //      proxy
   // "proxies": [
   //   {
   //     "path":"/oauth",
-  //     "proxyUrl": "http://104.198.175.198/oauth"
+  //     "proxyUrl": "http://192.168.1.5:8080/oauth"
   //   },
   //   {
   //     "path":"/authentication",
-  //     "proxyUrl": "http://104.198.175.198/authentication"
+  //     "proxyUrl": http://192.168.1.5:8080/authentication"
   //   }
   //   ],
   // "Production":"104.198.175.198"

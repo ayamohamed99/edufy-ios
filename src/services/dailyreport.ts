@@ -28,6 +28,17 @@ export class DailyReportService{
     };
   }
 
+  getDailyReportTemplate(language, date, classId){
 
+    let requestURL = "";
+    if (classId == null) {
+      requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date;
+    } else {
+      requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId;
+    }
+
+    return this.http.get(this.DomainUrl.Domain+requestURL,this.httpOptions);
+
+  }
 
 }

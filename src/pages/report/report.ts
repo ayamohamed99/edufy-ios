@@ -8,6 +8,7 @@ import {Student} from "../../models/student";
 import {Storage} from "@ionic/storage";
 import { DatePicker } from '@ionic-native/date-picker';
 import {MatExpansionPanel} from "@angular/material";
+import {DailyReportService} from "../../services/dailyreport";
 
 @IonicPage()
 @Component({
@@ -19,9 +20,11 @@ export class ReportPage {
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   pageName: string;
   reportId: any;
-  todayDate: string;
   selectedDate: string;
   pickerStartDate;
+  dayOfToDay:number;
+  monthOfToday:number;
+  yearOfToday:number;
   viewName: string;
   classOpId: any;
   studentOpId: any;
@@ -37,7 +40,7 @@ export class ReportPage {
   panelOpenState = 0;
   isAll;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public accountServ: AccountService,
+  constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker) {
     this.isAll = false;
@@ -47,10 +50,12 @@ export class ReportPage {
     var year = dateData [0];
     var month = dateData [1];
     var day = dateData [2];
-    this.todayDate = day + "-" + month + "-" + year;
     this.selectedDate = day + "-" + month + "-" + year;
     this.pickerStartDate = new Date();
-    console.log("Today is: " + this.todayDate);
+    this.dayOfToDay = Number(day);
+    this.monthOfToday = Number(month) - 1;
+    this.yearOfToday  = Number(year);
+    console.log("Selected Date is: " + this.selectedDate);
     if (this.accountServ.reportId == -1) {
       this.viewName = "DAILY_REPORT";
       this.classOpId = 4;
@@ -65,23 +70,44 @@ export class ReportPage {
 
 
     if (platform.is('core')) {
+
       this.tokenKey = localStorage.getItem(this.localStorageToken);
-      this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
+      this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
+      this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getAllClasses();
+      this.getDailyReportTemplet();
+
     } else {
+
       storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
-          this.studentsServ.putHeader(val);
+          this.dailyReportServ.putHeader(val);
           this.classesServ.putHeader(val);
+          this.studentsServ.putHeader(val);
           this.getAllClasses();
+          this.getDailyReportTemplet();
         });
+
     }
   }
 
-  isPanelOpen(index){
-    this.panelOpenState = index;
+  getDailyReportTemplet(){
+    this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,null).subscribe(
+      (val) => {
+        let allData:any = [];
+        allData = val;
+
+      },(err)=>{
+        console.log("GetAllTemplates Error : " + err);
+        this.NoClasses = true;
+        this.alrtCtrl.create({
+          title: 'Error',
+          subTitle: 'Can\'t load your report shape, please refresh the page.',
+          buttons: ['OK']
+        }).present();
+      });
   }
 
   getAllClasses() {
@@ -117,7 +143,7 @@ export class ReportPage {
         }
       },
       err => {
-        console.log(err);
+        console.log("GetAllClasses Error : " + err);
         this.NoClasses = true;
         this.alrtCtrl.create({
           title: 'Error',
@@ -138,7 +164,7 @@ export class ReportPage {
       content: "loading all students of "+name
     });
     loadS.present();
-    return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.todayDate,this.reportId).toPromise().then(
+    return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.selectedDate,this.reportId).toPromise().then(
       (val) => {
         let data: any = val;
         console.log(data);
@@ -247,12 +273,12 @@ export class ReportPage {
   }
 
   oonClickonMenuCalender(){
-    let today = new Date();
     this.datePicker.show({
       date: this.pickerStartDate,
       mode: 'date',
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
-      maxDate: today,
+      minDate:new Date(2014, 0, 1).valueOf(),
+      maxDate: new Date(this.yearOfToday, this.monthOfToday, this.dayOfToDay).valueOf(),
       allowFutureDates:false
     }).then(
       date => {
@@ -272,5 +298,4 @@ export class ReportPage {
       }
     );
   }
-
 }
