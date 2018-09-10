@@ -47,6 +47,7 @@ import {BrowserAnimationBuilder} from "@angular/platform-browser/animations/src/
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {ReportTemplatePage} from "../pages/report-template/report-template";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule];
@@ -60,7 +61,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
-    ReportPage
+    ReportPage,
+    ReportTemplatePage
   ],
   imports: [
     BrowserModule,
@@ -82,7 +84,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
-    ReportPage
+    ReportPage,
+    ReportTemplatePage
   ],
   providers: [
     StatusBar,

@@ -28,8 +28,13 @@ export class ReportTemplatePage {
   dailyReportQuestionsRecovery = {};
   dailyReportQuestionsEditParamTemps = {};
   editQuestionAllowed = false;
+  reportTemplate;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService) {
+
+    //this is your html write the directive here
+    this.reportTemplate ="";
+
     let selectedListOfStudents = [];
     selectedListOfStudents = this.navParams.get('selected');
     if(selectedListOfStudents.length > 1){
@@ -42,7 +47,7 @@ export class ReportTemplatePage {
       if (this.accountServ.reportId == -1) {
         this.PageName =  selectedListOfStudents[0].studentName +"'s daily report";
       } else {
-        this.PageName =  selectedListOfStudents[0].studentName +"'s"+this.accountServ.reportPage;
+        this.PageName =  selectedListOfStudents[0].studentName +"'s "+this.accountServ.reportPage+" report";
       }
     }
     this.reportDate = this.navParams.get('reportDate');

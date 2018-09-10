@@ -42,6 +42,7 @@ export class ReportPage {
   isAll;
   ReportQuestionsList;
   hideShowReport = true;
+  loadC;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
@@ -95,6 +96,10 @@ export class ReportPage {
   }
 
   getDailyReportTemplet(){
+    this.loadC = this.loadCtrl.create({
+      content: "loading all classes ..."
+    });
+    this.loadC.present();
     this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,null).subscribe(
       (val) => {
 
@@ -105,7 +110,7 @@ export class ReportPage {
         this.getAllClasses();
 
       },(err)=>{
-
+        this.loadC.dismiss();
         console.log("GetAllTemplates Error : " + err);
         this.NoClasses = true;
         this.alrtCtrl.create({
@@ -118,10 +123,6 @@ export class ReportPage {
   }
 
   getAllClasses() {
-    let loadC = this.loadCtrl.create({
-      content: "loading all classes ..."
-    });
-    loadC.present();
     this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
         let allData: any = value;
         console.log(allData);
@@ -155,7 +156,7 @@ export class ReportPage {
               this.classesList.push(item);
           }
           this.foundBefore = true;
-          loadC.dismiss();
+          this.loadC.dismiss();
           if(this.classesList.length == 1){
 
             this.waitStudents(allData[0].id,-1,allData[0].grade.name+" "+allData[0].name)
@@ -172,7 +173,7 @@ export class ReportPage {
           subTitle: 'Can\'t load your classes, please refresh the page.',
           buttons: ['OK']
         }).present();
-        loadC.dismiss();
+        this.loadC.dismiss();
       },
       () => {
         // this.waitStudents();
