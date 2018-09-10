@@ -10,6 +10,14 @@ export class Class{
   studentsList:any[] = [];
   allStudentApproved:boolean = false;
   allStudentFinalized:boolean = false;
+  noOfAllStudent;
+  noOfStudentDailyReportApproved;
+  noOfStudentDailyReportFinalized;
+  noOfStudentReportApproved;
+  noOfStudentReportFinalized;
+  noOfUnseenComments;
+  noOfUnseenReportComments;
+
   constructor() {
   }
 }

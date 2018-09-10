@@ -5,13 +5,14 @@
   },
   "type": "ionic-angular",
   "proxies": [
-       {
-         "path":"/oauth",
-         "proxyUrl": "http://192.168.1.5:8080/oauth"
-       },
-       {
-         "path":"/authentication",
-         "proxyUrl": "http://192.168.1.5:8080/authentication"
-       }
-       ]
+    {
+      "path": "/oauth",
+      "proxyUrl": "http://192.168.1.5:8080/oauth"
+    },
+    {
+      "path": "/authentication",
+      "proxyUrl": "http://192.168.1.5:8080/authentication"
+    }
+  ],
+  "app_id": ""
 }

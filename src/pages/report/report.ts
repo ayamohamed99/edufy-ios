@@ -9,6 +9,7 @@ import {Storage} from "@ionic/storage";
 import { DatePicker } from '@ionic-native/date-picker';
 import {MatExpansionPanel} from "@angular/material";
 import {DailyReportService} from "../../services/dailyreport";
+import {ReportTemplatePage} from "../report-template/report-template";
 
 @IonicPage()
 @Component({
@@ -39,6 +40,8 @@ export class ReportPage {
   showAllButton:boolean = false;
   panelOpenState = 0;
   isAll;
+  ReportQuestionsList;
+  hideShowReport = true;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
@@ -75,7 +78,6 @@ export class ReportPage {
       this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getAllClasses();
       this.getDailyReportTemplet();
 
     } else {
@@ -86,7 +88,6 @@ export class ReportPage {
           this.dailyReportServ.putHeader(val);
           this.classesServ.putHeader(val);
           this.studentsServ.putHeader(val);
-          this.getAllClasses();
           this.getDailyReportTemplet();
         });
 
@@ -96,10 +97,15 @@ export class ReportPage {
   getDailyReportTemplet(){
     this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,null).subscribe(
       (val) => {
-        let allData:any = [];
+
+        let allData:any;
         allData = val;
+        let template = allData[0];
+        this.ReportQuestionsList = template.questionsList;
+        this.getAllClasses();
 
       },(err)=>{
+
         console.log("GetAllTemplates Error : " + err);
         this.NoClasses = true;
         this.alrtCtrl.create({
@@ -107,6 +113,7 @@ export class ReportPage {
           subTitle: 'Can\'t load your report shape, please refresh the page.',
           buttons: ['OK']
         }).present();
+
       });
   }
 
@@ -130,6 +137,21 @@ export class ReportPage {
               item.branch.branchName = data.branch.name;
               item.branch.managerId = data.branch.managerId;
               item.studentsList = data.studentsList;
+              item.noOfAllStudent = data.noOfAllStudent;
+              item.noOfStudentDailyReportApproved = data.noOfStudentDailyReportApproved;
+              item.noOfStudentDailyReportFinalized = data.noOfStudentDailyReportFinalized;
+              item.noOfStudentReportApproved = data.noOfStudentReportApproved;
+              item.noOfStudentReportFinalized = data.noOfStudentReportFinalized;
+              item.noOfUnseenComments = data.noOfUnseenComments;
+              item.noOfUnseenReportComments = data.noOfUnseenReportComments;
+              if(data.noOfAllStudent - data.noOfStudentDailyReportApproved == 0){
+                item.allStudentApproved = true;
+              }
+              if(data.noOfAllStudent - data.noOfStudentDailyReportFinalized == 0){
+                if(item.allStudentApproved == false) {
+                  item.allStudentFinalized = true;
+                }
+              }
               this.classesList.push(item);
           }
           this.foundBefore = true;
@@ -240,7 +262,7 @@ export class ReportPage {
 
   checkedStudent(studentid,classId,studentList){
     if(studentid == -1 && classId == -1){
-      for (var i in studentList) {
+      for (let i in studentList) {
           studentList[i].reportChecked = this.isAll;
       }
     }else{
@@ -254,9 +276,24 @@ export class ReportPage {
       if(studentList.length == oneisNot){this.isAll = true;}else{this.isAll = false;}
 
     }
+
+    let foundOneChecked = false;
+    for (let i in studentList) {
+      if(studentList[i].reportChecked){
+        foundOneChecked = true;
+        break;
+      }
+    }
+
+    if(foundOneChecked){
+      this.hideShowReport = false;
+    }else{
+      this.hideShowReport = true;
+    }
   }
 
   whenClosed(studentList,index){
+    this.hideShowReport = true;
     let ref = index;
     ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down';
 
@@ -268,6 +305,7 @@ export class ReportPage {
   }
 
   whenOpen(index){
+    this.hideShowReport = true;
     let ref = index;
     ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
   }
@@ -298,4 +336,21 @@ export class ReportPage {
       }
     );
   }
+
+  openReportTemplate(){
+
+    let selectedStudents = [];
+    for (let i in this.studentsList) {
+      if(this.studentsList[i].reportChecked){
+        selectedStudents.push(this.studentsList[i]);
+      }
+    }
+
+    this.navCtrl.push(ReportTemplatePage,{
+      selected:selectedStudents,
+      template:this.ReportQuestionsList,
+      reportDate:this.selectedDate
+    });
+  }
+
 }
