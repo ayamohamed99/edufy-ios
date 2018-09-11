@@ -15,6 +15,88 @@
 </ion-header>
 
 
-<ion-content padding>
-<div [innerHTML]="reportTemplate"></div>
+<ion-content padding class="contentColor">
+
+  <ion-card style="border-radius: 15px">
+      <div justify-content-center text-center class="dateTopCenterBoldGray">
+        <b>{{reportDate}}</b>
+      </div>
+  </ion-card>
+  <ion-card style="border-radius: 15px">
+    <div padding="10px" *ngFor="let itm of drQuestion">
+
+
+
+      <!--Type "TEXT_QUESTION"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'TEXT_QUESTION'">
+        <label class="formLabel">
+          {{itm.question}} :
+        </label>
+        <label class="textarea">
+          <textarea rows="3" class="custom-scroll" style="width: 100%" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer">
+          </textarea>
+        </label>
+      </div>
+
+
+
+
+      <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER"-->
+      <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+                  itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER'">
+        <label class="formLabel">{{itm.question}}:</label>
+        <div class="inline-group">
+          <div *ngFor="let parameter of itm.parametersList">
+            <label class="checkbox  col-md-2 col-sm-4 col-xs-4">
+              <input type="checkbox" [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
+              <i></i>
+              {{parameter.value}}
+            </label>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN"-->
+      <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+                  itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR'">
+
+        <label class="formLabel">{{itm.question}} :</label>
+        <div *ngFor="let param of itm.parametersList; let i = index">
+
+          <div *ngIf="param.key == 'OPTION_ANSWER'">
+            <div class="inline-group" >
+              <label class="checkbox col-md-9 col-sm-9 col-xs-9" >
+                <input type="checkbox" [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                <i></i>
+                <input type="text"   only-digits ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i + 1].id]" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" ng-disabled="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                {{itm.parametersList[i].value}}
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+                  itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR'">
+
+      </div>
+
+
+
+
+
+
+
+
+    </div>
+  </ion-card>
+
 </ion-content>
