@@ -24,12 +24,25 @@ page-report-template {
     margin-right: 11px;
   }
 
-  te
+
   .label-as-badge {
     border-radius: 1em;
   }
 
+  .LopContain{
+    display:inline-block;
+    padding-right: 20px;
+    width: 50%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .inline-group{
+    padding-right: 20px;
+  }
+
   .formLabel {
+    width: 100%;
+    font-size: 17px;
     margin-bottom: 8px;
     margin-top: 13px;
   }
