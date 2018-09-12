@@ -94,26 +94,25 @@ export class ReportTemplatePage{
 
     switch (drQuestion.dailyReportQuestionType.title) {
       case 'TEXT_QUESTION':
-        return '<label class="formLabel">' + drQuestion.question + ':</label><label class="textarea"><textarea rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"></textarea></label>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><label class="textarea"><textarea rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"></textarea></label>';
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
         var checkList = "";
-        let checkboxForSTMVSMA = '';
         for (let parameter of drQuestion.parametersList){
-          checkboxForSTMVSMA += '<label class="checkbox  col-md-2 col-sm-4 col-xs-4">' +
+          checkList += '<div class="LoopContain"><label class="checkbox">' +
           '<input type="checkbox" name="checkbox' + drQuestion.questionNumber + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer['+parameter.id+']">' +
-          '<i></i>' + parameter.value + '</label></div>'
+          '<i></i>  ' + parameter.value + '</label></div>'
         }
 
         return '<label class="formLabel">'
           + drQuestion.question + ':' +
           '</label>' +
-          '<div class="inline-group">' + checkboxForSTMVSMA;
+          '<div class="inline-group">' + checkList;
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN':
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR':
         checkList = "";
         var textArea = "";
-        var row = '<label class="formLabel">' + drQuestion.question + ':</label>';
+        var row = '<label class="formLabel">' + drQuestion.question + ':</label><br>';
         for (var i = 0; i < drQuestion.parametersList.length; i++) {
           if (drQuestion.parametersList[i].key == "OPTION_ANSWER") {
             checkList += '<div class="inline-group" ><label class="checkbox col-md-9 col-sm-9 col-xs-9" ><input type="checkbox" name="checkbox' + drQuestion.questionNumber + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + drQuestion.parametersList[i].id + ']"><i></i><input type="text"   only-digits ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + drQuestion.parametersList[i + 1] + ']" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" ng-disabled="!dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + drQuestion.parametersList[i].id + ']">' + drQuestion.parametersList[i].value + '</label></div>';
@@ -144,7 +143,7 @@ export class ReportTemplatePage{
             textarea = '<label class="formLabel">' + drQuestion.parametersList[i].value + ':</label><label class="textarea"><textarea rows="3" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + i + ']"></textarea></label>';
           }
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="inline-group">' + checkList + '</div><div style=" clear: both;">' + textarea + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="inline-group">' + checkList + '</div><div style=" clear: both;">' + textarea + '</div>';
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
         var radioList = "";
         textarea = "";
@@ -157,25 +156,26 @@ export class ReportTemplatePage{
             textarea = '<label class="formLabel">' + drQuestion.parametersList[i].value + ':</label><label class="textarea"><textarea rows="1" style="width:40%" class="custom-scroll" ng-disabled="enableOtherNote[' + drQuestion.questionNumber + ']" ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[1]"></textarea></label>';
           }
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row"><div class="col col-12 inline-group">' + radioList + '</div></div><div style="clear:both; class="col-md-6>' + textarea + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-12 inline-group">' + radioList + '</div></div><div style="clear:both; class="col-md-6>' + textarea + '</div>';
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
         radioList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
-          radioList += '<label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"><i></i>' + drQuestion.parametersList[i].value + '</label>';
+          radioList += '<div class="LoopContain"><label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"><i></i>  ' + drQuestion.parametersList[i].value + '</label></div>';
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="inline-group">' + radioList + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="inline-group">' + radioList + '</div>';
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION':
         radioList = "";
         textarea = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
           if (drQuestion.parametersList[i].key == "OPTION_ANSWER") {
-            radioList += '<label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[0]"><i></i>' + drQuestion.parametersList[i].value + '</label>';
+            let radioName = "    "+drQuestion.parametersList[i].value;
+            radioList += '<div class="LoopContainWithoutWidth" style="width: '+100/drQuestion.parametersList.length+'%"><label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[0]"><i></i>' + radioName+ '</label></div>';
           }
           else {
             textarea = '<label class="formLabel">' + drQuestion.parametersList[i].value + ':</label><label class="textarea"><textarea rows="2" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[1]"></textarea></label>';
           }
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class=""><div class="inline-group">' + radioList + '</div></div><div style=" clear: both;" >' + textarea + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="inline-group">' + radioList + '</div></div><div style=" clear: both;" >' + textarea + '</div>';
 
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION':
         checkList = "";
@@ -188,7 +188,7 @@ export class ReportTemplatePage{
             textarea = '<label class="formLabel">' + drQuestion.parametersList[i].value + ':</label><label class="textarea"><textarea  ng-disabled="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[0]"  rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[1]"></textarea></label>';
           }
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row"><div class="col col-12">' + checkList + '</div></div><div>' + textarea + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-12">' + checkList + '</div></div><div>' + textarea + '</div>';
 
       case 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED':
         var label = "";
@@ -253,7 +253,7 @@ export class ReportTemplatePage{
         row += '<div class="row"><div class="col-md-3"><div class="">' + textList + '</div></div><div class="col-md-7 inline-group" style="margin-top:20px;">' + radioList + '</div></div>';
 
 
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div>' + label + '</div><div>' + row + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div>' + label + '</div><div>' + row + '</div>';
       case 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED':
         label = "";
         row = "";
@@ -317,35 +317,52 @@ export class ReportTemplatePage{
         row += '<div class="row"><div class="col-md-4 col-sm-12"><div class="">' + textList + '</div></div><div class="col-md-7 inline-group" style="margin-top:20px;">' + radioList + '</div></div>';
 
 
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div>' + label + '</div><div>' + row + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div>' + label + '</div><div>' + row + '</div>';
 
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
-        return '<div class="formLabel" style="width:100%;">' + drQuestion.question +
-          ':<button type="button" class="btn btn-outline-warning btn-sm" ng-if="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" ng-click="cancelEditigQuestion(' + drQuestion.questionNumber + ')"  style="float:right; margin-left: 7px;" ><i style="font-size:15px; color: #3B9FF3;"  >Cancel </i></button><button type="button" class="btn btn-outline-warning btn-sm" ng-if="editQuestionAllowed" ng-click="editSaveQuestion(' + drQuestion.questionNumber + ')" style="float:right; margin-right: 8px;" >' +
-          '<i style="font-size:15px; color: #3B9FF3;" ng-if="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" >Save </i><span ng-hide="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="glyphicon glyphicon-edit" style="font-size:15px; color: #3B9FF3;"></span></button></div><div class="row" style="width:99%;"><div class="col col-12" style="width:101%;">' +
-          '<label class="checkbox" ng-repeat="parameter in drQuestion.parametersList" style="width:100%;"><input type="checkbox" name="checkbox' + drQuestion.questionNumber +
-          '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[parameter.id]"><i></i>{{parameter.value}} <a style="font-size:20px; color:firebrick; float:right;" ng-if="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion"><span class="btn btn-link-danger glyphicon glyphicon-remove" ng-click="removeQuestionParameter(' + drQuestion.questionNumber + ',parameter.id)"></span></a></label></div>' +
-          '</div><div style="width:100%;" ng-if="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="input-group"><div><label class="formLabel"><i></i><span></span></label></div><div class="input-group"><input type="text" ng-model="dailyReportQuestionsEditParamTemps[' + drQuestion.questionNumber + '].parameters[0].value" class="form-control" placeholder=" Pleas enter your new question" /><span class="input-group-btn" style="padding-left:10px;"><button class="btn btn-secondary btn-sm" ng-click="addParameterForQuestion(' + drQuestion.questionNumber + ')"><span class="glyphicon glyphicon-plus" style="font-size:15px; color: #4CAF50;"></span><i style="font-size:15px; color: #3B9FF3;"> Add<i></button></span></div>'
-          + '</div>';
+
+        let pramData = "";
+        for(let parameter of drQuestion.parametersList){
+        pramData += '<div style="width: 100%"><label class="checkbox" style="width:100%;"><input type="checkbox" name="checkbox' + drQuestion.questionNumber + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer['+parameter.id+']">' +
+          '<i></i>' +'   '+ parameter.value + '<a style="font-size:20px; color:firebrick; float:right;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion">\n' +
+          '<span class="btn btn-link-danger glyphicon glyphicon-remove" (click)="removeQuestionParameter(' + drQuestion.questionNumber + ','+parameter.id+')">\n' +
+          '</span></a></label></div>';
+      }
+
+        return '<div class="formLabel" style="width:100%;">' + drQuestion.question + ':<button type="button" class="btn btn-outline-warning btn-sm" \n' +
+          '  *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" (click)="cancelEditigQuestion(' + drQuestion.questionNumber + ')" \n' +
+          '  style="float:right; margin-left: 7px;" ><i style="font-size:15px; color: #3B9FF3;"  >Cancel</i></button><button type="button" \n' +
+          '  class="btn btn-outline-warning btn-sm" *ngIf="editQuestionAllowed" (click)="editSaveQuestion(' + drQuestion.questionNumber + ')" \n' +
+          '  style="float:right; margin-right: 8px;" ><i style="font-size:15px; color: #3B9FF3;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" >\n' +
+          '  Save</i><span hideWhen="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="glyphicon glyphicon-edit" \n' +
+          '  style="font-size:15px; color: #3B9FF3;"></span></button></div><div class="row" style="width:99%;"><div class="col col-12" style="width:101%;">'
+          + pramData +
+            '</div></div><div style="width:100%;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="input-group"><div>\n' +
+          '  <label class="formLabel"><i></i><span></span></label></div><div class="input-group" style="width: 100%"><input  type="text" style="width: 80%"\n' +
+          '  ng-model="dailyReportQuestionsEditParamTemps[' + drQuestion.questionNumber + '].parameters[0].value" class="form-control" placeholder=" Pleas enter your new question" />\n' +
+          '  <span class="input-group-btn" style="padding-left:10px;"><button class="btn btn-secondary btn-sm" (click)="addParameterForQuestion(' + drQuestion.questionNumber + ')">\n' +
+          '  <span class="glyphicon glyphicon-plus" style="font-size:15px; color: #4CAF50;"></span><i style="font-size:15px; color: #3B9FF3;">Add</i></button>\n' +
+          '  </span></div></div>';
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
         radioList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
           radioList += '<label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"><i></i>' + drQuestion.parametersList[i].value + '</label>';
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row"><div class="col col-12">' + radioList + '</div></div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-12">' + radioList + '</div></div>';
       case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
         textList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
-          textList += '<section class="col col-2" style="margin-left: 9px;"><label class="formLabel ng-scope" style="margin-top: 5px;">' + drQuestion.parametersList[i].value + '</label><label class="input"><input type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section>';
+          textList += '<section class="col col-2" style="margin-left: 9px;display: inline-block"><label class="formLabel ng-scope" style="margin-top: 5px">  ' + drQuestion.parametersList[i].value + '</label><label class="input"><input type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section>';
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row" style="">' + textList + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row" style="">' + textList + '</div>';
       case 'SHORT_HELPER_TEXT_QUESTION':
         textList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
-          textList += '<section class="col col-2" style="margin-left: 9px;"><label class="formLabel ng-scope" style="margin-top: 5px;">' + drQuestion.parametersList[i].value + ':</label><label class="input"><input type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section>';
+          let textListName = drQuestion.parametersList[i].value+" :      ";
+          textList += '<div style="display: inline-block"><section class="section" style="margin-left: 9px;width: '+100/drQuestion.parametersList.length+'%"><label class="formLabel ng-scope" style="margin-top: 5px;font-weight: normal">' + textListName + '</label><label class="input"><input style="width: 70px; height: 35px;" type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section></div>';
         }
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row" style="">' + textList + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row" style="">' + textList + '</div>';
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
         label = "";
@@ -430,10 +447,10 @@ export class ReportTemplatePage{
         }
         row += '<div class="row"><div class="col-md-6 col-sm-12"><div class="">' + textList + '</div></div><div class="col-md-6 inline-group" style="margin-top:20px;">' + radioList + '</div></div>';
 
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div>' + label + '</div><div>' + row + '</div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div>' + label + '</div><div>' + row + '</div>';
       default:
         console.info("ThigetTemplates type not mapped: " + drQuestion.dailyReportQuestionType.title);
-        return '<label class="formLabel">' + drQuestion.question + ':</label><div class="row"><div class="col col-4"></div></div>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-4"></div></div>';
     }
     }
 

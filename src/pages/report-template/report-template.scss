@@ -11,7 +11,25 @@ page-report-template {
     font-size: 18px;
   }
 
+  .radio{
 
+  }
+
+  .col{
+    width: 100%;
+  }
+
+  .input{
+    width: 100%;
+  }
+
+  .section{
+    display: inline-block;
+  }
+
+  .custom-scroll{
+    width: 100%;
+  }
 
   .panel-body {
     padding-right: 0px;
@@ -29,22 +47,36 @@ page-report-template {
     border-radius: 1em;
   }
 
-  .LopContain{
+  .LoopContain{
     display:inline-block;
     padding-right: 20px;
     width: 50%;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
+
+  .LoopContainWithoutWidth{
+    display:inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .inline-group{
-    padding-right: 20px;
+    width: 100%;
+  }
+
+  .row{
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .formLabel {
     width: 100%;
     font-size: 17px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     margin-top: 13px;
+    padding-bottom: 10px;
+    font-weight: bold;
   }
 
   .englishPostionApprove {
@@ -79,22 +111,6 @@ page-report-template {
   .col-md-auto {
     width: auto;
   }
-
-  .greenlight {
-    width: 120px;
-    top: -50%;
-    height: 250%;
-    position: absolute;
-    animation: greenglow 3s linear infinite;
-    -webkit-animation: greenglow 3s linear infinite;
-    z-index: 2;
-
-    -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0) 100%);
-    mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 1) 100%);
-    /*background: linear-gradient(to bottom, rgba(166,229,179,1) 0%,rgba(166,229,179,1)42%,rgba(0,219,49,1) 42%);*/
-    background: #3276b1;
-  }
-
   @-webkit-keyframes greenglow {
     from {
       left: -120px;
@@ -223,27 +239,6 @@ page-report-template {
     /*   background-color: #D6DDE7;
     */
 
-  }
-
-  .table-hang tbody tr:hover td {
-    background-color: #F5F5F5;
-    color: black;
-  }
-
-  tr.borderSelect td {
-
-    color: white;
-    background-color: #4879BB !important;
-
-    /*background-color:#9CB4C5!important;
-    */
-  }
-
-  .test {
-    width: 100%;
-    max-width: 250px;
-    word-wrap: break-word;
-    white-space: initial;
   }
 
   .ui-select-choices-row.ng-hide {

@@ -176,14 +176,13 @@ export class ReportPage {
       });
   }
 
-  getDailyReportForClass(classId){
+  getDailyReportForClass(classId,loadS){
     this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId).subscribe(
       (val) => {
 
         let allData:any;
         allData = val;
         let template = allData[0];
-
         let reportQuestinsFirst =[];
         reportQuestinsFirst = template.questionsList;
         for (let i = 0; i < reportQuestinsFirst.length; i++) {
@@ -230,6 +229,7 @@ export class ReportPage {
             oneClass.reportTemplate = this.dailyReportQuestions;
           }
         }
+        loadS.dismiss();
       },(err)=>{
         this.loadC.dismiss();
         console.log("GetAllTemplates Error : " + err);
@@ -239,7 +239,7 @@ export class ReportPage {
           subTitle: 'Can\'t load your report shape, please refresh the page.',
           buttons: ['OK']
         }).present();
-
+        loadS.dismiss();
       });
   }
 
@@ -313,7 +313,7 @@ export class ReportPage {
         for(let oneClass of this.classesList){
           if(oneClass.classId == classId){
             if(oneClass.reportTemplate == null){
-              this.getDailyReportForClass(classId);
+              this.getDailyReportForClass(classId,loadS);
             }
           }
         }
@@ -340,8 +340,6 @@ export class ReportPage {
         this.showAllButton = true;
         if(this.classesList.length != 1) {
           this.addToClasses(classId,loadS);
-        }else{
-          loadS.dismiss();
         }
       },
       err => {
@@ -362,7 +360,6 @@ export class ReportPage {
         break; //Stop this loop, we found it!
       }
     }
-    load.dismiss();
   }
 
   waitStudents(classId,index,name){
@@ -483,17 +480,19 @@ export class ReportPage {
       }
     }
 
-    this.navCtrl.push(ReportTemplatePage,{
-      selected:selectedStudents,
-      template:this.ReportQuestionsList,
-      reportDate:this.dateView,
-      dailyReportAnswer: this.dailyReportAnswer,
-      dailyReportAnswersNoOfItems: this.dailyReportAnswersNoOfItems,
-      dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
-      dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
-      editQuestionAllowed:this.editQuestionAllowed
+    if(this.ReportQuestionsList) {
+      this.navCtrl.push(ReportTemplatePage, {
+        selected: selectedStudents,
+        template: this.ReportQuestionsList,
+        reportDate: this.dateView,
+        dailyReportAnswer: this.dailyReportAnswer,
+        dailyReportAnswersNoOfItems: this.dailyReportAnswersNoOfItems,
+        dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
+        dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
+        editQuestionAllowed: this.editQuestionAllowed
 
-    });
+      });
+    }
   }
 
   getNewInstanceOf(obj) {

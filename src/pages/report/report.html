@@ -19,7 +19,7 @@
   <div *ngIf="classesList.length > 1">
     <mat-accordion class="example-headers-align">
       <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId)">
-        <mat-expansion-panel-header (click)="waitStudents(itm.classId,i,itm.grade.gradeName+itm.className)">
+        <mat-expansion-panel-header (click)="waitStudents(itm.classId,i,itm.grade.gradeName+' '+itm.className)">
           <mat-panel-title>
             <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
             {{itm.grade.gradeName}} {{itm.className}}
