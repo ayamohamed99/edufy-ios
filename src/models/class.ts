@@ -17,6 +17,7 @@ export class Class{
   noOfStudentReportFinalized;
   noOfUnseenComments;
   noOfUnseenReportComments;
+  reportTemplet;
 
   constructor() {
   }

@@ -10,6 +10,7 @@ import { DatePicker } from '@ionic-native/date-picker';
 import {MatExpansionPanel} from "@angular/material";
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @IonicPage()
 @Component({
@@ -54,6 +55,7 @@ export class ReportPage {
   dailyReportQuestionsEditParamTemps = {};
   editQuestionAllowed = false;
   dateView;
+  selectedClassId;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
@@ -154,13 +156,80 @@ export class ReportPage {
           // let temp = this.dailyReportQuestions;
         }
 
-        this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate
+        this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
 
         // let temp2 = reportQuestinsFirst;
 
         this.ReportQuestionsList = this.dailyReportQuestions ;
         this.getAllClasses();
 
+      },(err)=>{
+        this.loadC.dismiss();
+        console.log("GetAllTemplates Error : " + err);
+        this.NoClasses = true;
+        this.alrtCtrl.create({
+          title: 'Error',
+          subTitle: 'Can\'t load your report shape, please refresh the page.',
+          buttons: ['OK']
+        }).present();
+
+      });
+  }
+
+  getDailyReportForClass(classId){
+    this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId).subscribe(
+      (val) => {
+
+        let allData:any;
+        allData = val;
+        let template = allData[0];
+
+        let reportQuestinsFirst =[];
+        reportQuestinsFirst = template.questionsList;
+        for (let i = 0; i < reportQuestinsFirst.length; i++) {
+          reportQuestinsFirst[i].questionNumber = i;
+          this.dailyReportAnswer.dailyReportAnswersObjectsList[i] = {
+            answer: null
+          };
+          this.dailyReportAnswersNoOfItems[i] = {
+            noOfItems: null
+          };
+          reportQuestinsFirst[i].editQuestion = false;
+          reportQuestinsFirst[i].isEdited = false;
+        }
+
+        this.dailyReportQuestions = reportQuestinsFirst;
+        this.dailyReportQuestionsRecovery = this.getNewInstanceOf(this.dailyReportQuestions);
+
+        for (let i = 0; i < this.dailyReportQuestions.length; i++){
+          this.mappingDefaultAnswers(this.dailyReportAnswer.dailyReportAnswersObjectsList[i], this.dailyReportQuestions[i]);
+          this.dailyReportQuestionsEditParamTemps[i] = {};
+          this.dailyReportQuestionsEditParamTemps[i].parameters = [];
+
+          for (let j = 0; j < this.dailyReportQuestions[i].parametersList.length; j++) {
+            let param = {
+              "id": '',
+              "key": '',
+              "value": ''
+            };
+            this.dailyReportQuestionsEditParamTemps[i].parameters[j] = param;
+            this.dailyReportQuestionsEditParamTemps[i].parameters[j].key = this.dailyReportQuestions[i].parametersList[j].key;
+          }
+
+          // let temp = this.dailyReportQuestions;
+        }
+
+        this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+
+        // let temp2 = reportQuestinsFirst;
+
+        this.ReportQuestionsList = this.dailyReportQuestions ;
+
+        for(let oneClass of this.classesList){
+          if(oneClass.classId == classId){
+            oneClass.reportTemplate = this.dailyReportQuestions;
+          }
+        }
       },(err)=>{
         this.loadC.dismiss();
         console.log("GetAllTemplates Error : " + err);
@@ -241,6 +310,13 @@ export class ReportPage {
     loadS.present();
     return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.selectedDate,this.reportId).toPromise().then(
       (val) => {
+        for(let oneClass of this.classesList){
+          if(oneClass.classId == classId){
+            if(oneClass.reportTemplate == null){
+              this.getDailyReportForClass(classId);
+            }
+          }
+        }
         let data: any = val;
         console.log(data);
         if(data) {
@@ -357,7 +433,8 @@ export class ReportPage {
     }
   }
 
-  whenOpen(index){
+  whenOpen(index,classId){
+    this.selectedClassId = classId;
     this.hideShowReport = true;
     let ref = index;
     ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
@@ -400,10 +477,22 @@ export class ReportPage {
       }
     }
 
+    for(let oneClass of this.classesList){
+      if(oneClass.classId == this.selectedClassId){
+        this.ReportQuestionsList = oneClass.reportTemplate;
+      }
+    }
+
     this.navCtrl.push(ReportTemplatePage,{
       selected:selectedStudents,
       template:this.ReportQuestionsList,
-      reportDate:this.dateView
+      reportDate:this.dateView,
+      dailyReportAnswer: this.dailyReportAnswer,
+      dailyReportAnswersNoOfItems: this.dailyReportAnswersNoOfItems,
+      dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
+      dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
+      editQuestionAllowed:this.editQuestionAllowed
+
     });
   }
 

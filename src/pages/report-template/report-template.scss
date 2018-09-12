@@ -326,6 +326,8 @@ page-report-template {
     display: block;
   }
 
+  .custom-scroll::-webkit-scrollbar{-webkit-overflow-scrolling:touch;height:10px;width:10px}
+
   /* .text-info {
     color: #FFFFFF;
   } */
