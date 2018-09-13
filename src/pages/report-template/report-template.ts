@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
+import {TemplateShape} from "../../models/template_Shape";
 
 /**
  * Generated class for the ReportTemplatePage page.
@@ -29,6 +30,8 @@ export class ReportTemplatePage{
   editQuestionAllowed;
   helperTextSSTOVS = false;
   switchToHelperSSTOVS = 0;
+  templateViewObjects = [];
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer) {
 
@@ -55,6 +58,7 @@ export class ReportTemplatePage{
     this.reportDate = this.navParams.get('reportDate');
     let reportQuestinsFirst =[];
     reportQuestinsFirst = this.navParams.get('template');
+    this.drQuestion = [];
     this.drQuestion = reportQuestinsFirst;
 
     this.dailyReportAnswer = this.navParams.get('dailyReportAnswer');
@@ -63,9 +67,18 @@ export class ReportTemplatePage{
     this.dailyReportQuestionsEditParamTemps = this.navParams.get('dailyReportQuestionsEditParamTemps');
     this.editQuestionAllowed = this.navParams.get('editQuestionAllowed');
 
-    for(let tw of this.drQuestion){
-      this.reportTemplate += this.getTemplate(tw) + '<br><br>';
+    let template = new TemplateShape();
+    for(let i=0; i<this.drQuestion.length;i++){
+
+      let temp = template.makeTheTemplateShape(this.drQuestion[i]);
+      if(temp.length >0) {
+        this.drQuestion[i].parametersList = temp;
+      }
     }
+
+    // for(let tw of this.drQuestion){
+    //   this.reportTemplate += this.getTemplate(tw) + '<br><br>';
+    // }
 
   }
 
@@ -94,7 +107,7 @@ export class ReportTemplatePage{
 
     switch (drQuestion.dailyReportQuestionType.title) {
       case 'TEXT_QUESTION':
-        return '<label class="formLabel">' + drQuestion.question + ':</label><br><label class="textarea"><textarea rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"></textarea></label>';
+        return '<label class="formLabel">' + drQuestion.question + ':</label><br><br><label class="textarea"><textarea rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"></textarea></label>';
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
         var checkList = "";
@@ -254,6 +267,7 @@ export class ReportTemplatePage{
 
 
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div>' + label + '</div><div>' + row + '</div>';
+
       case 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED':
         label = "";
         row = "";
@@ -344,18 +358,21 @@ export class ReportTemplatePage{
           '  <span class="input-group-btn" style="padding-left:10px;"><button class="btn btn-secondary btn-sm" (click)="addParameterForQuestion(' + drQuestion.questionNumber + ')">\n' +
           '  <span class="glyphicon glyphicon-plus" style="font-size:15px; color: #4CAF50;"></span><i style="font-size:15px; color: #3B9FF3;">Add</i></button>\n' +
           '  </span></div></div>';
+
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
         radioList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
           radioList += '<label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer"><i></i>' + drQuestion.parametersList[i].value + '</label>';
         }
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-12">' + radioList + '</div></div>';
+
       case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
         textList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
           textList += '<section class="col col-2" style="margin-left: 9px;display: inline-block"><label class="formLabel ng-scope" style="margin-top: 5px">  ' + drQuestion.parametersList[i].value + '</label><label class="input"><input type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section>';
         }
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row" style="">' + textList + '</div>';
+
       case 'SHORT_HELPER_TEXT_QUESTION':
         textList = "";
         for (i = 0; i < drQuestion.parametersList.length; i++) {
@@ -363,6 +380,7 @@ export class ReportTemplatePage{
           textList += '<div style="display: inline-block"><section class="section" style="margin-left: 9px;width: '+100/drQuestion.parametersList.length+'%"><label class="formLabel ng-scope" style="margin-top: 5px;font-weight: normal">' + textListName + '</label><label class="input"><input style="width: 70px; height: 35px;" type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer.' + i + '"></label></section></div>';
         }
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row" style="">' + textList + '</div>';
+
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
         label = "";
@@ -448,6 +466,7 @@ export class ReportTemplatePage{
         row += '<div class="row"><div class="col-md-6 col-sm-12"><div class="">' + textList + '</div></div><div class="col-md-6 inline-group" style="margin-top:20px;">' + radioList + '</div></div>';
 
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div>' + label + '</div><div>' + row + '</div>';
+
       default:
         console.info("ThigetTemplates type not mapped: " + drQuestion.dailyReportQuestionType.title);
         return '<label class="formLabel">' + drQuestion.question + ':</label><br><div class="row"><div class="col col-4"></div></div>';
