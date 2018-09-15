@@ -32,8 +32,14 @@ export class ReportTemplatePage{
   switchToHelperSSTOVS = 0;
   templateViewObjects = [];
   singleQuestionRow = [];
+  countParameters = 0;
 
-
+  addCount(){
+    this.countParameters +=this.countParameters;
+  }
+  removeCount(){
+    this.countParameters = 0;
+  }
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer) {
 
     //this is your html write the directive here
