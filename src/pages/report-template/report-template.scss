@@ -11,9 +11,100 @@ page-report-template {
     font-size: 18px;
   }
 
-  .radio{
-
+  .checkbox{
+    -webkit-appearance: none;
+    border-radius: 50%;
+    position: relative;
+    width: 21px;
+    height: 21px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #c8c7cc;
+    background-color: #fff;
   }
+
+  .checkbox:checked::before
+  {
+    position: absolute;
+    font: 11px/1 'Open Sans', sans-serif;
+    left: 7px;
+    top: 3px;
+    width: 4px;
+    height: 9px;
+    content: '\02143';
+    transform: rotate(45deg);
+    color: #fff;
+    -webkit-transform: rotate(45deg);
+  }
+
+  .checkbox:checked
+  {
+    border-color: #488aff;
+    background-color: #488aff;
+  }
+
+
+  .radio{
+    -webkit-appearance: none;
+    left: 0;
+    top: 0;
+    margin: 0;
+    border-radius: 50%;
+    position: relative;
+    //display: block;
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #787878;
+  }
+
+  .radio:checked::before
+  {
+    //position: absolute;
+    //font: 11px/1 'Open Sans', sans-serif;
+    //left: 4px;
+    //top: -1px;
+    //width: 4px;
+    //height: 9px;
+    content: '';
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #488aff;
+    -webkit-transform: scale3d(0, 0, 0);
+    transform: scale3d(0, 0, 0);
+    -webkit-transition: -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  .radio:checked
+  {
+    border-color: #488aff;
+  }
+
+  .longOneAnswer{
+    display: block;
+    padding-bottom: 20px;
+  }
+
+
+
+  butonOfEdit{
+    width: 5px;
+    height: 5px;
+  }
+
+
+
 
   .col{
     width: 100%;
@@ -75,12 +166,13 @@ page-report-template {
     padding-bottom: 10px;
   }
 
+
   .formLabel {
     width: 100%;
-    font-size: 17px;
-    margin-bottom: 10px;
-    margin-top: 13px;
-    padding-bottom: 10px;
+    font-size: 18px;
+    //margin-bottom: 10px;
+    //margin-top: 13px;
+    //padding-bottom: 10px;
     font-weight: bold;
   }
 

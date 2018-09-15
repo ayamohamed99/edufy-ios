@@ -48,9 +48,10 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReportTemplatePage} from "../pages/report-template/report-template";
+import {MatSelectModule} from '@angular/material/select'
 
 
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule];
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
   declarations: [
     MyApp,

@@ -22,8 +22,8 @@
       <b>{{reportDate}}</b>
     </div>
   </ion-card>
-  <ion-card style="border-radius: 10px">
-    <div padding="10px" *ngFor="let itm of drQuestion">
+  <ion-card style="border-radius: 10px; padding-bottom: 10px">
+    <div style="padding-bottom: 0;padding-right: 10px;padding-left: 10px;padding-top: 10px" *ngFor="let itm of drQuestion; let drIndex = index">
 
 
       <!--Type "TEXT_QUESTION"-->
@@ -45,8 +45,8 @@
         <label class="formLabel">{{itm.question}}:<br><br></label>
         <div class="inline-group">
           <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
-            <label class="checkbox  col-md-2 col-sm-4 col-xs-4">
-              <input type="checkbox"  [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
+            <label >
+              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
               <i></i>
               {{parameter.value}}
             </label>
@@ -66,8 +66,8 @@
 
           <div *ngIf="param.key == 'OPTION_ANSWER'" >
             <div class="inline-group">
-              <label class="checkbox" col-md-9 col-sm-9 col-xs-9>
-                <input type="checkbox" [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+              <label  col-md-9 col-sm-9 col-xs-9>
+                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 <i></i>
                 <input type="text"   only-digits ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i + 1].id]" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" ng-disabled="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 {{itm.parametersList[i].value}}
@@ -88,8 +88,8 @@
           <div *ngFor="let pram of itm.parametersList;let i = index" class="LopContain">
             <div *ngIf="pram.key == 'OPTION_ANSWER'">
 
-              <label class="checkbox col-md-2 col-sm-4 col-xs-4">
-                <input type="checkbox" [name]="'checkbox' + itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
+              <label >
+                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <i></i>
                 {{itm.parametersList[i].value}}
               </label>
@@ -104,8 +104,8 @@
           <div *ngFor="let pram of itm.parametersList;let i = index" >
             <div *ngIf="pram.key != 'OPTION_ANSWER'">
 
-              <label class="formLabel">
-                {{itm.parametersList[i].value}} :
+              <label>
+                {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
                 <textarea rows="3" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]"></textarea>
@@ -129,36 +129,22 @@
           <div class="col col-12 inline-group">
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
-                <label class="radio">
-                  <input type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="itm.parametersList[i].value" ng-change="enableOther(itm.questionNumber + ',' + i)" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
-                  <i></i>
-                  {{itm.parametersList[i].value}}
-                </label>
+
+                <label style="display: inline-block"><input class="radio" type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '" ng-change="enableOther(' + drQuestion.questionNumber + ',' + i + ')" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[0]"><i></i>     {{pram.value}}</label>
+
+
               </div>
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
-                <label class="radio">
-                  <input type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="itm.parametersList[i].value"  ng-change="enableOther(itm.questionNumber + ',' + i)" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
-                  <i></i>
-                  {{itm.parametersList[i].value}}
-                </label>
+
+                <div style="display: inline-block">
+                  <label ><input class="radio" type="radio" name="radio-inline' + drQuestion.questionNumber + '" value="' + drQuestion.parametersList[i].value + '"  ng-change="enableOther(' + drQuestion.questionNumber + ',' + i + ')" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[0]"><i></i>    {{pram.value}}</label>
+                  <label class="textarea"><textarea rows="1" style="width:100%" class="custom-scroll" ng-disabled="enableOtherNote[' + drQuestion.questionNumber + ']" ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[1]"></textarea></label>
+                </div>
+
               </div>
             </div>
           </div>
         </div>
-
-        <div style="clear:both;"col-md-6>
-          <div *ngFor="let pram of itm.parametersList; let i = index">
-            <label class="formLabel">
-              {{itm.parametersList[i].value}} :
-            </label>
-            <label class="textarea">
-    <textarea rows="1" style="width:40%" class="custom-scroll" ng-disabled="enableOtherNote[itm.questionNumber]" ng-init="enableOtherNote[itm.questionNumber]=true" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
-    </textarea>
-            </label>
-          </div>
-        </div>
-
-
       </div>
 
 
@@ -168,8 +154,8 @@
         <label class="formLabel">{{itm.question}} : <br><br></label>
 
         <div *ngFor="let pram of itm.parametersList" class="LopContain">
-          <label class="radio">
-            <input type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+          <label>
+            <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
             <i></i>
             {{pram.value}}
           </label>
@@ -188,8 +174,8 @@
 
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
-                <label class="radio">
-                  <input type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                <label >
+                  <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{pram.value}}
                 </label>
@@ -202,8 +188,8 @@
 
           <div *ngFor="let pram of itm.parametersList; let i = index">
             <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
-              <label class="formLabel">
-                {{pram.value}} :
+              <label>
+                {{pram.value}}
               </label>
               <label class="textarea">
     <textarea rows="2" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
@@ -228,8 +214,8 @@
 
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
-                <label class="checkbox">
-                  <input type="checkbox" [name]="'checkbox' + itm.questionNumber" ng-change="disableNote(dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0],itm.questionNumber)" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                <label >
+                  <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" ng-change="disableNote(dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0],itm.questionNumber)" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{itm.parametersList[i].value}}
                 </label>
@@ -242,8 +228,8 @@
 
           <div *ngFor="let pram of itm.parametersList; let i = index">
             <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
-              <label class="formLabel">
-                {{itm.parametersList[i].value}} :
+              <label>
+                {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
     <textarea  ng-disabled="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]"  rows="3" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
@@ -257,30 +243,249 @@
       </div>
 
 
-    <!--Type "SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED"-->
-    <div *ngIf="itm.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED';let i = index;">
+      <!--Type "SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED';let i = index;">
 
+        <label class="formLabel">
+          {{itm.question}} :
+        </label>
+
+        <div *ngFor=" let pram of itm.parametersList; let i = index">
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
+            <div class="col col-6"><label class="formLabel">{{itm.parametersList[i].value}} :</label></div><br>
+          </span>
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'">
+            <br>
+            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%" type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"></label></section>
+            <br>
+          </span>
+
+
+          <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
+            <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber+i" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"><i></i>      {{radio.value}} <br></label>
+            </span>
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!--Type "MULTI_SHORT_TEXT_ONE_VIEW_SELECTED"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED';let i = index;">
+
+        <label class="formLabel">
+          {{itm.question}} :<br><br>
+        </label>
+
+        <div style="display: block" *ngFor=" let pram of itm.parametersList; let i = index;">
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
+            <div class="col col-6"><label class="formLabel">{{pram.value}} :</label></div>
+          </span>
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'">
+            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%" type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"></label></section>
+            <br>
+          </span>
+
+          <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
+            <span *ngFor="let radio of itm.parametersList[i]" style="display: inline-block;width:  100px;">
+              <label><input type="radio" class="radio" name="radio-inline' + drQuestion.questionNumber + countRow + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"><i></i>      {{radio.value}} </label>
+            </span>
+          </span>
+
+        </div>
+
+      </div>
+
+
+
+
+      <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER"-->
+      <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' || itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER';">
+
+        <div style="display: inline-block;width: 100%">
+          <label class="formLabel">
+          {{itm.question}} :
+        </label>
+
+          <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="changeEditMode(drIndex,'create')" *ngIf="itm.editQuestion == false" [disabled]="!editQuestionAllowed">
+            <ion-icon style="font-size: 20px;" name="create"></ion-icon>
+          </button>
+
+          <button ion-button icon-only clear style="padding: 0; width: 70px;margin-top: 10px;float: right" (click)="changeEditMode(drIndex,'cancel')" *ngIf="itm.editQuestion == true">
+            cancel
+          </button>
+
+          <button ion-button icon-only clear style="padding: 0;width: 50px;margin-top: 10px;float: right" (click)="changeEditMode(drIndex,'save')" *ngIf="itm.editQuestion == true">
+            save
+          </button>
+        </div>
+
+        <br>
+
+
+        <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
+          <span *ngIf="pram.key == 'OPTION_HELPER_TEXT'">
+            <span style="display: inline-block">
+              <label><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
+                <i></i> {{pram.value}} </label>
+              <ion-label style="float: right">X</ion-label>
+            </span>
+          </span>
+        </span>
+
+        <div style="display: inline-block; width: 100%">
+          <input style="width: 80%; height: 30px; padding: 0" *ngIf="itm.editQuestion == true"/>
+          <button ion-button icon-only clear style="width: 40px; height: 35px; padding: 0;margin-top: 5px;float: right" (click)="changeEditMode(i,'cancel')" *ngIf="itm.editQuestion == true">
+            add
+          </button>
+        </div>
+      </div>
+
+
+
+
+      <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER';let i = index;">
+        <label class="formLabel">
+          {{itm.question}} :<br><br>
+        </label>
+
+        <span *ngFor="let pram of itm.parametersList; let i = index;" class="longOneAnswer">
+          <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
+        </span>
+      </div>
+
+
+
+
+      <!--Type "CONSTANT_SHORT_HELPER_TEXT_QUESTION"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION';">
+
+        <label class="formLabel">
+          {{itm.question}} :<br>
+        </label>
+
+        <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block" >
+          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer.k"></label></section>
+        </span>
+
+
+      </div>
+
+
+
+
+
+      <!--Type "SHORT_HELPER_TEXT_QUESTION"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION';let i = index;">
+
+        <label class="formLabel">
+          {{itm.question}} :<br>
+        </label>
+
+        <div class="row" style="">
+
+          <div style="display: inline-block; padding-right: 20px" *ngFor="let pram of itm.parametersList; let INDEX = index">
+            <section class="section" style="margin-left: 9px;width: {{100/itm.parametersList.length}} %">
+              <label class="formLabel ng-scope" style="margin-top: 5px;font-weight: normal">
+                {{pram.value}} :
+              </label>
+              <br>
+              <label class="input">
+                <input style="width: 70px; height: 35px;" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer.INDEX+INDEX">
+              </label>
+            </section>
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+
+
+
+      <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_EN"-->
+      <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_AR"-->
+      <div *ngIf="itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
+
+        <label class="formLabel">
+          {{itm.question}} :
+        </label>
+
+
+
+        <div *ngFor=" let pram of itm.parametersList; let i = index">
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
+            <div class="col col-6"><label class="formLabel">{{itm.parametersList[i].value}} :</label></div><br>
+          </span>
+
+          <span *ngIf="itm.parametersList[i].key == 'OPTION_DROP_DOWN'">
+            <br>
+            <ion-label>{{itm.parametersList[i].value}}</ion-label>
+            <ion-item style="padding: 0;margin: 0">
+              <ion-select style="width: 100%;max-width: 100%" multiple="true">
+                <ion-option>Bacon</ion-option>
+                <ion-option>Black Olives</ion-option>
+                <ion-option>Black</ion-option>
+                <ion-option>Olives</ion-option>
+              </ion-select>
+            </ion-item>
+            <br>
+          </span>
+
+
+          <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
+            <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber+i" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"><i></i>      {{radio.value}} <br></label>
+            </span>
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!--Type "Else"-->
+      <div *ngIf="itm.dailyReportQuestionType.title != 'TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER'
+       && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN'
+        && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'
+         && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
+         && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'
+          && itm.dailyReportQuestionType.title != 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED' && itm.dailyReportQuestionType.title != 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER'
+           && itm.dailyReportQuestionType.title != 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' && itm.dailyReportQuestionType.title != 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
+            && itm.dailyReportQuestionType.title != 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_HELPER_TEXT_QUESTION'
+             && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'
+              && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
       <label class="formLabel">
-      {{itm.question}} :<br><br>
+        {{itm.question}} :
       </label>
+        <br>
+        <div class="row">
+          <div class="col col-4">
 
-      <div *ngFor=" let pram of itm.parametersList; let i = index">
+          </div>
+        </div>
+      </div>
 
-      <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
-        <div class="col col-6"><label class="formLabel">{{itm.parametersList[i].value}} :</label></div>
-      </span>
 
-        <span *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'">
-      <section class="col-md-5" style="margin-left: 14px;"><label>{{pram.value}} <br></label><label class="input"><input type="text" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"></label></section>
-    </span>
 
-    <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' || itm.parametersList[i].key != 'OPTION_HELPER_TEXT'">
-      <label class="radio"><input type="radio" name="radio-inline' + drQuestion.questionNumber + countRow + '" value="' + drQuestion.parametersList[i].value + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer[' + countParameters + ']" ng-change="override()"><i></i>{{itm.parametersList[i].value}} <br></label>
-    </span>
 
-    </div>
 
-    </div>
+
+
+
+
+
 
 
 

@@ -93,7 +93,7 @@ export class ReportPage {
       this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getDailyReportTemplet();
+      this.getAllClasses();
 
     } else {
 
@@ -103,80 +103,13 @@ export class ReportPage {
           this.dailyReportServ.putHeader(val);
           this.classesServ.putHeader(val);
           this.studentsServ.putHeader(val);
-          this.getDailyReportTemplet();
+          this.getAllClasses();
         });
 
     }
   }
 
-  getDailyReportTemplet(){
-    this.loadC = this.loadCtrl.create({
-      content: "loading all classes ..."
-    });
-    this.loadC.present();
-    this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,null).subscribe(
-      (val) => {
-
-        let allData:any;
-        allData = val;
-        let template = allData[0];
-
-        let reportQuestinsFirst =[];
-        reportQuestinsFirst = template.questionsList;
-        for (let i = 0; i < reportQuestinsFirst.length; i++) {
-          reportQuestinsFirst[i].questionNumber = i;
-          this.dailyReportAnswer.dailyReportAnswersObjectsList[i] = {
-            answer: null
-          };
-          this.dailyReportAnswersNoOfItems[i] = {
-            noOfItems: null
-          };
-          reportQuestinsFirst[i].editQuestion = false;
-          reportQuestinsFirst[i].isEdited = false;
-        }
-
-        this.dailyReportQuestions = reportQuestinsFirst;
-        this.dailyReportQuestionsRecovery = this.getNewInstanceOf(this.dailyReportQuestions);
-
-        for (let i = 0; i < this.dailyReportQuestions.length; i++){
-          this.mappingDefaultAnswers(this.dailyReportAnswer.dailyReportAnswersObjectsList[i], this.dailyReportQuestions[i]);
-          this.dailyReportQuestionsEditParamTemps[i] = {};
-          this.dailyReportQuestionsEditParamTemps[i].parameters = [];
-
-          for (let j = 0; j < this.dailyReportQuestions[i].parametersList.length; j++) {
-            let param = {
-              "id": '',
-              "key": '',
-              "value": ''
-            };
-            this.dailyReportQuestionsEditParamTemps[i].parameters[j] = param;
-            this.dailyReportQuestionsEditParamTemps[i].parameters[j].key = this.dailyReportQuestions[i].parametersList[j].key;
-          }
-
-          // let temp = this.dailyReportQuestions;
-        }
-
-        this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
-
-        // let temp2 = reportQuestinsFirst;
-
-        this.ReportQuestionsList = this.dailyReportQuestions ;
-        this.getAllClasses();
-
-      },(err)=>{
-        this.loadC.dismiss();
-        console.log("GetAllTemplates Error : " + err);
-        this.NoClasses = true;
-        this.alrtCtrl.create({
-          title: 'Error',
-          subTitle: 'Can\'t load your report shape, please refresh the page.',
-          buttons: ['OK']
-        }).present();
-
-      });
-  }
-
-  getDailyReportForClass(classId,loadS){
+  getDailyReportForClass(classId,loadS ){
     this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId).subscribe(
       (val) => {
 
@@ -244,6 +177,10 @@ export class ReportPage {
   }
 
   getAllClasses() {
+    this.loadC = this.loadCtrl.create({
+      content: "loading all classes ..."
+    });
+    this.loadC.present();
     this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
         let allData: any = value;
         console.log(allData);
@@ -280,7 +217,11 @@ export class ReportPage {
           this.loadC.dismiss();
           if(this.classesList.length == 1){
 
-            this.waitStudents(allData[0].id,-1,allData[0].grade.name+" "+allData[0].name)
+            let classDataId = allData[0].id;
+
+            let classNameData = allData[0].grade.name+" "+allData[0].name;
+
+            this.waitStudents(classDataId,-1,classNameData);
           }
         }else{
           this.NoClasses = true;
@@ -428,6 +369,8 @@ export class ReportPage {
       studentList[j].reportChecked = false;
       this.showAllButton = false;
     }
+
+    this.studentsList = [];
   }
 
   whenOpen(index,classId){
