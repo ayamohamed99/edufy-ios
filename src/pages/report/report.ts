@@ -572,7 +572,7 @@ export class ReportPage {
     }
     else if (drQuestion.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED')
     {
-      let val = [];
+      let val = {};
       let firstTime = true;
       let counter = 0;
       let defailtValueArray = [];
@@ -603,12 +603,13 @@ export class ReportPage {
         }
 
       }
-
+      let textTemp = 0;
       for (let d = 0; d < defailtValueArray.length; d++) {
         if (defailtValueArray[d].key == "OPTION_HELPER_TEXT") {
-          val[d] = defailtValueArray[d].value;
+          textTemp = d+1;
+          val['OPTION_HELPER_TEXT'+d] = defailtValueArray[d].value;
         } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
-          val[d] = defailtValueArray[d].value;
+          val['OPTION_ANSWER'+textTemp] = defailtValueArray[d].value;
         }
 
       }
@@ -672,7 +673,7 @@ export class ReportPage {
     else if (drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR' ||
       drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN')
     {
-      let val = [];
+      let val = {};
       let firstTime = true;
       let counter = 0;
       let defailtValueArray = [];
@@ -703,12 +704,13 @@ export class ReportPage {
         }
 
       }
-
+      let tempDrop = 0;
       for (var d = 0; d < defailtValueArray.length; d++) {
         if (defailtValueArray[d].key == "OPTION_DROP_DOWN") {
-          val[d] = "";
+          tempDrop = d;
+          val["OPTION_DROP_DOWN"+d] = "";
         } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
-          val[d] = defailtValueArray[d].value;
+          val["OPTION_ANSWER"+(tempDrop+1)] = defailtValueArray[d].value;
         }
 
       }

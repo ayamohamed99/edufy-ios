@@ -41,4 +41,10 @@ export class DailyReportService{
 
   }
 
+
+  getDropDownPremeter(key){
+    return this.http.get(this.DomainUrl.Domain+'authentication/dailyreportparameter.ent/getparameter.ent?key=' + key,this.httpOptions);
+  }
+
+
 }

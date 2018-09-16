@@ -25,16 +25,19 @@ page-report-template {
 
   .checkbox:checked::before
   {
-    position: absolute;
-    font: 11px/1 'Open Sans', sans-serif;
+    content: '';
     left: 7px;
-    top: 3px;
+    top: 4px;
+    position: absolute;
     width: 4px;
     height: 9px;
-    content: '\02143';
-    transform: rotate(45deg);
-    color: #fff;
+    border-width: 1px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-style: solid;
+    border-color: #fff;
     -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
   }
 
   .checkbox:checked

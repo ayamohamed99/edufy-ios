@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
 import {TemplateShape} from "../../models/template_Shape";
+import {Storage} from "@ionic/storage";
+import {DailyReportService} from "../../services/dailyreport";
 
 /**
  * Generated class for the ReportTemplatePage page.
@@ -18,6 +20,7 @@ import {TemplateShape} from "../../models/template_Shape";
 })
 export class ReportTemplatePage{
   console = console;
+  localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   PageName;
   reportDate;
   reportTemplate;
@@ -33,6 +36,8 @@ export class ReportTemplatePage{
   templateViewObjects = [];
   singleQuestionRow = [];
   countParameters = 0;
+  load;
+  selectionData = new Map();
 
   addCount(){
     this.countParameters +=this.countParameters;
@@ -40,7 +45,8 @@ export class ReportTemplatePage{
   removeCount(){
     this.countParameters = 0;
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
+              public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController) {
 
     //this is your html write the directive here
     this.reportTemplate ="";
@@ -82,8 +88,63 @@ export class ReportTemplatePage{
         this.drQuestion[i].parametersList = temp;
       }
     }
+
+
+    if (platform.is('core')) {
+      this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
+      this.callDataAndWait();
+    } else {
+      storage.get(this.localStorageToken).then(
+        val => {
+          this.dailyReportServ.putHeader(val);
+          this.callDataAndWait();
+        });
+
+    }
+
   }
 
+  callDataAndWait(){
+    this.load = this.loadCtrl.create({
+      content: "loading DropDown list Data ..."
+    });
+    this.load.present();
+    let promises = [];
+    for(let i=0; i<this.drQuestion.length;i++){
+      if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+        for(let itm of this.drQuestion[i].parametersList) {
+          if (itm.key == "OPTION_DROP_DOWN") {
+            promises.push(this.getDropDownListIfFound(itm.id));
+          }
+        }
+      }
+    }
+
+    Promise.all(promises).then(
+      val =>{
+        this.load.dismiss();
+      }
+    ).catch(
+      err =>{
+        console.log(err);
+        this.load.dismiss();
+      }
+    )
+  }
+
+  getDropDownListIfFound(questionKey){
+    return this.dailyReportServ.getDropDownPremeter(questionKey).toPromise().then(
+      val=>{
+        this.selectionData.set(questionKey,val);
+      }
+    ).catch(
+      eer=>{
+        console.log(eer);
+        this.load.dismiss();
+      }
+    )
+
+  }
 
   changeEditMode(index,button){
 
