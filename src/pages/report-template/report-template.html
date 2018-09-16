@@ -46,7 +46,7 @@
         <div class="inline-group">
           <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
             <label >
-              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
+              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[parameter.id]">
               <i></i>
               {{parameter.value}}
             </label>
@@ -67,9 +67,9 @@
           <div *ngIf="param.key == 'OPTION_ANSWER'" >
             <div class="inline-group">
               <label  col-md-9 col-sm-9 col-xs-9>
-                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
-                <i></i>
-                <input type="text"   only-digits ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i + 1].id]" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" ng-disabled="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id]">
+                <i></i>{{console.log(i)}}
+                <input type="text"   only-digits [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[1 + i]]" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" [disabled]="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 {{itm.parametersList[i].value}}
               </label>
             </div>
@@ -89,7 +89,7 @@
             <div *ngIf="pram.key == 'OPTION_ANSWER'">
 
               <label >
-                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[i]">
                 <i></i>
                 {{itm.parametersList[i].value}}
               </label>
@@ -281,7 +281,7 @@
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber+i" [value]="radio.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()"><i></i>      {{radio.value}}</label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
             </span>
           </span>
 
@@ -348,7 +348,7 @@
         <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
           <span *ngIf="pram.key == 'OPTION_HELPER_TEXT'">
             <span style="display: inline-block">
-              <label><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[drQuestion.questionNumber].answer[parameter.id]">
+              <label><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[pram.id]">
                 <i></i> {{pram.value}} </label>
               <ion-label style="float: right">X</ion-label>
             </span>
@@ -456,16 +456,12 @@
           </div>
 
 
-          <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';" style="padding-right: 20px">
-            <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-            <label >
-                <input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber+j" [value]="radio.value"
-                       [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()">
-                <i></i>
-                    {{radio.value}}
-              </label>
-          </span>
-          </span>
+          <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
+            <div *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
+            </div>
+          </div>
+
         </div>
 
       </div>

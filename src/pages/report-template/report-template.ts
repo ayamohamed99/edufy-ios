@@ -24,7 +24,7 @@ export class ReportTemplatePage{
   PageName;
   reportDate;
   reportTemplate;
-  drQuestion;
+  drQuestion = [];
   enableOtherNote = [];
   dailyReportAnswer;
   dailyReportAnswersNoOfItems;
@@ -38,6 +38,7 @@ export class ReportTemplatePage{
   countParameters = 0;
   load;
   selectionData = new Map();
+  overrideAnswer = false;
 
   addCount(){
     this.countParameters +=this.countParameters;
@@ -50,6 +51,8 @@ export class ReportTemplatePage{
 
     //this is your html write the directive here
     this.reportTemplate ="";
+    this.drQuestion = [];
+    this.drQuestion = this.navParams.get('template');
 
     ////PageName
     let selectedListOfStudents = [];
@@ -69,10 +72,6 @@ export class ReportTemplatePage{
     }
     /////Date of Page
     this.reportDate = this.navParams.get('reportDate');
-    let reportQuestinsFirst =[];
-    reportQuestinsFirst = this.navParams.get('template');
-    this.drQuestion = [];
-    this.drQuestion = reportQuestinsFirst;
 
     this.dailyReportAnswer = this.navParams.get('dailyReportAnswer');
     this.dailyReportAnswersNoOfItems = this.navParams.get('dailyReportAnswersNoOfItems');
@@ -80,12 +79,42 @@ export class ReportTemplatePage{
     this.dailyReportQuestionsEditParamTemps = this.navParams.get('dailyReportQuestionsEditParamTemps');
     this.editQuestionAllowed = this.navParams.get('editQuestionAllowed');
 
+    let editDropOrNot = true;
+    let editSingleOrNot = true;
+    for(let i=0; i<this.drQuestion.length;i++){
+      if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+        for(let itm of this.drQuestion[i].parametersList) {
+          if (itm.key == "OPTION_ANSWER") {
+            editDropOrNot = false;
+          }
+        }
+      }
+      else if(this.drQuestion[i].dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+        for(let itm of this.drQuestion[i].parametersList) {
+          if (itm.key == "OPTION_ANSWER") {
+            editSingleOrNot = false;
+          }
+        }
+      }
+    }
+
     let template = new TemplateShape();
     for(let i=0; i<this.drQuestion.length;i++){
 
       let temp = template.makeTheTemplateShape(this.drQuestion[i]);
       if(temp.length >0) {
-        this.drQuestion[i].parametersList = temp;
+        if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+          if(editDropOrNot == false){
+            this.drQuestion[i].parametersList = temp;
+          }
+        }
+        else if(this.drQuestion[i].dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+          if(editSingleOrNot == false){
+            this.drQuestion[i].parametersList = temp;
+          }
+        }else{
+          this.drQuestion[i].parametersList = temp;
+        }
       }
     }
 
@@ -172,6 +201,9 @@ export class ReportTemplatePage{
   }
 
 
+  override = function () {
+    this.overrideAnswer = true;
+  };
 
 
 

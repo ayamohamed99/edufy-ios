@@ -83,12 +83,12 @@ export class TemplateShape{
           else if (drQuestion.parametersList[i].key == "OPTION_HELPER_TEXT") {
             if (helpertext) {
               tempRow.push(radios);
-              for(let temp of tempRow) {
+              for(let temp of tempRow){
                 row.push(temp);
               }
-              countRow++;
               tempRow = [];
               radios = [];
+              countRow++;
               tempRow.push(drQuestion.parametersList[i]);
               countParameters++;
               helpertext = false;
@@ -114,10 +114,9 @@ export class TemplateShape{
           }
         }
         tempRow.push(radios);
-        for(let temp of tempRow) {
+        for(let temp of tempRow){
           row.push(temp);
         }
-
 
         return row;
 
@@ -210,7 +209,7 @@ export class TemplateShape{
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
       case'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
         row = [];
-        radios = [];
+        radioList = [];
         tempRow = [];
         countRow = 0;
         countParameters = 0;
@@ -242,42 +241,49 @@ export class TemplateShape{
           }
           else if (drQuestion.parametersList[i].key == "OPTION_DROP_DOWN") {
             if (helpertext) {
-              tempRow.push(radios);
+              tempRow.push(radioList);
               for(let temp of tempRow) {
                 row.push(temp);
               }
-              countRow++;
+              radioList = [];
               tempRow = [];
-              radios = [];
+              countRow++;
               tempRow.push(drQuestion.parametersList[i]);
+
+              helpertext = false
               countParameters++;
-              helpertext = false;
+              ;
               count = 0;
             }
             else {
+
               tempRow.push(drQuestion.parametersList[i]);
+
               countParameters++;
             }
+
+
           }
           else {
             if (count != switchToHelper) {
               helpertext = true;
-              radios.push(drQuestion.parametersList[i]);
+              radioList.push(drQuestion.parametersList[i]);
               count++;
             }
             else {
               helpertext = true;
-              radios.push(drQuestion.parametersList[i]);
+              radioList.push(drQuestion.parametersList[i]);
               countParameters++;
 
             }
+
           }
+
         }
-        tempRow.push(radios);
+        tempRow.push(radioList);
         for(let temp of tempRow) {
           row.push(temp);
         }
-
 
         return row;
 
