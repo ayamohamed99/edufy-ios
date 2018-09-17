@@ -250,9 +250,8 @@ export class TemplateShape{
               countRow++;
               tempRow.push(drQuestion.parametersList[i]);
 
-              helpertext = false
+              helpertext = false;
               countParameters++;
-              ;
               count = 0;
             }
             else {

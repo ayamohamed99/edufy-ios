@@ -4,6 +4,33 @@ page-report-template {
     background: #e5e5e5;
   }
 
+  button[ion-fab] {
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: visible;
+    position: relative;
+
+    ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: -8px;
+      right: 40px;
+      color: #ff0400;
+      background-color: rgba(0,0,0,0.7);
+      line-height: 24px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+  }
+
+  .fab {
+    contain: layout;
+  }
+
   .dateTopCenterBoldGray{
     padding: 4px;
     margin: 0;
@@ -21,6 +48,7 @@ page-report-template {
     border-style: solid;
     border-color: #c8c7cc;
     background-color: #fff;
+    top: 5px;
   }
 
   .checkbox:checked::before

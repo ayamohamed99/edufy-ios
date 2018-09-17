@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
+import {
+  FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform,
+  ToastController
+} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
 import {TemplateShape} from "../../models/template_Shape";
@@ -39,6 +42,7 @@ export class ReportTemplatePage{
   load;
   selectionData = new Map();
   overrideAnswer = false;
+  isUserEditing;
 
   addCount(){
     this.countParameters +=this.countParameters;
@@ -47,7 +51,8 @@ export class ReportTemplatePage{
     this.countParameters = 0;
   }
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
-              public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController) {
+              public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
+              private toastCtrl: ToastController) {
 
     //this is your html write the directive here
     this.reportTemplate ="";
@@ -143,7 +148,7 @@ export class ReportTemplatePage{
       if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
         for(let itm of this.drQuestion[i].parametersList) {
           if (itm.key == "OPTION_DROP_DOWN") {
-            promises.push(this.getDropDownListIfFound(itm.id));
+            promises.push(this.getDropDownListIfFound(this.drQuestion[i].id));
           }
         }
       }
@@ -175,15 +180,77 @@ export class ReportTemplatePage{
 
   }
 
-  changeEditMode(index,button){
+  changeEditMode(index,button,questionNumber){
 
-    if(button == "create" || button == "cancel"){
-      this.drQuestion[index].editQuestion =  !this.drQuestion[index].editQuestion;
-    }else if (button == "save"){
-      this.drQuestion[index].editQuestion =  !this.drQuestion[index].editQuestion;
+    if (button == "save"){
+      this.drQuestion[index].editQuestion =  false;
       this.drQuestion[index].isEdited =  true;
-    }else{
+    }
+  }
 
+  removeQuestionParameter(questionNumber, parameterId) {
+    // console.log('remove ... questionNumber=
+    // '+questionNumber+', parameterId=
+    // '+parameterId);
+    let newQuestionParameters = [];
+    let oldQuestionParameters = this.drQuestion[questionNumber].parametersList;
+    // console.log('Old:');
+    // console.log(oldQuestionParameters);
+    let ctr = 0;
+    for (let i = 0; i < oldQuestionParameters.length; i++) {
+
+      if (oldQuestionParameters[i].id !== parameterId) {
+        newQuestionParameters[ctr] = oldQuestionParameters[i];
+        ctr++;
+      }
+    }
+    console.log('New:');
+    console.log(this.drQuestion);
+    this.drQuestion[questionNumber].parametersList = newQuestionParameters;
+  }
+
+  addParameterForQuestion (questionNumber) {
+
+    // console.log($scope.dailyReportQuestionsEditParamTemps);
+
+    let numberOfParams = this.drQuestion[questionNumber].parametersList.length;
+    let id = 0;
+    let parametersList = this.drQuestion[questionNumber].parametersList;
+
+    // give temporary Id to the new parameter
+    if (parametersList.length > 0) {
+      id = parametersList[0].id;
+      var isInList = true;
+      while (isInList) {
+        id = id + 1;
+        var found = false;
+        for (var i = 0; i < parametersList.length; i++) {
+          if (id === parametersList[i].id) {
+            found = true;
+          }
+        }
+        if (found === false) {
+          isInList = false;
+        }
+      }
+    }
+    switch (this.drQuestion[questionNumber].dailyReportQuestionType.title) {
+      case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
+        let value = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value;
+        if (value === '' || value.replace(" ", "") === '' || value === "" || value.replace(" ", "") === "") {
+          return;
+        }
+        this.drQuestion[questionNumber].parametersList[numberOfParams] = {};
+        this.drQuestion[questionNumber].parametersList[numberOfParams].id = id;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].value = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].key = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].key;
+
+        // clear variables
+        this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value = '';
+
+        console.log('LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER  parameter added!');
+        console.log(this.drQuestion[questionNumber].parametersList);
+        break;
     }
 
   }
@@ -203,12 +270,406 @@ export class ReportTemplatePage{
 
   override = function () {
     this.overrideAnswer = true;
+  }
+
+  editSaveQuestion(questionNumber) {
+    if (this.drQuestion[questionNumber].editQuestion) {
+      // save the edited question
+
+      // check if there is any question still
+      // editing if so $scope.isUserEditing must
+      // still true
+      this.drQuestion[questionNumber].editQuestion = false;
+      this.drQuestion[questionNumber].isEdited = true;
+      var tmp = false;
+      for (var i = 0; i < this.drQuestion.length; i++) {
+        if (this.drQuestion[i].editQuestion) {
+          tmp = true;
+          break;
+        }
+      }
+      this.isUserEditing = tmp;
+      if (!this.isUserEditing) {
+        this.saveTemplateAfterEdit();
+      }
+      // console.log('saved! ');
+    } else {
+
+      // take a copy of current editing question
+      // for recovery if cancel
+      this.dailyReportQuestionsRecovery[questionNumber] = this.getNewInstanceOf(this.drQuestion[questionNumber]);
+
+      // start edit question -questionNumber-
+      this.isUserEditing = true;
+      this.drQuestion[questionNumber].editQuestion = true;
+      for (var i = 0; i < this.drQuestion.length; i++) {
+        this.dailyReportQuestionsEditParamTemps[i].parameters = [];
+
+        for (var j = 0; j < this.drQuestion[i].parametersList.length; j++) {
+          var param = {
+            "id": '',
+            "key": '',
+            "value": ''
+          };
+          this.dailyReportQuestionsEditParamTemps[i].parameters[j] = param;
+          this.dailyReportQuestionsEditParamTemps[i].parameters[j].key = this.drQuestion[i].parametersList[j].key;
+        }
+
+      }
+
+      console.log('start Edit! ');
+      console.log(this.drQuestion);
+      // console.log($scope.dailyReportQuestionsEditParamTemps);
+      // console.log(dailyReportQuestionsRecovery);
+    }
+  }
+
+  saveTemplateAfterEdit() {
+
+    for (let i = 0; i < this.drQuestion.length; i++) {
+      if (this.drQuestion[i].isEdited) {
+        /*
+         * console.log('Saving Question ' + i + ' ...');
+         */
+        let questionId = this.drQuestion[i].id;
+        let questionParameters = this.drQuestion[i].parametersList;
+        let questionNumber = this.drQuestion[i].questionNumber;
+        this.dailyReportServ.saveDailyReportTemplateQuestionParameters(questionId, questionParameters, i).subscribe(
+          (response) => {
+            this.presentToast("Question edited successfully.");
+            let data ;
+              data = response;
+            console.log('Saving done!');
+            this.drQuestion[data.questionNumber].isEdited = false;
+            console.log('Template Saved!!');
+        },  (reason) => {
+          this.cancelEditigQuestion(questionNumber);
+            this.presentToast("Failed question editing.");
+          /*
+           * console .log('Saving failed! ' + reason);
+           */
+        });
+
+      }
+    }
+
+  }
+
+
+  fabSelected(button,fab: FabContainer){
+    fab.close();
+  }
+
+  cancelEditigQuestion(qNumber){
+    this.drQuestion[qNumber] = this.getNewInstanceOf(this.dailyReportQuestionsRecovery[qNumber]);
+    var tmp = false;
+    for (var i = 0; i < this.drQuestion.length; i++) {
+      if ((typeof this.drQuestion[i].editQuestion !== "undefined") && this.drQuestion[i].editQuestion) {
+        tmp = true;
+        break;
+      }
+    }
+    this.isUserEditing = tmp;
+    console.log('Canceled!');
+  }
+
+
+
+  getNewInstanceOf(obj) {
+    var copy;
+
+    // Handle the 3 simple types, and null or
+    // undefined
+    if (null == obj || "object" != typeof obj)
+      return obj;
+
+    // Handle Date
+    if (obj instanceof Date) {
+      copy = new Date();
+      copy.setTime(obj.getTime());
+      return copy;
+    }
+
+    // Handle Array
+    if (obj instanceof Array) {
+      copy = [];
+      for (var i = 0, len = obj.length; i < len; i++) {
+        copy[i] = this.getNewInstanceOf(obj[i]);
+      }
+      return copy;
+    }
+
+    // Handle Object
+    if (obj instanceof Object) {
+      copy = {};
+      for (var attr in obj) {
+        if (obj.hasOwnProperty(attr))
+          copy[attr] = this.getNewInstanceOf(obj[attr]);
+      }
+      return copy;
+    }
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+  }
+
+  mappingDefaultAnswers(defaultDailyReportAnswer, question) {
+    return defaultDailyReportAnswer.answer = this.getDefaultValue(question);
   };
 
+  getDefaultValue(drQuestion) {
+    if(drQuestion.dailyReportQuestionType.title == 'TEXT_QUESTION')
+    {
+      return "";
+    }
+    else if(drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+      drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR')
+    {
+      let val = [];
+      let firstTime = true;
+      let firstTextField = true;
+      let counter = 0;
+      let defailtValueArray = [];
 
+      for (let v = 0; v < drQuestion.parametersList.length; v++) {
 
+        if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
 
+        } else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
 
+          defailtValueArray[counter] = {};
+          defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+          defailtValueArray[counter].value = "";
+          counter++;
+
+        }
+
+        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+
+          defailtValueArray[counter] = {};
+          defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+          defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+          counter++;
+
+        } else {
+
+        }
+
+      }
+
+      for (let d = 0; d < defailtValueArray.length; d++) {
+        if (defailtValueArray[d].key == "OPTION_HELPER_TEXT") {
+          val[d] = defailtValueArray[d].value;
+        } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
+          val[d] = defailtValueArray[d].value;
+        }
+
+      }
+      return val;
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+      drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' ||
+      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' )
+    {
+      return {};
+    }
+    else if(drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT')
+    {
+      return {};
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT')
+    {
+      return [drQuestion.parametersList[0].value];
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_MULTISELECT_VIEW_SELECTED')
+    {
+      return {};
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION')
+    {
+      return [drQuestion.parametersList[0].value];
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION')
+    {
+      return [false];
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER' ||
+      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
+    )
+    {
+      return drQuestion.parametersList[0].value;
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' ||
+      drQuestion.dailyReportQuestionType.title == 'CONSTANT_LONG_HELPER_TEXT_QUESTION' ||
+      drQuestion.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION' ||
+      drQuestion.dailyReportQuestionType.title == 'LONG_HELPER_TEXT_QUESTION'
+    )
+    {
+      return {};
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED')
+    {
+      let val = {};
+      let firstTime = true;
+      let counter = 0;
+      let defailtValueArray = [];
+
+      for (let v = 0; v < drQuestion.parametersList.length; v++) {
+
+        if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+
+        } else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
+          defailtValueArray[counter] = {};
+          defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+          defailtValueArray[counter].value = "";
+          counter++;
+
+          firstTime = true;
+        }
+
+        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+          if (firstTime) {
+            defailtValueArray[counter] = {};
+            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+            defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+            counter++;
+            firstTime = false;
+          } else {
+
+          }
+        }
+
+      }
+      let textTemp = 0;
+      for (let d = 0; d < defailtValueArray.length; d++) {
+        if (defailtValueArray[d].key == "OPTION_HELPER_TEXT") {
+          textTemp = d+1;
+          val['OPTION_HELPER_TEXT'+d] = defailtValueArray[d].value;
+        } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
+          val['OPTION_ANSWER'+textTemp] = defailtValueArray[d].value;
+        }
+
+      }
+      return val;
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED')
+    {
+      let val = [];
+      let firstTime = true;
+      let firstTextField = true;
+      let counter = 0;
+      let defailtValueArray = [];
+
+      for (let v = 0; v < drQuestion.parametersList.length; v++) {
+
+        if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+
+        } else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
+          if (firstTextField) {
+            defailtValueArray[counter] = {};
+            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+            defailtValueArray[counter].value = "";
+            counter++;
+            firstTextField = false;
+          } else {
+            defailtValueArray[counter] = {};
+            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+            defailtValueArray[counter].value = "00";
+            counter++;
+            firstTextField = true;
+
+          }
+
+          firstTime = true;
+        }
+
+        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+          if (firstTime) {
+            defailtValueArray[counter] = {};
+            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+            defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+            counter++;
+            firstTime = false;
+          } else {
+
+          }
+        }
+
+      }
+
+      for (let d = 0; d < defailtValueArray.length; d++) {
+        if (defailtValueArray[d].key == "OPTION_HELPER_TEXT") {
+          val[d] = defailtValueArray[d].value;
+        } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
+          val[d] = defailtValueArray[d].value;
+        }
+
+      }
+      return val;
+    }
+    else if (drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR' ||
+      drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN')
+    {
+      let val = {};
+      let firstTime = true;
+      let counter = 0;
+      let defailtValueArray = [];
+
+      for (let v = 0; v < drQuestion.parametersList.length; v++) {
+
+        if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+
+        } else if (drQuestion.parametersList[v].key == "OPTION_DROP_DOWN") {
+          defailtValueArray[counter] = {};
+          defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+          defailtValueArray[counter].value = "";
+          counter++;
+          firstTime = true;
+        }
+
+        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+          if (firstTime) {
+            defailtValueArray[counter] = {};
+            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+            defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+            ;
+            counter++;
+            firstTime = false;
+          } else {
+
+          }
+        }
+
+      }
+      let tempDrop = 0;
+      for (var d = 0; d < defailtValueArray.length; d++) {
+        if (defailtValueArray[d].key == "OPTION_DROP_DOWN") {
+          tempDrop = d;
+          val["OPTION_DROP_DOWN"+d] = "";
+        } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
+          val["OPTION_ANSWER"+(tempDrop+1)] = defailtValueArray[d].value;
+        }
+
+      }
+      return val;
+    }else{
+      return "";
+    }
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
 
 
 
@@ -460,10 +921,7 @@ export class ReportTemplatePage{
   //
   //       let pramData = "";
   //       for(let parameter of drQuestion.parametersList){
-  //         pramData += '<div style="width: 100%"><label class="checkbox" style="width:100%;"><input type="checkbox" name="checkbox' + drQuestion.questionNumber + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer['+parameter.id+']">' +
-  //           '<i></i>' +'   '+ parameter.value + '<a style="font-size:20px; color:firebrick; float:right;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion">\n' +
-  //           '<span class="btn btn-link-danger glyphicon glyphicon-remove" (click)="removeQuestionParameter(' + drQuestion.questionNumber + ','+parameter.id+')">\n' +
-  //           '</span></a></label></div>';
+  //         pramData += ;
   //       }
   //
   //       return '<div class="formLabel" style="width:100%;">' + drQuestion.question + ':<button type="button" class="btn btn-outline-warning btn-sm" \n' +
@@ -473,7 +931,14 @@ export class ReportTemplatePage{
   //         '  style="float:right; margin-right: 8px;" ><i style="font-size:15px; color: #3B9FF3;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" >\n' +
   //         '  Save</i><span hideWhen="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="glyphicon glyphicon-edit" \n' +
   //         '  style="font-size:15px; color: #3B9FF3;"></span></button></div><div class="row" style="width:99%;"><div class="col col-12" style="width:101%;">'
-  //         + pramData +
+
+
+  //         '<div style="width: 100%"><label class="checkbox" style="width:100%;"><input type="checkbox" name="checkbox' + drQuestion.questionNumber + '" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[' + drQuestion.questionNumber + '].answer['+parameter.id+']">' +
+  //           '<i></i>' +'   '+ parameter.value + '<a style="font-size:20px; color:firebrick; float:right;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion">\n' +
+  //           '<span class="btn btn-link-danger glyphicon glyphicon-remove" (click)="removeQuestionParameter(' + drQuestion.questionNumber + ','+parameter.id+')">\n' +
+  //           '</span></a></label></div>'
+
+
   //         '</div></div><div style="width:100%;" *ngIf="dailyReportQuestions[' + drQuestion.questionNumber + '].editQuestion" class="input-group"><div>\n' +
   //         '  <label class="formLabel"><i></i><span></span></label></div><div class="input-group" style="width: 100%"><input  type="text" style="width: 80%"\n' +
   //         '  ng-model="dailyReportQuestionsEditParamTemps[' + drQuestion.questionNumber + '].parameters[0].value" class="form-control" placeholder=" Pleas enter your new question" />\n' +

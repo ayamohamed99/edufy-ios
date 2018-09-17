@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {Postattachment} from "../../models/postattachment";
@@ -21,6 +21,7 @@ declare var windows: any;
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
+  @ViewChild('commentDiv') commentAppear: ElementRef;
 
   name:string;
   userName:string;
@@ -81,6 +82,17 @@ export class ProfilePage {
       return true;
     }else {
       return false;
+    }
+  }
+
+  opend = true;
+  openComment(){
+    if(this.opend) {
+      this.commentAppear.nativeElement.className = "slideUp";
+      this.opend = false;
+    }else{
+      this.commentAppear.nativeElement.className = "slideDown";
+      this.opend = true;
     }
   }
 

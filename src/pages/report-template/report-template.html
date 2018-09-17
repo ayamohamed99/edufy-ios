@@ -62,14 +62,14 @@
 
         <label class="formLabel">{{itm.question}} :<br><br></label>
 
-        <div *ngFor="let param of itm.parametersList; let i = index" col-6 class="LopContain">
+        <div *ngFor="let param of itm.parametersList; let i = index" col-6 style="display: block">
 
           <div *ngIf="param.key == 'OPTION_ANSWER'" >
             <div class="inline-group">
               <label  col-md-9 col-sm-9 col-xs-9>
                 <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id]">
-                <i></i>{{console.log(i)}}
-                <input type="text"   only-digits [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[1 + i]]" style="width:40px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;  height: 17px;top: 2px;padding-bottom: 4px;top: -3px;" [disabled]="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                <i></i>
+                <input type="number"   required  [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList.length + i]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 {{itm.parametersList[i].value}}
               </label>
             </div>
@@ -203,8 +203,8 @@
                 {{pram.value}}
               </label>
               <label class="textarea">
-    <textarea rows="2" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
-    </textarea>
+                <textarea rows="2" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
+                </textarea>
               </label>
             </div>
           </div>
@@ -274,7 +274,7 @@
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'">
             <br>
             <br>
-            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_HELPER_TEXT'+i]" ng-change="override()"></label></section>
+            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_HELPER_TEXT'+i]" ng-change="override()"></label></section>
             <br>
           </div>
 
@@ -304,7 +304,7 @@
           </div>
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'" style="width: 100% !important;display: block">
-            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" ng-change="override()"></label></section>
+            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" ng-change="override()"></label></section>
             <br>
           </div>
 
@@ -324,20 +324,20 @@
       <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' || itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER';">
 
-        <div style="display: inline-block;width: 100%">
-          <label class="formLabel">
+        <div style="display: inline-block;width: 100%;">
+          <label class="formLabel" style="width:initial ;float: left">
           {{itm.question}} :
         </label>
 
-          <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="changeEditMode(drIndex,'create')" *ngIf="itm.editQuestion == false" [disabled]="!editQuestionAllowed">
+          <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="editSaveQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == false" [hidden]="!editQuestionAllowed">
             <ion-icon style="font-size: 20px;" name="create"></ion-icon>
           </button>
 
-          <button ion-button icon-only clear style="padding: 0; width: 70px;margin-top: 10px;float: right" (click)="changeEditMode(drIndex,'cancel')" *ngIf="itm.editQuestion == true">
+          <button ion-button icon-only clear style="padding: 0; width: 70px;float: right; margin-top: -7px" (click)="cancelEditigQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == true">
             cancel
           </button>
 
-          <button ion-button icon-only clear style="padding: 0;width: 50px;margin-top: 10px;float: right" (click)="changeEditMode(drIndex,'save')" *ngIf="itm.editQuestion == true">
+          <button ion-button icon-only clear style="padding: 0;width: 50px;float: right; margin-top: -7px" (click)="editSaveQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == true">
             save
           </button>
         </div>
@@ -346,21 +346,23 @@
 
 
         <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
-          <span *ngIf="pram.key == 'OPTION_HELPER_TEXT'">
-            <span style="display: inline-block">
-              <label><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[pram.id]">
+          <span *ngIf="pram.key == 'OPTION_HELPER_TEXT' || pram.key == 'OPTION_ANSWER'">
+            <span style="display: inline-block;width: 100%; margin-bottom: 20px">
+              <label style="bottom: 5px; float:left;"><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[pram.id]">
                 <i></i> {{pram.value}} </label>
-              <ion-label style="float: right">X</ion-label>
+              <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;bottom: 5px;float: right;" (click)="removeQuestionParameter(itm.questionNumber ,pram.id)" *ngIf="itm.editQuestion == true" [disabled]="!editQuestionAllowed">
+            <ion-icon style="font-size: 20px;" name="trash"></ion-icon>
+          </button>
             </span>
           </span>
         </span>
 
-        <div style="display: inline-block; width: 100%">
-          <input style="width: 80%; height: 30px; padding: 0" *ngIf="itm.editQuestion == true"/>
-          <button ion-button icon-only clear style="width: 40px; height: 35px; padding: 0;margin-top: 5px;float: right" (click)="changeEditMode(i,'cancel')" *ngIf="itm.editQuestion == true">
+        <ion-row style="display: inline-block; width: 100%">
+          <input style="width: calc(100% - 50px); height: 40px; padding: 0" *ngIf="itm.editQuestion == true" [(ngModel)]="dailyReportQuestionsEditParamTemps[itm.questionNumber].parameters[0].value" class="form-control" placeholder=" Pleas enter your new question" />
+          <button ion-button icon-only clear style="width: 40px; height: 40px; padding: 0;margin: 0;float: right" (click)="addParameterForQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == true">
             add
           </button>
-        </div>
+        </ion-row>
       </div>
 
 
@@ -388,7 +390,7 @@
         </label>
 
         <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block" >
-          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer.k"></label></section>
+          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer.k"></label></section>
         </span>
 
 
@@ -449,7 +451,7 @@
             <ion-label>{{itm.parametersList[i].value}}</ion-label>
             <ion-item style="padding: 0;margin: 0">
               <ion-select style="width: 100%;max-width: 100%" multiple="true" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_DROP_DOWN'+i]">
-                <ion-option *ngFor="let itmPram of selectionData.get(itm.parametersList[i].id)">{{itmPram.value}}</ion-option>
+                <ion-option *ngFor="let itmPram of selectionData.get(itm.id)">{{itmPram.value}}</ion-option>
               </ion-select>
             </ion-item>
             <br>
@@ -478,9 +480,9 @@
             && itm.dailyReportQuestionType.title != 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_HELPER_TEXT_QUESTION'
              && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'
               && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
-      <label class="formLabel">
-        {{itm.question}} :
-      </label>
+      <!--<label class="formLabel">-->
+        <!--{{itm.question}} :-->
+      <!--</label>-->
         <br>
         <div class="row">
           <div class="col col-4">
@@ -506,5 +508,34 @@
     </div>
     <!--<div padding="10px" [innerHTML]="sanitizer.bypassSecurityTrustHtml(reportTemplate)"></div>-->
   </ion-card>
+
+
+
+
+
+
+
+  <ion-fab bottom right>
+    <button ion-fab mini><ion-icon name="more"></ion-icon></button>
+    <ion-fab-list side="top">
+
+
+      <button ion-fab (click)="fabSelected('rest',fab)">
+        <ion-icon name="sync"></ion-icon>
+      </button>
+
+
+      <button ion-fab (click)="fabSelected('save',fab)">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </button>
+
+
+      <button ion-fab (click)="fabSelected('approve',fab)">
+        <img src="assets/icon/approved_black.png">
+      </button>
+
+
+    </ion-fab-list>
+  </ion-fab>
 
 </ion-content>
