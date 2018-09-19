@@ -11,6 +11,7 @@ page-report-template {
     appearance: none;
     overflow: visible;
     position: relative;
+    box-shadow: 5px 5px 5px grey;
 
     ion-label {
       -moz-appearance: none;
@@ -19,11 +20,12 @@ page-report-template {
       position: absolute;
       top: -8px;
       right: 40px;
-      color: #ff0400;
-      background-color: rgba(0,0,0,0.7);
+      color: #000000;
+      background-color: rgb(255, 255, 255);
       line-height: 24px;
       padding: 4px 8px;
       border-radius: 4px;
+      box-shadow: 5px 5px 5px grey;
     }
   }
 

@@ -18,8 +18,8 @@
 <ion-content padding class="contentColor">
   <div *ngIf="classesList.length > 1">
     <mat-accordion class="example-headers-align">
-      <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId)">
-        <mat-expansion-panel-header (click)="waitStudents(itm.classId,i,itm.grade.gradeName+' '+itm.className)">
+      <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId,i,itm.grade.gradeName+' '+itm.className)">
+        <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
             {{itm.grade.gradeName}} {{itm.className}}
@@ -31,17 +31,17 @@
 
         <div *ngIf="showAllButton">
           <ion-row *ngIf="itm.noOfAllStudent > 0">
-            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,itm.studentsList)"
+            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,itm.studentsList,-1,false,isAll,i)"
                           style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>
             <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
           </ion-row>
         </div>
 
-        <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of itm.studentsList">
+        <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of itm.studentsList;let j = index">
 
           <ion-row>
 
-            <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList)"
+            <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.studentName,i)"
                           style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>
 
             <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">
@@ -67,17 +67,17 @@
 
     <div *ngIf="showAllButton">
       <ion-row *ngIf="studentsList.length > 0">
-        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,studentsList)"
+        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,studentsList,-1,false,stud.reportChecked,0)"
                       style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>
         <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
       </ion-row>
     </div>
 
-    <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of studentsList">
+    <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of studentsList;let j = index">
 
       <ion-row>
 
-        <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList)"
+        <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"
                       style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>
 
         <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">
@@ -103,6 +103,6 @@
   </div>
 
   <ion-fab bottom right>
-    <button ion-button color="light" style="color: #488aff;" [disabled]="hideShowReport" (click)="openReportTemplate()">SHOW REPORT</button>
+    <button ion-button color="light" style="color: #488aff; box-shadow: 5px 5px 5px grey;" [disabled]="hideShowReport" (click)="openReportTemplate()">SHOW REPORT</button>
   </ion-fab>
 </ion-content>

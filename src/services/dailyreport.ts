@@ -6,17 +6,20 @@ import 'rxjs/observable/fromPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Platform} from "ionic-angular";
+import {map, tap} from "rxjs/operators";
 
 @Injectable()
-export class DailyReportService{
+export class DailyReportService {
 
-  httpOptions:any;
-  headers:any;
-  DomainUrl:Url_domain = new Url_domain;
+  httpOptions: any;
+  headers: any;
+  DomainUrl: Url_domain = new Url_domain;
+  dailyReportClassQuestionsGroups;
 
-  constructor(public http:HttpClient,private platform:Platform){}
+  constructor(public http: HttpClient, private platform: Platform) {
+  }
 
-  putHeader(value){
+  putHeader(value) {
     this.httpOptions = {
       headers: new HttpHeaders({
         // 'Access-Control-Allow-Origin' : '*',
@@ -28,7 +31,7 @@ export class DailyReportService{
     };
   }
 
-  getDailyReportTemplate(language, date, classId){
+  getDailyReportTemplate(language, date, classId) {
 
     let requestURL = "";
     if (classId == null) {
@@ -37,47 +40,27 @@ export class DailyReportService{
       requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId;
     }
 
-    return this.http.get(this.DomainUrl.Domain+requestURL,this.httpOptions);
+    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
 
   }
 
 
-  getDropDownPremeter(key){
-    return this.http.get(this.DomainUrl.Domain+'/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key,this.httpOptions);
+  getDropDownPremeter(key) {
+    return this.http.get(this.DomainUrl.Domain + '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key, this.httpOptions);
   }
 
 
-  saveDailyReportTemplateQuestionParameters(questionId, parameterWrapper, questionNumber){
-    return this.http.post(this.DomainUrl.Domain+'/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId,parameterWrapper,this.httpOptions);
+  saveDailyReportTemplateQuestionParameters(questionId, parameterWrapper, questionNumber) {
+    return this.http.post(this.DomainUrl.Domain + '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId, parameterWrapper, this.httpOptions);
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  getStudentReportAnswers(classId, date){
+    return this.http.get(this.DomainUrl.Domain + '/authentication/dailyReport.ent/getClassGroups.ent?classId=' + classId + '&date=' + date, this.httpOptions).pipe(
+      tap(response => {
+        this.dailyReportClassQuestionsGroups = response;
+      },err => {
+      }));
+  }
 
 
 

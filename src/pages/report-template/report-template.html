@@ -480,9 +480,9 @@
             && itm.dailyReportQuestionType.title != 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_HELPER_TEXT_QUESTION'
              && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'
               && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
-      <!--<label class="formLabel">-->
-        <!--{{itm.question}} :-->
-      <!--</label>-->
+        <label class="formLabel">
+          {{itm.question}} :
+        </label>
         <br>
         <div class="row">
           <div class="col col-4">
@@ -515,23 +515,26 @@
 
 
 
-  <ion-fab bottom right>
+  <ion-fab bottom right style="padding-bottom: 60px" #fab>
     <button ion-fab mini><ion-icon name="more"></ion-icon></button>
-    <ion-fab-list side="top">
+    <ion-fab-list side="top" style="padding-bottom: 50px">
 
 
       <button ion-fab (click)="fabSelected('rest',fab)">
         <ion-icon name="sync"></ion-icon>
+        <ion-label>Rest</ion-label>
       </button>
 
 
       <button ion-fab (click)="fabSelected('save',fab)">
         <ion-icon name="cloud-upload"></ion-icon>
+        <ion-label>Save</ion-label>
       </button>
 
 
       <button ion-fab (click)="fabSelected('approve',fab)">
         <img src="assets/icon/approved_black.png">
+        <ion-label>Approve</ion-label>
       </button>
 
 

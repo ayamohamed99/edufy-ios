@@ -1,5 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AlertController, IonicPage, LoadingController, NavController, NavParams, Platform} from 'ionic-angular';
+import {
+  AlertController, IonicPage, LoadingController, NavController, NavParams, Platform,
+  ToastController
+} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {StudentsService} from "../../services/students";
 import {ClassesService} from "../../services/classes";
@@ -56,10 +59,31 @@ export class ReportPage {
   editQuestionAllowed = false;
   dateView;
   selectedClassId;
+  //////////////////////////////////
+  selectedStudentListId = [];
+  listOfFinalized = [];
+  selectedClass;
+  studnetsAnswersList = [];
+  conflictListByQuestions = [];
+  dailyReportAnswerForSelectedStudent = [];
+  //////////////////////////////////
+  selectedMultiStudent = [];
+  isChecked = [];
+  studentsSelected = false;
+  isNotValid = true;
+  selectedMultiStudentId = [];
+  // studentName;
+  classChecked = [];
+  isSave = true;
+  overrideAnswer = false;
+  firstStudentId;
+  questionsToBeReset;
+  Sellected;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
-              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker) {
+              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker, private toastCtrl:ToastController) {
     this.isAll = false;
     this.pageName = this.accountServ.reportPage;
     const date = new Date().toISOString().substring(0, 10);
@@ -94,9 +118,7 @@ export class ReportPage {
       this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getAllClasses();
-
     } else {
-
       storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
@@ -327,7 +349,7 @@ export class ReportPage {
       });
   }
 
-  checkedStudent(studentid,classId,studentList){
+  checkedStudent(studentid,classId,studentList,index,studentFinalized,checked,studentName,classIndex){
     if(studentid == -1 && classId == -1){
       for (let i in studentList) {
           studentList[i].reportChecked = this.isAll;
@@ -357,6 +379,13 @@ export class ReportPage {
     }else{
       this.hideShowReport = true;
     }
+
+    if(studentid == -1){
+      console.log("ALl");
+    }else if(studentid != -1){
+      this.getMultiSelectedStudents(studentid, index, checked, studentFinalized,studentName,classIndex);
+    }
+
   }
 
   whenClosed(studentList,index){
@@ -373,12 +402,32 @@ export class ReportPage {
     this.studentsList = [];
   }
 
-  whenOpen(index,classId){
+  whenOpen(itmRef,classId,index,name){
     this.selectedClassId = classId;
     this.hideShowReport = true;
-    let ref = index;
+    let ref = itmRef;
     ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
+    this.getStudentsAnswer(classId,index,name);
   }
+
+
+  getStudentsAnswer(classId,index,name){
+    this.load = this.loadCtrl.create({
+      content: "loading Students Answers ..."
+    });
+    this.load.present();
+
+    this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,this.selectedDate).subscribe(
+      resp=>{
+        this.load.dismiss();
+        this.waitStudents(classId,index,name);
+      },err =>{
+        this.presentToast("Can't get students reports answer");
+        this.load.dismiss();
+      }
+    );
+  }
+
 
   oonClickonMenuCalender(){
     this.datePicker.show({
@@ -432,8 +481,8 @@ export class ReportPage {
         dailyReportAnswersNoOfItems: this.dailyReportAnswersNoOfItems,
         dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
         dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
-        editQuestionAllowed: this.editQuestionAllowed
-
+        editQuestionAllowed: this.editQuestionAllowed,
+        classId:this.selectedClassId
       });
     }
   }
@@ -477,7 +526,7 @@ export class ReportPage {
 
   mappingDefaultAnswers(defaultDailyReportAnswer, question) {
     return defaultDailyReportAnswer.answer = this.getDefaultValue(question);
-  };
+  }
 
   getDefaultValue(drQuestion) {
     if(drQuestion.dailyReportQuestionType.title == 'TEXT_QUESTION')
@@ -720,4 +769,560 @@ export class ReportPage {
     }
   }
 
+  checkStudent(j){
+    if(this.isChecked[j].checked){
+      return this.isChecked[j].checked;
+    }
+    return false;
+  }
+
+  getMultiSelectedStudents(StudentId, index, isChecked, studentFinalized,studentName,classIndex) {
+    this.Sellected = 1000;
+    let idx = this.selectedMultiStudent.indexOf(StudentId);
+    if (idx > -1) {
+      this.selectedMultiStudent.splice(idx, 1);
+      this.isChecked[index] = {};
+      this.isChecked[index].checked = false;
+      this.listOfFinalized.splice(idx, 1);
+    }
+    else {
+      this.listOfFinalized.push(studentFinalized);
+      this.selectedMultiStudent.push(StudentId);
+      this.isChecked[index] = {};
+      this.isChecked[index].checked = true;
+      this.studentsSelected = true;
+    }
+
+    this.isNotValid = false;
+    this.selectedMultiStudentId = [];
+    for (var i = 0; i < this.selectedMultiStudent.length; i++) {
+      this.selectedMultiStudentId[i] = {};
+      this.selectedMultiStudentId[i].id = this.selectedMultiStudent[i];
+    }
+      this.getDailyReportData(StudentId, index, this.isChecked[index].checked, 'checkBox', studentName, studentFinalized,classIndex);
+  }
+
+
+  getDailyReportData (studentId, index, checkedSudent, caller, studentName, studentFinalized,selectedClassIndex) {
+    // this.studentName = studentName + '\'s daily report';
+    let studentID = studentId;
+    if (caller == 'checkBox' && checkedSudent == true) {
+      this.classChecked[selectedClassIndex] = {};
+      this.classChecked[selectedClassIndex].selected = false;
+      if (this.selectedMultiStudent.length == 1) {
+        this.dailyReportAnswerForSelectedStudent = [];
+        console.log(this.dailyReportServ.dailyReportClassQuestionsGroups);
+        for (let qId of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups)) {
+          console.log(qId);
+          for (let answer of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId])) {
+            console.log(answer);
+            for(let answerTemp of this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer]) {
+              console.log(answerTemp);
+              console.log(studentID);
+              if (answerTemp == studentID) {
+                this.dailyReportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
+                console.log(this.dailyReportAnswerForSelectedStudent);
+              }
+            }
+          }
+        }
+        console.log(this.dailyReportAnswerForSelectedStudent.length);
+        if (this.dailyReportAnswerForSelectedStudent.length == 0) {
+          this.isSave = true;
+          this.isNotValid = false;
+          this.resetDailyReportTemplate(null,null);
+        } else {
+          this.studnetsAnswersList[studentId] = this.dailyReportAnswerForSelectedStudent;
+          this.isNotValid = false;
+          this.isSave = false;
+          this.reverseAnswerToViewAnswer(this.dailyReportAnswerForSelectedStudent);
+        }
+      }
+      else if (this.selectedMultiStudent.length > 1) {
+        if (this.isChecked[index].checked) {
+          this.dailyReportAnswerForSelectedStudent = [];
+          console.log(this.dailyReportServ.dailyReportClassQuestionsGroups);
+          for (let qId of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups)) {
+            console.log(qId);
+            for (let answer of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId])) {
+              console.log(answer);
+              for (let answerTemp of this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer]) {
+                console.log(answerTemp);
+                console.log(studentID);
+                if (answerTemp == studentID) {
+                  this.dailyReportAnswerForSelectedStudent.push({
+                    "questionId": qId,
+                    "answer": answer
+                  });
+                  console.log(this.dailyReportAnswerForSelectedStudent);
+                }
+              }
+            }
+          }
+          if (this.dailyReportAnswerForSelectedStudent.length == 0) {
+            this.isSave = true;
+            this.isNotValid = false;
+            let idx = this.listOfFinalized.indexOf(true);
+            if (idx == -1) {
+              this.isNotValid = false;
+              this.isSave = true;
+              this.firstStudentId = this.selectedMultiStudent[0];
+            } else {
+              this.isNotValid = false;
+              this.isSave = false;
+              this.firstStudentId = this.selectedMultiStudent[0];
+            }
+          } else {
+            this.studnetsAnswersList[studentId] = this.dailyReportAnswerForSelectedStudent;
+            for (var i = 0; i < this.dailyReportAnswerForSelectedStudent.length; i++) {
+              var questionIdGroup = this.dailyReportServ.dailyReportClassQuestionsGroups[this.dailyReportAnswerForSelectedStudent[i].questionId];
+              var sameAnswerStudentsIds = questionIdGroup[this.dailyReportAnswerForSelectedStudent[i].answer];
+              var sameAnswers = true;
+              for (let key of this.studnetsAnswersList) {
+                let intKey = parseInt(key, 10);
+                if (!sameAnswerStudentsIds.some(e => e === intKey)) {
+                  sameAnswers = false;
+                  break;
+                }
+              }
+              this.questionsToBeReset[i] = sameAnswers;
+            }
+            this.resetDailyReportTemplate(this.questionsToBeReset, this.dailyReportAnswerForSelectedStudent);
+            this.isNotValid = false;
+            this.isSave = false;
+          }
+        }
+      }
+    } else if (caller == 'checkBox' && checkedSudent == false) {
+      this.studnetsAnswersList.splice(studentId, 1);
+      if (this.studnetsAnswersList.length < 1) {
+        this.resetDailyReportTemplate(null,null);
+      } else {
+        this.dailyReportAnswerForSelectedStudent = [];
+        let oneStudentCheckedId = parseInt(Object.keys(this.studnetsAnswersList)[0], 10);
+        console.log(this.dailyReportServ.dailyReportClassQuestionsGroups);
+        for (let qId of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups)) {
+          console.log(qId);
+          for (let answer of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId])) {
+            console.log(answer);
+            for(let answerTemp of this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer]) {
+              console.log(answerTemp);
+              console.log(studentID);
+              if (answerTemp == oneStudentCheckedId) {
+                this.dailyReportAnswerForSelectedStudent.push({
+                  "questionId": qId,
+                  "answer": answer
+                });
+                console.log(this.dailyReportAnswerForSelectedStudent);
+              }
+            }
+          }
+        }
+        if (this.dailyReportAnswerForSelectedStudent.length == 0) {
+          this.isSave = true;
+          this.isNotValid = false;
+          this.resetDailyReportTemplate(null,null);
+        } else {
+          this.isNotValid = false;
+          this.isSave = false;
+        }
+        for (var i = 0; i < this.dailyReportAnswerForSelectedStudent.length; i++) {
+          var questionIdGroup = this.dailyReportServ.dailyReportClassQuestionsGroups[this.dailyReportAnswerForSelectedStudent[i].questionId];
+          var sameAnswerStudentsIds = questionIdGroup[this.dailyReportAnswerForSelectedStudent[i].answer];
+          var sameAnswers = true;
+          for (let key of this.studnetsAnswersList) {
+            var intKey = parseInt(key, 10);
+            if (!sameAnswerStudentsIds.includes(intKey)) {
+              sameAnswers = false;
+              break;
+            }
+          }
+          this.questionsToBeReset[i] = sameAnswers;
+        }
+        this.resetDailyReportTemplate(this.questionsToBeReset, this.dailyReportAnswerForSelectedStudent);
+      }
+      if (this.selectedMultiStudent.length == 1) {
+        for (var j = 0; j < this.classesList[selectedClassIndex].studentsList.length; j++) {
+          if (this.classesList[selectedClassIndex].studentsList[j].id == this.selectedMultiStudentId[0].id) {
+            // this.studentName = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
+            break;
+          }
+        }
+      }
+    }
+
+    console.log(this.dailyReportAnswerForSelectedStudent);
+    console.log(this.selectedMultiStudentId);
+    console.log(this.dailyReportAnswer);
+    console.log(this.isChecked);
+  }
+
+
+
+  resetDailyReportTemplate(questionsToBeReset, answers) {
+    if (!questionsToBeReset) {
+      for (let i = 0; i < this.dailyReportQuestions.length; i++) {
+        this.mappingDefaultAnswers(this.dailyReportAnswer.dailyReportAnswersObjectsList[i], this.dailyReportQuestions[i]);
+
+        // $('#' + $scope.dailyReportQuestions[i].id).addClass("ng-hide");
+        // this.studentName = "";
+
+      }
+    } else {
+      for (var i = 0; i < this.dailyReportQuestions.length; i++) {
+        if (!questionsToBeReset[i]) {
+          // not same answer>>> display empty answer.
+          // $('#' + $scope.dailyReportQuestions[i].id).removeClass("ng-hide");
+
+          // mappingDefaultAnswers(
+          // $scope.dailyReportAnswer.dailyReportAnswersObjectsList[i],
+          // $scope.dailyReportQuestions[i]);
+
+          switch (this.dailyReportQuestions[i].dailyReportQuestionType.title) {
+
+            case "TEXT_QUESTION":
+            case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER":
+              this.dailyReportAnswer.dailyReportAnswersObjectsList[i] = {
+                "answer": ""
+              }
+              break;
+            case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION":
+              this.dailyReportAnswer.dailyReportAnswersObjectsList[i] = {
+                "answer": ["", ""]
+              }
+              break;
+            default:
+
+              if (this.dailyReportQuestions[i].dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED' || this.dailyReportQuestions[i].dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED') {
+                this.overrideAnswer = false;
+              }
+
+              if (this.dailyReportQuestions[i].parametersList) {
+                var emptyAnswer = [];
+                for (var j = 0; j < this.dailyReportQuestions[i].parametersList.length; j++) {
+                  emptyAnswer.push("");
+                }
+                this.dailyReportAnswer.dailyReportAnswersObjectsList[i] = {
+                  "answer": emptyAnswer
+                }
+              }
+              break;
+
+          }
+
+        } else {
+          this.dailyReportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.dailyReportQuestions[i], answers[i].answer);
+          // $('#' + $scope.dailyReportQuestions[i].id).addClass("ng-hide");
+        }
+
+      }
+    }
+
+  }
+
+
+
+  getViewQuestionAnswer(question, dbAnswer) {
+    switch (question.dailyReportQuestionType.title) {
+      case 'TEXT_QUESTION':
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
+      case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return "";
+        }
+        return dbAnswer;
+
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
+      case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
+      case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        let midResult = dbAnswer.split("||");
+
+        let arrayIds = midResult[1].split("$$");
+        let value = {};
+        for (let i = 0; i < arrayIds.length; i++) {
+          value[arrayIds[i]] = true;
+        }
+        return value;
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        let answersList = dbAnswer.split("$$");
+        value = {};
+        for (let i = 0; i < question.parametersList.length; i++) {
+          if (question.parametersList[i].key == "OPTION_ANSWER") {
+
+            if (answersList.indexOf(question.parametersList[i].value) > -1) {
+              value[i] = true
+            } else {
+              value[i] = false;
+            }
+          } else if (question.parametersList[i].key == "OPTION_HELPER_TEXT") {
+            if (answersList[answersList.length - 1] == null || answersList[answersList.length - 1] == "" || answersList[answersList.length - 1] == " " || answersList[answersList.length - 1] == undefined || answersList[answersList.length - 1] == "undefined") {
+              value[i] = "";
+            } else {
+              value[i] = answersList[answersList.length - 1];
+            }
+
+          }
+        }
+        ;
+        return value;
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        answersList = dbAnswer.split("$$");
+        value = {};
+        value[0] = answersList[0];
+        if (answersList[1] == null || answersList[1] == "" || answersList[1] == " ") {
+
+        } else {
+          value[1] = answersList[1];
+        }
+        return value;
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        answersList = dbAnswer.split("$$");
+        value = {};
+        value[0] = answersList[0];
+        value[1] = answersList[1];
+
+        return value;
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        value = {};
+        if (dbAnswer == question.parametersList[0].value) {
+          value[0] = true;
+        } else {
+          value[0] = false;
+          value[1] = dbAnswer;
+        }
+        return value;
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN':
+      case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        midResult = dbAnswer.split("||");
+
+        let arrayValues = midResult[0].split(/[$&]+/);
+        arrayIds = midResult[1].split(/[$&]+/);
+        value = {};
+        for (let i = 0; i < arrayIds.length; i++) {
+          if ((i % 2) == 0) {
+            if (arrayValues[i] == null || arrayValues[i] == "" || arrayValues[i] == " " || arrayValues[i] == "0") {
+              value[arrayIds[i]] = false;
+            } else {
+              value[arrayIds[i]] = true;
+            }
+
+          } else {
+            if (arrayValues[i] == "0") {
+              value[arrayIds[i]] = "";
+            } else {
+              value[arrayIds[i]] = arrayValues[i];
+            }
+
+          }
+
+        }
+        return value;
+      case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
+      case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
+        let counter = 0;
+        let getAnswerValueArray = [];
+        let firstTimeFullArray = true;
+        let questionCount = 0;
+
+        for (let j = 0; j < question.parametersList.length; j++) {
+
+          if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+
+          } else if (question.parametersList[j].key == "OPTION_DROP_DOWN") {
+            getAnswerValueArray[counter] = {};
+            getAnswerValueArray[counter].key = question.parametersList[j].key;
+            counter++;
+            firstTimeFullArray = true;
+          }
+
+          else if (question.parametersList[j].key == "OPTION_ANSWER") {
+            if (firstTimeFullArray) {
+              getAnswerValueArray[counter] = {};
+              getAnswerValueArray[counter].key = question.parametersList[j].key;
+              counter++;
+              firstTimeFullArray = false;
+              questionCount++;
+            } else {
+
+            }
+          }
+
+        }
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+
+        let answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+
+        value = {};
+
+        for (let i = 0; i < getAnswerValueArray.length; i++) {
+          if (answersQuestionList[i] == 0) {
+            value[i] = "";
+          } else {
+            value[i] = answersQuestionList[i];
+          }
+
+        }
+        return value;
+      case 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED':
+      case 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED':
+
+        counter = 0;
+        getAnswerValueArray = [];
+        firstTimeFullArray = true;
+        questionCount = 0;
+
+        for (let j = 0; j < question.parametersList.length; j++) {
+
+          if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+
+          } else if (question.parametersList[j].key == "OPTION_HELPER_TEXT") {
+            getAnswerValueArray[counter] = {};
+            getAnswerValueArray[counter].key = question.parametersList[j].key;
+            counter++;
+            firstTimeFullArray = true;
+          }
+
+          else if (question.parametersList[j].key == "OPTION_ANSWER") {
+            if (firstTimeFullArray) {
+              getAnswerValueArray[counter] = {};
+              getAnswerValueArray[counter].key = question.parametersList[j].key;
+              counter++;
+              firstTimeFullArray = false;
+              questionCount++;
+            } else {
+
+            }
+          }
+
+        }
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        // var answersQuestionList =
+        // dbAnswer.split("||");
+        answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+
+        value = {};
+
+        for (let i = 0; i < getAnswerValueArray.length; i++) {
+
+          value[i] = answersQuestionList[i];
+
+        }
+        return value;
+      case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
+      case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
+        counter = 0;
+        getAnswerValueArray = [];
+        firstTimeFullArray = true;
+        questionCount = 0;
+
+        for (let j = 0; j < question.parametersList.length; j++) {
+
+          if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+
+          } else if (question.parametersList[j].key == "OPTION_DROP_DOWN") {
+            getAnswerValueArray[counter] = {};
+            getAnswerValueArray[counter].key = question.parametersList[j].key;
+            counter++;
+            firstTimeFullArray = true;
+          }
+
+          else if (question.parametersList[j].key == "OPTION_ANSWER") {
+            if (firstTimeFullArray) {
+              getAnswerValueArray[counter] = {};
+              getAnswerValueArray[counter].key = question.parametersList[j].key;
+              counter++;
+              firstTimeFullArray = false;
+              questionCount++;
+            } else {
+
+            }
+          }
+
+        }
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+
+        answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+
+        value = {};
+
+        for (let i = 0; i < getAnswerValueArray.length; i++) {
+
+          value[i] = answersQuestionList[i];
+
+        }
+        return value;
+
+      case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
+      case 'CONSTANT_LONG_HELPER_TEXT_QUESTION':
+      case 'SHORT_HELPER_TEXT_QUESTION':
+      case 'LONG_HELPER_TEXT_QUESTION':
+        if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+          return {};
+        }
+        answersList = dbAnswer.split("$$");
+        value = {};
+        for (let i = 0; i < question.parametersList.length; i++) {
+          value[i] = answersList[i];
+        }
+        return value;
+    }
+  }
+
+  reverseAnswerToViewAnswer(dailyReportAnswerDb) {
+    let dailyReportAnswerView = {
+      "dailyReportAnswersObjectsList": []
+    };
+
+    for (let i = 0; i < this.dailyReportQuestions.length; i++) {
+      let question = this.dailyReportQuestions[i];
+      dailyReportAnswerView.dailyReportAnswersObjectsList[i] = {
+        "answer": this.getViewQuestionAnswer(question, dailyReportAnswerDb[i].answer)
+      };
+    }
+
+    this.dailyReportAnswer = dailyReportAnswerView;
+
+  }
+
+
+
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
 }
