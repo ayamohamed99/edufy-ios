@@ -203,7 +203,7 @@
                 {{pram.value}}
               </label>
               <label class="textarea">
-                <textarea rows="2" cols="50" class="custom-scroll" ng-model="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
+                <textarea rows="2" cols="50" class="custom-scroll" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>
@@ -274,14 +274,15 @@
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'">
             <br>
             <br>
-            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_HELPER_TEXT'+i]" ng-change="override()"></label></section>
+            {{openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
+            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" ng-change="override()"></label></section>
             <br>
           </div>
 
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
             </span>
           </span>
 
@@ -304,13 +305,14 @@
           </div>
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'" style="width: 100% !important;display: block">
+            {{openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
             <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" ng-change="override()"></label></section>
             <br>
           </div>
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span style="display: inline-block;width:  100px;">
-              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" ng-change="override()"><i></i>      {{pram.value}} </label>
+              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]" ng-change="override()"><i></i>      {{pram.value}} </label>
             </span>
           </span>
 
@@ -390,7 +392,7 @@
         </label>
 
         <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block" >
-          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer.k"></label></section>
+          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
         </span>
 
 
@@ -448,9 +450,10 @@
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_DROP_DOWN'">
             <br>
+            {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
             <ion-label>{{itm.parametersList[i].value}}</ion-label>
             <ion-item style="padding: 0;margin: 0">
-              <ion-select style="width: 100%;max-width: 100%" multiple="true" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_DROP_DOWN'+i]">
+              <ion-select style="width: 100%;max-width: 100%" multiple="true" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <ion-option *ngFor="let itmPram of selectionData.get(itm.id)">{{itmPram.value}}</ion-option>
               </ion-select>
             </ion-item>
@@ -460,7 +463,7 @@
 
           <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
             <div *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer['OPTION_ANSWER'+i]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [ngModel]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[DROPDOWN_MENU_ONE_VIEW_SELECTED_index+1]" ng-change="override()"><i></i>      {{radio.value}} <br></label>
             </div>
           </div>
 

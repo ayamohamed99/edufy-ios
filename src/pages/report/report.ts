@@ -47,6 +47,7 @@ export class ReportPage {
   ReportQuestionsList;
   hideShowReport = true;
   loadC;
+  questionListForRecovary;
   dailyReportAnswer = {
     // to show the well of comments to spacific
     // student according to its index
@@ -80,6 +81,13 @@ export class ReportPage {
   questionsToBeReset;
   Sellected;
 
+
+  ionViewDidEnter(){
+    if(this.questionListForRecovary){
+      this.dailyReportQuestions = this.questionListForRecovary;
+      this.ReportQuestionsList = this.questionListForRecovary;
+    }
+  }
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
@@ -177,6 +185,7 @@ export class ReportPage {
 
         // let temp2 = reportQuestinsFirst;
 
+        this.questionListForRecovary = this.dailyReportQuestions;
         this.ReportQuestionsList = this.dailyReportQuestions ;
 
         for(let oneClass of this.classesList){
@@ -484,7 +493,10 @@ export class ReportPage {
         editQuestionAllowed: this.editQuestionAllowed,
         classId:this.selectedClassId
       });
+
     }
+
+
   }
 
   getNewInstanceOf(obj) {
@@ -846,14 +858,11 @@ export class ReportPage {
             console.log(qId);
             for (let answer of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId])) {
               console.log(answer);
-              for (let answerTemp of this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer]) {
+              for(let answerTemp of this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer]) {
                 console.log(answerTemp);
                 console.log(studentID);
                 if (answerTemp == studentID) {
-                  this.dailyReportAnswerForSelectedStudent.push({
-                    "questionId": qId,
-                    "answer": answer
-                  });
+                  this.dailyReportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
                   console.log(this.dailyReportAnswerForSelectedStudent);
                 }
               }
@@ -909,15 +918,13 @@ export class ReportPage {
               console.log(answerTemp);
               console.log(studentID);
               if (answerTemp == oneStudentCheckedId) {
-                this.dailyReportAnswerForSelectedStudent.push({
-                  "questionId": qId,
-                  "answer": answer
-                });
+                this.dailyReportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
                 console.log(this.dailyReportAnswerForSelectedStudent);
               }
             }
           }
         }
+
         if (this.dailyReportAnswerForSelectedStudent.length == 0) {
           this.isSave = true;
           this.isNotValid = false;

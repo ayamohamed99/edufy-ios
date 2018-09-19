@@ -22,6 +22,9 @@ import {DailyReportService} from "../../services/dailyreport";
   templateUrl: 'report-template.html',
 })
 export class ReportTemplatePage{
+  MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index;
+  DROPDOWN_MENU_ONE_VIEW_SELECTED_index;
+  SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX;
   console = console;
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   PageName;
@@ -46,9 +49,16 @@ export class ReportTemplatePage{
   isUserEditing;
   selectedClassId;
   dateForData;
+  recoveryQuestion;
 
-  addCount(){
-    this.countParameters +=this.countParameters;
+  openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i){
+    this.MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index = i;
+  }
+  openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i){
+    this.DROPDOWN_MENU_ONE_VIEW_SELECTED_index=i;
+  }
+  openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i){
+    this.SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX=i;
   }
   removeCount(){
     this.countParameters = 0;
@@ -61,6 +71,7 @@ export class ReportTemplatePage{
     this.reportTemplate ="";
     this.drQuestion = [];
     this.drQuestion = this.navParams.get('template');
+    this.recoveryQuestion = this.navParams.get('template');
     this.selectedClassId = this.navParams.get('classId');
     ////PageName
     let selectedListOfStudents = [];
@@ -144,6 +155,10 @@ export class ReportTemplatePage{
 
 
 
+  }
+
+  ionViewWillLeave(){
+    this.drQuestion = this.recoveryQuestion;
   }
 
   callDataAndWait(){
