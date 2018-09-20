@@ -45,6 +45,7 @@
     "com-sarriaroman-photoviewer": "^1.1.18",
     "cordova": "^8.0.0",
     "cordova-android": "7.0.0",
+    "cordova-android-support-gradle-release": "^1.4.4",
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-advanced-http": "^1.11.1",
@@ -100,12 +101,15 @@
       "cordova-plugin-advanced-http": {},
       "cordova-plugin-background-mode": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-datepicker": {}
+      "cordova-plugin-datepicker": {},
+      "cordova-android-support-gradle-release": {
+        "ANDROID_SUPPORT_VERSION": "27.+"
+      }
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

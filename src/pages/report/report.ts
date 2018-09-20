@@ -407,8 +407,8 @@ export class ReportPage {
       studentList[j].reportChecked = false;
       this.showAllButton = false;
     }
-
     this.studentsList = [];
+    this.isChecked = [];
   }
 
   whenOpen(itmRef,classId,index,name){
@@ -1237,6 +1237,8 @@ export class ReportPage {
           value[i] = answersQuestionList[i];
 
         }
+        console.log('SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED');
+        console.log(value);
         return value;
       case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
       case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
