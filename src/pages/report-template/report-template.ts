@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {
   FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform,
-  ToastController
+  ToastController, ViewController
 } from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -65,7 +65,7 @@ export class ReportTemplatePage{
   }
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
-              private toastCtrl: ToastController) {
+              private toastCtrl: ToastController, private viewCtrl:ViewController) {
 
     //this is your html write the directive here
     this.reportTemplate ="";
@@ -141,20 +141,29 @@ export class ReportTemplatePage{
 
     if (platform.is('core')) {
       this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.callDataAndWait();
+      for(let i=0; i<this.drQuestion.length;i++){
+        if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+          this.callDataAndWait();
+          break;
+        }
+      }
     } else {
       storage.get(this.localStorageToken).then(
         val => {
           this.dailyReportServ.putHeader(val);
-          this.callDataAndWait();
+          for(let i=0; i<this.drQuestion.length;i++){
+            if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+              this.callDataAndWait();
+              break;
+            }
+          }
         });
 
     }
+  }
 
-
-
-
-
+  close(){
+    this.viewCtrl.dismiss({name:'dismissed'});
   }
 
   ionViewWillLeave(){

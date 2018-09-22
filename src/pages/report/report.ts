@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, NavController, NavParams, Platform,
+  AlertController, IonicPage, LoadingController, ModalController, NavController, NavParams, Platform,
   ToastController
 } from 'ionic-angular';
 import {AccountService} from "../../services/account";
@@ -91,7 +91,8 @@ export class ReportPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
-              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker, private toastCtrl:ToastController) {
+              public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
+              private toastCtrl:ToastController, private modalCtrl:ModalController) {
     this.isAll = false;
     this.pageName = this.accountServ.reportPage;
     const date = new Date().toISOString().substring(0, 10);
@@ -415,6 +416,8 @@ export class ReportPage {
     this.selectedClassId = classId;
     this.hideShowReport = true;
     let ref = itmRef;
+    this.studentsList = [];
+    this.isChecked = [];
     ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
     this.getStudentsAnswer(classId,index,name);
   }
@@ -480,9 +483,9 @@ export class ReportPage {
         this.ReportQuestionsList = oneClass.reportTemplate;
       }
     }
-
+    let model;
     if(this.ReportQuestionsList) {
-      this.navCtrl.push(ReportTemplatePage, {
+      model = this.modalCtrl.create(ReportTemplatePage, {
         selected: selectedStudents,
         template: this.ReportQuestionsList,
         reportDate: this.dateView,
@@ -493,9 +496,17 @@ export class ReportPage {
         editQuestionAllowed: this.editQuestionAllowed,
         classId:this.selectedClassId
       });
+      model.present();
 
     }
 
+    model.onDidDismiss(data => {
+      this.studentsList = [];
+      this.isChecked = [];
+      this.classesList = [];
+      this.selectedMultiStudent = [];
+      this.getAllClasses();
+    });
 
   }
 
