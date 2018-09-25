@@ -228,7 +228,7 @@
                 <label >
                   <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber+i"
                          ng-change="disableNote(dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0],itm.questionNumber)"
-                         [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
+                         [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{itm.parametersList[i].value}}
                 </label>
@@ -247,7 +247,7 @@
               <label class="textarea">
                 <textarea  [disabled]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]"
                            rows="3" class="custom-scroll"
-                           [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
+                           [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>

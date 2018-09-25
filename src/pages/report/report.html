@@ -31,8 +31,7 @@
 
         <div *ngIf="showAllButton">
           <ion-row *ngIf="itm.noOfAllStudent > 0">
-            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,itm.studentsList,-1,false,isAll,i)"
-                          style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>
+            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(itm.classId, isAll, i, -1, studentsList)" style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>
             <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
           </ion-row>
         </div>
@@ -67,7 +66,7 @@
 
     <div *ngIf="showAllButton">
       <ion-row *ngIf="studentsList.length > 0">
-        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="checkedStudent(-1,-1,studentsList,-1,false,stud.reportChecked,0)"
+        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].classId, isAll, i, -1, studentsList)"
                       style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>
         <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
       </ion-row>

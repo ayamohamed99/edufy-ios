@@ -678,10 +678,10 @@ export class ReportPage {
       let textTemp = 0;
       for (let d = 0; d < defailtValueArray.length; d++) {
         if (defailtValueArray[d].key == "OPTION_HELPER_TEXT") {
-          textTemp = d+1;
-          val['OPTION_HELPER_TEXT'+d] = defailtValueArray[d].value;
+          textTemp = d;
+          val[d] = defailtValueArray[d].value;
         } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
-          val['OPTION_ANSWER'+textTemp] = defailtValueArray[d].value;
+          val[textTemp+1] = defailtValueArray[d].value;
         }
 
       }
@@ -780,9 +780,9 @@ export class ReportPage {
       for (var d = 0; d < defailtValueArray.length; d++) {
         if (defailtValueArray[d].key == "OPTION_DROP_DOWN") {
           tempDrop = d;
-          val["OPTION_DROP_DOWN"+d] = "";
+          val[d] = "";
         } else if (defailtValueArray[d].key == "OPTION_ANSWER") {
-          val["OPTION_ANSWER"+(tempDrop+1)] = defailtValueArray[d].value;
+          val[tempDrop+1] = defailtValueArray[d].value;
         }
 
       }
@@ -944,10 +944,10 @@ export class ReportPage {
           this.isNotValid = false;
           this.isSave = false;
         }
-        for (var i = 0; i < this.dailyReportAnswerForSelectedStudent.length; i++) {
-          var questionIdGroup = this.dailyReportServ.dailyReportClassQuestionsGroups[this.dailyReportAnswerForSelectedStudent[i].questionId];
-          var sameAnswerStudentsIds = questionIdGroup[this.dailyReportAnswerForSelectedStudent[i].answer];
-          var sameAnswers = true;
+        for (let i = 0; i < this.dailyReportAnswerForSelectedStudent.length; i++) {
+          let questionIdGroup = this.dailyReportServ.dailyReportClassQuestionsGroups[this.dailyReportAnswerForSelectedStudent[i].questionId];
+          let sameAnswerStudentsIds = questionIdGroup[this.dailyReportAnswerForSelectedStudent[i].answer];
+          let sameAnswers = true;
           for (let key of this.studnetsAnswersList) {
             var intKey = parseInt(key, 10);
             if (!sameAnswerStudentsIds.includes(intKey)) {
@@ -987,7 +987,7 @@ export class ReportPage {
 
       }
     } else {
-      for (var i = 0; i < this.dailyReportQuestions.length; i++) {
+      for (let i = 0; i < this.dailyReportQuestions.length; i++) {
         if (!questionsToBeReset[i]) {
           // not same answer>>> display empty answer.
           // $('#' + $scope.dailyReportQuestions[i].id).removeClass("ng-hide");
@@ -1330,6 +1330,264 @@ export class ReportPage {
   }
 
 
+  AnswersBeforeEdit;
+  selectClass (classId, checked, index, studentid, studentList) {
+    if(studentid == -1){
+      for (let i in studentList) {
+        studentList[i].reportChecked = this.isAll;
+      }
+    }else {
+
+      let oneisNot = 0;
+      for (let j in studentList) {
+        if (studentList[j].reportChecked == true) {
+          oneisNot++;
+        }
+      }
+    }
+    this.selectedClass = classId;
+
+    let foundOneChecked = false;
+    for (let i in studentList) {
+      if(studentList[i].reportChecked){
+        foundOneChecked = true;
+        break;
+      }
+    }
+
+    if(foundOneChecked){
+      this.hideShowReport = false;
+    }else{
+      this.hideShowReport = true;
+    }
+
+    // // *******
+    //
+    // this.getClassGroups();
+    //
+    // var seconds = Math.floor(200000 / 1000);
+    // var days = Math.floor(seconds / 86400);
+    // var hours = Math.floor((seconds % 86400) / 3600);
+    // var minutes = Math.floor(((seconds % 86400) % 3600) / 60);
+    //
+    // // 200000 -->> is  3 minutes
+    //
+    // $interval(getClassGroups , 200000);
+    //
+    // // *******
+
+
+    this.firstStudentId = null;
+    this.listOfFinalized = [];
+    if (this.classesList[index].noOfStudentDailyReportFinalized == 0) {
+
+      this.isNotValid = false;
+      this.isSave = true;
+      if (checked == true) {
+
+        // this.isAbsent = false;
+        // this.isPresent = true;
+
+        // $rootScope.isdisabled = false;
+
+        // var studentsList = this.getStudents();
+        var studentsList = this.studentsList;
+
+        for (var i = 0; i < studentsList.length; i++) {
+          var studentId = studentsList[i].studentId ;
+
+          this.isChecked[i] = {};
+          this.isChecked[i].checked = true;
+          this.selectedMultiStudentId[i] = {};
+          this.selectedMultiStudentId[i].id = studentId;
+          this.selectedMultiStudent[i] = studentId;
+
+          // if(!this.attendanceStudents[studentId]) {
+          //   this.attendanceStudents[studentId] = {isAbsent: false};
+          // }
+        }
+
+      } else {
+
+        // this.isAbsent = false;
+        // this.isPresent = false;
+
+        // this.isdisabled = true;
+        this.Sellected = 1000;
+
+        // var studentsList = $scope.getStudents();
+        studentsList = this.studentsList;
+
+        for (let i = 0; i < studentsList.length; i++) {
+          this.isChecked[i] = {};
+          this.isChecked[i].checked = false;
+          this.selectedMultiStudentId = [];
+          this.selectedMultiStudent = [];
+          this.isNotValid = true;
+          // $rootScope.isdisabled = true;
+          this.isSave = true;
+
+          // $scope.attendanceStudents=[];
+        }
+
+      }
+
+    } else {
+
+      // showEmptyDailyReportTemplate();
+
+      var firstStudentAnswers = [];
+
+      if (checked == true) {
+
+        // $scope.isAbsent = false;
+        // $scope.isPresent = true;
+
+
+        this.isSave = false;
+        this.isNotValid = false;
+        // this.isdisabled = false;
+        this.selectedMultiStudentId = [];
+        this.selectedMultiStudent = [];
+
+        //$scope.attendanceStudents=[];
+
+        this.isChecked = [];
+        var done = false;
+        this.studnetsAnswersList = [];
+        var dailyReportAnswerForSelectedStudent = [];
+        this.questionsToBeReset = {};
+
+        // var studentsList = $scope.getStudents();
+        studentsList = this.studentsList;
+
+        for (let i = 0; i < studentsList.length; i++) {
+
+          let studentId = studentsList[i].studentId;
+
+          this.isChecked[i] = {};
+          this.isChecked[i].checked = true;
+          this.selectedMultiStudentId[i] = {};
+          this.selectedMultiStudentId[i].id = studentId;
+          this.selectedMultiStudent[i] = studentId;
+
+          // if(!this.attendanceStudents[studentId] || $scope.attendanceStudents[studentId].isAbsent ==null || $scope.attendanceStudents[studentId].isAbsent==undefined){
+          //   $scope.attendanceStudents[studentId] = {isAbsent:false};
+          // }
+
+          if (studentsList[i].reportFinalized && !done) {
+            done = true;
+            for (let qId of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups)) {
+              for (let answer of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId])) {
+                for(let id of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer])) {
+                  if (this.studnetsAnswersList[this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer][id]]) {
+                    this.studnetsAnswersList[this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer][id]].push({
+                      "questionId": qId,
+                      "answer": answer
+                    });
+                  } else {
+                    var answersList = [];
+                    answersList.push({
+                      "questionId": qId,
+                      "answer": answer
+                    });
+                    this.studnetsAnswersList[this.dailyReportServ.dailyReportClassQuestionsGroups[qId][answer][id]] = answersList;
+                  }
+
+                }
+              }
+            }
+          }
+
+          //
+
+        }
+
+        if (Object.keys(this.studnetsAnswersList).length > 0) {
+          var counter = 0;
+          for (let key of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups)) {
+            var intKey = parseInt(key, 10);
+
+            var countAnswers = 0 ;
+            // we need to check if answer is for selected student after adding attendance view
+
+            for (let a of Object.keys(this.dailyReportServ.dailyReportClassQuestionsGroups[intKey])) {
+              let id = this.dailyReportServ.dailyReportClassQuestionsGroups[intKey][a];
+              let studentFound = false;
+              for(let s of Object.keys(studentsList)){
+                if(studentsList[s].studentId == id){
+                  studentFound = true;
+                  break;
+                }
+              }
+              if(studentFound){
+                countAnswers++;
+              }
+            }
+
+            if (countAnswers > 1) {
+              this.questionsToBeReset[counter++] = false;
+            } else {
+              this.questionsToBeReset[counter++] = true;
+            }
+          }
+
+          this.resetDailyReportTemplate(this.questionsToBeReset, this.studnetsAnswersList[Object.keys(this.studnetsAnswersList)[0]]);
+
+        }
+
+        // saving Answers  in the first Time when open Class.
+
+        firstStudentAnswers = this.studnetsAnswersList;
+        this.AnswersBeforeEdit = {};
+        if (firstStudentAnswers) {
+          for (let i in this.selectedMultiStudent) {
+            var selectedStudent = this.selectedMultiStudent[i];
+            for (let studentID in firstStudentAnswers) {
+              if (studentID == selectedStudent) {
+                this.AnswersBeforeEdit = firstStudentAnswers[studentID];
+              }
+            }
+          }
+        }
+
+
+
+        // keeping track of  StudentAnswers before editting
+
+      } else {
+
+        // $scope.isAbsent = false;
+        // $scope.isPresent = false;
+        //
+        //
+        // $rootScope.isdisabled = true;
+        this.Sellected = 1000;
+
+        // var studentsList = $scope.getStudents();
+        studentsList = this.studentsList;
+
+        for (let i = 0; i < studentsList.length; i++) {
+          this.isChecked[i] = {};
+          this.isChecked[i].checked = false;
+          this.selectedMultiStudentId = [];
+          this.selectedMultiStudent = [];
+
+          // $scope.attendanceStudents=[];
+
+          this.isNotValid = true;
+          this.isSave = true;
+          // $rootScope.isdisabled = true;
+
+        }
+
+        this.resetDailyReportTemplate(null,null);
+
+      }
+
+    }
+
+  }
 
 
   presentToast(message) {
