@@ -36,8 +36,20 @@ page-report-template {
   .select-ios .select-placeholder {
     color: #222;
   }
+  .fab[mini] {
+    margin: 8px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+  }
+
   .fab {
     contain: layout;
+    background-color: #0A73A4;
+  }
+
+  ion-fab[bottom] {
+    bottom: 60px;
   }
 
   .imgOfRadio{

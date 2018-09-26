@@ -610,25 +610,25 @@
 
 
 
-  <ion-fab bottom right style="padding-bottom: 60px" #fab>
+  <ion-fab bottom right #fab>
     <button ion-fab mini><ion-icon name="more"></ion-icon></button>
-    <ion-fab-list side="top" style="padding-bottom: 50px">
+    <ion-fab-list side="top" >
 
 
-      <button ion-fab (click)="fabSelected('rest',fab)">
-        <ion-icon name="sync"></ion-icon>
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)">
+        <ion-icon color="light" name="sync"></ion-icon>
         <ion-label>Rest</ion-label>
       </button>
 
 
-      <button ion-fab (click)="fabSelected('save',fab)">
-        <ion-icon name="cloud-upload"></ion-icon>
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)">
+        <ion-icon color="light" name="cloud-upload"></ion-icon>
         <ion-label>Save</ion-label>
       </button>
 
 
-      <button ion-fab (click)="fabSelected('approve',fab)">
-        <img src="assets/icon/approved_black.png">
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)">
+        <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
         <ion-label>Approve</ion-label>
       </button>
 
