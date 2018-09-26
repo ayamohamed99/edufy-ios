@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {
+  AlertController,
   FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform,
   ToastController, ViewController
 } from 'ionic-angular';
@@ -50,7 +51,31 @@ export class ReportTemplatePage{
   selectedClassId;
   dateForData;
   recoveryQuestion;
-
+  conflict = [];
+  imgsFoodName = ['All', 'Few', 'Half', 'Little','More', 'Most', 'None', 'Quarter','Some'];
+  imgsMilkName = ['All', 'None', 'Some'];
+  imgsMoodName = ['Active', 'Aggressive', 'Cheerful', 'Cranky','Different', 'Difficult', 'Energetic',
+                  'Excellent','Fazzy', 'Good', 'Happy', 'Irretated', 'Lazy', 'Missed My Mummy','Naughty',
+                  'Normal', 'On_off', 'Quiet','Sad', 'Sick', 'Sleepy', 'Tired', 'Unhappy', 'Very Good'];
+  showNames(){
+    let selectedListOfStudents = [];
+    selectedListOfStudents = this.navParams.get('selected');
+    let studentsNames = "";
+    for(let i=0;i<selectedListOfStudents.length;i++){
+      if(i==(selectedListOfStudents.length -1)){
+        studentsNames += selectedListOfStudents[i].studentName
+      }else {
+        studentsNames += selectedListOfStudents[i].studentName + " & ";
+      }
+    }
+    if(selectedListOfStudents.length > 1) {
+      this.alrtCtrl.create({
+        title: 'Selected students of this report',
+        subTitle: studentsNames,
+        buttons: ['OK']
+      }).present();
+    }
+  }
   openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i){
     this.MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index = i;
   }
@@ -63,9 +88,50 @@ export class ReportTemplatePage{
   removeCount(){
     this.countParameters = 0;
   }
+
+  setImageOrLable(question,pramName){
+    let pramNameFound = false;
+    if(question=='Food'){
+      for(let name of this.imgsFoodName){
+        if(name == pramName){
+          pramNameFound = true;
+        }
+      }
+      if(pramNameFound) {
+        return 'Food';
+      }else{
+        return 'Label';
+      }
+    }else if(question=='Mood'){
+      for(let name of this.imgsMoodName){
+        if(name == pramName){
+          pramNameFound = true;
+        }
+      }
+      if(pramNameFound) {
+        return 'Mood';
+      }else{
+        return 'Label';
+      }
+    }else if(question=='Milk'){
+      for(let name of this.imgsMilkName){
+        if(name == pramName){
+          pramNameFound = true;
+        }
+      }
+      if(pramNameFound) {
+        return 'Milk';
+      }else{
+        return 'Label';
+      }
+    }else{
+      return 'Label';
+    }
+
+  }
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
-              private toastCtrl: ToastController, private viewCtrl:ViewController) {
+              private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController) {
 
     //this is your html write the directive here
     this.reportTemplate ="";
@@ -98,6 +164,9 @@ export class ReportTemplatePage{
     this.dailyReportQuestionsRecovery = this.navParams.get('dailyReportQuestionsRecovery');
     this.dailyReportQuestionsEditParamTemps = this.navParams.get('dailyReportQuestionsEditParamTemps');
     this.editQuestionAllowed = this.navParams.get('editQuestionAllowed');
+    if(selectedListOfStudents.length > 1) {
+      this.conflict = this.navParams.get('reportConflict');
+    }
 
     let editDropOrNot = true;
     let editSingleOrNot = true;

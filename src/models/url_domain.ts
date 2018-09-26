@@ -4,7 +4,7 @@ export class Url_domain{
   // PRODUCTION:"http://104.198.175.198";
   // LOCAL:"http://192.168.1.5:8080";
 
-  Domain = "http://104.198.175.198";
+  Domain = "";
 
 
   //      proxy
@@ -15,7 +15,7 @@ export class Url_domain{
   //   },
   //   {
   //     "path":"/authentication",
-  //     "proxyUrl": http://192.168.1.5:8080/authentication"
+  //     "proxyUrl": "http://192.168.1.5:8080/authentication"
   //   }
   //   ],
   // "Production":"104.198.175.198"

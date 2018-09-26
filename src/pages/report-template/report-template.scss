@@ -36,9 +36,14 @@ page-report-template {
   .select-ios .select-placeholder {
     color: #222;
   }
-
   .fab {
     contain: layout;
+  }
+
+  .imgOfRadio{
+    width: 40px;
+    height: 40px;
+    display: inline;
   }
 
   .dateTopCenterBoldGray{
@@ -98,6 +103,8 @@ page-report-template {
     border-width: 2px;
     border-style: solid;
     border-color: #787878;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   .radio:checked::before

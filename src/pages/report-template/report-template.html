@@ -5,7 +5,7 @@
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title text-center>{{PageName}}</ion-title>
+    <ion-title text-center (click)="showNames()">{{PageName}}</ion-title>
     <ion-buttons right>
       <button ion-button icon-only (click)="oonClickonMenuCalender()">
         <ion-icon name="md-calendar"></ion-icon>
@@ -28,9 +28,14 @@
 
       <!--Type "TEXT_QUESTION"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'TEXT_QUESTION'">
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
+
         <label class="textarea">
     <textarea rows="3" class="custom-scroll" style="width: 100%" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer">
     </textarea>
@@ -42,7 +47,13 @@
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
     itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER'">
-        <label class="formLabel">{{itm.question}}:<br><br></label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
         <div class="inline-group">
           <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
             <label >
@@ -60,7 +71,13 @@
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
     itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR'">
 
-        <label class="formLabel">{{itm.question}} :<br><br></label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <div *ngFor="let param of itm.parametersList; let i = index" col-6 style="display: block">
 
@@ -82,7 +99,13 @@
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'">
-        <label class="formLabel">{{itm.question}} :<br><br></label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
         <div class="inline-group">
 
           <div *ngFor="let pram of itm.parametersList;let i = index" class="LopContain">
@@ -118,10 +141,14 @@
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT'">
 
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
         <div class="row">
           <div class="col col-12 inline-group">
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
@@ -162,14 +189,44 @@
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
 
-        <label class="formLabel">{{itm.question}} : <br><br></label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <div *ngFor="let pram of itm.parametersList" class="LopContain">
-          <label>
-            <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
-            <i></i>
-            {{pram.value}}
-          </label>
+          <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Food'" style="display: inline-block">
+            <ion-row>
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <img [src]="'assets/food/'+pram.value+'.png'" class="imgOfRadio">
+            </ion-row>
+          </div>
+
+          <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'"style="display: inline-block">
+            <ion-row>
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <img [src]="'assets/mood/'+pram.value+'.png'" class="imgOfRadio">
+            </ion-row>
+          </div>
+
+          <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'"style="display: inline-block">
+            <ion-row>
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <img [src]="'assets/milk/'+pram.value+'.png'" class="imgOfRadio">
+            </ion-row>
+          </div>
+
+          <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Label'">
+            <label>
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <i></i>
+              {{pram.value}}
+            </label>
+          </div>
+
         </div>
 
       </div>
@@ -177,9 +234,14 @@
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
+
         <div class="">
           <div class="inline-group">
 
@@ -216,9 +278,13 @@
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION'">
 
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <div class="row">
           <div class="col col-12">
@@ -261,9 +327,12 @@
       <!--Type "SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED';let i = index;">
 
-        <label class="formLabel">
-          {{itm.question}} :
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
 
         <div *ngFor=" let pram of itm.parametersList; let i = index">
 
@@ -294,9 +363,13 @@
       <!--Type "MULTI_SHORT_TEXT_ONE_VIEW_SELECTED"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED';let i = index;">
 
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <span *ngFor=" let pram of itm.parametersList; let i = index;">
 
@@ -330,6 +403,8 @@
           <label class="formLabel" style="width:initial ;float: left">
           {{itm.question}} :
         </label>
+
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
 
           <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="editSaveQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == false" [hidden]="!editQuestionAllowed">
             <ion-icon style="font-size: 20px;" name="create"></ion-icon>
@@ -372,9 +447,13 @@
 
       <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER';let i = index;">
-        <label class="formLabel">
-          {{itm.question}} :<br><br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <span *ngFor="let pram of itm.parametersList; let i = index;" class="longOneAnswer">
           <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
@@ -387,9 +466,13 @@
       <!--Type "CONSTANT_SHORT_HELPER_TEXT_QUESTION"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION';">
 
-        <label class="formLabel">
-          {{itm.question}} :<br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block;" >
           <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="dailyReportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
@@ -405,9 +488,13 @@
       <!--Type "SHORT_HELPER_TEXT_QUESTION"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION';let i = index;">
 
-        <label class="formLabel">
-          {{itm.question}} :<br>
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
+        <br>
 
         <div class="row" style="">
 
@@ -436,10 +523,12 @@
       <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_AR"-->
       <div *ngIf="itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
 
-        <label class="formLabel">
-          {{itm.question}} :
-        </label>
-
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
 
 
         <div *ngFor=" let pram of itm.parametersList; let i = index">
@@ -483,9 +572,12 @@
             && itm.dailyReportQuestionType.title != 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_HELPER_TEXT_QUESTION'
              && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' && itm.dailyReportQuestionType.title != 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'
               && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
-        <label class="formLabel">
-          {{itm.question}} :
-        </label>
+        <ion-row>
+          <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
+            {{itm.question}} :
+          </label>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+        </ion-row>
         <br>
         <div class="row">
           <div class="col col-4">

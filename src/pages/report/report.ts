@@ -413,6 +413,8 @@ export class ReportPage {
   }
 
   whenOpen(itmRef,classId,index,name){
+    this.hideShowReport = true;
+    this.isAll = false;
     this.selectedClassId = classId;
     this.hideShowReport = true;
     let ref = itmRef;
@@ -494,7 +496,8 @@ export class ReportPage {
         dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
         dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
         editQuestionAllowed: this.editQuestionAllowed,
-        classId:this.selectedClassId
+        classId:this.selectedClassId,
+        reportConflict:this.questionsToBeReset
       });
       model.present();
 
@@ -505,6 +508,7 @@ export class ReportPage {
       this.isChecked = [];
       this.classesList = [];
       this.selectedMultiStudent = [];
+      this.questionsToBeReset = [];
       this.getAllClasses();
     });
 
