@@ -32,7 +32,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -51,7 +51,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
         <div class="inline-group">
@@ -75,7 +75,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -103,7 +103,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
         <div class="inline-group">
@@ -145,7 +145,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -193,7 +193,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -238,7 +238,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -282,7 +282,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -331,7 +331,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
 
         <div *ngFor=" let pram of itm.parametersList; let i = index">
@@ -367,7 +367,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -404,9 +404,9 @@
           {{itm.question}} :
         </label>
 
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
-          <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="editSaveQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == false" [hidden]="!editQuestionAllowed">
+          <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;margin-bottom: 20px;float: right" (click)="editSaveQuestion(itm.questionNumber)" *ngIf="itm.editQuestion == false && showEditButton()" [hidden]="!editQuestionAllowed">
             <ion-icon style="font-size: 20px;" name="create"></ion-icon>
           </button>
 
@@ -451,7 +451,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -470,7 +470,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -492,7 +492,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
 
@@ -527,7 +527,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
 
 
@@ -576,7 +576,7 @@
           <label class="formLabel" style="float: left;width: calc(100% - 1.2em);">
             {{itm.question}} :
           </label>
-          <ion-icon style="float: right" name="alert" color="danger" *ngIf="!conflict[drIndex]&&conflict.length!=0"></ion-icon>
+          <ion-icon style="float: right" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
         </ion-row>
         <br>
         <div class="row">
@@ -615,19 +615,20 @@
     <ion-fab-list side="top" >
 
 
-      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)">
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
         <ion-icon color="light" name="sync"></ion-icon>
         <ion-label>Rest</ion-label>
       </button>
 
 
-      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)">
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showButtonOfSaveOrUpdate()">
         <ion-icon color="light" name="cloud-upload"></ion-icon>
-        <ion-label>Save</ion-label>
+        <ion-label *ngIf="showSaveOrUpdate() == 'save'">Save</ion-label>
+        <ion-label *ngIf="showSaveOrUpdate() == 'update'">Update</ion-label>
       </button>
 
 
-      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)">
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)" *ngIf="showApproveButton()">
         <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
         <ion-label>Approve</ion-label>
       </button>

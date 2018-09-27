@@ -62,7 +62,14 @@ export class DailyReportService {
       }));
   }
 
+  approveReport(date,classId){
+    let requestURL = '/authentication/dailyReport.ent/approveDailyReport.ent?date=' + date + "&classId=" + classId;
+    return this.http.put(this.DomainUrl.Domain + requestURL,null, this.httpOptions);
+  }
 
-
+  deleteStudnetReport(studentId, date) {
+    let requestURL = '/authentication/dailyReport.ent?studentId=' + studentId + '&date=' + date;
+    return this.http.delete(this.DomainUrl.Domain + requestURL,this.httpOptions);
+  }
 
 }

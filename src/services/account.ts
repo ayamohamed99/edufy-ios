@@ -28,6 +28,7 @@ export class AccountService{
 
   private _reportPage:string;
   private _reportId:any;
+
   constructor(private http: HttpClient) {
     this.DomainUrl=new Url_domain();
   }

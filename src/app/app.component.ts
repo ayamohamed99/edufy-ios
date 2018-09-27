@@ -323,8 +323,18 @@ export class MyApp {
   }
 
   knowFeatures(data:any){
-    this.appearNotification = data.notificationActivated;
-    this.appearDailyReport = data.dailyReportActivated;
+    if(this.accountServ.getUserRole().notificationView && data.notificationActivated){
+      this.appearNotification = true;
+    }else{
+      this.appearNotification = false;
+    }
+
+    if(this.accountServ.getUserRole().dailyReportView && data.dailyReportActivated){
+      this.appearDailyReport = true;
+    }else{
+      this.appearDailyReport = false;
+    }
+
   }
 
   knowCustomReport(data){

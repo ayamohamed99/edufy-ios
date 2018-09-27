@@ -480,9 +480,12 @@ export class ReportPage {
       }
     }
 
+    let SelectedClass;
+
     for(let oneClass of this.classesList){
       if(oneClass.classId == this.selectedClassId){
         this.ReportQuestionsList = oneClass.reportTemplate;
+        SelectedClass = oneClass;
       }
     }
     let model;
@@ -491,12 +494,14 @@ export class ReportPage {
         selected: selectedStudents,
         template: this.ReportQuestionsList,
         reportDate: this.dateView,
+        selectedDate:this.selectedDate,
         dailyReportAnswer: this.dailyReportAnswer,
         dailyReportAnswersNoOfItems: this.dailyReportAnswersNoOfItems,
         dailyReportQuestionsRecovery: this.dailyReportQuestionsRecovery,
         dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
         editQuestionAllowed: this.editQuestionAllowed,
-        classId:this.selectedClassId,
+        class:SelectedClass,
+        theClassIsSelected:this.isAll,
         reportConflict:this.questionsToBeReset
       });
       model.present();

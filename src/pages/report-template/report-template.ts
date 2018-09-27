@@ -49,6 +49,8 @@ export class ReportTemplatePage{
   overrideAnswer = false;
   isUserEditing;
   selectedClassId;
+  selectedClass;
+  selectedReportDate;
   dateForData;
   recoveryQuestion;
   conflict = [];
@@ -57,6 +59,11 @@ export class ReportTemplatePage{
   imgsMoodName = ['Active', 'Aggressive', 'Cheerful', 'Cranky','Different', 'Difficult', 'Energetic',
                   'Excellent','Fazzy', 'Good', 'Happy', 'Irretated', 'Lazy', 'Missed My Mummy','Naughty',
                   'Normal', 'On_off', 'Quiet','Sad', 'Sick', 'Sleepy', 'Tired', 'Unhappy', 'Very Good'];
+
+
+
+
+  ///////////////////// HERE ORGANIZE THE VIEW//////////////////////
   showNames(){
     let selectedListOfStudents = [];
     selectedListOfStudents = this.navParams.get('selected');
@@ -91,7 +98,8 @@ export class ReportTemplatePage{
 
   setImageOrLable(question,pramName){
     let pramNameFound = false;
-    if(question=='Food'){
+    let qName = question.toLowerCase();
+    if(qName.includes('food')|| qName.includes('snack') || qName.includes('breakfast') || qName.includes('lunch') || qName.includes('late snack') || qName.includes('meal') || qName.includes('extra meal')){
       for(let name of this.imgsFoodName){
         if(name == pramName){
           pramNameFound = true;
@@ -102,7 +110,7 @@ export class ReportTemplatePage{
       }else{
         return 'Label';
       }
-    }else if(question=='Mood'){
+    }else if(qName.includes('mood') || qName.includes('behaviour') || qName.includes('my day was')){
       for(let name of this.imgsMoodName){
         if(name == pramName){
           pramNameFound = true;
@@ -113,7 +121,7 @@ export class ReportTemplatePage{
       }else{
         return 'Label';
       }
-    }else if(question=='Milk'){
+    }else if(qName.includes('milk') || qName.includes('milk / juice') || qName.includes('juice') || qName.includes('drinks') || qName.includes('drink')){
       for(let name of this.imgsMilkName){
         if(name == pramName){
           pramNameFound = true;
@@ -129,6 +137,91 @@ export class ReportTemplatePage{
     }
 
   }
+  showSaveOrUpdate(){
+
+    if(this.navParams.get('theClassIsSelected')){
+      if(this.selectedClass.noOfStudentDailyReportFinalized == 0){
+        return 'save';
+      }else{
+        return 'update';
+      }
+    }else{
+      let foundStudentThatFinalized = false;
+      for(let student of this.navParams.get('selected')){
+        if(student.reportFinalized){
+          foundStudentThatFinalized = true;
+        }
+      }
+
+      if(foundStudentThatFinalized){
+        return 'update';
+      }else{
+        return 'save';
+      }
+    }
+  }
+
+  showButtonOfSaveOrUpdate(){
+    if(this.accountServ.reportId == -1) {
+      if (this.showSaveOrUpdate() == 'save' && this.accountServ.getUserRole().dailyReportCreate) {
+        return true;
+      } else if (this.showSaveOrUpdate() == 'update' && this.accountServ.getUserRole().dailyReportUpdate) {
+        return true;
+      } else {
+        return false;
+      }
+    }else{
+      if (this.showSaveOrUpdate() == 'save' && this.accountServ.getUserRole().reportCreate) {
+        return true;
+      } else if (this.showSaveOrUpdate() == 'update' && this.accountServ.getUserRole().reportUpdate) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  showRestButton(){
+    if(this.accountServ.reportId == -1) {
+      return this.accountServ.getUserRole().dailyReportReset;
+    }else{
+      return this.accountServ.getUserRole().reportReset;
+    }
+  }
+
+  showApproveButton(){
+    if(this.accountServ.reportId == -1) {
+      return this.accountServ.getUserRole().dailyReportApprove;
+    }else{
+      return this.accountServ.getUserRole().reportApprove;
+    }
+  }
+
+  showEditButton(){
+    if(this.accountServ.reportId == -1) {
+      return this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+    }else{
+      return this.accountServ.getUserRole().reportEditQuestionCreate;
+    }
+  }
+
+  showConflict(drIndex){
+    if(this.conflict.length!=0) {
+      if (!this.conflict[drIndex]) {
+        return true;
+      } else {
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
+
+
+
+
+
+  /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
               private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController) {
@@ -138,7 +231,8 @@ export class ReportTemplatePage{
     this.drQuestion = [];
     this.drQuestion = this.navParams.get('template');
     this.recoveryQuestion = this.navParams.get('template');
-    this.selectedClassId = this.navParams.get('classId');
+    this.selectedClassId = this.navParams.get('class').classId;
+    this.selectedClass = this.navParams.get('class');
     ////PageName
     let selectedListOfStudents = [];
     selectedListOfStudents = this.navParams.get('selected');
@@ -152,11 +246,12 @@ export class ReportTemplatePage{
       if (this.accountServ.reportId == -1) {
         this.PageName =  selectedListOfStudents[0].studentName +"'s daily report";
       } else {
-        this.PageName =  selectedListOfStudents[0].studentName +"'s "+this.accountServ.reportPage+" report";
+        this.PageName =  selectedListOfStudents[0].studentName +"'s "+this.accountServ.reportPage;
       }
     }
     /////Date of Page
     this.reportDate = this.navParams.get('reportDate');
+    this.selectedReportDate = this.navParams.get('selectedDate');
 
     this.dailyReportDefultAnswer = this.navParams.get('dailyReportAnswer');
     this.dailyReportAnswer = this.dailyReportDefultAnswer;
@@ -206,7 +301,6 @@ export class ReportTemplatePage{
         }
       }
     }
-
 
     if (platform.is('core')) {
       this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
@@ -468,6 +562,20 @@ export class ReportTemplatePage{
 
   fabSelected(button,fab: FabContainer){
     fab.close();
+
+    let noFinalize = 0;
+    if(this.accountServ.reportId == -1) {
+      noFinalize = this.selectedClass.noOfStudentDailyReportFinalized;
+    }else{
+      noFinalize = this.selectedClass.noOfStudentReportFinalized;
+    }
+    if(button == 'approve'){
+      this.approveDailyReport(this.selectedClassId, this.selectedClass.className, this.selectedClass.grade.gradeName, this.selectedClass.noOfAllStudent, noFinalize);
+    }else if(button == 'save'){
+
+    }else if(button == 'rest'){
+      this.rollbackReport(this.navParams.get('selected')[0].studentId,this.navParams.get('selected')[0].studentName,null,null)
+    }
   }
 
   cancelEditigQuestion(qNumber){
@@ -767,6 +875,98 @@ export class ReportTemplatePage{
     }
   }
 
+
+  approveDailyReport(classId, className, classGradeName, noOfAllStudents, noOfFinalized) {
+
+    let noOfUnFinalized = noOfAllStudents - noOfFinalized;
+    this.alrtCtrl.create({
+      title: 'Approve Report',
+      subTitle: 'Do you want to approve '+classGradeName+ className +' while '+noOfUnFinalized + ' student report(s) pending ?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.load = this.loadCtrl.create({
+              content: "the report is approving now ..."
+            });
+            this.load.present();
+
+            this.dailyReportServ.approveReport(this.selectedReportDate,this.selectedClassId).subscribe(
+              response =>{
+                this.load.dismiss();
+                this.presentToast("The report was Approved");
+              },err=>{
+                this.console.log(err);
+                this.load.dismiss();
+                this.alrtCtrl.create({
+                  title: 'Approve Report',
+                  subTitle: 'The Report didn\'t approved',
+                  buttons: ['Ok']
+                });
+              });
+
+
+          }
+        }
+        ]}).present();
+  }
+
+  rollbackReport(studentId, studentName, selectedDate, classId) {
+    this.alrtCtrl.create({
+      title: 'Reset Student Report',
+      subTitle: 'Are you sure you want to reset '+studentName +' \'s report?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.load = this.loadCtrl.create({
+              content: "the report is now reset..."
+            });
+            this.load.present();
+
+            if(this.navParams.get('selected').length == 1) {
+              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].studentId, this.selectedReportDate).subscribe(
+                response => {
+                  this.load.dismiss();
+                  this.viewCtrl.dismiss(
+                    {closeView:"The report was reset"}
+                  )
+                }, err => {
+                  this.console.log(err);
+                  this.load.dismiss();
+                  this.alrtCtrl.create({
+                    title: 'Reset Student Report',
+                    subTitle: 'The Report didn\'t Reset',
+                    buttons: ['Ok']
+                  });
+                });
+            }else{
+              this.load.dismiss();
+              this.alrtCtrl.create({
+                title: 'Reset Student Report',
+                subTitle: 'You can\'t reset report for mor than one student',
+                buttons: ['Ok']
+              });
+            }
+
+          }
+        }
+      ]}).present();
+  }
 
   presentToast(message) {
     let toast = this.toastCtrl.create({
