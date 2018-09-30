@@ -1190,13 +1190,17 @@ export class ReportTemplatePage{
             }
 
             else if (question.parametersList[j].key == "OPTION_ANSWER") {
-              if (firstTimeFullArray) {
-                answerValueArray[counter] = {};
-                answerValueArray[counter].key = question.parametersList[j].key;
-                counter++;
-                firstTimeFullArray = false;
-              } else {
+              for(let pram of question.parametersList[j]) {
+                if(pram.key == "OPTION_ANSWER") {
+                  if (firstTimeFullArray) {
+                    answerValueArray[counter] = {};
+                    answerValueArray[counter].key = pram.key;
+                    counter++;
+                    firstTimeFullArray = false;
+                  } else {
 
+                  }
+                }
               }
             }
 
@@ -1250,14 +1254,31 @@ export class ReportTemplatePage{
               firstTimeFullArray = true;
             }
 
-            else if (question.parametersList[j].key == "OPTION_ANSWER") {
-              if (firstTimeFullArray) {
-                answerValueArray[counter] = {};
-                answerValueArray[counter].key = question.parametersList[j].key;
-                counter++;
-                firstTimeFullArray = false;
-              } else {
+            else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" || question.parametersList[j].key != "OPTION_HELPER_TEXT") {
+              if(question.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+                for(let pram of question.parametersList[j]){
+                  if (pram.key == "OPTION_ANSWER") {
+                    if (firstTimeFullArray) {
+                      answerValueArray[counter] = {};
+                      answerValueArray[counter].key = pram.key;
+                      counter++;
+                      firstTimeFullArray = false;
+                    } else {
 
+                    }
+                  }
+                }
+              }else {
+                if (question.parametersList[j].key == "OPTION_ANSWER") {
+                  if (firstTimeFullArray) {
+                    answerValueArray[counter] = {};
+                    answerValueArray[counter].key = question.parametersList[j].key;
+                    counter++;
+                    firstTimeFullArray = false;
+                  } else {
+
+                  }
+                }
               }
             }
 
@@ -1409,7 +1430,7 @@ export class ReportTemplatePage{
           title: 'Failed',
           subTitle: errorMsg,
           buttons: ['Ok']
-        });
+        }).present();
     });
 
   }
@@ -1607,14 +1628,31 @@ export class ReportTemplatePage{
                 firstTimeFullArray = true;
               }
 
-              else if (question.parametersList[j].key == "OPTION_ANSWER") {
-                if (firstTimeFullArray) {
-                  answerValueArray[counter] = {};
-                  answerValueArray[counter].key = question.parametersList[j].key;
-                  counter++;
-                  firstTimeFullArray = false;
-                } else {
+              else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" || question.parametersList[j].key != "OPTION_HELPER_TEXT") {
+                if(question.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+                  for(let pram of question.parametersList[j]){
+                    if (pram.key == "OPTION_ANSWER") {
+                      if (firstTimeFullArray) {
+                        answerValueArray[counter] = {};
+                        answerValueArray[counter].key = pram.key;
+                        counter++;
+                        firstTimeFullArray = false;
+                      } else {
 
+                      }
+                    }
+                  }
+                }else {
+                  if (question.parametersList[j].key == "OPTION_ANSWER") {
+                    if (firstTimeFullArray) {
+                      answerValueArray[counter] = {};
+                      answerValueArray[counter].key = question.parametersList[j].key;
+                      counter++;
+                      firstTimeFullArray = false;
+                    } else {
+
+                    }
+                  }
                 }
               }
 
@@ -1684,7 +1722,6 @@ export class ReportTemplatePage{
           counter = 0;
           firstTimeFullArray = true;
           answer = "";
-
           for (let j = 0; j < question.parametersList.length; j++) {
 
             if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
@@ -1696,14 +1733,18 @@ export class ReportTemplatePage{
               firstTimeFullArray = true;
             }
 
-            else if (question.parametersList[j].key == "OPTION_ANSWER") {
-              if (firstTimeFullArray) {
-                answerValueArray[counter] = {};
-                answerValueArray[counter].key = question.parametersList[j].key;
-                counter++;
-                firstTimeFullArray = false;
-              } else {
+            else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" || question.parametersList[j].key != "OPTION_DROP_DOWN") {
+              for(let pram of question.parametersList[j]) {
+                if(pram.key == "OPTION_ANSWER") {
+                  if (firstTimeFullArray) {
+                    answerValueArray[counter] = {};
+                    answerValueArray[counter].key = pram.key;
+                    counter++;
+                    firstTimeFullArray = false;
+                  } else {
 
+                  }
+                }
               }
             }
 
@@ -1860,11 +1901,11 @@ export class ReportTemplatePage{
         errorMsg = 'Problem updating report.';
       }
 
-      this.alrtCtrl.create({
+     this.alrtCtrl.create({
         title: 'Failed',
         subTitle: errorMsg,
         buttons: ['Ok']
-      });
+      }).present();
     });
   }
 
