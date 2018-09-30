@@ -49,6 +49,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReportTemplatePage} from "../pages/report-template/report-template";
 import {MatSelectModule} from '@angular/material/select'
+import {CheckboxFunctionService} from "../services/checkboxFunctionService";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -110,7 +111,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     AndroidPermissions,
     ClassesService,
     DailyReportService,
-    DatePicker
+    DatePicker,
+    CheckboxFunctionService
   ]
 })
 export class AppModule {}

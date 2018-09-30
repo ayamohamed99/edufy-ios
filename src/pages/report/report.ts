@@ -141,7 +141,7 @@ export class ReportPage {
   }
 
   getDailyReportForClass(classId,loadS ){
-    this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId).subscribe(
+    this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId,this.reportId).subscribe(
       (val) => {
 
         let allData:any;
@@ -413,6 +413,7 @@ export class ReportPage {
   }
 
   whenOpen(itmRef,classId,index,name){
+    this.selectedClassIndex = index;
     this.hideShowReport = true;
     this.isAll = false;
     this.selectedClassId = classId;
@@ -474,10 +475,16 @@ export class ReportPage {
   openReportTemplate(){
 
     let selectedStudents = [];
+    let selectStudentIndex;
+    let TempIndex;
     for (let i in this.studentsList) {
       if(this.studentsList[i].reportChecked){
         selectedStudents.push(this.studentsList[i]);
+        TempIndex = i;
       }
+    }
+    if(selectedStudents.length == 1){
+      selectStudentIndex = TempIndex;
     }
 
     let SelectedClass;
@@ -501,6 +508,8 @@ export class ReportPage {
         dailyReportQuestionsEditParamTemps: this.dailyReportQuestionsEditParamTemps,
         editQuestionAllowed: this.editQuestionAllowed,
         class:SelectedClass,
+        classIndex:this.selectedClassIndex,
+        selectedStudentIndex:selectStudentIndex,
         theClassIsSelected:this.isAll,
         reportConflict:this.questionsToBeReset
       });
@@ -1340,7 +1349,9 @@ export class ReportPage {
 
 
   AnswersBeforeEdit;
+  selectedClassIndex;
   selectClass (classId, checked, index, studentid, studentList) {
+    this.selectedClassIndex = index;
     if(studentid == -1){
       for (let i in studentList) {
         studentList[i].reportChecked = this.isAll;

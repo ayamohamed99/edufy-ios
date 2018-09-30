@@ -616,15 +616,19 @@
 
 
       <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
-        <ion-icon color="light" name="sync"></ion-icon>
+        <img src="assets/icon/reset.png">
         <ion-label>Rest</ion-label>
       </button>
 
 
-      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showButtonOfSaveOrUpdate()">
-        <ion-icon color="light" name="cloud-upload"></ion-icon>
-        <ion-label *ngIf="showSaveOrUpdate() == 'save'">Save</ion-label>
-        <ion-label *ngIf="showSaveOrUpdate() == 'update'">Update</ion-label>
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
+        <img src="assets/icon/save.png">
+        <ion-label>Save</ion-label>
+      </button>
+
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
+        <img src="assets/icon/save.png">
+        <ion-label>Update</ion-label>
       </button>
 
 

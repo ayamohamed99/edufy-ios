@@ -31,13 +31,18 @@ export class DailyReportService {
     };
   }
 
-  getDailyReportTemplate(language, date, classId) {
+  getDailyReportTemplate(language, date, classId,reportId) {
 
     let requestURL = "";
-    if (classId == null) {
+    if (classId == null && reportId== null) {
       requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date;
-    } else {
+    } else if(classId != null && reportId== null){
       requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId;
+    }
+    if (classId == null && reportId!= null) {
+      requestURL = 'authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&reportId=' + reportId;
+    } else if(classId != null && reportId!= null) {
+      requestURL = 'authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId + '&reportId=' + reportId;
     }
 
     return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
@@ -70,6 +75,17 @@ export class DailyReportService {
   deleteStudnetReport(studentId, date) {
     let requestURL = '/authentication/dailyReport.ent?studentId=' + studentId + '&date=' + date;
     return this.http.delete(this.DomainUrl.Domain + requestURL,this.httpOptions);
+  }
+
+  saveReport(answerObject, date){
+    let requestURL = '/authentication/dailyReport.ent?date=' + date;
+    return this.http.post(this.DomainUrl.Domain + requestURL,answerObject, this.httpOptions);
+  }
+
+  updateReport(answerObject, date){
+    let requestURL = '/authentication/dailyReport.ent?date=' + date;
+    console.log(answerObject);
+    return this.http.put(this.DomainUrl.Domain + requestURL,answerObject, this.httpOptions);
   }
 
 }
