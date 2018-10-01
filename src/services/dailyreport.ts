@@ -56,7 +56,7 @@ export class DailyReportService {
     if(reportId== null){
       requestURL = '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key;
     }else{
-      requestURL = '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key + '&reportId=' + reportId;
+      requestURL = '/authentication/reportparameter.ent/getparameter.ent?key=' + key + '&reportId=' + reportId;
     }
 
     return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
@@ -68,7 +68,7 @@ export class DailyReportService {
     if(reportId== null){
       requestURL = '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId;
     }else{
-      requestURL = '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
+      requestURL = '/authentication/report.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
     }
     return this.http.post(this.DomainUrl.Domain + requestURL, parameterWrapper, this.httpOptions);
   }
@@ -88,23 +88,44 @@ export class DailyReportService {
       }));
   }
 
-  approveReport(date,classId){
-    let requestURL = '/authentication/dailyReport.ent/approveDailyReport.ent?date=' + date + "&classId=" + classId;
+  approveReport(date,classId,reportId){
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent/approveDailyReport.ent?date=' + date + "&classId=" + classId;
+    }else{
+      requestURL = '/authentication/report.ent/approveReport.ent?date=' + date + "&classId=" + classId + '&reportId=' + reportId;
+    }
     return this.http.put(this.DomainUrl.Domain + requestURL,null, this.httpOptions);
   }
 
-  deleteStudnetReport(studentId, date) {
-    let requestURL = '/authentication/dailyReport.ent?studentId=' + studentId + '&date=' + date;
+  deleteStudnetReport(studentId, date, reportId) {
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent?studentId=' + studentId + '&date=' + date;
+    }else{
+      requestURL = '/authentication/report.ent?studentId=' + studentId + '&date=' + date + '&reportId=' + reportId;
+    }
+
     return this.http.delete(this.DomainUrl.Domain + requestURL,this.httpOptions);
   }
 
-  saveReport(answerObject, date){
-    let requestURL = '/authentication/dailyReport.ent?date=' + date;
+  saveReport(answerObject, date, reportId){
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent?date=' + date;
+    }else{
+      requestURL = '/authentication/report.ent?date=' + date + '&reportId=' + reportId;
+    }
     return this.http.post(this.DomainUrl.Domain + requestURL,answerObject, this.httpOptions);
   }
 
-  updateReport(answerObject, date){
-    let requestURL = '/authentication/dailyReport.ent?date=' + date;
+  updateReport(answerObject, date, reportId){
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent?date=' + date;
+    }else{
+      requestURL = '/authentication/report.ent?date=' + date + '&reportId=' + reportId;
+    }
     console.log(answerObject);
     return this.http.put(this.DomainUrl.Domain + requestURL,answerObject, this.httpOptions);
   }

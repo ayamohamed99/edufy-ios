@@ -57,6 +57,7 @@ export class ReportTemplatePage{
   dateForData;
   recoveryQuestion;
   conflict = [];
+  reportAnswerObj;
   selectedListOfStudents = [];
   selectedListOfStudentsID = [];
   imgsFoodName = ['All', 'Few', 'Half', 'Little','More', 'Most', 'None', 'Quarter','Some'];
@@ -987,7 +988,7 @@ export class ReportTemplatePage{
             });
             this.load.present();
 
-            this.dailyReportServ.approveReport(this.selectedReportDate,this.selectedClassId).subscribe(
+            this.dailyReportServ.approveReport(this.selectedReportDate,this.selectedClassId,this.reportId).subscribe(
               response =>{
                 this.load.dismiss();
                 this.presentToast("The report was Approved");
@@ -1028,7 +1029,7 @@ export class ReportTemplatePage{
             this.load.present();
 
             if(this.navParams.get('selected').length == 1) {
-              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].studentId, this.selectedReportDate).subscribe(
+              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].studentId, this.selectedReportDate,this.reportId).subscribe(
                 response => {
                   this.load.dismiss();
                   this.viewCtrl.dismiss(
@@ -1076,35 +1077,66 @@ export class ReportTemplatePage{
 
 
   saveDailyReport() {
-
-    var newDailyReport = {
-      "dailyReportAnswersObjectsList": []
-    };
+    var newReport;
+    if(this.accountServ.reportId == -1) {
+      newReport = {
+        "dailyReportAnswersObjectsList": []
+      };
+    }else{
+      newReport = {
+        "reportAnswersObjectsList": []
+      };
+    }
     let index = this.selectedClassIndex;
     for (let i = 0; i < this.drQuestion.length; i++) {
-      newDailyReport.dailyReportAnswersObjectsList[i] = {
-        "answer": "",
-        "studentsList": this.selectedListOfStudentsID,
-        "classId": this.selectedClassId,
-        "questionId": this.drQuestion[i].id
-      };
+
+      if(this.accountServ.reportId == -1) {
+        newReport.dailyReportAnswersObjectsList[i] = {
+          "answer": "",
+          "studentsList": this.selectedListOfStudentsID,
+          "classId": this.selectedClassId,
+          "questionId": this.drQuestion[i].id
+        };
+      }else{
+        newReport.reportAnswersObjectsList[i] = {
+          "answer": "",
+          "studentsList": this.selectedListOfStudentsID,
+          "classId": this.selectedClassId,
+          "questionId": this.drQuestion[i].id
+        };
+      }
 
       let question = this.drQuestion[i];
       question.questionNumber = i;
       let value = this.getViewAnswers(question.questionNumber);
 
-      switch (question.dailyReportQuestionType.title) {
+      let questionTitle;
+      if(this.accountServ.reportId == -1) {
+        questionTitle = question.dailyReportQuestionType.title;
+      }else{
+        questionTitle = question.reportQuestionType.title;
+      }
+
+      switch (questionTitle) {
         case 'TEXT_QUESTION':
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], value);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], value);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], value);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
           let selecteditems = this.checkboxFunctionService.convert_CheckListObject_To_DailyReportAnswer(value, question.parametersList);
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], selecteditems);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], selecteditems);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], selecteditems);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT':
           let answer = "";
@@ -1130,12 +1162,20 @@ export class ReportTemplatePage{
             }
 
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
 
         case 'MULTI_SHORT_TEXT_MULTISELECT_VIEW_SELECTED':
           selecteditems = this.checkboxFunctionService.convert_CheckListObject_To_DailyReportAnswer(value, question.parametersList);
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], selecteditems);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], selecteditems);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], selecteditems);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION':
           answer = "";
@@ -1144,7 +1184,11 @@ export class ReportTemplatePage{
           } else {
             answer = value[0] + "$$" + value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION':
           answer = "";
@@ -1153,7 +1197,11 @@ export class ReportTemplatePage{
           } else {
             answer = value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
           answer = "";
@@ -1163,7 +1211,11 @@ export class ReportTemplatePage{
           } else {
             answer = value[0] + "$$" + value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
 
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR':
@@ -1231,8 +1283,11 @@ export class ReportTemplatePage{
 
             }
           }
-
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer + "||" + idAnswer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer + "||" + idAnswer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer + "||" + idAnswer);
+          }
           break;
         case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
         case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
@@ -1297,7 +1352,11 @@ export class ReportTemplatePage{
             }
           }
 
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED':
         case 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED':
@@ -1371,7 +1430,11 @@ export class ReportTemplatePage{
             }
           }
 
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
         case 'CONSTANT_LONG_HELPER_TEXT_QUESTION':
@@ -1391,7 +1454,12 @@ export class ReportTemplatePage{
               answer += "$$" + value[j];
             }
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
       }
     }
@@ -1418,7 +1486,7 @@ export class ReportTemplatePage{
     //     }
     //   }
     //
-    //   var currentAnswers = newDailyReport.dailyReportAnswersObjectsList;
+    //   var currentAnswers = newReport.dailyReportAnswersObjectsList;
     //   var answersBeforeEdit = $scope.AnswersBeforeEdit;
     //
     //   for (i in currentAnswers) {
@@ -1461,7 +1529,7 @@ export class ReportTemplatePage{
     //   newDailyReport.dailyReportAnswersObjectsList = reportAnswers;
     // }
 
-    this.dailyReportServ.saveReport(newDailyReport, searchDate).subscribe(
+    this.dailyReportServ.saveReport(newReport, searchDate, this.reportId).subscribe(
       (response) => {
         let successMsg;
         if(this.accountServ.reportId == -1){
@@ -1504,45 +1572,83 @@ export class ReportTemplatePage{
 
 
   getViewAnswers(questionNumber) {
-    return this.reportAnswer.dailyReportAnswersObjectsList[questionNumber].answer;
+    if(this.accountServ.reportId == -1) {
+      return this.reportAnswer.dailyReportAnswersObjectsList[questionNumber].answer;
+    }else{
+      return this.reportAnswer.reportAnswersObjectsList[questionNumber].answer;
+    }
   }
 
-  mappingAnswers(dailyReportObject, value) {
-    return dailyReportObject.answer = value;
+  mappingAnswers(reportObject, value) {
+    return reportObject.answer = value;
   }
+
+
 
   KEEP_ORIGINAL_PATERN = "^_KEEP_ORIGINAL_^";
   updateDailyReport() {
 
     // $rootScope.isdisabled = true;
     let index = this.selectedClassIndex;
-    let newDailyReport = {
-      "dailyReportAnswersObjectsList": []
-    };
-    for (let i = 0; i < this.drQuestion.length; i++) {
-      newDailyReport.dailyReportAnswersObjectsList[i] = {
-        "answer": "",
-        "studentsList": this.selectedListOfStudentsID,
-        "classId": this.selectedClassId,
-        "questionId": this.drQuestion[i].id
+    let newReport;
+    if(this.accountServ.reportId == -1) {
+      newReport = {
+        "dailyReportAnswersObjectsList": []
       };
+    }else{
+      newReport = {
+        "reportAnswersObjectsList": []
+      };
+    }
+    for (let i = 0; i < this.drQuestion.length; i++) {
+
+      if(this.accountServ.reportId == -1) {
+        newReport.dailyReportAnswersObjectsList[i] = {
+          "answer": "",
+          "studentsList": this.selectedListOfStudentsID,
+          "classId": this.selectedClassId,
+          "questionId": this.drQuestion[i].id
+        };
+      }else{
+        newReport.reportAnswersObjectsList[i] = {
+          "answer": "",
+          "studentsList": this.selectedListOfStudentsID,
+          "classId": this.selectedClassId,
+          "questionId": this.drQuestion[i].id
+        };
+      }
       let question = this.drQuestion[i];
       question.questionNumber = i;
       let value = this.getViewAnswers(question.questionNumber);
 
-      switch (question.dailyReportQuestionType.title) {
+      let questionTitle;
+      if(this.accountServ.reportId == -1) {
+        questionTitle = question.dailyReportQuestionType.title;
+      }else{
+        questionTitle = question.reportQuestionType.title;
+      }
+
+      switch (questionTitle) {
 
         case 'TEXT_QUESTION':
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], value);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], value);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], value);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
         case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
           let selecteditems = this.checkboxFunctionService.convert_CheckListObject_To_DailyReportAnswer(value, question.parametersList);
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], selecteditems);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], selecteditems);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], selecteditems);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT':
           let answer = "";
@@ -1567,7 +1673,11 @@ export class ReportTemplatePage{
             }
 
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
           answer = "";
@@ -1577,7 +1687,12 @@ export class ReportTemplatePage{
           } else {
             answer = value[0] + "$$" + value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
 
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION':
@@ -1591,7 +1706,12 @@ export class ReportTemplatePage{
             }
             answer = value[0] + "$$" + value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION':
           answer = "";
@@ -1600,7 +1720,11 @@ export class ReportTemplatePage{
           } else {
             answer = value[1];
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR':
         case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN':
@@ -1667,8 +1791,11 @@ export class ReportTemplatePage{
 
             }
           }
-
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer + "||" + idAnswer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer + "||" + idAnswer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer + "||" + idAnswer);
+          }
           break;
 
         case 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED':
@@ -1774,8 +1901,11 @@ export class ReportTemplatePage{
                 }
               }
             }
-
-            this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+            if(this.accountServ.reportId == -1) {
+              this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+            }else{
+              this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+            }
           }
 
           break;
@@ -1841,8 +1971,11 @@ export class ReportTemplatePage{
 
             }
           }
-
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
         case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
         case 'CONSTANT_LONG_HELPER_TEXT_QUESTION':
@@ -1862,7 +1995,11 @@ export class ReportTemplatePage{
               answer += "$$" + value[j];
             }
           }
-          this.mappingAnswers(newDailyReport.dailyReportAnswersObjectsList[i], answer);
+          if(this.accountServ.reportId == -1) {
+            this.mappingAnswers(newReport.dailyReportAnswersObjectsList[i], answer);
+          }else{
+            this.mappingAnswers(newReport.reportAnswersObjectsList[i], answer);
+          }
           break;
       }
     }
@@ -1891,7 +2028,7 @@ export class ReportTemplatePage{
     //     }
     //   }
     //
-    //   var currentAnswers = newDailyReport.dailyReportAnswersObjectsList;
+    //   var currentAnswers = newReport.dailyReportAnswersObjectsList;
     //   var answersBeforeEdit = $scope.AnswersBeforeEdit;
     //
     //   for (i in currentAnswers) {
@@ -1936,7 +2073,7 @@ export class ReportTemplatePage{
     //   // ********
     // }
 
-    this.dailyReportServ.updateReport(newDailyReport, searchDate).subscribe(
+    this.dailyReportServ.updateReport(newReport, searchDate, this.reportId).subscribe(
       (response)=> {
         let successMsg;
         if(this.accountServ.reportId == -1){
