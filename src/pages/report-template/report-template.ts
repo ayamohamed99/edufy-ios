@@ -1407,7 +1407,7 @@ export class ReportTemplatePage{
         this.presentToast(successMsg);
         if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
-
+          this.getNextStudent();
         }
         this.load.dismiss();
     },
@@ -1882,7 +1882,7 @@ export class ReportTemplatePage{
         this.presentToast(successMsg);
         if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
-
+          this.getNextStudent();
         }
         this.load.dismiss();
 
@@ -1909,4 +1909,8 @@ export class ReportTemplatePage{
     });
   }
 
+
+  getNextStudent(){
+    
+  }
 }
