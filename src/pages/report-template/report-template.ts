@@ -538,7 +538,7 @@ export class ReportTemplatePage{
 
   saveTemplateAfterEdit() {
 
-    this.load = this.load.create({
+    this.load = this.loadCtrl.create({
       content: ""
     });
     this.load.present();

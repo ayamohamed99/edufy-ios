@@ -4,7 +4,7 @@ export class Url_domain{
   // PRODUCTION:"http://104.198.175.198";
   // LOCAL:"http://192.168.1.5:8080";
 
-  Domain = "";
+  Domain = "http://192.168.1.5:8080";
 
 
   //      proxy
