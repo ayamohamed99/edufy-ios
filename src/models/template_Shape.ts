@@ -1,4 +1,5 @@
 import {ParamData} from "./paramData";
+import {AccountService} from "../services/account";
 
 export class TemplateShape{
 
@@ -8,16 +9,23 @@ export class TemplateShape{
 
   }
 
-  makeTheTemplateShape(reportQuestion){
-    return this.getTemplate(reportQuestion);
+  makeTheTemplateShape(reportQuestion,reportId){
+    return this.getTemplate(reportQuestion,reportId);
   }
 
 
 
 
-  getTemplate(drQuestion) {
+  getTemplate(drQuestion,reportId) {
 
-    switch (drQuestion.dailyReportQuestionType.title) {
+    let questionTitle;
+    if(reportId == -1){
+      questionTitle = drQuestion.dailyReportQuestionType.title;
+    }else{
+      questionTitle = drQuestion.reportQuestionType.title
+    }
+
+    switch (questionTitle) {
       case 'TEXT_QUESTION':
         return drQuestion.parametersList;
 
@@ -287,7 +295,11 @@ export class TemplateShape{
         return row;
 
       default:
-        console.info("ThigetTemplates type not mapped: " + drQuestion.dailyReportQuestionType.title);
+        if(reportId == -1) {
+          console.info("ThigetTemplates type not mapped: " + drQuestion.dailyReportQuestionType.title);
+        }else{
+          console.info("ThigetTemplates type not mapped: " + drQuestion.reportQuestionType.title);
+        }
         return drQuestion.parametersList;
     }
   }

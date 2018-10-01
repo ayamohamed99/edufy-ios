@@ -31,14 +31,15 @@ export class ReportTemplatePage{
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   PageName;
   reportDate;
+  reportId;
   reportTemplate;
   drQuestion = [];
   enableOtherNote = [];
-  dailyReportAnswer;
-  dailyReportDefultAnswer;
-  dailyReportAnswersNoOfItems;
-  dailyReportQuestionsRecovery;
-  dailyReportQuestionsEditParamTemps;
+  reportAnswer;
+  reportDefultAnswer;
+  reportAnswersNoOfItems;
+  reportQuestionsRecovery;
+  reportQuestionsEditParamTemps;
   editQuestionAllowed;
   helperTextSSTOVS = false;
   switchToHelperSSTOVS = 0;
@@ -144,7 +145,15 @@ export class ReportTemplatePage{
   showSaveOrUpdate(){
 
     if(this.navParams.get('theClassIsSelected')){
-      if(this.selectedClass.noOfStudentDailyReportFinalized == 0){
+
+      let noOfStudentFinalized;
+      if(this.accountServ.reportId == -1){
+        noOfStudentFinalized = this.selectedClass.noOfStudentDailyReportFinalized;
+      }else{
+        noOfStudentFinalized = this.selectedClass.noOfStudentReportFinalized;
+      }
+
+      if(noOfStudentFinalized == 0){
         return 'save';
       }else{
         return 'update';
@@ -245,6 +254,11 @@ export class ReportTemplatePage{
               private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController,
               public checkboxFunctionService:CheckboxFunctionService) {
 
+    if(this.accountServ.reportId == -1){
+      this.reportId = null;
+    }else{
+      this.reportId = this.accountServ.reportId;
+    }
     //this is your html write the directive here
     this.reportTemplate ="";
     this.drQuestion = [];
@@ -275,11 +289,11 @@ export class ReportTemplatePage{
     this.selectedClassIndex = this.navParams.get('classIndex');
     this.selectedReportDate = this.navParams.get('selectedDate');
 
-    this.dailyReportDefultAnswer = this.navParams.get('dailyReportAnswer');
-    this.dailyReportAnswer = this.dailyReportDefultAnswer;
-    this.dailyReportAnswersNoOfItems = this.navParams.get('dailyReportAnswersNoOfItems');
-    this.dailyReportQuestionsRecovery = this.navParams.get('dailyReportQuestionsRecovery');
-    this.dailyReportQuestionsEditParamTemps = this.navParams.get('dailyReportQuestionsEditParamTemps');
+    this.reportDefultAnswer = this.navParams.get('reportAnswer');
+    this.reportAnswer = this.reportDefultAnswer;
+    this.reportAnswersNoOfItems = this.navParams.get('reportAnswersNoOfItems');
+    this.reportQuestionsRecovery = this.navParams.get('reportQuestionsRecovery');
+    this.reportQuestionsEditParamTemps = this.navParams.get('reportQuestionsEditParamTemps');
     this.editQuestionAllowed = this.navParams.get('editQuestionAllowed');
     if(this.selectedListOfStudents.length > 1) {
       this.conflict = this.navParams.get('reportConflict');
@@ -288,14 +302,20 @@ export class ReportTemplatePage{
     let editDropOrNot = true;
     let editSingleOrNot = true;
     for(let i=0; i<this.drQuestion.length;i++){
-      if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+      let questionTitle;
+      if(this.accountServ.reportId == -1){
+        questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+      }else{
+        questionTitle = this.drQuestion[i].reportQuestionType.title;
+      }
+      if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
         for(let itm of this.drQuestion[i].parametersList) {
           if (itm.key == "OPTION_ANSWER") {
             editDropOrNot = false;
           }
         }
       }
-      else if(this.drQuestion[i].dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+      else if(questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
         for(let itm of this.drQuestion[i].parametersList) {
           if (itm.key == "OPTION_ANSWER") {
             editSingleOrNot = false;
@@ -307,14 +327,21 @@ export class ReportTemplatePage{
     let template = new TemplateShape();
     for(let i=0; i<this.drQuestion.length;i++){
 
-      let temp = template.makeTheTemplateShape(this.drQuestion[i]);
+      let questionTitle;
+      if(this.accountServ.reportId == -1){
+        questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+      }else{
+        questionTitle = this.drQuestion[i].reportQuestionType.title;
+      }
+
+      let temp = template.makeTheTemplateShape(this.drQuestion[i],this.accountServ.reportId);
       if(temp.length >0) {
-        if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+        if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
           if(editDropOrNot == false){
             this.drQuestion[i].parametersList = temp;
           }
         }
-        else if(this.drQuestion[i].dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+        else if(questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
           if(editSingleOrNot == false){
             this.drQuestion[i].parametersList = temp;
           }
@@ -327,7 +354,14 @@ export class ReportTemplatePage{
     if (platform.is('core')) {
       this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
       for(let i=0; i<this.drQuestion.length;i++){
-        if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+        let questionTitle;
+        if(this.accountServ.reportId == -1){
+          questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+        }else{
+          questionTitle = this.drQuestion[i].reportQuestionType.title;
+        }
+
+        if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
           this.callDataAndWait();
           break;
         }
@@ -337,7 +371,15 @@ export class ReportTemplatePage{
         val => {
           this.dailyReportServ.putHeader(val);
           for(let i=0; i<this.drQuestion.length;i++){
-            if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+
+            let questionTitle;
+            if(this.accountServ.reportId == -1){
+              questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+            }else{
+              questionTitle = this.drQuestion[i].reportQuestionType.title;
+            }
+
+            if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
               this.callDataAndWait();
               break;
             }
@@ -362,7 +404,15 @@ export class ReportTemplatePage{
     this.load.present();
     let promises = [];
     for(let i=0; i<this.drQuestion.length;i++){
-      if(this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || this.drQuestion[i].dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+
+      let questionTitle;
+      if(this.accountServ.reportId == -1){
+        questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+      }else{
+        questionTitle = this.drQuestion[i].reportQuestionType.title;
+      }
+
+      if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
         for(let itm of this.drQuestion[i].parametersList) {
           if (itm.key == "OPTION_DROP_DOWN") {
             promises.push(this.getDropDownListIfFound(this.drQuestion[i].id));
@@ -386,7 +436,7 @@ export class ReportTemplatePage{
   }
 
   getDropDownListIfFound(questionKey){
-    return this.dailyReportServ.getDropDownPremeter(questionKey).toPromise().then(
+    return this.dailyReportServ.getDropDownPremeter(questionKey,this.reportId).toPromise().then(
       val=>{
         this.selectionData.set(questionKey,val);
       }
@@ -422,7 +472,7 @@ export class ReportTemplatePage{
 
   addParameterForQuestion (questionNumber) {
 
-    // console.log($scope.dailyReportQuestionsEditParamTemps);
+    // console.log($scope.reportQuestionsEditParamTemps);
 
     let numberOfParams = this.drQuestion[questionNumber].parametersList.length;
     let id = 0;
@@ -445,20 +495,28 @@ export class ReportTemplatePage{
         }
       }
     }
-    switch (this.drQuestion[questionNumber].dailyReportQuestionType.title) {
+
+    let questionTitle;
+    if(this.accountServ.reportId == -1){
+      questionTitle = this.drQuestion[questionNumber].dailyReportQuestionType.title;
+    }else{
+      questionTitle = this.drQuestion[questionNumber].reportQuestionType.title;
+    }
+
+    switch (questionTitle) {
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
-        let value = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value;
+        let value = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value;
         if (value === '' || value.replace(" ", "") === '' || value === "" || value.replace(" ", "") === "") {
           return;
         }
         this.drQuestion[questionNumber].parametersList[numberOfParams] = {};
         this.drQuestion[questionNumber].parametersList[numberOfParams].id = id;
-        this.drQuestion[questionNumber].parametersList[numberOfParams].value = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value;
-        this.drQuestion[questionNumber].parametersList[numberOfParams].key = this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].key;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].value = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].key = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].key;
 
         // clear variables
-        this.dailyReportQuestionsEditParamTemps[questionNumber].parameters[0].value = '';
+        this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value = '';
 
         console.log('LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER  parameter added!');
         console.log(this.drQuestion[questionNumber].parametersList);
@@ -474,7 +532,7 @@ export class ReportTemplatePage{
       this.enableOtherNote[questionN] = false;
     } else {
       this.enableOtherNote[questionN] = true;
-      this.dailyReportAnswer.dailyReportAnswersObjectsList[questionN].answer[1] = "";
+      this.reportAnswer.dailyReportAnswersObjectsList[questionN].answer[1] = "";
     }
 
   }
@@ -509,13 +567,13 @@ export class ReportTemplatePage{
 
       // take a copy of current editing question
       // for recovery if cancel
-      this.dailyReportQuestionsRecovery[questionNumber] = this.getNewInstanceOf(this.drQuestion[questionNumber]);
+      this.reportQuestionsRecovery[questionNumber] = this.getNewInstanceOf(this.drQuestion[questionNumber]);
 
       // start edit question -questionNumber-
       this.isUserEditing = true;
       this.drQuestion[questionNumber].editQuestion = true;
       for (let i = 0; i < this.drQuestion.length; i++) {
-        this.dailyReportQuestionsEditParamTemps[i].parameters = [];
+        this.reportQuestionsEditParamTemps[i].parameters = [];
 
         for (let j = 0; j < this.drQuestion[i].parametersList.length; j++) {
           var param = {
@@ -523,16 +581,16 @@ export class ReportTemplatePage{
             "key": '',
             "value": ''
           };
-          this.dailyReportQuestionsEditParamTemps[i].parameters[j] = param;
-          this.dailyReportQuestionsEditParamTemps[i].parameters[j].key = this.drQuestion[i].parametersList[j].key;
+          this.reportQuestionsEditParamTemps[i].parameters[j] = param;
+          this.reportQuestionsEditParamTemps[i].parameters[j].key = this.drQuestion[i].parametersList[j].key;
         }
 
       }
 
       console.log('start Edit! ');
       console.log(this.drQuestion);
-      // console.log($scope.dailyReportQuestionsEditParamTemps);
-      // console.log(dailyReportQuestionsRecovery);
+      // console.log($scope.reportQuestionsEditParamTemps);
+      // console.log(reportQuestionsRecovery);
     }
   }
 
@@ -551,7 +609,7 @@ export class ReportTemplatePage{
         let questionId = this.drQuestion[i].id;
         let questionParameters = this.drQuestion[i].parametersList;
         let questionNumber = this.drQuestion[i].questionNumber;
-        this.dailyReportServ.saveDailyReportTemplateQuestionParameters(questionId, questionParameters, i).subscribe(
+        this.dailyReportServ.saveDailyReportTemplateQuestionParameters(questionId, questionParameters, i,this.reportId).subscribe(
           response => {
             this.load.dismiss();
             this.presentToast("Question edited successfully.");
@@ -603,7 +661,7 @@ export class ReportTemplatePage{
   }
 
   cancelEditigQuestion(qNumber){
-    this.drQuestion[qNumber] = this.getNewInstanceOf(this.dailyReportQuestionsRecovery[qNumber]);
+    this.drQuestion[qNumber] = this.getNewInstanceOf(this.reportQuestionsRecovery[qNumber]);
     var tmp = false;
     for (var i = 0; i < this.drQuestion.length; i++) {
       if ((typeof this.drQuestion[i].editQuestion !== "undefined") && this.drQuestion[i].editQuestion) {
@@ -659,12 +717,19 @@ export class ReportTemplatePage{
   };
 
   getDefaultValue(drQuestion) {
-    if(drQuestion.dailyReportQuestionType.title == 'TEXT_QUESTION')
+    let questionTitle;
+    if(this.accountServ.reportId == -1){
+      questionTitle = drQuestion.dailyReportQuestionType.title;
+    }else {
+      questionTitle = drQuestion.reportQuestionType.title;
+    }
+
+    if(questionTitle == 'TEXT_QUESTION')
     {
       return "";
     }
-    else if(drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
-      drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR')
+    else if(questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+      questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR')
     {
       let val = [];
       let firstTime = true;
@@ -708,48 +773,48 @@ export class ReportTemplatePage{
       }
       return val;
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
-      drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' ||
-      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
-      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' )
+    else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+      questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' ||
+      questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+      questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' )
     {
       return {};
     }
-    else if(drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT')
+    else if(questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT')
     {
       return {};
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT')
+    else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT')
     {
       return [drQuestion.parametersList[0].value];
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_MULTISELECT_VIEW_SELECTED')
+    else if (questionTitle == 'MULTI_SHORT_TEXT_MULTISELECT_VIEW_SELECTED')
     {
       return {};
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION')
+    else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION')
     {
       return [drQuestion.parametersList[0].value];
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION')
+    else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION')
     {
       return [false];
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER' ||
-      drQuestion.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
+    else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER' ||
+      questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
     )
     {
       return drQuestion.parametersList[0].value;
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' ||
-      drQuestion.dailyReportQuestionType.title == 'CONSTANT_LONG_HELPER_TEXT_QUESTION' ||
-      drQuestion.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION' ||
-      drQuestion.dailyReportQuestionType.title == 'LONG_HELPER_TEXT_QUESTION'
+    else if (questionTitle == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' ||
+      questionTitle == 'CONSTANT_LONG_HELPER_TEXT_QUESTION' ||
+      questionTitle == 'SHORT_HELPER_TEXT_QUESTION' ||
+      questionTitle == 'LONG_HELPER_TEXT_QUESTION'
     )
     {
       return {};
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED')
+    else if (questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED')
     {
       let val = {};
       let firstTime = true;
@@ -794,7 +859,7 @@ export class ReportTemplatePage{
       }
       return val;
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED')
+    else if (questionTitle == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED')
     {
       let val = [];
       let firstTime = true;
@@ -849,8 +914,8 @@ export class ReportTemplatePage{
       }
       return val;
     }
-    else if (drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR' ||
-      drQuestion.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN')
+    else if (questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR' ||
+      questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN')
     {
       let val = {};
       let firstTime = true;
@@ -1439,7 +1504,7 @@ export class ReportTemplatePage{
 
 
   getViewAnswers(questionNumber) {
-    return this.dailyReportAnswer.dailyReportAnswersObjectsList[questionNumber].answer;
+    return this.reportAnswer.dailyReportAnswersObjectsList[questionNumber].answer;
   }
 
   mappingAnswers(dailyReportObject, value) {
@@ -1911,6 +1976,6 @@ export class ReportTemplatePage{
 
 
   getNextStudent(){
-    
+
   }
 }

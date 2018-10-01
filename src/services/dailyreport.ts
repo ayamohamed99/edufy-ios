@@ -14,7 +14,7 @@ export class DailyReportService {
   httpOptions: any;
   headers: any;
   DomainUrl: Url_domain = new Url_domain;
-  dailyReportClassQuestionsGroups;
+  reportClassQuestionsGroups;
 
   constructor(public http: HttpClient, private platform: Platform) {
   }
@@ -40,9 +40,9 @@ export class DailyReportService {
       requestURL = '/authentication/dailyReport.ent/dailyReportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId;
     }
     if (classId == null && reportId!= null) {
-      requestURL = 'authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&reportId=' + reportId;
+      requestURL = '/authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&reportId=' + reportId;
     } else if(classId != null && reportId!= null) {
-      requestURL = 'authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId + '&reportId=' + reportId;
+      requestURL = '/authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId + '&reportId=' + reportId;
     }
 
     return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
@@ -50,19 +50,40 @@ export class DailyReportService {
   }
 
 
-  getDropDownPremeter(key) {
-    return this.http.get(this.DomainUrl.Domain + '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key, this.httpOptions);
+  getDropDownPremeter(key,reportId) {
+
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key;
+    }else{
+      requestURL = '/authentication/dailyreportparameter.ent/getparameter.ent?key=' + key + '&reportId=' + reportId;
+    }
+
+    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
   }
 
 
-  saveDailyReportTemplateQuestionParameters(questionId, parameterWrapper, questionNumber) {
-    return this.http.post(this.DomainUrl.Domain + '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId, parameterWrapper, this.httpOptions);
+  saveDailyReportTemplateQuestionParameters(questionId, parameterWrapper, questionNumber,reportId) {
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId;
+    }else{
+      requestURL = '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
+    }
+    return this.http.post(this.DomainUrl.Domain + requestURL, parameterWrapper, this.httpOptions);
   }
 
-  getStudentReportAnswers(classId, date){
-    return this.http.get(this.DomainUrl.Domain + '/authentication/dailyReport.ent/getClassGroups.ent?classId=' + classId + '&date=' + date, this.httpOptions).pipe(
+  getStudentReportAnswers(classId, date,reportId){
+    let requestURL;
+    if(reportId== null){
+      requestURL = '/authentication/dailyReport.ent/getClassGroups.ent?classId=' + classId + '&date=' + date;
+    }else{
+      requestURL = '/authentication/report.ent/getClassGroups.ent?classId=' + classId + '&date=' + date + '&reportId=' + reportId;
+    }
+
+    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
       tap(response => {
-        this.dailyReportClassQuestionsGroups = response;
+        this.reportClassQuestionsGroups = response;
       },err => {
       }));
   }
