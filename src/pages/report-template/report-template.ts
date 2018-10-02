@@ -292,6 +292,7 @@ export class ReportTemplatePage{
 
     this.reportDefultAnswer = this.navParams.get('reportAnswer');
     this.reportAnswer = this.reportDefultAnswer;
+    console.log(this.reportAnswer);
     this.reportAnswersNoOfItems = this.navParams.get('reportAnswersNoOfItems');
     this.reportQuestionsRecovery = this.navParams.get('reportQuestionsRecovery');
     this.reportQuestionsEditParamTemps = this.navParams.get('reportQuestionsEditParamTemps');
