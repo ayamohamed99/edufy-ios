@@ -68,7 +68,7 @@ export class DailyReportService {
     if(reportId== null){
       requestURL = '/authentication/dailyReport.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId;
     }else{
-      requestURL = '/authentication/report.ent/dailyReportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
+      requestURL = '/authentication/report.ent/reportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
     }
     return this.http.post(this.DomainUrl.Domain + requestURL, parameterWrapper, this.httpOptions);
   }

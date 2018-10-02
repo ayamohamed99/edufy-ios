@@ -331,24 +331,25 @@ export class ReportPage {
         let data: any = val;
         console.log(data);
         if(data) {
-          for (let value of data) {
+          for (let i=0; i<data.length;i++) {
             let students = new Student();
-            students.studentClass.classId = value.classes.id;
-            students.studentClass.className = value.classes.name;
-            students.studentClass.grade.gradeId = value.classes.grade.id;
-            students.studentClass.grade.gradeName = value.classes.grade.name;
-            students.studentClass.branch.branchId = value.classes.branch.id;
-            students.studentClass.branch.branchName = value.classes.branch.name;
-            students.studentClass.branch.managerId = value.classes.branch.managerId;
-            students.studentId = value.id;
-            students.studentName = value.name;
-            students.studentAddress = value.address;
+            students.studentClass.classId = data[i].classes.id;
+            students.studentClass.className = data[i].classes.name;
+            students.studentClass.grade.gradeId = data[i].classes.grade.id;
+            students.studentClass.grade.gradeName = data[i].classes.grade.name;
+            students.studentClass.branch.branchId = data[i].classes.branch.id;
+            students.studentClass.branch.branchName = data[i].classes.branch.name;
+            students.studentClass.branch.managerId = data[i].classes.branch.managerId;
+            students.studentId = data[i].id;
+            students.studentName = data[i].name;
+            students.studentAddress = data[i].address;
+            students.numberInList = i;
             if(this.accountServ.reportId == -1) {
-              students.reportApproved = value.dailyReportApproved;
-              students.reportFinalized = value.dailyReportFinalized;
+              students.reportApproved = data[i].dailyReportApproved;
+              students.reportFinalized = data[i].dailyReportFinalized;
             }else{
-              students.reportApproved = value.reportApproved[this.accountServ.reportId];
-              students.reportFinalized = value.reportFinalized[this.accountServ.reportId];
+              students.reportApproved = data[i].reportApproved[this.accountServ.reportId];
+              students.reportFinalized = data[i].reportFinalized[this.accountServ.reportId];
             }
             this.studentsList.push(students);
           }

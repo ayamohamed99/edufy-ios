@@ -2114,6 +2114,163 @@ export class ReportTemplatePage{
 
 
   getNextStudent(){
+    let student_list = this.selectedClass.studentsList;
+    let lastOneInList = student_list.length-1;
+    if(this.selectedListOfStudents.length == 1){
+      console.log('selectedListOfStudents Number'+this.selectedListOfStudents.length);
+      let nextStudentNumb = this.selectedListOfStudents[0].numberInList + 1;
+      if(this.selectedListOfStudents[0].numberInList != lastOneInList){
+        console.log('selectedListOfStudents Numberin list'+this.selectedListOfStudents[0].numberInList);
 
+        if (this.accountServ.reportId == -1) {
+          this.PageName =  student_list[nextStudentNumb].studentName +"'s daily report";
+        } else {
+          this.PageName =  student_list[nextStudentNumb].studentName +"'s "+this.accountServ.reportPage;
+        }
+        this.selectedListOfStudents[0] = student_list[nextStudentNumb];
+        for(let i in this.selectedListOfStudents) {
+          this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].studentId});
+        }
+
+        let loadAnswer = this.loadCtrl.create({
+          content:"Load Student Answer"
+        });
+
+        this.getDailyReportForClass(this.selectedClassId,loadAnswer);
+
+      }
+    }
   }
+
+
+  reportQuestions;
+  questionListForRecovary;
+  getDailyReportForClass(classId,loadAnswer){
+    this.dailyReportServ.getDailyReportTemplate("English",this.selectedReportDate,classId,this.reportId).subscribe(
+      (val) => {
+
+        let allData:any;
+        allData = val;
+        let template = allData[0];
+        let reportQuestinsFirst =[];
+        reportQuestinsFirst = template.questionsList;
+        for (let i = 0; i < reportQuestinsFirst.length; i++) {
+          reportQuestinsFirst[i].questionNumber = i;
+          if(this.accountServ.reportId == -1) {
+            this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+              answer: null
+            };
+          }else{
+            this.reportAnswer.reportAnswersObjectsList[i] = {
+              answer: null
+            };
+          }
+          this.reportAnswersNoOfItems[i] = {
+            noOfItems: null
+          };
+          reportQuestinsFirst[i].editQuestion = false;
+          reportQuestinsFirst[i].isEdited = false;
+        }
+
+        this.reportQuestions = reportQuestinsFirst;
+        this.reportQuestionsRecovery = this.getNewInstanceOf(this.reportQuestions);
+
+        for (let i = 0; i < this.reportQuestions.length; i++){
+          if(this.accountServ.reportId == -1) {
+            this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+          }else{
+            this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+          }
+          this.reportQuestionsEditParamTemps[i] = {};
+          this.reportQuestionsEditParamTemps[i].parameters = [];
+
+          for (let j = 0; j < this.reportQuestions[i].parametersList.length; j++) {
+            let param = {
+              "id": '',
+              "key": '',
+              "value": ''
+            };
+            this.reportQuestionsEditParamTemps[i].parameters[j] = param;
+            this.reportQuestionsEditParamTemps[i].parameters[j].key = this.reportQuestions[i].parametersList[j].key;
+          }
+
+          // let temp = this.reportQuestions;
+        }
+
+        if(this.accountServ.reportId == -1) {
+          this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+        }else{
+          this.editQuestionAllowed = this.accountServ.getUserRole().reportEditQuestionCreate;
+        }
+        // let temp2 = reportQuestinsFirst;
+
+        this.questionListForRecovary = this.reportQuestions;
+        this.drQuestion = this.reportQuestions ;
+        this.selectedClass.reportTemplate = this.reportQuestions;
+
+
+        let editDropOrNot = true;
+        let editSingleOrNot = true;
+        for(let i=0; i<this.drQuestion.length;i++){
+          let questionTitle;
+          if(this.accountServ.reportId == -1){
+            questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+          }else{
+            questionTitle = this.drQuestion[i].reportQuestionType.title;
+          }
+          if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+            for(let itm of this.drQuestion[i].parametersList) {
+              if (itm.key == "OPTION_ANSWER") {
+                editDropOrNot = false;
+              }
+            }
+          }
+          else if(questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+            for(let itm of this.drQuestion[i].parametersList) {
+              if (itm.key == "OPTION_ANSWER") {
+                editSingleOrNot = false;
+              }
+            }
+          }
+        }
+
+        let template = new TemplateShape();
+        for(let i=0; i<this.drQuestion.length;i++){
+
+          let questionTitle;
+          if(this.accountServ.reportId == -1){
+            questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
+          }else{
+            questionTitle = this.drQuestion[i].reportQuestionType.title;
+          }
+
+          let temp = template.makeTheTemplateShape(this.drQuestion[i],this.accountServ.reportId);
+          if(temp.length >0) {
+            if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
+              if(editDropOrNot == false){
+                this.drQuestion[i].parametersList = temp;
+              }
+            }
+            else if(questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED'){
+              if(editSingleOrNot == false){
+                this.drQuestion[i].parametersList = temp;
+              }
+            }else{
+              this.drQuestion[i].parametersList = temp;
+            }
+          }
+        }
+
+        loadAnswer.dismiss();
+      },(err)=>{
+        console.log("GetAllTemplates Error : " + err);
+        this.alrtCtrl.create({
+          title: 'Error',
+          subTitle: 'Can\'t load your report shape, please refresh the page.',
+          buttons: ['OK']
+        }).present();
+        loadAnswer.dismiss();
+      });
+  }
+
 }
