@@ -10,6 +10,7 @@ export class Student{
   reportChecked:boolean;
   reportApproved:boolean;
   reportFinalized:boolean;
+  numberInList:number;
   constructor() {
   }
 }

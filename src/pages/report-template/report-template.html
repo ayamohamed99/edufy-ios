@@ -37,7 +37,7 @@
         <br>
 
         <label class="textarea">
-    <textarea rows="3" class="custom-scroll" style="width: 100%" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer">
+    <textarea rows="3" class="custom-scroll" style="width: 100%" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer">
     </textarea>
         </label>
       </div>
@@ -57,7 +57,7 @@
         <div class="inline-group">
           <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
             <label >
-              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[parameter.id]">
+              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[parameter.id]">
               <i></i>
               {{parameter.value}}
             </label>
@@ -79,14 +79,14 @@
         </ion-row>
         <br>
 
-        <div *ngFor="let param of itm.parametersList; let i = index" col-6 style="display: block">
+        <div *ngFor="let param of itm.parametersList; let i = index" style="display: block;width: 100%">
 
           <div *ngIf="param.key == 'OPTION_ANSWER'" >
             <div class="inline-group">
               <label  col-md-9 col-sm-9 col-xs-9>
-                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 <i></i>
-                <input type="number" required [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                <input type="number" required [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[(itm.parametersList[i].id)+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 {{itm.parametersList[i].value}}
               </label>
             </div>
@@ -112,7 +112,7 @@
             <div *ngIf="pram.key == 'OPTION_ANSWER'">
 
               <label >
-                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[i]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <i></i>
                 {{itm.parametersList[i].value}}
               </label>
@@ -130,7 +130,7 @@
                 {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
-                <textarea rows="3" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]"></textarea>
+                <textarea rows="3" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]"></textarea>
               </label>
             </div>
           </div>
@@ -156,7 +156,7 @@
 
                 <label style="display: inline-block">
                   <input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber" [value]="itm.parametersList[i].value"
-                         (change)="enableOther(itm.questionNumber,i)" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                         (change)="enableOther(itm.questionNumber,i)" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                     {{pram.value}}
                 </label>
@@ -168,13 +168,13 @@
                 <div style="display: inline-block">
                   <label >
                     <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="itm.parametersList[i].value"
-                           (change)="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                           (change)="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                     <i></i>
                         {{pram.value}}
                   </label>
                   <label class="textarea">
                     <textarea rows="1" style="width:100%" class="custom-scroll" [disabled]="enableOtherNote[itm.questionNumber]"
-                              ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
+                              ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
                     </textarea>
                   </label>
                 </div>
@@ -200,28 +200,28 @@
         <div *ngFor="let pram of itm.parametersList" class="LopContain">
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Food'" style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/food/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'"style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/mood/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'"style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/milk/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Label'">
             <label>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber ].answer">
               <i></i>
               {{pram.value}}
             </label>
@@ -248,7 +248,7 @@
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                 <label >
-                  <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                  <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{pram.value}}
                 </label>
@@ -265,7 +265,7 @@
                 {{pram.value}}
               </label>
               <label class="textarea">
-                <textarea rows="2" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
+                <textarea rows="2" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>
@@ -294,7 +294,7 @@
                 <label >
                   <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber+i"
                          ng-change="disableNote(reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0],itm.questionNumber)"
-                         [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
+                         [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{itm.parametersList[i].value}}
                 </label>
@@ -311,9 +311,9 @@
                 {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
-                <textarea  [disabled]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]"
+                <textarea  [disabled]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[0]"
                            rows="3" class="custom-scroll"
-                           [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
+                           [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>
@@ -344,14 +344,14 @@
             <br>
             <br>
             {{openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
-            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
+            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
             <br>
           </div>
 
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" [value]="radio.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[(i)]" (change)="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" [value]="radio.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[(i)]" (change)="override()"><i></i>      {{radio.value}} <br></label>
             </span>
           </span>
 
@@ -379,13 +379,13 @@
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'" style="width: 100% !important;display: block">
             {{openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
-            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
+            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
             <br>
           </div>
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span style="display: inline-block;width:  100px;">
-              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]" (change)="override()"><i></i>      {{pram.value}} </label>
+              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]" (change)="override()"><i></i>      {{pram.value}} </label>
             </span>
           </span>
 
@@ -426,7 +426,7 @@
         <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
           <span *ngIf="pram.key == 'OPTION_HELPER_TEXT' || pram.key == 'OPTION_ANSWER'">
             <span style="display: inline-block;width: 100%; margin-bottom: 20px">
-              <label style="bottom: 5px; float:left;"><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber]?.answer[pram.id]">
+              <label style="bottom: 5px; float:left;"><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[pram.id]">
                 <i></i> {{pram.value}} </label>
               <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;bottom: 5px;float: right;" (click)="removeQuestionParameter(itm.questionNumber ,pram.id)" *ngIf="itm.editQuestion == true" [disabled]="!editQuestionAllowed">
             <ion-icon style="font-size: 20px;" name="trash"></ion-icon>
@@ -457,7 +457,7 @@
         <br>
 
         <span *ngFor="let pram of itm.parametersList; let i = index;" class="longOneAnswer">
-          <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
+          <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
         </span>
       </div>
 
@@ -476,7 +476,7 @@
         <br>
 
         <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block;" >
-          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
+          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
         </span>
 
 
@@ -506,7 +506,7 @@
               </label>
               <br>
               <label class="input">
-                <input style="width: 70px; height: 35px;" type="text" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[TEMP.toString()]">
+                <input style="width: 70px; height: 35px;" type="text" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[TEMP.toString()]">
               </label>
             </section>
           </div><br>
@@ -543,7 +543,7 @@
             {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
             <ion-label>{{itm.parametersList[i].value}}</ion-label>
             <ion-item style="padding: 0;margin: 0">
-              <ion-select style="width: 100%;max-width: 100%" [placeholder]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" multiple="false" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
+              <ion-select style="width: 100%;max-width: 100%" [placeholder]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" multiple="false" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <ion-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">{{itmPram.value}}</ion-option>
               </ion-select>
             </ion-item>
@@ -553,7 +553,7 @@
 
           <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
             <div *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [(ngModel)]="reportAnswer?.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [(ngModel)]="reportAnswer.dailyReportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"><i></i>      {{radio.value}} <br></label>
             </div>
           </div>
 
@@ -624,7 +624,7 @@
         <br>
 
         <label class="textarea">
-    <textarea rows="3" class="custom-scroll" style="width: 100%" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer">
+    <textarea rows="3" class="custom-scroll" style="width: 100%" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer">
     </textarea>
         </label>
       </div>
@@ -644,7 +644,7 @@
         <div class="inline-group">
           <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
             <label >
-              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber]?.answer[parameter.id]">
+              <input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[parameter.id]">
               <i></i>
               {{parameter.value}}
             </label>
@@ -666,14 +666,14 @@
         </ion-row>
         <br>
 
-        <div *ngFor="let param of itm.parametersList; let i = index" col-6 style="display: block">
+        <div *ngFor="let param of itm.parametersList; let i = index" style="display: block">
 
           <div *ngIf="param.key == 'OPTION_ANSWER'" >
             <div class="inline-group">
               <label  col-md-9 col-sm-9 col-xs-9>
-                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 <i></i>
-                <input type="number" required [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber]?.answer[itm.parametersList[i].id+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
+                <input type="number" required [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[itm.parametersList[i].id]">
                 {{itm.parametersList[i].value}}
               </label>
             </div>
@@ -699,7 +699,7 @@
             <div *ngIf="pram.key == 'OPTION_ANSWER'">
 
               <label >
-                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber]?.answer[i]">
+                <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <i></i>
                 {{itm.parametersList[i].value}}
               </label>
@@ -717,7 +717,7 @@
                 {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
-                <textarea rows="3" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]"></textarea>
+                <textarea rows="3" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]"></textarea>
               </label>
             </div>
           </div>
@@ -743,7 +743,7 @@
 
                 <label style="display: inline-block">
                   <input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber" [value]="itm.parametersList[i].value"
-                         (change)="enableOther(itm.questionNumber,i)" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[0]">
+                         (change)="enableOther(itm.questionNumber,i)" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{pram.value}}
                 </label>
@@ -755,13 +755,13 @@
                 <div style="display: inline-block">
                   <label >
                     <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="itm.parametersList[i].value"
-                           (change)="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[0]">
+                           (change)="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0]">
                     <i></i>
                     {{pram.value}}
                   </label>
                   <label class="textarea">
                     <textarea rows="1" style="width:100%" class="custom-scroll" [disabled]="enableOtherNote[itm.questionNumber]"
-                              ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[1]">
+                              ng-init="enableOtherNote[' + drQuestion.questionNumber + ']=' + true + '" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[1]">
                     </textarea>
                   </label>
                 </div>
@@ -787,28 +787,28 @@
         <div *ngFor="let pram of itm.parametersList" class="LopContain">
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Food'" style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/food/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'"style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/mood/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'"style="display: inline-block">
             <ion-row>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber ].answer">
               <img [src]="'assets/milk/'+pram.value+'.png'" class="imgOfRadio">
             </ion-row>
           </div>
 
           <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Label'">
             <label>
-              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber ].answer">
+              <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber ].answer">
               <i></i>
               {{pram.value}}
             </label>
@@ -835,7 +835,7 @@
             <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
               <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                 <label >
-                  <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[0]">
+                  <input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{pram.value}}
                 </label>
@@ -852,7 +852,7 @@
                 {{pram.value}}
               </label>
               <label class="textarea">
-                <textarea rows="2" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[1]">
+                <textarea rows="2" cols="50" class="custom-scroll" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>
@@ -881,7 +881,7 @@
                 <label >
                   <input class="checkbox" type="checkbox" [name]="'checkbox' + itm.questionNumber+i"
                          ng-change="disableNote(reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0],itm.questionNumber)"
-                         [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[0]">
+                         [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0]">
                   <i></i>
                   {{itm.parametersList[i].value}}
                 </label>
@@ -898,9 +898,9 @@
                 {{itm.parametersList[i].value}}
               </label>
               <label class="textarea">
-                <textarea  [disabled]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[0]"
+                <textarea  [disabled]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[0]"
                            rows="3" class="custom-scroll"
-                           [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[1]">
+                           [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[1]">
                 </textarea>
               </label>
             </div>
@@ -931,14 +931,14 @@
             <br>
             <br>
             {{openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
-            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
+            <section class="col-md-5"><label>{{pram.value}} <br></label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
             <br>
           </div>
 
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" [value]="radio.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[(i)]" (change)="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" [value]="radio.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[(i)]" (change)="override()"><i></i>      {{radio.value}} <br></label>
             </span>
           </span>
 
@@ -966,13 +966,13 @@
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TEXT'" style="width: 100% !important;display: block">
             {{openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
-            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
+            <section class="col-md-3"><label class="" style="">{{pram.value}}</label><label class="input"><input style="width: 100%;height: 30px" type="text" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"></label></section>
             <br>
           </div>
 
           <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';">
             <span style="display: inline-block;width:  100px;">
-              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]" (change)="override()"><i></i>      {{pram.value}} </label>
+              <label><input type="radio" class="radio" [name]="'radio-inline'+ itm.questionNumber" [value]="itm.parametersList[i].value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]" (change)="override()"><i></i>      {{pram.value}} </label>
             </span>
           </span>
 
@@ -1013,7 +1013,7 @@
         <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
           <span *ngIf="pram.key == 'OPTION_HELPER_TEXT' || pram.key == 'OPTION_ANSWER'">
             <span style="display: inline-block;width: 100%; margin-bottom: 20px">
-              <label style="bottom: 5px; float:left;"><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber]?.answer[pram.id]">
+              <label style="bottom: 5px; float:left;"><input class="checkbox" type="checkbox"  [name]="'checkbox'+itm.questionNumber" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[pram.id]">
                 <i></i> {{pram.value}} </label>
               <button ion-button icon-only clear style="height: 25px;width: 25px; padding: 0;bottom: 5px;float: right;" (click)="removeQuestionParameter(itm.questionNumber ,pram.id)" *ngIf="itm.editQuestion == true" [disabled]="!editQuestionAllowed">
             <ion-icon style="font-size: 20px;" name="trash"></ion-icon>
@@ -1044,7 +1044,7 @@
         <br>
 
         <span *ngFor="let pram of itm.parametersList; let i = index;" class="longOneAnswer">
-          <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
+          <label style="display: inline-block"><input class="radio" type="radio" [name]="'radio-inline' + itm.questionNumber" [value]="pram.value" ng-change="enableOther(itm.questionNumber + ',' + i)" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer"><i></i>     {{pram.value}}</label>
         </span>
       </div>
 
@@ -1063,7 +1063,7 @@
         <br>
 
         <span *ngFor="let pram of itm.parametersList; let k = index;" style="display: block;" >
-          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
+          <section class="col col-2"><label style="margin-top: 5px"> {{pram.value}}   </label><label class="input"><input style="width: 100%;height: 30px;" type="text" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[k]"></label></section>
         </span>
 
 
@@ -1093,7 +1093,7 @@
               </label>
               <br>
               <label class="input">
-                <input style="width: 70px; height: 35px;" type="text" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[TEMP.toString()]">
+                <input style="width: 70px; height: 35px;" type="text" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[TEMP.toString()]">
               </label>
             </section>
           </div><br>
@@ -1130,7 +1130,7 @@
             {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
             <ion-label>{{itm.parametersList[i].value}}</ion-label>
             <ion-item style="padding: 0;margin: 0">
-              <ion-select style="width: 100%;max-width: 100%" [placeholder]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]" multiple="false" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]">
+              <ion-select style="width: 100%;max-width: 100%" [placeholder]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]" multiple="false" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]">
                 <ion-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">{{itmPram.value}}</ion-option>
               </ion-select>
             </ion-item>
@@ -1140,7 +1140,7 @@
 
           <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
             <div *ngFor="let radio of itm.parametersList[i]; let j = index" style="display: inline-block;padding-right: 20px">
-              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [(ngModel)]="reportAnswer?.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"><i></i>      {{radio.value}} <br></label>
+              <label ><input class="radio" type="radio" [name]="'radio-inline'+itm.questionNumber + i" [value]="radio.value" [(ngModel)]="reportAnswer.reportAnswersObjectsList[itm.questionNumber].answer[i]" (change)="override()"><i></i>      {{radio.value}} <br></label>
             </div>
           </div>
 
