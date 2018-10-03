@@ -1,0 +1,23 @@
+report-comment {
+  left: 0;
+ // position: fixed;
+  .slide-up-comments-container{
+    background: #ffffff;
+   // position: fixed;
+    width: 100%;
+    top: 30%;
+    height: 70%;
+    overflow: hidden;
+    transition: all 1s;
+  }
+
+  .slide-down-comments-container{
+    top: calc(100% - 40px);
+    background: #1a74f1;
+  //  position: fixed;
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+    transition: all 1s;
+  }
+}

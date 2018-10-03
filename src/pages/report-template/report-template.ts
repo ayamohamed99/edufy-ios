@@ -2238,7 +2238,7 @@ export class ReportTemplatePage{
           }
         }
 
-        let template = new TemplateShape();
+         template = new TemplateShape();
         for(let i=0; i<this.drQuestion.length;i++){
 
           let questionTitle;

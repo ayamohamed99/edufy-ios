@@ -49,6 +49,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReportTemplatePage} from "../pages/report-template/report-template";
 import {MatSelectModule} from '@angular/material/select'
 import {CheckboxFunctionService} from "../services/checkboxFunctionService";
+import {ComponentsModule} from "../components/components.module";
+import {ReportCommentComponent} from "../components/report-comment/report-comment";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -63,7 +65,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     SettingsPage,
     NotificationEditPage,
     ReportPage,
-    ReportTemplatePage
+   // ReportTemplatePage
   ],
   imports: [
     BrowserModule,
@@ -72,8 +74,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     IonicStorageModule.forRoot(),
     RlTagInputModule,
     mods,
-    BrowserAnimationsModule
-
+    BrowserAnimationsModule,
+    ComponentsModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -86,7 +88,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     SettingsPage,
     NotificationEditPage,
     ReportPage,
-    ReportTemplatePage
+   // ReportTemplatePage,
   ],
   providers: [
     StatusBar,

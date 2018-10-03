@@ -545,7 +545,7 @@ export class ReportPage {
     }
     let model;
     if(this.ReportQuestionsList) {
-      model = this.modalCtrl.create(ReportTemplatePage, {
+      model = this.modalCtrl.create('ReportTemplatePage', {
         selected: selectedStudents,
         template: this.ReportQuestionsList,
         reportDate: this.dateView,
