@@ -1,23 +1,24 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, NavParams, Platform, ToastController,
-  ViewController,ActionSheetController
+  ActionSheetController,
+  AlertController,
+  LoadingController,
+  NavParams,
+  Platform,
+  ToastController,
+  ViewController
 } from 'ionic-angular';
 import {NotificationService} from "../../services/notification";
-import { Network } from '@ionic-native/network';
+import {Network} from '@ionic-native/network';
 import {AccountService} from "../../services/account";
 import {Class} from "../../models/class";
 import {Student} from "../../models/student";
 import {Autocomplete_shown_array} from "../../models/autocomplete_shown_array";
 import {Send_student_notification} from "../../models/send_student_notification";
-import { Storage } from "@ionic/storage";
+import {Storage} from "@ionic/storage";
 import {AutoCompleteOps} from "angular2-tag-input/dist/lib/shared/tag-input-autocompleteOps";
-import {FileUploadOptions} from "@ionic-native/transfer";
-import {NgForm} from "@angular/forms";
-import {Attachment} from "../../models/attachment";
 import {Postattachment} from "../../models/postattachment";
-import { BackgroundMode } from '@ionic-native/background-mode';
-import {NativeStorage} from "@ionic-native/native-storage";
+import {BackgroundMode} from '@ionic-native/background-mode';
 import {Pendingnotification} from "../../models/pendingnotification";
 
 

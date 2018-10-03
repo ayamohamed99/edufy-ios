@@ -1,14 +1,12 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AlertController, LoadingController, NavController, Platform} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login";
 import {Storage} from "@ionic/storage";
 import {AccountService} from "../../services/account";
 import {ProfilePage} from "../profile/profile";
-import {Pendingnotification} from "../../models/pendingnotification";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
-import {Postattachment} from "../../models/postattachment";
 
 @Component({
   selector: 'page-home',

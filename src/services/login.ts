@@ -2,13 +2,9 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import 'rxjs/add/operator/map';
 import {Url_domain} from "../models/url_domain";
-import { HTTP } from '@ionic-native/http';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Platform} from "ionic-angular";
-import {RequestOptions} from "@angular/http";
 
 @Injectable()
 export class LoginService {

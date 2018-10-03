@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import {NavController, NavParams, Platform} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {Postattachment} from "../../models/postattachment";
 import {Pendingnotification} from "../../models/pendingnotification";

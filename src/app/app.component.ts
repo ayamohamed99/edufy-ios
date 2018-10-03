@@ -1,16 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
-import { AlertController, LoadingController, MenuController, Nav, Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import {Component, ViewChild} from '@angular/core';
+import {AlertController, LoadingController, MenuController, Nav, Platform} from 'ionic-angular';
+import {StatusBar} from '@ionic-native/status-bar';
+import {SplashScreen} from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { Storage } from "@ionic/storage";
-import { LoginService } from "../services/login";
-import { NotificationPage } from "../pages/notification/notification";
-import { AccountService } from "../services/account";
-import { ProfilePage } from "../pages/profile/profile";
-import { SettingsPage } from "../pages/settings/settings";
-import { LogoutService } from "../services/logout";
+import {HomePage} from '../pages/home/home';
+import {Storage} from "@ionic/storage";
+import {LoginService} from "../services/login";
+import {NotificationPage} from "../pages/notification/notification";
+import {AccountService} from "../services/account";
+import {ProfilePage} from "../pages/profile/profile";
+import {SettingsPage} from "../pages/settings/settings";
+import {LogoutService} from "../services/logout";
 import {ReportPage} from "../pages/report/report";
 
 declare var window:any;

@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
-import {
-  AlertController, IonicPage, LoadingController, NavController, NavParams, Platform,
-  ViewController
-} from 'ionic-angular';
-import {NgForm} from "@angular/forms";
+import {Component} from '@angular/core';
+import {AlertController, LoadingController, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
+import {FormControl, NgForm} from "@angular/forms";
 import {NotificationService} from "../../../../services/notification";
-import {FormControl} from '@angular/forms';
 
 
 @Component({

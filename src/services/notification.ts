@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import 'rxjs/add/operator/map';
 import {Url_domain} from "../models/url_domain";
 import 'rxjs/add/observable/fromPromise';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import {Platform} from "ionic-angular";
 

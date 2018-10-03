@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
-import {
-  AlertController, IonicPage, LoadingController, NavController, NavParams, Platform,
-  ViewController
-} from 'ionic-angular';
+import {Component} from '@angular/core';
+import {AlertController, LoadingController, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
 import {NotificationService} from "../../../services/notification";
 import {Storage} from "@ionic/storage";
-import {NotificationNewPage} from "../../notification-new/notification-new";
 
 @Component({
   selector: 'page-popovernotificationcard',

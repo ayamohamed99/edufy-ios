@@ -1,8 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {
   AlertController,
-  FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform,
-  ToastController, ViewController
+  FabContainer,
+  IonicPage,
+  LoadingController,
+  NavController,
+  NavParams,
+  Platform,
+  ToastController,
+  ViewController
 } from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -65,8 +71,6 @@ export class ReportTemplatePage{
   imgsMoodName = ['Active', 'Aggressive', 'Cheerful', 'Cranky','Different', 'Difficult', 'Energetic',
                   'Excellent','Fazzy', 'Good', 'Happy', 'Irretated', 'Lazy', 'Missed My Mummy','Naughty',
                   'Normal', 'On_off', 'Quiet','Sad', 'Sick', 'Sleepy', 'Tired', 'Unhappy', 'Very Good'];
-
-
 
 
   ///////////////////// HERE ORGANIZE THE VIEW//////////////////////

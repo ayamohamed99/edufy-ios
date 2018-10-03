@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
-import {
-  AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
-} from 'ionic-angular';
+import {AlertController, LoadingController, ModalController, Platform, PopoverController} from 'ionic-angular';
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
@@ -14,14 +12,14 @@ import {StudentsService} from "../../services/students";
 import {Student} from "../../models/student";
 import {Attachment} from "../../models/attachment";
 import {File} from '@ionic-native/file';
-import { DocumentViewer, DocumentViewerOptions } from '@ionic-native/document-viewer';
+import {DocumentViewer, DocumentViewerOptions} from '@ionic-native/document-viewer';
 import {FileTransfer} from '@ionic-native/file-transfer';
 import {Media} from "@ionic-native/media";
-import { FileOpener } from '@ionic-native/file-opener';
+import {FileOpener} from '@ionic-native/file-opener';
 import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {Pendingnotification} from "../../models/pendingnotification";
 import {Network} from "@ionic-native/network";
-import { AndroidPermissions } from '@ionic-native/android-permissions';
+import {AndroidPermissions} from '@ionic-native/android-permissions';
 import {ClassesService} from "../../services/classes";
 
 declare var cordova: any;

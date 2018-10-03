@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import {Component} from '@angular/core';
+import {NavController, NavParams, Platform} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
 
 @Component({

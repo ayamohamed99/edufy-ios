@@ -1,6 +1,3 @@
-import {ParamData} from "./paramData";
-import {AccountService} from "../services/account";
-
 export class TemplateShape{
 
   row = [];

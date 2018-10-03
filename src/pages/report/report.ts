@@ -1,6 +1,12 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, ModalController, NavController, NavParams, Platform,
+  AlertController,
+  IonicPage,
+  LoadingController,
+  ModalController,
+  NavController,
+  NavParams,
+  Platform,
   ToastController
 } from 'ionic-angular';
 import {AccountService} from "../../services/account";
@@ -9,11 +15,9 @@ import {ClassesService} from "../../services/classes";
 import {Class} from "../../models/class";
 import {Student} from "../../models/student";
 import {Storage} from "@ionic/storage";
-import { DatePicker } from '@ionic-native/date-picker';
-import {MatExpansionPanel} from "@angular/material";
+import {DatePicker} from '@ionic-native/date-picker';
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
-import {DomSanitizer} from "@angular/platform-browser";
 
 @IonicPage()
 @Component({
