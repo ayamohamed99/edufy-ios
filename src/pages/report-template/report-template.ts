@@ -838,15 +838,17 @@ export class ReportTemplatePage{
           firstTime = true;
         }
 
-        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
-          if (firstTime) {
-            defailtValueArray[counter] = {};
-            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
-            defailtValueArray[counter].value = drQuestion.parametersList[v].value;
-            counter++;
-            firstTime = false;
-          } else {
+        else if (drQuestion.parametersList[v].key != "OPTION_HELPER_TITLE" || drQuestion.parametersList[v].key != "OPTION_HELPER_TEXT") {
+          for(let pram of drQuestion.parametersList[v]) {
+            if (firstTime) {
+              defailtValueArray[counter] = {};
+              defailtValueArray[counter].key = pram.key;
+              defailtValueArray[counter].value = pram.value;
+              counter++;
+              firstTime = false;
+            } else {
 
+            }
           }
         }
 
@@ -938,16 +940,20 @@ export class ReportTemplatePage{
           firstTime = true;
         }
 
-        else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
-          if (firstTime) {
-            defailtValueArray[counter] = {};
-            defailtValueArray[counter].key = drQuestion.parametersList[v].key;
-            defailtValueArray[counter].value = drQuestion.parametersList[v].value;
-            ;
-            counter++;
-            firstTime = false;
-          } else {
+        else if (drQuestion.parametersList[v].key != "OPTION_HELPER_TITLE" && drQuestion.parametersList[v].key != "OPTION_DROP_DOWN") {
+          for(let pram of drQuestion.parametersList[v]) {
+            if(pram.key == "OPTION_ANSWER") {
+              if (firstTime) {
+                defailtValueArray[counter] = {};
+                defailtValueArray[counter].key = pram.key;
+                defailtValueArray[counter].value = pram.value;
+                ;
+                counter++;
+                firstTime = false;
+              } else {
 
+              }
+            }
           }
         }
 
@@ -1312,7 +1318,7 @@ export class ReportTemplatePage{
               firstTimeFullArray = true;
             }
 
-            else if (question.parametersList[j].key == "OPTION_ANSWER") {
+            else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" && question.parametersList[j].key != "OPTION_DROP_DOWN") {
               for(let pram of question.parametersList[j]) {
                 if(pram.key == "OPTION_ANSWER") {
                   if (firstTimeFullArray) {
@@ -1931,7 +1937,7 @@ export class ReportTemplatePage{
               firstTimeFullArray = true;
             }
 
-            else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" || question.parametersList[j].key != "OPTION_DROP_DOWN") {
+            else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" && question.parametersList[j].key != "OPTION_DROP_DOWN") {
               for(let pram of question.parametersList[j]) {
                 if(pram.key == "OPTION_ANSWER") {
                   if (firstTimeFullArray) {
@@ -2599,7 +2605,7 @@ export class ReportTemplatePage{
             firstTimeFullArray = true;
           }
 
-          else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" || question.parametersList[j].key != "OPTION_HELPER_TITLE") {
+          else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" && question.parametersList[j].key != "OPTION_DROP_DOWN") {
             for(let pram of question.parametersList[j]) {
               if(pram.key == "OPTION_ANSWER") {
                 if (firstTimeFullArray) {
@@ -2712,15 +2718,17 @@ export class ReportTemplatePage{
             firstTimeFullArray = true;
           }
 
-          else if (question.parametersList[j].key == "OPTION_ANSWER") {
-            if (firstTimeFullArray) {
-              getAnswerValueArray[counter] = {};
-              getAnswerValueArray[counter].key = question.parametersList[j].key;
-              counter++;
-              firstTimeFullArray = false;
-              questionCount++;
-            } else {
+          else if (question.parametersList[j].key != "OPTION_HELPER_TITLE" && question.parametersList[j].key != "OPTION_DROP_DOWN") {
+            for(let pram of question.parametersList[j]) {
+              if (firstTimeFullArray) {
+                getAnswerValueArray[counter] = {};
+                getAnswerValueArray[counter].key = pram.key;
+                counter++;
+                firstTimeFullArray = false;
+                questionCount++;
+              } else {
 
+              }
             }
           }
 
