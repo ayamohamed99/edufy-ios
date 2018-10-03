@@ -2120,7 +2120,7 @@ export class ReportTemplatePage{
     if(this.selectedListOfStudents.length == 1){
       console.log('selectedListOfStudents Number'+this.selectedListOfStudents.length);
       this.nextStudentNumb = this.selectedListOfStudents[0].numberInList + 1;
-      if(this.selectedListOfStudents[0].numberInList < lastOneInList){
+      if(this.nextStudentNumb < lastOneInList){
         console.log('selectedListOfStudents Numberin list'+this.selectedListOfStudents[0].numberInList);
 
         if (this.accountServ.reportId == -1) {
