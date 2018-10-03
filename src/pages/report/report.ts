@@ -14,6 +14,8 @@ import {MatExpansionPanel} from "@angular/material";
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
 import {DomSanitizer} from "@angular/platform-browser";
+import {DatePipe} from "@angular/common";
+import {TransFormDate} from "../../services/transFormDate";
 
 @IonicPage()
 @Component({
@@ -88,7 +90,7 @@ export class ReportPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
-              private toastCtrl:ToastController, private modalCtrl:ModalController) {
+              private toastCtrl:ToastController, private modalCtrl:ModalController,public transformDate:TransFormDate) {
 
     if(this.accountServ.reportId == -1){
       this.reportAnswer = {
@@ -498,13 +500,13 @@ export class ReportPage {
       allowFutureDates:false
     }).then(
       date => {
-        console.log('Got date: ', date);
+        console.log('Got date: ', this.transformDate.transformTheDate(date,'dd-MM-yyyy'));
         this.pickerStartDate = date;
-        let newDate = date.toISOString().substring(0, 10);
+        let newDate = this.transformDate.transformTheDate(date,'dd-MM-yyyy');
         var dateData = newDate.split('-');
-        var year = dateData [0];
+        var year = dateData [2];
         var month = dateData [1];
-        var day = dateData [2];
+        var day = dateData [0];
         this.selectedDate = day + "-" + month + "-" + year;
         this.dateView =  day + "/" + month + "/" + year;
         this.classesList = [];
@@ -1723,7 +1725,6 @@ export class ReportPage {
     }
 
   }
-
 
   presentToast(message) {
     let toast = this.toastCtrl.create({

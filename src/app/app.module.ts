@@ -50,6 +50,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ReportTemplatePage} from "../pages/report-template/report-template";
 import {MatSelectModule} from '@angular/material/select'
 import {CheckboxFunctionService} from "../services/checkboxFunctionService";
+import {DatePipe} from "@angular/common";
+import {TransFormDate} from "../services/transFormDate";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -112,7 +114,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     ClassesService,
     DailyReportService,
     DatePicker,
-    CheckboxFunctionService
+    CheckboxFunctionService,
+    [DatePipe],TransFormDate
   ]
 })
 export class AppModule {}

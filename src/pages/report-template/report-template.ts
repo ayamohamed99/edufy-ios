@@ -10,6 +10,8 @@ import {TemplateShape} from "../../models/template_Shape";
 import {Storage} from "@ionic/storage";
 import {DailyReportService} from "../../services/dailyreport";
 import {CheckboxFunctionService} from "../../services/checkboxFunctionService";
+import {DatePicker} from "@ionic-native/date-picker";
+import {TransFormDate} from "../../services/transFormDate";
 
 /**
  * Generated class for the ReportTemplatePage page.
@@ -253,7 +255,7 @@ export class ReportTemplatePage{
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
               private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController,
-              public checkboxFunctionService:CheckboxFunctionService) {
+              public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDate) {
 
     if(this.accountServ.reportId == -1){
       this.reportId = null;
@@ -2781,6 +2783,33 @@ export class ReportTemplatePage{
 
     this.reportAnswer = reportAnswerView;
 
+  }
+
+
+  onClickonMenuCalenderFromReport(){
+    let date = this.selectedReportDate.split('-');
+    let year = date [2];
+    let month = date [1];
+    let day = date [0];
+    this.datePicker.show({
+      date: new Date(year, month-1, day),
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
+      minDate:new Date(2014, 0, 1).valueOf(),
+      maxDate: new Date(year, month-1, day).valueOf(),
+      allowFutureDates:false
+    }).then(
+      date => {
+        console.log('Got date: ', this.tranformDate.transformTheDate(date,'dd-MM-yyyy'));
+        this.presentToast(this.tranformDate.transformTheDate(date,'dd-MM-yyyy'));
+        this.selectedReportDate = this.tranformDate.transformTheDate(date,'dd-MM-yyyy');
+        this.reportDate = this.tranformDate.transformTheDate(date,'dd/MM/yyyy');
+        this.getStudentsAnswer();
+      },
+      err =>{
+        console.log('Error occurred while getting date: ', err);
+      }
+    );
   }
 
 }
