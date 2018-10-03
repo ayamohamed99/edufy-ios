@@ -2,7 +2,7 @@
 export class Url_domain{
   // DEV:any;
   // PRODUCTION:"http://104.198.175.198";
-  // LOCAL:"http://192.168.1.10:8080";
+  // LOCAL:"http://192.168.1.6:8080";
 
   Domain = "";
 
