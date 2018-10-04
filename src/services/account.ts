@@ -28,6 +28,7 @@ export class AccountService{
 
   private _reportPage:string;
   private _reportId:any;
+  private _userId: number;
 
   constructor(private http: HttpClient) {
     this.DomainUrl=new Url_domain();
@@ -65,6 +66,7 @@ export class AccountService{
     if(this.value.data != null){
       this.value = JSON.parse(this.value.data);
     }
+    this._userId = this.value.id;
     this.accountFeature = this.value.accountFeatures;
     this.userRole = this.value.userRoles;
     this.userTelephone = this.value.telephone;
@@ -168,5 +170,13 @@ export class AccountService{
 
   set reportId(value: any) {
     this._reportId = value;
+  }
+
+  get userId(): number {
+    return this._userId;
+  }
+
+  set userId(value: number) {
+    this._userId = value;
   }
 }

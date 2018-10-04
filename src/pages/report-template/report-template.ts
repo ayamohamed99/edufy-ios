@@ -2277,4 +2277,8 @@ export class ReportTemplatePage{
       });
   }
 
+  showStudentinfo() {
+    console.log(this.selectedListOfStudentsID);
+    console.log(this.selectedListOfStudents);
+  }
 }

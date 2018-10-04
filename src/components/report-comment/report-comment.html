@@ -1,19 +1,29 @@
 <!--<div >-->
-  <div [ngClass]="isCommentsSectionExpanded? 'slide-up-comments-container': 'slide-down-comments-container'">
+  <div *ngIf="shouldShowComments" [ngClass]="isCommentsSectionExpanded? 'slide-up-comments-container': 'slide-down-comments-container'">
   <button ion-button full style="height: 40px;margin-top: 0" (click)="toggleCommentsSection()">Comment</button>
-    <div style="overflow: scroll;width: 100%;height: calc(100% - 90px);padding: 12px">
-      <section>
+    <div #commentsContainer style="overflow-y: scroll; overflow-x: hidden; width: 100%;height: calc(100% - 90px);padding: 12px">
+      <section > 
         <div class="comment-message-container" *ngFor="let comment of currentReportComments">
-          <div class="comment-message-bubble" [ngClass]="comment.senderType=='USER'?'from-me':'from-them'">
-            <p class="comment-message-text" > {{comment.comment}}</p>
+          <div class="comment-message-bubble" [ngClass]="comment.senderObject.type=='USER'?'from-me':'from-them'">
+            <div class="comment-message-actions">
+              <button class="comment-message-actions-button" ion-button icon-only clear small >
+                <ion-icon name="ios-create-outline"></ion-icon>
+              </button>
+              <button class="comment-message-actions-button" ion-button icon-only clear small >
+                <ion-icon name="ios-trash-outline"></ion-icon>
+              </button>
+            </div>
+            <p class="comment-message comment-message-sender" > {{comment.senderObject.name}}</p>
+            <p class="comment-message comment-message-date" > {{comment.postDate | date:"MMM d, y,  h:mm a"}}</p>
+            <p class="comment-message comment-message-text" > {{comment.comment}}</p>
           </div>
           <div class="clear"></div>
         </div>
       </section>
     </div>
-  <ion-row style="background: gray;width: 100%;height: 50px; padding:0;">
-    <textarea type="text" rows="3"  style="background: #eaeaea;width: calc(100% - 50px);height: 50px"></textarea>
-    <button ion-button icon-only style="width: 50px;height: 50px;margin: 0;padding: 0;">
+  <ion-row style="background: gray;width: 100%;height: 50px; padding:0;" ng-if="canSubmitComment">
+    <textarea type="text" rows="3"  style="background: #eaeaea;width: calc(100% - 50px);height: 50px" [(ngModel)]="newCommentToBeSubmitted" [disabled]="isSendingComment"></textarea>
+    <button (click)="submitNewComment()" [disabled]="isSendingComment" ion-button icon-only style="width: 50px;height: 50px;margin: 0;padding: 0;">
       <ion-icon name="md-send" style="margin: 0;padding: 0"></ion-icon>
     </button>
   </ion-row>

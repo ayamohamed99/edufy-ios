@@ -346,6 +346,8 @@ export class ReportPage {
             students.studentClass.branch.branchId = data[i].classes.branch.id;
             students.studentClass.branch.branchName = data[i].classes.branch.name;
             students.studentClass.branch.managerId = data[i].classes.branch.managerId;
+            students.numberOfUnseenComments = data[i].numberOfUnseenComments;
+            students.numberOfUnseenReportComments = data[i].numberOfUnseenReportComments;
             students.studentId = data[i].id;
             students.studentName = data[i].name;
             students.studentAddress = data[i].address;
