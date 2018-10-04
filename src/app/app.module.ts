@@ -46,12 +46,14 @@ import {MatAutocompleteModule, MatExpansionModule, MatFormFieldModule} from '@an
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ReportTemplatePage} from "../pages/report-template/report-template";
 import {MatSelectModule} from '@angular/material/select'
 import {CheckboxFunctionService} from "../services/checkboxFunctionService";
 import {ComponentsModule} from "../components/components.module";
-import {ReportCommentComponent} from "../components/report-comment/report-comment";
+import {ReportCommentProvider} from '../providers/report-comment/report-comment';
 
+export interface String {
+  format(...replacements: string[]): string;
+}
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
@@ -113,7 +115,28 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     ClassesService,
     DailyReportService,
     DatePicker,
-    CheckboxFunctionService
+    CheckboxFunctionService,
+    ReportCommentProvider
   ]
 })
-export class AppModule {}
+export class AppModule {
+constructor(){
+  console.log("still format");
+  const stringPrototype = <any>String.prototype;
+  stringPrototype.format = function() {
+    console.log("formated")
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+        ;
+    });
+
+  };
+}
+}
+
+
+
+

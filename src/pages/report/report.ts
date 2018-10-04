@@ -18,6 +18,7 @@ import {Storage} from "@ionic/storage";
 import {DatePicker} from '@ionic-native/date-picker';
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
+import {ReportCommentProvider} from "../../providers/report-comment/report-comment";
 
 @IonicPage()
 @Component({
@@ -92,7 +93,7 @@ export class ReportPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
-              private toastCtrl:ToastController, private modalCtrl:ModalController) {
+              private toastCtrl:ToastController, private modalCtrl:ModalController,private reportComment:ReportCommentProvider) {
 
     if(this.accountServ.reportId == -1){
       this.reportAnswer = {
@@ -146,6 +147,7 @@ export class ReportPage {
       storage.get(this.localStorageToken).then(
         val => {
           this.tokenKey = val;
+          this.reportComment.putHeader(val);
           this.dailyReportServ.putHeader(val);
           this.classesServ.putHeader(val);
           this.studentsServ.putHeader(val);

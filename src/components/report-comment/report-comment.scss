@@ -21,8 +21,10 @@ report-comment {
     transition: all 1s;
   }
 
-  section {
-    div {
+    .comment-message-container{
+      display: inline;
+    }
+    .comment-message-bubble {
       max-width: 255px;
       word-wrap: break-word;
       margin-bottom: 12px;
@@ -33,10 +35,10 @@ report-comment {
         clear: both;
       }
     }
-    p{
+    .comment-message-text{
       margin: 0;
     }
-  }
+
 
   .clear {clear: both}
   .from-me {

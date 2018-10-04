@@ -3,13 +3,11 @@
   <button ion-button full style="height: 40px;margin-top: 0" (click)="toggleCommentsSection()">Comment</button>
     <div style="overflow: scroll;width: 100%;height: calc(100% - 90px);padding: 12px">
       <section>
-        
-        <div class="from-me">
-          <p>Hey there! What's up?</p>
-        </div>
-        <div class="clear"></div>
-        <div class="from-them">
-          <p>Checking out iOS7 you know..</p>
+        <div class="comment-message-container" *ngFor="let comment of currentReportComments">
+          <div class="comment-message-bubble" [ngClass]="comment.senderType=='USER'?'from-me':'from-them'">
+            <p class="comment-message-text" > {{comment.comment}}</p>
+          </div>
+          <div class="clear"></div>
         </div>
       </section>
     </div>

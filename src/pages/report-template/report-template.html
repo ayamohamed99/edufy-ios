@@ -539,7 +539,7 @@
           </div>
 
           <div *ngIf="itm.parametersList[i].key == 'OPTION_DROP_DOWN'">
-            <br>{{console.log('Data'+i)}}
+            <br>
             {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
             <ion-label>{{itm.parametersList[i].value}}</ion-label>
             <ion-item style="padding: 0;margin: 0">
@@ -1226,7 +1226,8 @@
 
       </ion-fab-list>
     </ion-fab>
-    <report-comment></report-comment>
+
+    <report-comment [date]="selectedReportDate" [studentId]="selectedListOfStudentsID[0].id" [reportId]="reportId"></report-comment>
 
   </div>
 
