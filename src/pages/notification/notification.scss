@@ -9,6 +9,24 @@ page-notification {
     margin: 10px;
     padding: 0px;
   }
+
+  .firstView{
+    height: fit-content;
+  }
+  .secView{
+    height: fit-content;
+  }
+  .thridView{
+    height: fit-content;
+  }
+  .forthView{
+    height: fit-content;
+  }
+  //#488aff
+  //.toolbar-background-md {
+  //  border-color: #ffffff;
+  //  background: #488aff;
+  //}
   .buttonShape .button {
     background: #ffffff00;
   }
@@ -91,3 +109,11 @@ page-notification {
   }
 }
 
+.md{
+  page-notification {
+    .toolBarShap {
+      padding: 0;
+      min-height: fit-content;
+    }
+  }
+}

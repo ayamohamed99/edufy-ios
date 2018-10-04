@@ -44,7 +44,7 @@
 
   <div style="height: 16px; background-color: white"></div>
 
-  <button ion-button block outline class="fileContainer">
+  <button ion-button block outline class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
     Choose Files
     <input type="file" multiple #file id="inputFiles" (change)="filesChange()">
   </button>

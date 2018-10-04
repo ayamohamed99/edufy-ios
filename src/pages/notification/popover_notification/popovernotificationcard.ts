@@ -6,6 +6,7 @@ import {
 import {NotificationService} from "../../../services/notification";
 import {Storage} from "@ionic/storage";
 import {NotificationNewPage} from "../../notification-new/notification-new";
+import {AccountService} from "../../../services/account";
 
 @Component({
   selector: 'page-popovernotificationcard',
@@ -19,7 +20,7 @@ export class PopoverNotificationCardPage {
   notificationDetails:string;
 
   constructor(public navCtrl: NavController,public navParams:NavParams,public viewCtrl: ViewController,
-              public platform:Platform,public storage:Storage,public alertCtrl:AlertController,
+              public platform:Platform,public storage:Storage,public alertCtrl:AlertController,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingController, public alrtCtrl:AlertController)
   {
 

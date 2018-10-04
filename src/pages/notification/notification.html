@@ -7,10 +7,19 @@
     </ion-buttons>
     <ion-title text-center>Notifications</ion-title>
   </ion-navbar>
-
+  <ion-toolbar class="toolBarShap" color="primary">
+    <ion-segment [(ngModel)]="selectedTab" color="light">
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approved</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="contentColor">
+  <ion-slides style="height: fit-content;scroll-padding-block-start: initial" (ionSlideDidChange)="slideChanged()">
+    <ion-slide class="firstView">
   <ion-grid>
     <ion-row>
       <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
@@ -18,7 +27,7 @@
           <ion-item style="background-color: white">
 
             <h1>{{notify.title}}</h1>
-              <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending'" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+              <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
           </ion-item>
           <div style="padding-left: 16px;">
             <h2 style="color: gray">{{notify.body}}</h2>
@@ -61,8 +70,31 @@
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
+
+    </ion-slide>
+
+    <ion-slide class="secView">
+
+      <p>Sent</p>
+
+    </ion-slide>
+
+    <ion-slide class="thridView" *ngIf="accountServ.getUserRole().notificationApproved">
+
+      <p>Awaiting Approved</p>
+
+    </ion-slide>
+
+    <ion-slide class="forthView" *ngIf="accountServ.getUserRole().archiveNotificationView">
+
+      <p>Archive</p>
+
+    </ion-slide>
+
+  </ion-slides>
+
   <ion-fab bottom right>
-    <button ion-fab mini (click)="onOpenView()"><ion-icon name="add"></ion-icon></button>
+    <button ion-fab mini (click)="onOpenView()" *ngIf="accountServ.getUserRole().notificationCreate"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 
 </ion-content>

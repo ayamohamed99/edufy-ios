@@ -55,7 +55,7 @@ export class NotificationService{
       return this.http.post(this.DomainUrl.Domain + this.commonUrl, newNotification, this.httpOptions);
   }
 
-  getNotification(pageNumber:number,userId:number,classId:number,approved:string, archived:string,sent:string,tagId:number) {
+  getNotification(pageNumber:number,userId:number,classId:number,approved, archived,sent,tagId:number) {
     console.log('Domain',this.DomainUrl.Domain);
     let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='

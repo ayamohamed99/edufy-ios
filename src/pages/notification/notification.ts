@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {
   AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController
 } from 'ionic-angular';
@@ -22,6 +22,8 @@ import {Transfer, TransferObject} from '@ionic-native/transfer';
 import {Pendingnotification} from "../../modles/pendingnotification";
 import {Network} from "@ionic-native/network";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import { Slides } from 'ionic-angular';
+
 
 declare var cordova: any;
 
@@ -30,7 +32,7 @@ declare var cordova: any;
   templateUrl: 'notification.html',
 })
 export class NotificationPage{
-
+  @ViewChild(Slides) slides: Slides;
   notifications:Notification[] = [];
   notificationPage=1;
   loading:any;
@@ -48,27 +50,37 @@ export class NotificationPage{
   editTitle;
   editDetails;
   editTags;
+  selectedTab;
+  scrollTab;
+  approved;
+  archived;
+  sent;
+  console=console;
 
   constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
-              private transferF: Transfer, private accountServ:AccountService,private network:Network,
+              private transferF: Transfer, public accountServ:AccountService,private network:Network,
               private androidPermissions: AndroidPermissions) {
+    this.approved = null;
+    this.archived = null;
+    this.sent = null;
+    this.selectedTab = "all";
     this.fristOpen = true;
     if (platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+      this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
     } else {
       storage.get(this.localStorageToken).then(
         val => {
             this.getPendingNotification();
           this.tokenKey = val;
           notificationService.putHeader(val);
-          this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
         });
     }
     if (platform.is('android')) {
@@ -109,7 +121,7 @@ export class NotificationPage{
         this.notificationPage = 1;
 
         this.notificationService.putHeader(this.tokenKey);
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
       }else if (data.done === 'updateSuccess'){
         console.log(data.done);
@@ -123,7 +135,7 @@ export class NotificationPage{
             this.notificationPage = 1;
 
             this.notificationService.putHeader(this.tokenKey);
-            this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+            this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
           }
         });
         model.present();
@@ -175,19 +187,34 @@ export class NotificationPage{
     this.getAllDataThenNavigate();
   }
 
-  getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    if(this.fristOpen || this.loadNow) {
-      this.loading = this.load.create({
-        content: 'Loading Notifications...'
-      });
-      this.loading.present();
+  getData = false;
+  getNotifications(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
+    let contentMsg;
+    if(this.approved){
+      contentMsg = 'Loading Awaiting Approved Notifications...';
+    }else if(this.archived){
+      contentMsg = 'Loading Archived Notifications...';
+    }else if(this.sent){
+      contentMsg = 'Loading Sent Notifications...';
+    }else{
+      contentMsg = 'Loading Notifications...';
+    }
+    if(!this.getData) {
+      this.getData = true;
+      if (this.fristOpen || this.loadNow) {
+        this.loading = this.load.create({
+          content: contentMsg
+        });
+        this.loading.present();
+      }
     }
     this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
   }
 
-  getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
+  getNotification(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
+        this.getData = false;
         console.log("Date Is", data);
         let allData:any = data;
         for (let value of allData){
@@ -237,7 +264,7 @@ export class NotificationPage{
       setTimeout(() => {
 
         this.notificationPage += this.notificationPage + 1;
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
         console.log('Async operation has ended');
         resolve();
@@ -317,7 +344,7 @@ export class NotificationPage{
               this.notificationPage = 1;
               this.getPendingNotification();
               this.notificationService.putHeader(this.tokenKey);
-              this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+              this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
             }else if(data.name =="dismissed&NOTSENT"){
               this.fristOpen = false;
@@ -344,7 +371,7 @@ export class NotificationPage{
             this.notificationPage = 1;
 
             this.notificationService.putHeader(this.tokenKey);
-            this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+            this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
           });
           model.present();
 
@@ -363,7 +390,7 @@ export class NotificationPage{
   }
 
   onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,pending:any){
-    if(pending!="pending") {
+    if(pending!="pending" && this.accountServ.getUserRole().notificationAttachmentDownload) {
       this.alrtCtrl.create({
         title: 'Atachment',
         subTitle: 'What are you want to do with this file!',
@@ -661,6 +688,40 @@ export class NotificationPage{
     }
   }
 
+  tabThatSelectedDo(tabName){
+    console.log("TabName "+this.selectedTab);
+    let speed = 500;
+    if(tabName == 'all'){
+      this.slides.slideTo(0, speed);
+    }else if(tabName == 'sent'){
+      this.slides.slideTo(1, speed);
+    }else if(tabName == 'approved'){
+      this.slides.slideTo(2, speed);
+    }else if(tabName == 'archived'){
+      this.slides.slideTo(3, speed);
+    }
+  }
+  slideChanged() {
+    let currentIndex = this.slides.getActiveIndex();
+    console.log('Current index is', currentIndex);
+    switch (currentIndex){
+      case 1:
+        this.selectedTab = 'sent';
+        break;
+
+      case 2:
+        this.selectedTab = 'approved';
+        break;
+
+      case 3:
+        this.selectedTab = 'archived';
+        break;
+
+      default:
+        this.selectedTab = 'all';
+        break;
+    }
+  }
 
   // getSeencount(){
   //   this.notificationService.getSeencount(6094).subscribe(
