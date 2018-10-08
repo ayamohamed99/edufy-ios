@@ -1,0 +1,20 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-buttons end>
+      <button ion-button icon-only (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Notification Receiver(s)</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-label style="text-align: center;" *ngIf="receiverListStudents.length == 0">No receivers have been Chosen</ion-label>
+  <div *ngIf="receiverListStudents.length > 0">
+
+  </div>
+</ion-content>

@@ -23,6 +23,7 @@ import {Pendingnotification} from "../../modles/pendingnotification";
 import {Network} from "@ionic-native/network";
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { Slides } from 'ionic-angular';
+import {NotificationViewReceiver} from "../notification-view-receiver/notification-view-receiver";
 
 
 declare var cordova: any;
@@ -99,7 +100,7 @@ export class NotificationPage{
       );
     }
 
-    this.tagsArr = accService.accountBranchesList;
+    this.tagsArr = accService.accountBranchesListIds;
   }
 
   fullString(fristPart:string, secoundPart:string){
@@ -1042,6 +1043,16 @@ export class NotificationPage{
       () => {
         console.log("The POST observable is now completed.");
       });
+  }
+
+
+
+  openNotificationViewBy(notification){
+    let model = this.modalCtrl.create(NotificationViewReceiver,{notification:notification});
+    model.onDidDismiss(data=>{
+      this.console.log('Page Dismissed');
+    });
+    model.present();
   }
 
 }

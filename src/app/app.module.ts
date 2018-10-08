@@ -36,6 +36,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { HTTP } from '@ionic-native/http';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions';
+import {NotificationViewReceiver} from "../pages/notification-view-receiver/notification-view-receiver";
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     NotificationNewPage,
     PopoverNotificationCardPage,
     SettingsPage,
-    NotificationEditPage
+    NotificationEditPage,
+    NotificationViewReceiver
   ],
   imports: [
     BrowserModule,
@@ -65,7 +67,8 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
     NotificationNewPage,
     PopoverNotificationCardPage,
     SettingsPage,
-    NotificationEditPage
+    NotificationEditPage,
+    NotificationViewReceiver
   ],
   providers: [
     StatusBar,

@@ -18,6 +18,7 @@ export class AccountService{
   private userName:string;
   private userUserName:string;
   private userAddress:string;
+  private _accountBranchesListIds:any = [];
   private _accountBranchesList:any = [];
   private _tagArry:any = [];
   private Arry:any = [];
@@ -52,8 +53,9 @@ export class AccountService{
     this.userName = this.value.name;
     this.userUserName = this.value.username;
     this.userAddress = this.value.address;
+    this._accountBranchesList =this.value.branchesList;
     for(let branch of this.value.branchesList){
-      this._accountBranchesList.push(branch.id);
+      this._accountBranchesListIds.push(branch.id);
     }
 
   }
@@ -67,7 +69,7 @@ export class AccountService{
         'Authorization' : subHeader
       })};
 
-      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this._accountBranchesList, httpOptions).subscribe(value => {
+      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this._accountBranchesListIds, httpOptions).subscribe(value => {
         console.log('Tags : ' + value);
         this.Arry = value;
         for (let tag of this.Arry) {
@@ -108,6 +110,14 @@ export class AccountService{
     this._accountBranchesList = value;
   }
 
+  get accountBranchesListIds(): any {
+    return this._accountBranchesListIds;
+  }
+
+  set accountBranchesListIds(value: any) {
+    this._accountBranchesListIds = value;
+  }
+
 
   get tagArry(): any {
     return this._tagArry;
@@ -116,4 +126,5 @@ export class AccountService{
   set tagArry(value: any) {
     this._tagArry = value;
   }
+
 }
