@@ -20,7 +20,6 @@ import {TransFormDate} from "../../services/transFormDate";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-report-template',
   templateUrl: 'report-template.html',
@@ -236,9 +235,13 @@ export class ReportTemplatePage{
   }
 
   showConflict(drIndex){
-    if(this.conflict.length!=0) {
-      if (!this.conflict[drIndex]) {
-        return true;
+    if(this.conflict) {
+      if (this.conflict.length != 0) {
+        if (!this.conflict[drIndex]) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         return false;
       }
@@ -2799,12 +2802,19 @@ export class ReportTemplatePage{
     let year = date [2];
     let month = date [1];
     let day = date [0];
+
+    let dateMaxmum = this.tranformDate.transformTheDate(new Date(),'dd-MM-yyyy');
+    let dateMaxData = dateMaxmum.split('-');
+    let yearMaxmum:number = +dateMaxData [2];
+    let monthMaxmum:number = +dateMaxData [1];
+    let dayMaxmum:number = +dateMaxData [0];
+
     this.datePicker.show({
       date: new Date(year, month-1, day),
       mode: 'date',
       androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
       minDate:new Date(2014, 0, 1).valueOf(),
-      maxDate: new Date(year, month-1, day).valueOf(),
+      maxDate: new Date(yearMaxmum, (monthMaxmum-1), dayMaxmum).valueOf(),
       allowFutureDates:false
     }).then(
       date => {

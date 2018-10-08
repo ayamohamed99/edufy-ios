@@ -17,7 +17,6 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {DatePipe} from "@angular/common";
 import {TransFormDate} from "../../services/transFormDate";
 
-@IonicPage()
 @Component({
   selector: 'page-report',
   templateUrl: 'report.html',
@@ -108,14 +107,14 @@ export class ReportPage {
 
     this.isAll = false;
     this.pageName = this.accountServ.reportPage;
-    const date = new Date().toISOString().substring(0, 10);
+    this.pickerStartDate = new Date();
+    const date = this.transformDate.transformTheDate(this.pickerStartDate,'dd-MM-yyyy');
     var dateData = date.split('-');
-    var year = dateData [0];
+    var year = dateData [2];
     var month = dateData [1];
-    var day = dateData [2];
+    var day = dateData [0];
     this.selectedDate = day + "-" + month + "-" + year;
     this.dateView =  day + "/" + month + "/" + year;
-    this.pickerStartDate = new Date();
     this.dayOfToDay = Number(day);
     this.monthOfToday = Number(month) - 1;
     this.yearOfToday  = Number(year);
@@ -564,6 +563,13 @@ export class ReportPage {
     }
 
     model.onDidDismiss(data => {
+      this.pickerStartDate = new Date();
+      const date = this.transformDate.transformTheDate(this.pickerStartDate,'dd-MM-yyyy');
+      var dateData = date.split('-');
+      var year = dateData [2];
+      var month = dateData [1];
+      var day = dateData [1];
+      this.selectedDate = day + "-" + month + "-" + year;
       this.studentsList = [];
       this.isChecked = [];
       this.classesList = [];
