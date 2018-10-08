@@ -110,6 +110,37 @@ export class NotificationService{
         option);
   }
 
+
+  editNotification(updateObject, operationId){
+    let requestURL = '/authentication/notification.ent?operationId=' + operationId;
+    return this.http.put(this.DomainUrl.Domain + requestURL, updateObject, this.httpOptions);
+  }
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

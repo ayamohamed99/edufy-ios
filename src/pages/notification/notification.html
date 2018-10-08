@@ -18,76 +18,256 @@
 </ion-header>
 
 <ion-content class="contentColor">
-  <ion-slides style="height: fit-content;scroll-padding-block-start: initial" (ionSlideDidChange)="slideChanged()">
-    <ion-slide class="firstView">
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-        <ion-card>
-          <ion-item style="background-color: white">
+  <ion-slides style="height: 100%;" (ionSlideDidChange)="slideChanged()">
+    <ion-slide style="height: 100%;">
+      <ion-content class="contentScroll">
 
-            <h1>{{notify.title}}</h1>
-              <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
-          </ion-item>
-          <div style="padding-left: 16px;">
-            <h2 style="color: gray">{{notify.body}}</h2>
-          </div>
-          <ion-card-content>
-            <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
-              <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
-                <h3>{{item.name.substring(17)}}</h3>
-                <div style="text-align: -webkit-center;/">
-                  <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                  <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
+              <ion-card>
+                <ion-item style="background-color: white">
+
+                  <h1>{{notify.title}}</h1>
+                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                </ion-item>
+                <div style="padding-left: 16px;">
+                  <h2 style="color: gray">{{notify.body}}</h2>
                 </div>
-              </ion-slide>
-            </ion-slides>
+                <ion-card-content>
+                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                      <h3>{{item.name.substring(17)}}</h3>
+                      <div style="text-align: -webkit-center;/">
+                        <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                      </div>
+                    </ion-slide>
+                  </ion-slides>
 
-          </ion-card-content>
+                </ion-card-content>
 
-          <div style="height: 8px; background-color: white"></div>
+                <div style="height: 8px; background-color: white"></div>
 
-          <ion-item>
-          <ion-avatar item-start>
-            <img src="assets/imgs/profile.png">
-          </ion-avatar>
-          <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-            <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+                <ion-item>
+                  <ion-avatar item-start>
+                    <img src="assets/imgs/profile.png">
+                  </ion-avatar>
+                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
 
-  <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+        <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
 
+      </ion-content>
+    </ion-slide>
+
+
+
+     <!--SENT VIEW-->
+    <ion-slide>
+
+      <ion-content class="contentScroll">
+
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let notify of notificationsSent; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
+              <ion-card>
+                <ion-item style="background-color: white">
+
+                  <h1>{{notify.title}}</h1>
+                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                </ion-item>
+                <div style="padding-left: 16px;">
+                  <h2 style="color: gray">{{notify.body}}</h2>
+                </div>
+                <ion-card-content>
+                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                      <h3>{{item.name.substring(17)}}</h3>
+                      <div style="text-align: -webkit-center;/">
+                        <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                      </div>
+                    </ion-slide>
+                  </ion-slides>
+
+                </ion-card-content>
+
+                <div style="height: 8px; background-color: white"></div>
+
+                <ion-item>
+                  <ion-avatar item-start>
+                    <img src="assets/imgs/profile.png">
+                  </ion-avatar>
+                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+        <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+      </ion-content>
 
     </ion-slide>
 
-    <ion-slide class="secView">
 
-      <p>Sent</p>
+
+    <!--Awaiting Approved-->
+    <ion-slide *ngIf="accountServ.getUserRole().notificationApproved">
+
+      <ion-content class="contentScroll">
+
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let notify of notificationsApproved; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
+              <ion-card>
+                <ion-item style="background-color: white">
+
+                  <h1>{{notify.title}}</h1>
+                  <button item-end ion-button outline icon-start style="color: #1daf4c;border-color: #1daf4c" (click)="approveNotification(i)" *ngIf="accountServ.getUserRole().notificationCanApprove">
+                    <ion-icon style="color: #1daf4c;padding-right: 10px" name="checkmark"></ion-icon>
+                    Approve
+                  </button>
+                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                </ion-item>
+                <div style="padding-left: 16px;">
+                  <h2 style="color: gray">{{notify.body}}</h2>
+                </div>
+                <ion-card-content>
+                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                      <h3>{{item.name.substring(17)}}</h3>
+                      <div style="text-align: -webkit-center;/">
+                        <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                      </div>
+                    </ion-slide>
+                  </ion-slides>
+
+                </ion-card-content>
+
+                <div style="height: 8px; background-color: white"></div>
+
+                <ion-item>
+                  <ion-avatar item-start>
+                    <img src="assets/imgs/profile.png">
+                  </ion-avatar>
+                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+        <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+      </ion-content>
 
     </ion-slide>
 
-    <ion-slide class="thridView" *ngIf="accountServ.getUserRole().notificationApproved">
 
-      <p>Awaiting Approved</p>
 
-    </ion-slide>
 
-    <ion-slide class="forthView" *ngIf="accountServ.getUserRole().archiveNotificationView">
+    <!--Archive-->
+    <ion-slide *ngIf="accountServ.getUserRole().archiveNotificationView">
 
-      <p>Archive</p>
+      <ion-content class="contentScroll">
+
+        <ion-grid>
+          <ion-row>
+            <ion-col *ngFor="let notify of notificationsArchived; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
+              <ion-card>
+                <ion-item style="background-color: white">
+
+                  <h1>{{notify.title}}</h1>
+                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                </ion-item>
+                <div style="padding-left: 16px;">
+                  <h2 style="color: gray">{{notify.body}}</h2>
+                </div>
+                <ion-card-content>
+                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                      <h3>{{item.name.substring(17)}}</h3>
+                      <div style="text-align: -webkit-center;/">
+                        <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                      </div>
+                    </ion-slide>
+                  </ion-slides>
+
+                </ion-card-content>
+
+                <div style="height: 8px; background-color: white"></div>
+
+                <ion-item>
+                  <ion-avatar item-start>
+                    <img src="assets/imgs/profile.png">
+                  </ion-avatar>
+                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+
+        <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+
+      </ion-content>
 
     </ion-slide>
 

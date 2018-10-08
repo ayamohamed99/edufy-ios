@@ -9,6 +9,8 @@ export class Notification{
   tagsList:any[] = [];
   tagsListName:any[] = [];
   pending:any;
+  archived:boolean;
+  approved:boolean;
 
   constructor(){}
 
