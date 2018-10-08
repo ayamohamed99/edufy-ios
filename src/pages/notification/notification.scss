@@ -17,6 +17,13 @@ page-notification {
   .slide-zoom {
     height: 100%;
   }
+
+  .buttonInCard{
+    //-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
+    text-transform: none;
+  }
+
   .firstView{
     //height: 100vh;
   }

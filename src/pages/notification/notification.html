@@ -62,6 +62,7 @@
                     <img src="assets/imgs/profile.png">
                   </ion-avatar>
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <button ion-button item-end class="buttonInCard" *ngIf="notify.pending != 'pending'">{{notify.seenCount}} views</button>
                   <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                 </ion-item>
               </ion-card>
@@ -124,6 +125,7 @@
                     <img src="assets/imgs/profile.png">
                   </ion-avatar>
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <button ion-button item-end class="buttonInCard" *ngIf="notify.pending != 'pending'">{{notify.seenCount}} views</button>
                   <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                 </ion-item>
               </ion-card>
@@ -191,6 +193,7 @@
                     <img src="assets/imgs/profile.png">
                   </ion-avatar>
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <button ion-button item-end class="buttonInCard" *ngIf="notify.pending != 'pending'">{{notify.seenCount}} views</button>
                   <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                 </ion-item>
               </ion-card>
@@ -255,6 +258,7 @@
                     <img src="assets/imgs/profile.png">
                   </ion-avatar>
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+                  <button ion-button item-end class="buttonInCard" *ngIf="notify.pending != 'pending'">{{notify.seenCount}} views</button>
                   <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                 </ion-item>
               </ion-card>

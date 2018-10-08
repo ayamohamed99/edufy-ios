@@ -38,6 +38,7 @@ export class NotificationPage{
   notificationsApproved:Notification[] = [];
   notificationsArchived:Notification[] = [];
   notificationPage=1;
+  notificationIds = [];
   loading:any;
   fristOpen:boolean;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
@@ -243,6 +244,7 @@ export class NotificationPage{
           if(value.tagsList != null) {
             notify.tagsListName = value.tagsList.name;
           }
+          this.notificationIds.push(value.id);
           if(this.sent){
             this.notificationsSent.push(notify);
           }else if(this.approved){
@@ -253,7 +255,7 @@ export class NotificationPage{
             this.notifications.push(notify);
           }
         }
-        this.loading.dismiss();
+        this.getSeencount(this.notificationIds, this.loading);
       },
       err => {
         console.log("POST call in error", err);
@@ -893,7 +895,7 @@ export class NotificationPage{
                 this.notifications = [];
               }
               this.notificationPage = 1;
-              this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+              this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
             this.presentToast('Notification approved & sent successfully.');
           }, (reason) => {
               this.loading.dismiss();
@@ -998,17 +1000,48 @@ export class NotificationPage{
   }
 
 
-  // getSeencount(){
-  //   this.notificationService.getSeencount(6094).subscribe(
-  //     (data) => {
-  //       console.log("Date Is", data);
-  //     },
-  //     err => {
-  //       console.log("POST call in error", err);
-  //     },
-  //     () => {
-  //       console.log("The POST observable is now completed.");
-  //     });
-  // }
+  getSeencount(notificationsIds,load){
+    this.notificationService.getSeencount(notificationsIds).subscribe(
+      (data) => {
+        console.log("Date Is", data);
+        let AllData:any = [];
+        AllData = data;
+        this.notificationIds = [];
+        for (let id in AllData){
+          if(this.sent){
+            for(let notify of this.notificationsSent){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else if(this.approved){
+            for(let notify of this.notificationsApproved){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else if(this.archived){
+            for(let notify of this.notificationsArchived){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else {
+            for(let notify of this.notifications){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }
+        }
+        load.dismiss();
+      },
+      err => {
+        console.log("POST call in error", err);
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
+  }
 
 }

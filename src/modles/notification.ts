@@ -11,6 +11,7 @@ export class Notification{
   pending:any;
   archived:boolean;
   approved:boolean;
+  seenCount:number = 0;
 
   constructor(){}
 
