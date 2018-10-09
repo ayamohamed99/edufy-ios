@@ -9,7 +9,8 @@
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "ionic:serve": "ionic-app-scripts serve",
+    "ionic:serve:b": "ionic-app-scripts serve -b"
   },
   "dependencies": {
     "@angular/animations": "5.2.11",
@@ -81,8 +82,8 @@
   "description": "An Ionic project",
   "config": {
     "ionic_copy": "./config/copy.config.js",
-	"ionic_webpack": "./config/webpack.config.js",
-	"ionic_bundler": "webpack"
+    "ionic_webpack": "./config/webpack.config.js",
+    "ionic_bundler": "webpack"
   },
   "cordova": {
     "plugins": {

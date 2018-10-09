@@ -7,11 +7,11 @@
   "proxies": [
     {
       "path": "/oauth",
-      "proxyUrl": "http://192.168.1.31:8080/oauth"
+      "proxyUrl": "http://education.entrepreware.com/oauth"
     },
     {
       "path": "/authentication",
-      "proxyUrl": "http://192.168.1.31:8080/authentication"
+      "proxyUrl": "http://education.entrepreware.com/authentication"
     }
   ]
 }

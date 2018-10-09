@@ -1,30 +1,49 @@
 <!--<div >-->
   <div *ngIf="shouldShowComments" [ngClass]="isCommentsSectionExpanded? 'slide-up-comments-container': 'slide-down-comments-container'">
-  <button ion-button full style="height: 40px;margin-top: 0" (click)="toggleCommentsSection()">Comment</button>
-    <div #commentsContainer style="overflow-y: scroll; overflow-x: hidden; width: 100%;height: calc(100% - 90px);padding: 12px">
-      <section > 
-        <div class="comment-message-container" *ngFor="let comment of currentReportComments">
+    <button ion-button full style="height: 40px;margin-top: 0;margin-bottom: 0; z-index: 1"
+            (click)="toggleCommentsSection()">Comment
+    </button>
+    <div style="overflow-y: scroll; overflow-x: hidden;
+     width: 100%;height: calc(100% - 140px);padding: 12px">
+      <section>
+        <div class="comment-message-container" #commentsContainer
+             *ngFor="let comment of currentReportComments; let i = index;">
           <div class="comment-message-bubble" [ngClass]="comment.senderObject.type=='USER'?'from-me':'from-them'">
             <div class="comment-message-actions">
-              <button class="comment-message-actions-button" ion-button icon-only clear small >
-                <ion-icon name="ios-create-outline"></ion-icon>
+              <button *ngIf="!isEditedCommentsLoading[comment.id]"
+                      (click)="inEditModeComments[comment.id]? toggleEditMode(comment) : presentCommentActionSheet(comment,i)"
+                      class="comment-message-actions-button" ion-button icon-only clear small>
+                <ion-icon class="comment-message-actions-icon"
+                          [name]="inEditModeComments[comment.id]? 'md-checkbox-outline' : 'md-more'"></ion-icon>
               </button>
-              <button class="comment-message-actions-button" ion-button icon-only clear small >
-                <ion-icon name="ios-trash-outline"></ion-icon>
-              </button>
+              <ion-spinner *ngIf="isEditedCommentsLoading[comment.id]" class="comment-message-actions-loading"
+                           name="crescent"></ion-spinner>
             </div>
             <p class="comment-message comment-message-sender" > {{comment.senderObject.name}}</p>
             <p class="comment-message comment-message-date" > {{comment.postDate | date:"MMM d, y,  h:mm a"}}</p>
-            <p class="comment-message comment-message-text" > {{comment.comment}}</p>
+            <p *ngIf="!inEditModeComments[comment.id]" class="comment-message comment-message-text">
+              {{comment.comment}}</p>
+            <ion-textarea rows="1" [disabled]="isEditedCommentsLoading[comment.id]"
+                          *ngIf="inEditModeComments[comment.id]"
+                          autoresize class="comment-message  comment-message-edit" style="color: black"
+                          [(ngModel)]="comment.comment"></ion-textarea>
           </div>
+
           <div class="clear"></div>
         </div>
       </section>
     </div>
-  <ion-row style="background: gray;width: 100%;height: 50px; padding:0;" ng-if="canSubmitComment">
-    <textarea type="text" rows="3"  style="background: #eaeaea;width: calc(100% - 50px);height: 50px" [(ngModel)]="newCommentToBeSubmitted" [disabled]="isSendingComment"></textarea>
-    <button (click)="submitNewComment()" [disabled]="isSendingComment" ion-button icon-only style="width: 50px;height: 50px;margin: 0;padding: 0;">
-      <ion-icon name="md-send" style="margin: 0;padding: 0"></ion-icon>
-    </button>
-  </ion-row>
+    <div style="padding: 8px 0 0 8px;height: 100px;" *ngIf="canSubmitComment">
+      <textarea class="new-comment-text" type="text" rows="3" [(ngModel)]="newCommentToBeSubmitted"
+                [disabled]="isSendingComment"></textarea>
+      <div class="new-comment-button-container">
+        <button class="new-comment-button" (click)="submitNewComment()"
+                *ngIf="!isSendingComment" [disabled]="newCommentToBeSubmitted.trim().length == 0" ion-fab mini>
+          <ion-icon name="md-send"></ion-icon>
+        </button>
+        <ion-spinner class="new-comment-spinner" name="crescent" *ngIf="isSendingComment"></ion-spinner>
+
+      </div>
+
+    </div>
 </div>

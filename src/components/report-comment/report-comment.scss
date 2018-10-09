@@ -18,17 +18,22 @@ report-comment {
     width: 100%;
     height: 40px;
     overflow: hidden;
-    transition: all 1s;
+
   }
 
   .comment-message-container {
     display: inline;
   }
   .comment-message-bubble {
-    max-width: 255px;
     word-wrap: break-word;
     margin-bottom: 12px;
     line-height: 24px;
+    min-width: 45%;
+    max-width: 65%;
+    transition: all 300ms;
+    * {
+      transition: all 300ms;
+    }
     &:after {
       content: "";
       display: table;
@@ -45,6 +50,7 @@ report-comment {
     font-weight: bold;
     line-height: 12px;
     margin-top: 4px;
+    margin-right: 8px;
   }
   .comment-message-date {
     font-size: 11px;
@@ -53,18 +59,48 @@ report-comment {
   .comment-message-text {
     margin-top: 4px;
     font-size: 13px;
+    white-space: pre-line
+  }
+
+  .comment-message-edit {
+    border-radius: 10px;
+    font-size: 13px;
+    background: white;
+    textarea {
+      margin: 0;
+      padding: 4px;
+      width: 100%;
+    }
   }
   .comment-message-actions{
     position: absolute;
     right: 12px;
     top: 0;
+
     *{
       padding: 0;
       margin: 0;
     }
     .comment-message-actions-button{
       color: white;
+      font-size: 16px;
+      font-weight: bold;
     }
+    .spinner-md-crescent circle {
+      stroke: white;
+    }
+    .comment-message-actions-loading {
+      width: 20px;
+
+    }
+    //.comment-message-save:before{
+    //    //color:gainsboro;
+    //  transform: scaleX(1) !important;
+    //}
+    //.comment-message-actions-icon:before{
+    //  transform: scaleX(0.15);
+    //  font-weight: bold;
+    //}
   }
 
   .clear {
@@ -136,4 +172,32 @@ report-comment {
       -webkit-transform: translate(-30px, -2px);
     }
   }
+  .new-comment-text {
+    border: 1px solid #C8C5C5;
+    box-sizing: border-box;
+    border-radius: 15px;
+    display: inline-block;
+    width: calc(100% - 60px);
+    padding: 12px;
+    line-height: 20px;
+  }
+
+  .new-comment-button-container {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+    position: relative;
+  }
+  .new-comment-button {
+    margin-left: 5px !important;
+    position: absolute !important;
+    top: 17%;
+  }
+  .new-comment-spinner {
+    margin-left: 12px !important;
+    position: absolute !important;
+    top: 28%;
+  }
 }
+
+
