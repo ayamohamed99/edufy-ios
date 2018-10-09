@@ -8,7 +8,7 @@ report-comment {
     top: 30%;
     height: 70%;
     overflow: hidden;
-    transition: all 1s;
+    transition: all 500ms;
   }
 
   .slide-down-comments-container {
@@ -18,7 +18,7 @@ report-comment {
     width: 100%;
     height: 40px;
     overflow: hidden;
-    transition: all 1s;
+    transition: all 500ms;
   }
 
   .comment-message-container {
@@ -205,6 +205,15 @@ report-comment {
     font-size: 18px;
     font-weight: bold;
     color: #7b7b7b;
+  }
+  .comments-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.35;
   }
 }
 

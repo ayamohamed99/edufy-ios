@@ -4,6 +4,7 @@ import {ReportComment} from "../../models/reportComment";
 import {Student} from "../../models";
 import {AccountService} from "../../services/account";
 import {ActionSheetController, ToastController} from "ionic-angular";
+import {animate, style, transition, trigger} from "@angular/animations";
 
 /**
  * Generated class for the ReportCommentComponent component.
@@ -13,7 +14,18 @@ import {ActionSheetController, ToastController} from "ionic-angular";
  */
 @Component({
   selector: 'report-comment',
-  templateUrl: 'report-comment.html'
+  templateUrl: 'report-comment.html',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({opacity: 0}),
+        animate(300, style({opacity: 0.35}))
+      ]),
+      transition(':leave', [
+        animate(300, style({opacity: 0}))
+      ])
+    ])
+  ]
 })
 export class ReportCommentComponent implements OnInit, AfterViewChecked {
   @Input() date:string;

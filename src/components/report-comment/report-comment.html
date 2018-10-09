@@ -1,7 +1,10 @@
-<!--<div >-->
-  <div *ngIf="shouldShowComments" [ngClass]="isCommentsSectionExpanded? 'slide-up-comments-container': 'slide-down-comments-container'">
+<div *ngIf="shouldShowComments">
+  <div *ngIf="isCommentsSectionExpanded" (click)="isCommentsSectionExpanded=false" class="comments-backdrop"
+       [@fadeInOut]>
+  </div>
+  <div [ngClass]="isCommentsSectionExpanded? 'slide-up-comments-container': 'slide-down-comments-container'">
     <button ion-button full style="height: 40px;margin-top: 0;margin-bottom: 0; z-index: 1"
-            (click)="toggleCommentsSection()">Comment
+            (click)="toggleCommentsSection()">Comments
     </button>
     <div #commentsContainer style="overflow-y: scroll; overflow-x: hidden;
      width: 100%;height: calc(100% - 140px);padding: 12px">
@@ -53,4 +56,6 @@
       </div>
 
     </div>
+  </div>
 </div>
+

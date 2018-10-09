@@ -51,10 +51,6 @@ import {CheckboxFunctionService} from "../services/checkboxFunctionService";
 import {ComponentsModule} from "../components/components.module";
 import {ReportCommentProvider} from '../providers/report-comment/report-comment';
 
-export interface String {
-  format(...replacements: string[]): string;
-}
-
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
   declarations: [
@@ -124,7 +120,7 @@ constructor(){
   console.log("still format");
   const stringPrototype = <any>String.prototype;
   stringPrototype.format = function() {
-    console.log("formated")
+    console.log("formated");
     var args = arguments;
     return this.replace(/{(\d+)}/g, function(match, number) {
       return typeof args[number] != 'undefined'
@@ -132,7 +128,6 @@ constructor(){
         : match
         ;
     });
-
   };
 }
 }
