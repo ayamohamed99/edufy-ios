@@ -945,7 +945,6 @@ export class ReportTemplatePage{
             defailtValueArray[counter] = {};
             defailtValueArray[counter].key = drQuestion.parametersList[v].key;
             defailtValueArray[counter].value = drQuestion.parametersList[v].value;
-            ;
             counter++;
             firstTime = false;
           } else {

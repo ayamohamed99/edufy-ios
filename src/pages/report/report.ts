@@ -843,7 +843,6 @@ export class ReportPage {
             defailtValueArray[counter] = {};
             defailtValueArray[counter].key = drQuestion.parametersList[v].key;
             defailtValueArray[counter].value = drQuestion.parametersList[v].value;
-            ;
             counter++;
             firstTime = false;
           } else {
@@ -1208,7 +1207,6 @@ export class ReportPage {
 
           }
         }
-        ;
         return value;
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
         if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
