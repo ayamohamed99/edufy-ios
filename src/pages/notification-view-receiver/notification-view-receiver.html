@@ -13,8 +13,32 @@
 
 
 <ion-content padding>
-  <ion-label style="text-align: center;" *ngIf="receiverListStudents.length == 0">No receivers have been Chosen</ion-label>
-  <div *ngIf="receiverListStudents.length > 0">
+  <ion-label style="text-align: center;" *ngIf="receiverListStudents.length > 0">No receivers have been Chosen</ion-label>
+  <div *ngIf="receiverListStudents.length == 0">
+    <ion-searchbar style="padding: 0" (ionInput)="getItems($event)"></ion-searchbar>
+    <br>
+    <br>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let itm of receivers">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{itm.name}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
+        <ion-list>
+          <ion-item>
+            <ion-label>Ahmed Tarek</ion-label>
+          </ion-item>
+        </ion-list>
+
+
+      </mat-expansion-panel>
+    </mat-accordion>
   </div>
+  <ion-fab  bottom right>
+    <button ion-fab (click)="downloadReceiversPdf()" *ngIf="receiverListStudents.length == 0">
+      <ion-icon name="download"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

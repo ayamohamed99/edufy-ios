@@ -18,7 +18,9 @@ export class NotificationViewReceiver {
   receivers;
   notification;
   receiverListStudents = [];
+  originalReceiverListStudents = [];
   branchesNumber = 0;
+  searchItems = [];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController,private accountServ:AccountService) {
     this.notification = this.navParams.get('notification');
@@ -27,10 +29,29 @@ export class NotificationViewReceiver {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationViewPage');
+    console.log('ionViewDidLoad NotificationViewReceiver');
   }
 
   close(){
     this.viewCtrl.dismiss({name:'dismissed'});
+  }
+
+  downloadReceiversPdf(){
+
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.originalReceiverListStudents = [];
+
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.searchItems = this.searchItems.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
   }
 }

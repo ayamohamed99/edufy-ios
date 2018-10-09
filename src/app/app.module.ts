@@ -37,8 +37,13 @@ import { HTTP } from '@ionic-native/http';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 import {NotificationViewReceiver} from "../pages/notification-view-receiver/notification-view-receiver";
+import {
+  MatAutocompleteModule, MatDatepickerModule, MatExpansionModule, MatFormFieldModule,
+  MatIconModule, MatSelectModule
+} from "@angular/material";
+import {BrowserAnimationsModule, NoopAnimationsModule} from "@angular/platform-browser/animations";
 
-
+let mods = [MatExpansionModule, MatAutocompleteModule, MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule,BrowserAnimationsModule,NoopAnimationsModule];
 @NgModule({
   declarations: [
     MyApp,
@@ -56,7 +61,8 @@ import {NotificationViewReceiver} from "../pages/notification-view-receiver/noti
     IonicModule.forRoot(MyApp),
     HttpClientModule,
     IonicStorageModule.forRoot(),
-    RlTagInputModule
+    RlTagInputModule,
+    mods
   ],
   bootstrap: [IonicApp],
   entryComponents: [
