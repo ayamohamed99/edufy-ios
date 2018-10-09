@@ -3,13 +3,20 @@
     <button ion-button full style="height: 40px;margin-top: 0;margin-bottom: 0; z-index: 1"
             (click)="toggleCommentsSection()">Comment
     </button>
-    <div style="overflow-y: scroll; overflow-x: hidden;
+    <div #commentsContainer style="overflow-y: scroll; overflow-x: hidden;
      width: 100%;height: calc(100% - 140px);padding: 12px">
+      <div class="comments-loading-spinner">
+        <ion-spinner name="crescent" style="zoom: 1.5;" *ngIf="isLoadingComments"></ion-spinner>
+        <p class="no-comments-text" *ngIf="!isLoadingComments && currentReportComments?.length == 0">There are no
+          comments yet for this report</p>
+      </div>
+
       <section>
-        <div class="comment-message-container" #commentsContainer
+        <div class="comment-message-container"
              *ngFor="let comment of currentReportComments; let i = index;">
           <div class="comment-message-bubble" [ngClass]="comment.senderObject.type=='USER'?'from-me':'from-them'">
-            <div class="comment-message-actions">
+            <div *ngIf="accountService.userId == comment.senderObject.id && (canDeleteComment || canEditComment )"
+                 class="comment-message-actions">
               <button *ngIf="!isEditedCommentsLoading[comment.id]"
                       (click)="inEditModeComments[comment.id]? toggleEditMode(comment) : presentCommentActionSheet(comment,i)"
                       class="comment-message-actions-button" ion-button icon-only clear small>
