@@ -3,4 +3,22 @@ page-notification-view-receiver {
     padding: 8px 8px 24px 16px;
     background-color: #f7f9f9;
   }
+
+  .circleGreen:before {
+    content: '';
+    height: 21px;
+    width: 21px;
+    background-color: #468847;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .circleRed:before {
+    content: '';
+    height: 21px;
+    width: 21px;
+    background-color: #b94a48;
+    border-radius: 50%;
+    display: inline-block;
+  }
 }

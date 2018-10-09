@@ -12,7 +12,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding style="background: #e5e5e5">
   <ion-label style="text-align: center;" *ngIf="receiverListStudents.length > 0">No receivers have been Chosen</ion-label>
   <div *ngIf="receiverListStudents.length == 0">
     <ion-searchbar style="padding: 0" (ionInput)="getItems($event)"></ion-searchbar>
@@ -26,11 +26,15 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <ion-list>
+        <ion-card>
           <ion-item>
-            <ion-label>Ahmed Tarek</ion-label>
+            <ion-label style="height: 21px;">
+              Ahmed Tarek
+              <span class="circleGreen" style="float: right" *ngIf="false"></span>
+              <span class="circleRed" style="float: right" *ngIf="true"></span>
+            </ion-label>
           </ion-item>
-        </ion-list>
+        </ion-card>
 
 
       </mat-expansion-panel>

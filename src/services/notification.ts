@@ -116,8 +116,10 @@ export class NotificationService{
     return this.http.put(this.DomainUrl.Domain + requestURL, updateObject, this.httpOptions);
   }
 
-
-
+  getRecieverList(notificationID){
+    return this.http.get(this.DomainUrl.Domain + this.commonUrl + '/getReceiever.ent?notificationId=' + notificationID,
+      this.httpOptions);
+  }
 
 
 
