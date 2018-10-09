@@ -135,7 +135,7 @@ export class TemplateShape{
         count = 0;
         optionAnswerCounter = 0;
         optionHelperText = 0;
-        switchToHelper = 0
+        switchToHelper = 0;
         for (let i = 0; i < drQuestion.parametersList.length; i++) {
           if (drQuestion.parametersList[i].key == "OPTION_ANSWER") {
             optionAnswerCounter++;

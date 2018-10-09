@@ -85,16 +85,16 @@ export class ProfilePage {
     }
   }
 
-  opend = true;
-  openComment(){
-    if(this.opend) {
-      this.commentAppear.nativeElement.className = "slideUp";
-      this.opend = false;
-    }else{
-      this.commentAppear.nativeElement.className = "slideDown";
-      this.opend = true;
-    }
-  }
+  // opend = true;
+  // openComment(){
+  //   if(this.opend) {
+  //     this.commentAppear.nativeElement.className = "slideUp";
+  //     this.opend = false;
+  //   }else{
+  //     this.commentAppear.nativeElement.className = "slideDown";
+  //     this.opend = true;
+  //   }
+  // }
 
   ionViewDidLoad() {
   }

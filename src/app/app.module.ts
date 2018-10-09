@@ -48,8 +48,11 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select'
 import {CheckboxFunctionService} from "../services/checkboxFunctionService";
+import {DatePipe} from "@angular/common";
+import {TransFormDate} from "../services/transFormDate";
 import {ComponentsModule} from "../components/components.module";
-import {ReportCommentProvider} from '../providers/report-comment/report-comment';
+import {ReportCommentProvider} from "../providers/report-comment/report-comment";
+
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
@@ -112,7 +115,9 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     DailyReportService,
     DatePicker,
     CheckboxFunctionService,
-    ReportCommentProvider
+    CheckboxFunctionService,
+    ReportCommentProvider,
+    [DatePipe],TransFormDate
   ]
 })
 export class AppModule {

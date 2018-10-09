@@ -19,6 +19,8 @@ import {DatePicker} from '@ionic-native/date-picker';
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
 import {ReportCommentProvider} from "../../providers/report-comment/report-comment";
+import {DatePipe} from "@angular/common";
+import {TransFormDate} from "../../services/transFormDate";
 
 @IonicPage()
 @Component({
@@ -93,8 +95,7 @@ export class ReportPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
-              private toastCtrl:ToastController, private modalCtrl:ModalController,private reportComment:ReportCommentProvider) {
-
+              private toastCtrl:ToastController, private modalCtrl:ModalController,private reportComment:ReportCommentProvider,public transformDate:TransFormDate) {
     if(this.accountServ.reportId == -1){
       this.reportAnswer = {
         // to show the well of comments to spacific
@@ -111,14 +112,14 @@ export class ReportPage {
 
     this.isAll = false;
     this.pageName = this.accountServ.reportPage;
-    const date = new Date().toISOString().substring(0, 10);
+    this.pickerStartDate = new Date();
+    const date = this.transformDate.transformTheDate(this.pickerStartDate,'dd-MM-yyyy');
     var dateData = date.split('-');
-    var year = dateData [0];
+    var year = dateData [2];
     var month = dateData [1];
-    var day = dateData [2];
+    var day = dateData [0];
     this.selectedDate = day + "-" + month + "-" + year;
     this.dateView =  day + "/" + month + "/" + year;
-    this.pickerStartDate = new Date();
     this.dayOfToDay = Number(day);
     this.monthOfToday = Number(month) - 1;
     this.yearOfToday  = Number(year);
@@ -506,13 +507,13 @@ export class ReportPage {
       allowFutureDates:false
     }).then(
       date => {
-        console.log('Got date: ', date);
+        console.log('Got date: ', this.transformDate.transformTheDate(date,'dd-MM-yyyy'));
         this.pickerStartDate = date;
-        let newDate = date.toISOString().substring(0, 10);
+        let newDate = this.transformDate.transformTheDate(date,'dd-MM-yyyy');
         var dateData = newDate.split('-');
-        var year = dateData [0];
+        var year = dateData [2];
         var month = dateData [1];
-        var day = dateData [2];
+        var day = dateData [0];
         this.selectedDate = day + "-" + month + "-" + year;
         this.dateView =  day + "/" + month + "/" + year;
         this.classesList = [];
@@ -570,6 +571,13 @@ export class ReportPage {
     }
 
     model.onDidDismiss(data => {
+      this.pickerStartDate = new Date();
+      const date = this.transformDate.transformTheDate(this.pickerStartDate,'dd-MM-yyyy');
+      var dateData = date.split('-');
+      var year = dateData [2];
+      var month = dateData [1];
+      var day = dateData [1];
+      this.selectedDate = day + "-" + month + "-" + year;
       this.studentsList = [];
       this.isChecked = [];
       this.classesList = [];
@@ -1729,7 +1737,6 @@ export class ReportPage {
     }
 
   }
-
 
   presentToast(message) {
     let toast = this.toastCtrl.create({

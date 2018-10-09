@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title text-center (click)="showNames()">{{PageName}}</ion-title>
     <ion-buttons right>
-      <button ion-button icon-only (click)="oonClickonMenuCalender()">
+      <button ion-button icon-only (click)="onClickonMenuCalenderFromReport()">
         <ion-icon name="md-calendar"></ion-icon>
       </button>
     </ion-buttons>
@@ -1220,7 +1220,7 @@
 
         <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)" *ngIf="showApproveButton()">
           <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
-          <ion-label>Approve</ion-label>
+          <ion-label>Approve Class</ion-label>
         </button>
 
 

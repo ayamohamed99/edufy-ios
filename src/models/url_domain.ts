@@ -4,8 +4,7 @@ export class Url_domain{
   // PRODUCTION:"http://104.198.175.198";
   // LOCAL:"http://192.168.1.10:8080";
 
-
-  Domain = "";
+  Domain = "http://104.198.175.198";
 
 
   //      proxy
@@ -24,9 +23,10 @@ export class Url_domain{
   // open /Volumes/BOOTCAMP/Mostafa/Edufy/platforms/ios/Edufy.xcodeproj
   // <preference name="iosPersistentFileLocation" value="Library" />
   // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
+
   // keytool -genkey -v -keystore edufy_teachers.jks -keyalg RSA -keysize 2048 -validity 10000 -alias edufy_teachers
   // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks app-release-unsigned.apk edufy_teachers
   //PASSWORD : @Entrepreware123
-  //zipalign -v 4 app-release-unsigned.apk edufyTeachers.apk
+  //zipalign -v 4 app-release-unsigned.apk 1.0.3-edufy_teachers.apk
   //apksigner verify edufyTeachers.apk
 }
