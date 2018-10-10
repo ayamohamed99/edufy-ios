@@ -48,4 +48,23 @@ page-report {
   }
 
 
+
+
+  .mat-expansion-panel-body {
+    padding: 8px 8px 24px 16px;
+    background-color: #f7f9f9;
+    border-radius: 15px;
+    transition: all;
+  }
+
+  .mat-expansion-panel-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  .mat-expansion-panel {
+    border-radius: 15px;
+    transition: all;
+    margin-bottom: 8px;
+  }
+
 }

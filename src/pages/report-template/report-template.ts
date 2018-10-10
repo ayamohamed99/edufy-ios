@@ -1016,7 +1016,7 @@ export class ReportTemplatePage{
                   title: 'Approve Report',
                   subTitle: 'The Report didn\'t approved',
                   buttons: ['Ok']
-                });
+                }).present();
               });
 
 
