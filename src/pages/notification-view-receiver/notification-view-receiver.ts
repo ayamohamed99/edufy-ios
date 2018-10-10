@@ -8,13 +8,7 @@ import {NotificationService} from "../../services/notification";
 import { Chart } from 'chart.js';
 import {File} from '@ionic-native/file';
 import {FileOpener} from "@ionic-native/file-opener";
-
-/**
- * Generated class for the NotificationViewPage page.
-
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'page-notification-view-receiver',
@@ -42,26 +36,6 @@ export class NotificationViewReceiver {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationViewReceiver');
-    // this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
-    //
-    //   type: 'doughnut',
-    //   data: {
-    //     labels: ["Seen", "UnSeen"],
-    //     datasets: [{
-    //       label: '# of Votes',
-    //       data: [0, 0],
-    //       backgroundColor: [
-    //         'rgba(26,198,31)',
-    //         'rgba(236,27,35)'
-    //       ],
-    //       hoverBackgroundColor: [
-    //         "#1AC61F",
-    //         "#EC1B23"
-    //       ]
-    //     }]
-    //   }
-    //
-    // });
   }
 
   close(){
@@ -183,7 +157,83 @@ tempRList =[];
     return doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
   }
   createReceiversPdf(){
-
+    var leftPadding = 30;
+    var y = 40;
+    var x = leftPadding;
+    var doc = new jsPDF("portrait", "pt", "a4");
+    doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+    doc.setFontSize(16);
+    var title = this.notification.title;
+    var textWidth = this.getTextWidth(doc, title);
+    var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+    doc.text(textOffset, y, title);
+    y += 50;
+    for (let i = 0; i < this.tempRList.length; i++) {
+      var receiverObject = this.tempRList[i];
+      var textWidth = this.getTextWidth(doc, receiverObject.className);
+      var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+      doc.setFontSize(14);
+      doc.setDrawColor(0)
+      doc.setFillColor(215, 215, 215)
+      doc.roundedRect(21, y - 19, doc.internal.pageSize.width - 42, 34, 3, 3, 'FD')
+      doc.text(textOffset, y, receiverObject.className);
+      y += 30;
+      var classGroups = {
+        'className': receiverObject.className,
+        'seen': [],
+        'unseen': []
+      };
+      for (var j = 0; j < receiverObject.List.length; j++) {
+        if (receiverObject.List[j].seenByParent || receiverObject.List[j].seenByStudent) {
+          classGroups.seen.push(receiverObject.List[j].student.name);
+        } else {
+          classGroups.unseen.push(receiverObject.List[j].student.name);
+        }
+      }
+      if (classGroups.seen.length > 0) {
+        var seenList = classGroups.seen;
+        seenList.sort();
+        doc.setFontSize(12);
+        doc.text(leftPadding, y, "Seen By (" + seenList.length + ")");
+        var textWidth = this.getTextWidth(doc, "Seen By (" + seenList.length + ")");
+        y += 3;
+        doc.line(leftPadding, y, leftPadding + textWidth, y);
+        y += 20;
+        doc.setFontSize(10);
+        for (var j = 0; j < seenList.length; j++) {
+          if (y > 800) {
+            doc.addPage();
+            y = 50;
+            doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+          }
+          doc.text(leftPadding + 70, y, seenList[j]);
+          y += 15;
+        }
+      }
+      y += 15;
+      if (classGroups.unseen.length > 0) {
+        var unseenList = classGroups.unseen;
+        unseenList.sort();
+        doc.setFontSize(12);
+        doc.text(leftPadding, y, "Unseen By (" + unseenList.length + ")");
+        var textWidth = this.getTextWidth(doc, "Unseen By (" + unseenList.length + ")");
+        y += 3;
+        doc.line(leftPadding, y, leftPadding + textWidth, y);
+        y += 20;
+        doc.setFontSize(10);
+        for (var j = 0; j < unseenList.length; j++) {
+          if (y > 800) {
+            doc.addPage();
+            y = 50;
+            doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+          }
+          doc.text(leftPadding + 70, y, unseenList[j]);
+          y += 15;
+        }
+      }
+      y += 20;
+    }
+    this.downloadPDF(doc);
   }
 
   downloadPDF(pdf){
@@ -192,7 +242,7 @@ tempRList =[];
         let utf8 = new Uint8Array(buffer);
         let binaryArray = utf8.buffer;
         let blob = new Blob([binaryArray],{type:'application/pdf'});
-        let fileName = this.notification.title + new Date();
+        let fileName = 'Notification Receivers';
 
         this.file.writeFile(this.file.dataDirectory,fileName,blob,{replace:true}).then(
           fileEntry =>{
@@ -200,7 +250,7 @@ tempRList =[];
           });
       });
     }else{
-      pdf.download();
+      pdf.save('Notification Receivers');
     }
   }
 
