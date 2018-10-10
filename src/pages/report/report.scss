@@ -27,4 +27,25 @@ page-report {
     transition: transform 0.2s linear;
   }
 
+  .circleGreen:before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    background-color: #468847;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .circleRed:before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    background-color: #b94a48;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+
 }

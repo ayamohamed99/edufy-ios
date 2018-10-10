@@ -53,6 +53,8 @@
             <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
             <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
             <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
+            <span class="circleGreen"item-end style="float: right;padding-top: 10px;" *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
+            <span class="circleRed"item-end style="float: right;padding-top: 10px;" *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
 
           </ion-row>
 
@@ -89,7 +91,8 @@
         <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
         <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
         <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
-
+        <span class="circleGreen"item-end style="float: right;padding-top: 10px;" *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
+        <span class="circleRed"item-end style="float: right;padding-top: 10px;" *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
       </ion-row>
 
     </ion-card>

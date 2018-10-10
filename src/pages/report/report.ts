@@ -348,9 +348,13 @@ export class ReportPage {
             if(this.accountServ.reportId == -1) {
               students.reportApproved = data[i].dailyReportApproved;
               students.reportFinalized = data[i].dailyReportFinalized;
+              students.reportSeenByParent = data[i].dailyReportSeenByParent;
+              students.reportSeenByStudent = data[i].dailyReportSeenByStudent;
             }else{
               students.reportApproved = data[i].reportApproved[this.accountServ.reportId];
               students.reportFinalized = data[i].reportFinalized[this.accountServ.reportId];
+              students.reportSeenByParent = data[i].reportSeenByParent[this.accountServ.reportId];
+              students.reportSeenByStudent = data[i].reportSeenByStudent[this.accountServ.reportId];
             }
             this.studentsList.push(students);
           }
