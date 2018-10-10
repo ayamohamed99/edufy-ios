@@ -1,8 +1,13 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {IonicPage, LoadingController, NavController, NavParams, ToastController, ViewController} from 'ionic-angular';
+import {
+  IonicPage, LoadingController, NavController, NavParams, Platform, ToastController,
+  ViewController
+} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {NotificationService} from "../../services/notification";
 import { Chart } from 'chart.js';
+import {File} from '@ionic-native/file';
+import {FileOpener} from "@ionic-native/file-opener";
 
 /**
  * Generated class for the NotificationViewPage page.
@@ -28,7 +33,7 @@ export class NotificationViewReceiver {
   classReceverList;
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController,
               private accountServ:AccountService,private notificationServ:NotificationService,public load:LoadingController,
-              public toastCtrl:ToastController) {
+              public toastCtrl:ToastController,private platform:Platform,private file:File,private fileOpener: FileOpener) {
     this.notification = this.navParams.get('notification');
     this.receivers = this.navParams.get('notification').receiversList;
     this.branchesNumber = this.accountServ.accountBranchesList.length;
@@ -63,10 +68,6 @@ export class NotificationViewReceiver {
     this.viewCtrl.dismiss({name:'dismissed'});
   }
 
-  downloadReceiversPdf(){
-
-  }
-
   getItems(ev: any) {
     // Reset items back to all of the items
     this.receiverListStudents = this.originalReceiverListStudents.map(value => {
@@ -99,7 +100,7 @@ export class NotificationViewReceiver {
       }
   }
 
-
+tempRList =[];
   getReceivers(){
     let loading = this.load.create({
       content: ""
@@ -114,6 +115,12 @@ export class NotificationViewReceiver {
           this.classReceverList.studentlist = Data[item];
           this.originalReceiverListStudents.push(this.classReceverList);
           this.receiverListStudents.push(this.classReceverList);
+          this.tempRList
+            .push({
+              branch: response[item][0].classes.branch,
+              className: item,
+              List: response[item]
+            });
         }
 
         if(this.originalReceiverListStudents.length == 0){
@@ -171,6 +178,31 @@ export class NotificationViewReceiver {
     );
   }
 
+
+  getTextWidth(doc, text) {
+    return doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
+  }
+  createReceiversPdf(){
+
+  }
+
+  downloadPDF(pdf){
+    if(this.platform.is('cordova')){
+      pdf.getBuffer((buffer) =>{
+        let utf8 = new Uint8Array(buffer);
+        let binaryArray = utf8.buffer;
+        let blob = new Blob([binaryArray],{type:'application/pdf'});
+        let fileName = this.notification.title + new Date();
+
+        this.file.writeFile(this.file.dataDirectory,fileName,blob,{replace:true}).then(
+          fileEntry =>{
+            this.fileOpener.open(this.file.dataDirectory+fileName,'application/pdf');
+          });
+      });
+    }else{
+      pdf.download();
+    }
+  }
 
 
   presentToast(message) {
