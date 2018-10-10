@@ -62,7 +62,7 @@ export class NotificationPage{
   sent;
   console=console;
 
-  constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
+  constructor(private alrtCtrl:AlertController,public platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,

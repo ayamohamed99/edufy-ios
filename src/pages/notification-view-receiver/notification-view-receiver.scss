@@ -2,6 +2,8 @@ page-notification-view-receiver {
   .mat-expansion-panel-body {
     padding: 8px 8px 24px 16px;
     background-color: #f7f9f9;
+    border-radius: 15px;
+    transition: all;
   }
 
   .circleGreen:before {
@@ -20,5 +22,32 @@ page-notification-view-receiver {
     background-color: #b94a48;
     border-radius: 50%;
     display: inline-block;
+  }
+
+  .mat-expansion-panel-header {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  .scroll-content {
+    background-color: map-get($colors, light);
+  }
+
+  ion-card-header {
+    font-weight: bold;
+  }
+
+  .mat-expansion-panel {
+    border-radius: 15px;
+    transition: all;
+  }
+
+
+}
+.md{
+  page-notification-view-receiver {
+    .searchbar-md .searchbar-input {
+      border-radius: 15px;
+    }
   }
 }

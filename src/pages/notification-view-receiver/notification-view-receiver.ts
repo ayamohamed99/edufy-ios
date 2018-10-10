@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {IonicPage, LoadingController, NavController, NavParams, ToastController, ViewController} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {NotificationService} from "../../services/notification";
+import { Chart } from 'chart.js';
 
 /**
  * Generated class for the NotificationViewPage page.
@@ -15,7 +16,10 @@ import {NotificationService} from "../../services/notification";
   templateUrl: 'notification-view-receiver.html',
 })
 export class NotificationViewReceiver {
+  @ViewChild('doughnutCanvas') doughnutCanvas;
+  doughnutChart: any;
 
+  norecievers = "";
   receivers;
   notification;
   receiverListStudents = [];
@@ -33,6 +37,26 @@ export class NotificationViewReceiver {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationViewReceiver');
+    // this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
+    //
+    //   type: 'doughnut',
+    //   data: {
+    //     labels: ["Seen", "UnSeen"],
+    //     datasets: [{
+    //       label: '# of Votes',
+    //       data: [0, 0],
+    //       backgroundColor: [
+    //         'rgba(26,198,31)',
+    //         'rgba(236,27,35)'
+    //       ],
+    //       hoverBackgroundColor: [
+    //         "#1AC61F",
+    //         "#EC1B23"
+    //       ]
+    //     }]
+    //   }
+    //
+    // });
   }
 
   close(){
@@ -91,9 +115,56 @@ export class NotificationViewReceiver {
           this.originalReceiverListStudents.push(this.classReceverList);
           this.receiverListStudents.push(this.classReceverList);
         }
+
+        if(this.originalReceiverListStudents.length == 0){
+          this.norecievers = "No Receivers";
+        }else {
+          let intervaldata = setInterval(() => {
+            let seenNumb: number = 0;
+            let unseenNumb: number = 0;
+            ///GET SEEN AND UNSEEN FIRST
+
+            for (let i = 0; i < this.originalReceiverListStudents.length; i++) {
+              let num = this.originalReceiverListStudents[i]['studentlist'].length;
+              for (let j = 0; j < num; j++) {
+                if (this.originalReceiverListStudents[i]['studentlist'][j].seenByParent || this.originalReceiverListStudents[i]['studentlist'][j].seenByStudent) {
+                  seenNumb += 1;
+                } else {
+                  unseenNumb += 1;
+                }
+              }
+            }
+            ///Put them in CHART.JS
+            this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
+
+              type: 'doughnut',
+              data: {
+                labels: ["Seen", "UnSeen"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [seenNumb, unseenNumb],
+                  backgroundColor: [
+                    'rgba(26,198,31)',
+                    'rgba(236,27,35)'
+                  ],
+                  hoverBackgroundColor: [
+                    "#1AC61F",
+                    "#EC1B23"
+                  ]
+                }]
+              }
+
+            });
+            clearInterval(intervaldata);
+          },250);
+        }
+
         loading.dismiss();
       },err =>{
         loading.dismiss();
+        if(this.originalReceiverListStudents.length == 0){
+          this.norecievers = "No Receivers";
+        }
         this.presentToast('can\'t load students');
         console.log(err);
       }
