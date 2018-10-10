@@ -10,8 +10,7 @@
      width: 100%;height: calc(100% - 140px);padding: 12px">
       <div class="comments-loading-spinner">
         <ion-spinner name="crescent" style="zoom: 1.5;" *ngIf="isLoadingComments"></ion-spinner>
-        <p class="no-comments-text" *ngIf="!isLoadingComments && currentReportComments?.length == 0">There are no
-          comments yet for this report</p>
+        <p class="no-comments-text" *ngIf="!isLoadingComments && currentReportComments?.length == 0">No comments</p>
       </div>
 
       <section>
@@ -29,10 +28,10 @@
               <ion-spinner *ngIf="isEditedCommentsLoading[comment.id]" class="comment-message-actions-loading"
                            name="crescent"></ion-spinner>
             </div>
-            <p class="comment-message comment-message-sender" > {{comment.senderObject.name}}</p>
-            <p class="comment-message comment-message-date" > {{comment.postDate | date:"MMM d, y,  h:mm a"}}</p>
-            <p *ngIf="!inEditModeComments[comment.id]" class="comment-message comment-message-text">
-              {{comment.comment}}</p>
+            <p class="comment-message comment-message-sender"> {{comment.senderObject.name}}</p>
+            <p class="comment-message comment-message-date"> {{comment.postDate | date:"MMM d, y, h:mm a"}}</p>
+            <p *ngIf="!inEditModeComments[comment.id]"
+               class="comment-message comment-message-text">{{comment.comment}}</p>
             <ion-textarea rows="1" [disabled]="isEditedCommentsLoading[comment.id]"
                           *ngIf="inEditModeComments[comment.id]"
                           autoresize class="comment-message  comment-message-edit" style="color: black"

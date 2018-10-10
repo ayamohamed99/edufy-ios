@@ -17,6 +17,7 @@ import {animate, style, transition, trigger} from "@angular/animations";
   templateUrl: 'report-comment.html',
   animations: [
     trigger('fadeInOut', [
+
       transition(':enter', [
         style({opacity: 0}),
         animate(300, style({opacity: 0.35}))

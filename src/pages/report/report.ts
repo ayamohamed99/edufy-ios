@@ -19,7 +19,6 @@ import {DatePicker} from '@ionic-native/date-picker';
 import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
 import {ReportCommentProvider} from "../../providers/report-comment/report-comment";
-import {DatePipe} from "@angular/common";
 import {TransFormDate} from "../../services/transFormDate";
 
 @IonicPage()
@@ -1750,5 +1749,9 @@ export class ReportPage {
     });
 
     toast.present();
+  }
+
+  shouldHighlightComment(stud) {
+    return this.reportId ? stud.numberOfUnseenReportComments[this.reportId] > 0 : stud.numberOfUnseenComments > 0;
   }
 }

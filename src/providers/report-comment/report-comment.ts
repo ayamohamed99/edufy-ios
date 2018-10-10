@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {map} from "rxjs/operators";
 import {AccountService} from "../../services/account";
 import {ReportComment} from "../../models/reportComment";
+import {Url_domain} from "../../models/url_domain";
 
 /*
   Generated class for the ReportCommentProvider provider.
@@ -11,12 +12,12 @@ import {ReportComment} from "../../models/reportComment";
   and Angular DI.
 */
 
-const GET_DAILY_REPORT_COMMENTS_URL = "authentication/comments.ent?operationId=3&date={0}&studentId={1}";
-const SEND_DAILY_REPORT_COMMENTS_URL = "authentication/comments.ent?operationId=1";
-const DELETE_DAILY_REPORT_COMMENTS_URL = "authentication/comments.ent?id={0}";
-const GET_CUSTOM_REPORT_COMMENTS_URL = "authentication/reportComments.ent?operationId=3&date={0}&studentId={1}&reportId={2}";
-const SEND_CUSTOM_REPORT_COMMENTS_URL = "authentication/reportComments.ent?operationId=1";
-const DELETE_CUSTOM_REPORT_COMMENTS_URL = "authentication/reportComments.ent?id={0}";
+const GET_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?operationId=3&date={0}&studentId={1}";
+const SEND_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?operationId=1";
+const DELETE_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?id={0}";
+const GET_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/reportComments.ent?operationId=3&date={0}&studentId={1}&reportId={2}";
+const SEND_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/reportComments.ent?operationId=1";
+const DELETE_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/reportComments.ent?id={0}";
 
 @Injectable()
 export class ReportCommentProvider {
