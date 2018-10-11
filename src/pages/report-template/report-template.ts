@@ -984,7 +984,7 @@ export class ReportTemplatePage{
     let noOfUnFinalized = noOfAllStudents - noOfFinalized;
     this.alrtCtrl.create({
       title: 'Approve Report',
-      subTitle: 'Do you want to approve '+classGradeName+ className +' while '+noOfUnFinalized + ' student report(s) pending ?',
+      subTitle: 'Do you want to approve the reports for the selected student(s) ?',
       buttons: [
         {
           text: 'No',
@@ -1001,7 +1001,12 @@ export class ReportTemplatePage{
             });
             this.load.present();
 
-            this.dailyReportServ.approveReport(this.selectedReportDate,this.selectedClassId,this.reportId).subscribe(
+            let studentsIdsArray = [];
+            for(let student of this.navParams.get('selected')){
+              studentsIdsArray.push(student.studentId);
+            }
+
+            this.dailyReportServ.approveReportByStudent(this.selectedReportDate,studentsIdsArray,this.reportId).subscribe(
               response =>{
                 this.load.dismiss();
                 this.presentToast("The report was Approved");
@@ -1012,7 +1017,7 @@ export class ReportTemplatePage{
                   title: 'Approve Report',
                   subTitle: 'The Report didn\'t approved',
                   buttons: ['Ok']
-                });
+                }).present();
               });
 
 

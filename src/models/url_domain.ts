@@ -12,11 +12,11 @@ export class Url_domain{
   // "proxies": [
   //   {
   //     "path":"/oauth",
-  //     "proxyUrl": "http://192.168.1.5:8080/oauth"
+  //     "proxyUrl": "http://192.168.1.11:8080/oauth"
   //   },
   //   {
   //     "path":"/authentication",
-  //     "proxyUrl": "http://192.168.1.5:8080/authentication"
+  //     "proxyUrl": "http://192.168.1.11:8080/authentication"
   //   }
   //   ],
   // "Production":"104.198.175.198"

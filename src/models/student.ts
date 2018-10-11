@@ -11,6 +11,8 @@ export class Student{
   reportApproved:boolean;
   reportFinalized:boolean;
   numberInList:number;
+  reportSeenByParent:boolean;
+  reportSeenByStudent:boolean;
   numberOfUnseenComments: number;
   numberOfUnseenReportComments: object;
   constructor() {
