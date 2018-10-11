@@ -22,7 +22,8 @@ report-comment {
   }
 
   .comment-message-container {
-    display: inline;
+    //  display: inline;
+    transform-origin: 0 0;
   }
   .comment-message-bubble {
     word-wrap: break-word;
@@ -55,13 +56,15 @@ report-comment {
   .comment-message-text {
     margin-top: 4px;
     font-size: 13px;
-    white-space: pre-line
+    white-space: pre-line;
+    //transition: all 1s;
   }
 
   .comment-message-edit {
     border-radius: 10px;
     font-size: 13px;
     background: white;
+    // transition: all 1s;
     textarea {
       margin: 0;
       padding: 4px;

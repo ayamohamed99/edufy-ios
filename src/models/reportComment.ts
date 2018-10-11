@@ -10,6 +10,7 @@ export class ReportComment {
   public deleted: boolean;
   public approved: boolean;
   public dailyReportDate: string;
+  animationStatus: string = 'loaded';
 }
 
 export interface SenderObject {
