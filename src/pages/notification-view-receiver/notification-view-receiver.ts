@@ -157,33 +157,36 @@ tempRList =[];
     return doc.getStringUnitWidth(text) * doc.internal.getFontSize() / doc.internal.scaleFactor;
   }
   createReceiversPdf(){
-    var leftPadding = 30;
-    var y = 40;
-    var x = leftPadding;
-    var doc = new jsPDF("portrait", "pt", "a4");
-    doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+    let a4paperWidth = 595.28;
+    let a4paperHeight = 841.89;
+
+    let leftPadding = 30;
+    let y = 40;
+    let x = leftPadding;
+    let doc = new jsPDF("portrait", "pt", "a4");
+    doc.rect(20, 20, a4paperWidth - 40, a4paperHeight - 40, 'S');
     doc.setFontSize(16);
-    var title = this.notification.title;
-    var textWidth = this.getTextWidth(doc, title);
-    var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+    let title = this.notification.title;
+    let textWidth = this.getTextWidth(doc, title);
+    let textOffset = (a4paperWidth - textWidth) / 2;
     doc.text(textOffset, y, title);
     y += 50;
     for (let i = 0; i < this.tempRList.length; i++) {
-      var receiverObject = this.tempRList[i];
-      var textWidth = this.getTextWidth(doc, receiverObject.className);
-      var textOffset = (doc.internal.pageSize.width - textWidth) / 2;
+      let receiverObject = this.tempRList[i];
+      let textWidth = this.getTextWidth(doc, receiverObject.className);
+      let textOffset = (a4paperWidth - textWidth) / 2;
       doc.setFontSize(14);
       doc.setDrawColor(0)
       doc.setFillColor(215, 215, 215)
-      doc.roundedRect(21, y - 19, doc.internal.pageSize.width - 42, 34, 3, 3, 'FD')
+      doc.roundedRect(21, y - 19, a4paperWidth - 42, 34, 3, 3, 'FD')
       doc.text(textOffset, y, receiverObject.className);
       y += 30;
-      var classGroups = {
+      let classGroups = {
         'className': receiverObject.className,
         'seen': [],
         'unseen': []
       };
-      for (var j = 0; j < receiverObject.List.length; j++) {
+      for (let j = 0; j < receiverObject.List.length; j++) {
         if (receiverObject.List[j].seenByParent || receiverObject.List[j].seenByStudent) {
           classGroups.seen.push(receiverObject.List[j].student.name);
         } else {
@@ -191,20 +194,20 @@ tempRList =[];
         }
       }
       if (classGroups.seen.length > 0) {
-        var seenList = classGroups.seen;
+        let seenList = classGroups.seen;
         seenList.sort();
         doc.setFontSize(12);
         doc.text(leftPadding, y, "Seen By (" + seenList.length + ")");
-        var textWidth = this.getTextWidth(doc, "Seen By (" + seenList.length + ")");
+        let textWidth = this.getTextWidth(doc, "Seen By (" + seenList.length + ")");
         y += 3;
         doc.line(leftPadding, y, leftPadding + textWidth, y);
         y += 20;
         doc.setFontSize(10);
-        for (var j = 0; j < seenList.length; j++) {
+        for (let j = 0; j < seenList.length; j++) {
           if (y > 800) {
             doc.addPage();
             y = 50;
-            doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+            doc.rect(20, 20, a4paperWidth - 40, a4paperHeight - 40, 'S');
           }
           doc.text(leftPadding + 70, y, seenList[j]);
           y += 15;
@@ -212,20 +215,20 @@ tempRList =[];
       }
       y += 15;
       if (classGroups.unseen.length > 0) {
-        var unseenList = classGroups.unseen;
+        let unseenList = classGroups.unseen;
         unseenList.sort();
         doc.setFontSize(12);
         doc.text(leftPadding, y, "Unseen By (" + unseenList.length + ")");
-        var textWidth = this.getTextWidth(doc, "Unseen By (" + unseenList.length + ")");
+        let textWidth = this.getTextWidth(doc, "Unseen By (" + unseenList.length + ")");
         y += 3;
         doc.line(leftPadding, y, leftPadding + textWidth, y);
         y += 20;
         doc.setFontSize(10);
-        for (var j = 0; j < unseenList.length; j++) {
+        for (let j = 0; j < unseenList.length; j++) {
           if (y > 800) {
             doc.addPage();
             y = 50;
-            doc.rect(20, 20, doc.internal.pageSize.width - 40, doc.internal.pageSize.height - 40, 'S');
+            doc.rect(20, 20, a4paperWidth - 40, a4paperHeight - 40, 'S');
           }
           doc.text(leftPadding + 70, y, unseenList[j]);
           y += 15;
@@ -237,23 +240,49 @@ tempRList =[];
   }
 
   downloadPDF(pdf){
+    let that = this;
     if(this.platform.is('cordova')){
-      pdf.getBuffer((buffer) =>{
-        let utf8 = new Uint8Array(buffer);
-        let binaryArray = utf8.buffer;
-        let blob = new Blob([binaryArray],{type:'application/pdf'});
-        let fileName = 'Notification Receivers';
+      let seeArray = this.convertDataURIToBinary(pdf.output('datauristring'));
+      let utf8 = new Uint8Array(this.convertDataURIToBinary(pdf.output('datauristring')));
+      let binaryArray = utf8.buffer;
+      let blob = new Blob([binaryArray],{type:'application/pdf'});
+      let fileName = 'Notification Receivers.pdf';
+      let storageDirectory = null;
 
-        this.file.writeFile(this.file.dataDirectory,fileName,blob,{replace:true}).then(
-          fileEntry =>{
-            this.fileOpener.open(this.file.dataDirectory+fileName,'application/pdf');
-          });
-      });
+      if (this.platform.is('ios')) {
+        storageDirectory = this.file.documentsDirectory;
+      } else if (this.platform.is('android')) {
+        storageDirectory = this.file.externalRootDirectory+'Download/';
+      }
+
+
+      that.file.writeFile(storageDirectory,fileName,blob,{replace:true}).then(
+        fileEntry =>{
+          console.log(fileEntry);
+          that.fileOpener.open(storageDirectory+fileName,'application/pdf')
+            .catch(e => console.log('Error opening file', e));
+        }).catch(
+          reason => console.log(reason)
+      );
     }else{
       pdf.save('Notification Receivers');
     }
   }
 
+  BASE64_MARKER = ';base64,';
+
+  convertDataURIToBinary(dataURI) {
+    let base64Index = dataURI.indexOf(this.BASE64_MARKER) + this.BASE64_MARKER.length;
+    let base64 = dataURI.substring(base64Index);
+    let raw = window.atob(base64);
+    let rawLength = raw.length;
+    let array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for(let i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i);
+    }
+    return array;
+  }
 
   presentToast(message) {
     let toast = this.toastCtrl.create({

@@ -168,7 +168,7 @@ export class MyApp {
 
   startLogIn(){
     this.load = this.loading.create({
-      content: 'Login now...'
+      content: 'Logging in...'
     });
     this.load.present();
 
