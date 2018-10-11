@@ -240,7 +240,7 @@ export class ReportPage {
 
   getAllClasses() {
     this.loadC = this.loadCtrl.create({
-      content: "loading all classes ..."
+      content: "Loading classes ..."
     });
     this.loadC.present();
     this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
@@ -321,16 +321,18 @@ export class ReportPage {
 
   getAllStudent(classId,name) {
     this.studentsList = [];
-    let loadS = this.loadCtrl.create({
-      content: "loading all students of "+name
-    });
-    loadS.present();
+    this.load.setContent("Just a few more...");
+    // this.load.present();
+    // let loadS = this.loadCtrl.create({
+    //   content:
+    // });
+    // loadS.present();
     return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.selectedDate,this.reportId).toPromise().then(
       (val) => {
         for(let oneClass of this.classesList){
           if(oneClass.classId == classId){
             if(oneClass.reportTemplate == null){
-              this.getDailyReportForClass(classId,loadS);
+              this.getDailyReportForClass(classId,this.load);
             }
           }
         }
@@ -368,7 +370,7 @@ export class ReportPage {
         }
         this.showAllButton = true;
         if(this.classesList.length != 1) {
-          this.addToClasses(classId,loadS);
+          this.addToClasses(classId,this.load);
         }
       },
       err => {
@@ -378,7 +380,7 @@ export class ReportPage {
           subTitle: 'Can\'t load your students, please refresh the page.',
           buttons: ['OK']
         }).present();
-        loadS.dismiss();
+        this.load.dismiss();
       });
   }
 
@@ -481,16 +483,17 @@ export class ReportPage {
     this.getStudentsAnswer(classId,index,name);
   }
 
-
+  massageChange;
   getStudentsAnswer(classId,index,name){
+    this.massageChange = "Getting reports ...";
     this.load = this.loadCtrl.create({
-      content: "loading Students Answers ..."
+      content: this.massageChange
     });
     this.load.present();
 
     this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,this.selectedDate,this.reportId).subscribe(
       resp=>{
-        this.load.dismiss();
+        // this.load.dismiss();
         this.waitStudents(classId,index,name);
       },err =>{
         this.presentToast("Can't get students reports answer");
@@ -586,6 +589,7 @@ export class ReportPage {
       this.classesList = [];
       this.selectedMultiStudent = [];
       this.questionsToBeReset = [];
+      this.hideShowReport = true;
       this.getAllClasses();
     });
 

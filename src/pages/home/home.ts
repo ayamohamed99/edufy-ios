@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {AlertController, LoadingController, NavController, Platform} from 'ionic-angular';
+import {Component, ElementRef, Renderer, Renderer2, ViewChild} from '@angular/core';
+import {AlertController, IonicFormInput, LoadingController, NavController, Platform} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login";
 import {Storage} from "@ionic/storage";
@@ -23,10 +23,12 @@ export class HomePage {
   toKenFull:string;
   load:any;
   elementByClass:any = [];
+  @ViewChild('passwordInput') inp  : any ;
 
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
     , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
-              private network:Network, private notiServ:NotificationService) {}
+              private network:Network, private notiServ:NotificationService
+              ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -36,7 +38,7 @@ export class HomePage {
 
   startLogIn(){
     this.load = this.loading.create({
-      content: 'Login now...'
+      content: 'Logging in...'
     });
     this.load.present();
 
@@ -112,6 +114,7 @@ export class HomePage {
     this.loginServ.authenticateUserManager(this.token,this.toKenFull).subscribe(
       (data) => {
         this.accountInfo();
+
       },
       err => {
         this.load.dismiss();
@@ -167,4 +170,19 @@ export class HomePage {
       });
   }
 
+  passOn = false;
+  showPassword(){
+    if (this.inp.type === "password") {
+      this.rend2.setProperty(this.inp , "type" , "text");
+      this.passOn = true;
+    } else {
+      this.rend2.setProperty(this.inp , "type" , "password");
+      this.passOn = false;
+    }
+
+
+    console.log(this.inp);
+
+    // this.rend.setElementProperty(this.inp._elementRef.nativeElement , "type" , "text");
+  }
 }
