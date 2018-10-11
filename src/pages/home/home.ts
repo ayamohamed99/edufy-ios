@@ -171,18 +171,12 @@ export class HomePage {
   }
 
   passOn = false;
+  inputTextType = "text";
   showPassword(){
-    if (this.inp.type === "password") {
-      this.rend2.setProperty(this.inp , "type" , "text");
+    if (!this.passOn) {
       this.passOn = true;
     } else {
-      this.rend2.setProperty(this.inp , "type" , "password");
       this.passOn = false;
     }
-
-
-    console.log(this.inp);
-
-    // this.rend.setElementProperty(this.inp._elementRef.nativeElement , "type" , "text");
   }
 }
