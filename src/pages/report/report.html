@@ -37,7 +37,8 @@
           </ion-row>
         </div>
 
-        <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of itm.studentsList;let j = index">
+        <ion-card style="height: 50px;padding: 5px; display:inline-block;border-radius: 15px"
+                  *ngFor="let stud of itm.studentsList;let j = index">
 
           <ion-row style="position: relative;">
 
@@ -53,8 +54,10 @@
             <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
             <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
             <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
-            <span class="circleGreen"item-end style="float: right;padding-top: 10px;" *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
-            <span class="circleRed"item-end style="float: right;padding-top: 10px;" *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
+            <span class="circleGreen" item-end style="float: right;padding-top: 10px;"
+                  *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
+            <span class="circleRed" item-end style="float: right;padding-top: 10px;"
+                  *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
             <div class="unseen-comments-container">
               <div class="unseen-comments-count-active"
                    [ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
@@ -82,7 +85,8 @@
       </ion-row>
     </div>
 
-    <ion-card style="height: 50px;padding: 5px; display:inline-block;" *ngFor="let stud of studentsList;let j = index">
+    <ion-card style="height: 50px;padding: 5px; display:inline-block; border-radius: 15px"
+              *ngFor="let stud of studentsList;let j = index">
 
       <ion-row>
 
@@ -98,8 +102,17 @@
         <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
         <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
         <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
-        <span class="circleGreen"item-end style="float: right;padding-top: 10px;" *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
-        <span class="circleRed"item-end style="float: right;padding-top: 10px;" *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
+        <span class="circleGreen" item-end style="float: right;padding-top: 10px;"
+              *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
+        <span class="circleRed" item-end style="float: right;padding-top: 10px;"
+              *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
+        <div class="unseen-comments-container">
+          <div class="unseen-comments-count-active"
+               [ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
+                <span
+                  [innerText]="reportId? stud.numberOfUnseenReportComments[reportId]:stud.numberOfUnseenComments"></span>
+          </div>
+        </div>
       </ion-row>
 
     </ion-card>

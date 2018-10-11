@@ -36,7 +36,6 @@ import {BackgroundMode} from '@ionic-native/background-mode';
 import {HTTP} from '@ionic-native/http';
 
 import {AndroidPermissions} from '@ionic-native/android-permissions';
-import {ReportPage} from "../pages/report/report";
 import {ClassesService} from "../services/classes";
 import {DailyReportService} from "../services/dailyreport";
 
@@ -65,7 +64,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
-    ReportPage,
+    // ReportPage,
    // ReportTemplatePage
   ],
   imports: [
@@ -88,7 +87,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
-    ReportPage,
+    //ReportPage,
    // ReportTemplatePage,
   ],
   providers: [

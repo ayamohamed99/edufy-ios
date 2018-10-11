@@ -26,7 +26,10 @@ page-report {
     -webkit-transform: rotate(180deg);
     transition: transform 0.2s linear;
   }
-
+  .circleGreen {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
   .circleGreen:before {
     content: '';
     height: 15px;
@@ -36,7 +39,10 @@ page-report {
     vertical-align: middle;
     display: inline-block;
   }
-
+  .circleRed {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
   .circleRed:before {
     content: '';
     height: 15px;
@@ -46,9 +52,6 @@ page-report {
     vertical-align: middle;
     display: inline-block;
   }
-
-
-
 
   .mat-expansion-panel-body {
     padding: 8px 8px 24px 16px;
@@ -67,7 +70,6 @@ page-report {
     margin-bottom: 8px;
   }
 
-}
   .unseen-comments-count-active {
     height: 22px;
     position: relative;
@@ -140,11 +142,15 @@ page-report {
     }
   }
   .unseen-comments-container {
-    padding-bottom: 6px;
+    padding-bottom: 5px;
+    margin-right: 5px;
     display: flex;
     align-items: center;
     margin-left: 2px;
-    margin-right: 2px;
   }
+
 }
+
+
+
 

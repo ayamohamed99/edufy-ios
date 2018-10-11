@@ -130,15 +130,14 @@ export class DailyReportService {
   }
 
 
-
-  approveReportByStudent(date,studentIds,reportId){
+  approveReportByStudent(date, studentIds, reportId) {
     let requestURL;
-    if(reportId== null){
+    if (reportId == null) {
       requestURL = '/authentication/dailyReport.ent/approveStudentDailyReport.ent?date=' + date + "&studentIds=" + studentIds;
-    }else{
+    } else {
       requestURL = '/authentication/report.ent/approveStudentReport.ent?date=' + date + "&studentIds=" + studentIds + '&reportId=' + reportId;
     }
-    return this.http.put(this.DomainUrl.Domain + requestURL,null, this.httpOptions);
+    return this.http.put(this.DomainUrl.Domain + requestURL, null, this.httpOptions);
   }
 
 }

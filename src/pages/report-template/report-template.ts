@@ -1,8 +1,14 @@
 import {Component} from '@angular/core';
 import {
   AlertController,
-  FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform,
-  ToastController, ViewController
+  FabContainer,
+  IonicPage,
+  LoadingController,
+  NavController,
+  NavParams,
+  Platform,
+  ToastController,
+  ViewController
 } from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -951,7 +957,6 @@ export class ReportTemplatePage{
                 defailtValueArray[counter] = {};
                 defailtValueArray[counter].key = pram.key;
                 defailtValueArray[counter].value = pram.value;
-                ;
                 counter++;
                 firstTime = false;
               } else {
@@ -1002,11 +1007,11 @@ export class ReportTemplatePage{
             this.load.present();
 
             let studentsIdsArray = [];
-            for(let student of this.navParams.get('selected')){
+            for (let student of this.navParams.get('selected')) {
               studentsIdsArray.push(student.studentId);
             }
 
-            this.dailyReportServ.approveReportByStudent(this.selectedReportDate,studentsIdsArray,this.reportId).subscribe(
+            this.dailyReportServ.approveReportByStudent(this.selectedReportDate, studentsIdsArray, this.reportId).subscribe(
               response =>{
                 this.load.dismiss();
                 this.presentToast("The report was Approved");
@@ -2530,7 +2535,6 @@ export class ReportTemplatePage{
 
           }
         }
-        ;
         return value;
       case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
         if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {

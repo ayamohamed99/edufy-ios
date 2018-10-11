@@ -28,7 +28,7 @@ export class MyApp {
   homePage = HomePage;
   notificationPage = NotificationPage;
   settingsPage = SettingsPage;
-  reportPage = ReportPage;
+  reportPage = 'ReportPage';
 
   userName:string;
   password:string;
@@ -57,8 +57,10 @@ export class MyApp {
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
       }else{
-          storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err)=> {}).catch((err)=> {});;
-          storage.get(this.loginServ.localStoragePassword).then(
+        storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err) => {
+        }).catch((err) => {
+        });
+        storage.get(this.loginServ.localStoragePassword).then(
             value =>{
               this.password = value;
               if((this.userName && this.userName != '') && (this.password && this.password != '')){
