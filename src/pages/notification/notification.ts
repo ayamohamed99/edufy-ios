@@ -158,11 +158,11 @@ export class NotificationPage{
 
     popover.present({ev: event});
   }
-
+  reciversList;
   getNotificationReciver(id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
     this.notificationService.getNotificationReceivers(id).subscribe(
       (data) => {
-        let temp = data;
+        this.reciversList = data;
         this.loading.dismiss();
         this.editId = id;
         this.editTitle = title;
@@ -361,7 +361,7 @@ export class NotificationPage{
 
           let model = this.modalCtrl.create('NotificationNewPage',{id:this.editId,title:this.editTitle, details:this.editDetails,
             classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
-            ,recieverList:data, tagList:this.editTags});
+            ,recieverList:this.reciversList, tagList:this.editTags});
           model.onDidDismiss(()=>{
             this.notifications.splice(0);
             this.notificationPage = 1;
