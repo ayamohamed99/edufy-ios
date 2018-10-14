@@ -10,6 +10,7 @@ import {File} from '@ionic-native/file';
 import {FileOpener} from "@ionic-native/file-opener";
 import * as jsPDF from 'jspdf';
 
+@IonicPage()
 @Component({
   selector: 'page-notification-view-receiver',
   templateUrl: 'notification-view-receiver.html',

@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {
   ActionSheetController,
-  AlertController,
+  AlertController, IonicPage,
   LoadingController,
   NavParams,
   Platform,
@@ -21,7 +21,7 @@ import {Postattachment} from "../../models/postattachment";
 import {BackgroundMode} from '@ionic-native/background-mode';
 import {Pendingnotification} from "../../models/pendingnotification";
 
-
+@IonicPage()
 @Component({
   selector: 'page-notification-new',
   templateUrl: 'notification-new.html',

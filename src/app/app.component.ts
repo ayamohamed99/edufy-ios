@@ -24,10 +24,10 @@ export class MyApp {
 
   view:any = [];
   rootPage:any;
-  profilePage = ProfilePage;
+  profilePage = 'ProfilePage';
   homePage = HomePage;
-  notificationPage = NotificationPage;
-  settingsPage = SettingsPage;
+  notificationPage = 'NotificationPage';
+  settingsPage = 'SettingsPage';
   reportPage = 'ReportPage';
 
   userName:string;
@@ -360,8 +360,15 @@ export class MyApp {
         this.nav.setRoot(this.profilePage);
       },
       err => {
-        this.load.dismiss();
-        this.nav.setRoot(this.homePage);
+        if(err.error == "FORBIDDEN"){
+          this.load.dismiss();
+          console.log('Has No Custom report(s)');
+          this.accountServ.getTags(this.fullToken());
+          this.nav.setRoot('ProfilePage');
+        }else {
+          this.load.dismiss();
+          this.nav.setRoot(this.homePage);
+        }
       },
       () => {
       });

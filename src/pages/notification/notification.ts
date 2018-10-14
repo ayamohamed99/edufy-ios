@@ -29,6 +29,7 @@ import {NotificationViewReceiver} from "../notification-view-receiver/notificati
 
 declare var cordova: any;
 
+@IonicPage()
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html',
@@ -112,7 +113,7 @@ export class NotificationPage{
   }
 
   onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
-    let popover = this.popoverCtrl.create(PopoverNotificationCardPage, {id:id, title:title, details:details});
+    let popover = this.popoverCtrl.create('PopoverNotificationCardPage', {id:id, title:title, details:details});
 
     popover.onDidDismiss(data => {
       if(data == null) {
@@ -129,7 +130,7 @@ export class NotificationPage{
       }else if (data.done === 'updateSuccess'){
         this.fristOpen = false;
         this.loadNow = true;
-        let model = this.modalCtrl.create(NotificationEditPage,{id:data.id,title:data.title,
+        let model = this.modalCtrl.create('NotificationEditPage',{id:data.id,title:data.title,
           details:data.details});
         model.onDidDismiss(data=>{
           if(data.name != "dismissed") {
@@ -161,6 +162,7 @@ export class NotificationPage{
   getNotificationReciver(id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
     this.notificationService.getNotificationReceivers(id).subscribe(
       (data) => {
+        let temp = data;
         this.loading.dismiss();
         this.editId = id;
         this.editTitle = title;
@@ -326,7 +328,7 @@ export class NotificationPage{
 
         if(this.NewNotification){
 
-          let model = this.modalCtrl.create(NotificationNewPage,{classesList:this.classes,
+          let model = this.modalCtrl.create('NotificationNewPage',{classesList:this.classes,
             studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass});
           model.present();
 
@@ -357,7 +359,7 @@ export class NotificationPage{
 
         }else{
 
-          let model = this.modalCtrl.create(NotificationNewPage,{id:this.editId,title:this.editTitle, details:this.editDetails,
+          let model = this.modalCtrl.create('NotificationNewPage',{id:this.editId,title:this.editTitle, details:this.editDetails,
             classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
             ,recieverList:data, tagList:this.editTags});
           model.onDidDismiss(()=>{
@@ -776,6 +778,9 @@ export class NotificationPage{
                   (response) => {
                     this.loading.dismiss();
                     approvedNotification.archived = false;
+                    if(this.archived){
+                      this.notificationsArchived.splice(index, 1);
+                    }
                     // this.notificationPage = 1;
                     // this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
                     this.presentToast('Notification restored successfully.');
@@ -962,7 +967,7 @@ export class NotificationPage{
     let toast = this.toastCtrl.create({
       message: message,
       duration: 3000,
-      position: 'top'
+      position: 'bottom'
     });
 
     toast.onDidDismiss(() => {
@@ -1020,7 +1025,7 @@ export class NotificationPage{
 
 
   openNotificationViewBy(notification){
-    let model = this.modalCtrl.create(NotificationViewReceiver,{notification:notification});
+    let model = this.modalCtrl.create('NotificationViewReceiver',{notification:notification});
     model.onDidDismiss(data=>{
       this.console.log('Page Dismissed');
     });

@@ -58,14 +58,14 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
 @NgModule({
   declarations: [
     MyApp,
-    ProfilePage,
+    // ProfilePage,
     HomePage,
-    NotificationPage,
-    NotificationNewPage,
-    PopoverNotificationCardPage,
-    SettingsPage,
-    NotificationEditPage,
-    NotificationViewReceiver
+    // NotificationPage,
+    // NotificationNewPage,
+    // PopoverNotificationCardPage,
+    // SettingsPage,
+    // NotificationEditPage,
+    // NotificationViewReceiver
     // ReportPage,
    // ReportTemplatePage
   ],
@@ -82,14 +82,14 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    ProfilePage,
+    // ProfilePage,
     HomePage,
-    NotificationPage,
-    NotificationNewPage,
-    PopoverNotificationCardPage,
-    SettingsPage,
-    NotificationEditPage,
-    NotificationViewReceiver
+    // NotificationPage,
+    // NotificationNewPage,
+    // PopoverNotificationCardPage,
+    // SettingsPage,
+    // NotificationEditPage,
+    // NotificationViewReceiver
     //ReportPage,
    // ReportTemplatePage,
   ],

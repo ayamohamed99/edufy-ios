@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {NavController, NavParams, Platform} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {Postattachment} from "../../models/postattachment";
 import {Pendingnotification} from "../../models/pendingnotification";
@@ -16,6 +16,7 @@ import {NotificationService} from "../../services/notification";
 
 declare var windows: any;
 
+@IonicPage()
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',

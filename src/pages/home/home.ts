@@ -156,15 +156,22 @@ export class HomePage {
         this.load.dismiss();
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
-        this.navCtrl.setRoot(ProfilePage);
+        this.navCtrl.setRoot('ProfilePage');
       },
       err => {
-        this.load.dismiss();
-        this.alertCtrl.create({
-          title: 'Error!',
-          subTitle: "Wrong Username or Password",
-          buttons: ['OK']
-        }).present();
+        if(err.error == "FORBIDDEN"){
+          this.load.dismiss();
+          console.log('Has No Custom report(s)');
+          this.accountServ.getTags(this.fullToken());
+          this.navCtrl.setRoot('ProfilePage');
+        }else{
+          this.load.dismiss();
+          this.alertCtrl.create({
+            title: 'Error!',
+            subTitle: "Wrong Username or Password",
+            buttons: ['OK']
+          }).present();
+        }
       },
       () => {
       });
