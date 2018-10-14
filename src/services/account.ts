@@ -19,6 +19,7 @@ export class AccountService{
   private userName:string;
   private userUserName:string;
   private userAddress:string;
+  private _accountBranchesListIds:any = [];
   private _accountBranchesList:any = [];
   private _tagArry:any = [];
   private Arry:any = [];
@@ -74,16 +75,17 @@ export class AccountService{
     this.userName = this.value.name;
     this.userUserName = this.value.username;
     this.userAddress = this.value.address;
+    this._accountBranchesList =this.value.branchesList;
     for(let branch of this.value.branchesList){
-      this._accountBranchesList.push(branch.id);
+      this._accountBranchesListIds.push(branch.id);
     }
   }
 
 
-  setCustomReport(data:any){
+  setCustomReport(data:any) {
 
     this.customReportsValue = data;
-    for(let item of this.customReportsValue) {
+    for (let item of this.customReportsValue) {
       let CRD = new Custom_reports_data();
       CRD.id = item.id;
       CRD.name = item.name;
@@ -143,6 +145,14 @@ export class AccountService{
 
   set accountBranchesList(value: any) {
     this._accountBranchesList = value;
+  }
+
+  get accountBranchesListIds(): any {
+    return this._accountBranchesListIds;
+  }
+
+  set accountBranchesListIds(value: any) {
+    this._accountBranchesListIds = value;
   }
 
 

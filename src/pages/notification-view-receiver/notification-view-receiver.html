@@ -1,0 +1,62 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-buttons end>
+      <button ion-button icon-only (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Notification Receiver(s)</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding style="background: #e5e5e5;">
+  <div *ngIf="originalReceiverListStudents.length == 0" style="height: 100%;">
+  <ion-label style="text-align: center;padding-top: 100%;padding-bottom: 100%;">{{norecievers}}</ion-label>
+  </div>
+
+
+  <div *ngIf="originalReceiverListStudents.length > 0">
+    <ion-card style="margin-left: 0;margin-left: 0;width: 100%;min-height: 0;transition: all;border-radius: 10px;">
+      <ion-card-content style="min-height: 0;transition: all">
+        <canvas #doughnutCanvas style="min-height: 0;"></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <br>
+
+    <ion-searchbar style="padding: 0;background: rgba(0, 0, 0, 0);border-radius: 10px;" (ionInput)="getItems($event)"></ion-searchbar>
+    <br>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let itm of receiverListStudents">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{itm.class}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <ion-card  style="border-radius: 15px;" *ngFor="let stud of itm.studentlist">
+          <ion-item>
+            <ion-label style="height: 21px;">
+              {{stud.student.name}}
+              <span class="circleGreen" style="float: right" *ngIf="stud.seenByParent || stud.seenByStudent"></span>
+              <span class="circleRed" style="float: right" *ngIf="!stud.seenByParent && !stud.seenByStudent"></span>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+
+            <ion-label text-center style="height: 21px;" *ngIf="itm.studentlist.length == 0">
+              No students here !
+            </ion-label>
+
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <ion-fab  bottom right>
+    <button ion-fab (click)="createReceiversPdf()" *ngIf="receiverListStudents.length > 0">
+      <ion-icon name="download"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

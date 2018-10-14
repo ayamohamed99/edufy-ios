@@ -51,6 +51,7 @@ import {DatePipe} from "@angular/common";
 import {TransFormDate} from "../services/transFormDate";
 import {ComponentsModule} from "../components/components.module";
 import {ReportCommentProvider} from "../providers/report-comment/report-comment";
+import {NotificationViewReceiver} from "../pages/notification-view-receiver/notification-view-receiver";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -64,6 +65,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
+    NotificationViewReceiver
     // ReportPage,
    // ReportTemplatePage
   ],
@@ -87,6 +89,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     PopoverNotificationCardPage,
     SettingsPage,
     NotificationEditPage,
+    NotificationViewReceiver
     //ReportPage,
    // ReportTemplatePage,
   ],

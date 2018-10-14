@@ -59,7 +59,7 @@ export class NotificationNewPage {
   @ViewChild('file') inputEl: ElementRef;
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
-              public network:Network,private toastCtrl: ToastController, private platform:Platform,
+              public network:Network,private toastCtrl: ToastController, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingController,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private backgroundMode:BackgroundMode)
   {

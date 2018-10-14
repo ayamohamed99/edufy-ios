@@ -54,7 +54,7 @@ export class NotificationService{
       return this.http.post(this.DomainUrl.Domain + this.commonUrl, newNotification, this.httpOptions);
   }
 
-  getNotification(pageNumber:number,userId:number,classId:number,approved:string, archived:string,sent:string,tagId:number) {
+  getNotification(pageNumber:number,userId:number,classId:number,approved, archived,sent,tagId:number) {
     let st:String = '/webApp.ent?page=' + pageNumber + '&userId=' + userId +
       '&classId=' + classId + '&approved=' + approved + '&archived=' + archived + '&sent=' + sent + '&tagId='
       + tagId;
@@ -107,6 +107,39 @@ export class NotificationService{
         option);
   }
 
+
+  editNotification(updateObject, operationId){
+    let requestURL = '/authentication/notification.ent?operationId=' + operationId;
+    return this.http.put(this.DomainUrl.Domain + requestURL, updateObject, this.httpOptions);
+  }
+
+  getRecieverList(notificationID){
+    return this.http.get(this.DomainUrl.Domain + this.commonUrl + '/getReceiever.ent?notificationId=' + notificationID,
+      this.httpOptions);
+  }
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

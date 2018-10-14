@@ -13,5 +13,6 @@
       "path": "/authentication",
       "proxyUrl": "http://104.198.175.198/authentication"
     }
-  ]
+  ],
+  "app_id": ""
 }

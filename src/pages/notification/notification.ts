@@ -1,5 +1,7 @@
-import {Component} from '@angular/core';
-import {AlertController, LoadingController, ModalController, Platform, PopoverController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {
+  AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController, ToastController
+} from 'ionic-angular';
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
 import {PopoverNotificationCardPage} from "./popover_notification/popovernotificationcard";
@@ -21,6 +23,9 @@ import {Pendingnotification} from "../../models/pendingnotification";
 import {Network} from "@ionic-native/network";
 import {AndroidPermissions} from '@ionic-native/android-permissions';
 import {ClassesService} from "../../services/classes";
+import { Slides } from 'ionic-angular';
+import {NotificationViewReceiver} from "../notification-view-receiver/notification-view-receiver";
+
 
 declare var cordova: any;
 
@@ -29,9 +34,13 @@ declare var cordova: any;
   templateUrl: 'notification.html',
 })
 export class NotificationPage{
-
+  @ViewChild(Slides) slides: Slides;
   notifications:Notification[] = [];
+  notificationsSent:Notification[] = [];
+  notificationsApproved:Notification[] = [];
+  notificationsArchived:Notification[] = [];
   notificationPage=1;
+  notificationIds = [];
   loading:any;
   fristOpen:boolean;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
@@ -47,32 +56,43 @@ export class NotificationPage{
   editTitle;
   editDetails;
   editTags;
+  selectedTab;
+  scrollTab;
+  approved;
+  archived;
+  sent;
+  console=console;
 
-  constructor(private alrtCtrl:AlertController,private platform:Platform,private storage:Storage,
+  constructor(private alrtCtrl:AlertController,public platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
               private popoverCtrl: PopoverController, private load:LoadingController, private accService:AccountService,
               private studentService:StudentsService, private document: DocumentViewer, private file: File,
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
-              private transferF: Transfer, private accountServ:AccountService,private network:Network,
-              private androidPermissions: AndroidPermissions,private classesServ:ClassesService) {
+              private transferF: Transfer, public accountServ:AccountService,private network:Network,
+              private androidPermissions: AndroidPermissions,private toastCtrl:ToastController,private classesServ:ClassesService) {
+    this.approved = null;
+    this.archived = null;
+    this.sent = null;
+    this.selectedTab = "all";
     this.fristOpen = true;
     if (platform.is('core')) {
 
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+      this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
     } else {
       storage.get(this.localStorageToken).then(
         val => {
             this.getPendingNotification();
           this.tokenKey = val;
           notificationService.putHeader(val);
-          this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
         });
     }
     if (platform.is('android')) {
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
         result => {
+          console.log('Has permission?',result.hasPermission);
           if(!result.hasPermission){
             this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE);
           }
@@ -81,7 +101,7 @@ export class NotificationPage{
       );
     }
 
-    this.tagsArr = accService.accountBranchesList;
+    this.tagsArr = accService.accountBranchesListIds;
   }
 
   fullString(fristPart:string, secoundPart:string){
@@ -104,7 +124,7 @@ export class NotificationPage{
         this.notificationPage = 1;
 
         this.notificationService.putHeader(this.tokenKey);
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
       }else if (data.done === 'updateSuccess'){
         this.fristOpen = false;
@@ -117,7 +137,7 @@ export class NotificationPage{
             this.notificationPage = 1;
 
             this.notificationService.putHeader(this.tokenKey);
-            this.getNotifications(this.notificationPage, 0, 0, null, null, null, 0);
+            this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
           }
         });
         model.present();
@@ -165,19 +185,34 @@ export class NotificationPage{
     this.getAllDataThenNavigate();
   }
 
-  getNotifications(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
-    if(this.fristOpen || this.loadNow) {
-      this.loading = this.load.create({
-        content: 'Loading Notifications...'
-      });
-      this.loading.present();
+  getData = false;
+  getNotifications(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
+    let contentMsg;
+    if(this.approved){
+      contentMsg = 'Loading Awaiting Approved Notifications...';
+    }else if(this.archived){
+      contentMsg = 'Loading Archived Notifications...';
+    }else if(this.sent){
+      contentMsg = 'Loading Sent Notifications...';
+    }else{
+      contentMsg = 'Loading Notifications...';
+    }
+    if(!this.getData) {
+      this.getData = true;
+      if (this.fristOpen || this.loadNow) {
+        this.loading = this.load.create({
+          content: contentMsg
+        });
+        this.loading.present();
+      }
     }
     this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
   }
 
-  getNotification(pageNumber:number,userId:number,classId:number,approved:string,archived:string,sent:string,tagId:number){
+  getNotification(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
       (data) => {
+        this.getData = false;
         let allData:any = data;
         for (let value of allData){
           let notify = new Notification;
@@ -197,13 +232,23 @@ export class NotificationPage{
           notify.receiversList = value.receiversList;
           notify.senderName = value.senderName;
           notify.tagsList = value.tagsList;
+          notify.archived = value.archived;
+          notify.approved = value.approved;
           if(value.tagsList != null) {
             notify.tagsListName = value.tagsList.name;
           }
-
-          this.notifications.push(notify);
+          this.notificationIds.push(value.id);
+          if(this.sent){
+            this.notificationsSent.push(notify);
+          }else if(this.approved){
+            this.notificationsApproved.push(notify);
+          }else if(this.archived){
+            this.notificationsArchived.push(notify);
+          }else {
+            this.notifications.push(notify);
+          }
         }
-        this.loading.dismiss();
+        this.getSeencount(this.notificationIds, this.loading);
       },
       err => {
         this.loading.dismiss();
@@ -223,10 +268,10 @@ export class NotificationPage{
       setTimeout(() => {
 
         this.notificationPage += this.notificationPage + 1;
-        this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+        this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
         resolve();
-      }, 500);
+      }, 1000);
     })
   }
 
@@ -293,7 +338,7 @@ export class NotificationPage{
               this.notificationPage = 1;
               this.getPendingNotification();
               this.notificationService.putHeader(this.tokenKey);
-              this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+              this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
             }else if(data.name =="dismissed&NOTSENT"){
               this.fristOpen = false;
@@ -320,7 +365,7 @@ export class NotificationPage{
             this.notificationPage = 1;
 
             this.notificationService.putHeader(this.tokenKey);
-            this.getNotifications(this.notificationPage,0,0,null,null,null,0);
+            this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
           });
           model.present();
 
@@ -338,7 +383,7 @@ export class NotificationPage{
   }
 
   onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,pending:any){
-    if(pending!="pending") {
+    if(pending!="pending" && this.accountServ.getUserRole().notificationAttachmentDownload) {
       this.alrtCtrl.create({
         title: 'Atachment',
         subTitle: 'What are you want to do with this file!',
@@ -630,18 +675,356 @@ export class NotificationPage{
     }
   }
 
+  tabThatSelectedDo(tabName){
+    this.notificationPage = 1;
+    console.log("TabName "+this.selectedTab);
+    let speed = 500;
+    if(tabName == 'all'){
+      this.slides.slideTo(0, speed);
+    }else if(tabName == 'sent'){
+      this.slides.slideTo(1, speed);
+    }else if(tabName == 'approved'){
+      this.slides.slideTo(2, speed);
+    }else if(tabName == 'archived'){
+      this.slides.slideTo(3, speed);
+    }
+  }
+  slideChanged() {
+    this.notificationPage = 1;
+    let currentIndex = this.slides.getActiveIndex();
+    console.log('Current index is', currentIndex);
+    switch (currentIndex){
+      case 1:
+        this.notificationsSent = [];
+        this.selectedTab = 'sent';
+        this.sent = true;
+        this.approved = null;
+        this.archived = null;
+        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+        break;
 
-  // getSeencount(){
-  //   this.notificationService.getSeencount(6094).subscribe(
-  //     (data) => {
-  //       console.log("Date Is", data);
-  //     },
-  //     err => {
-  //       console.log("POST call in error", err);
-  //     },
-  //     () => {
-  //       console.log("The POST observable is now completed.");
-  //     });
-  // }
+      case 2:
+        this.notificationsApproved = [];
+        this.selectedTab = 'approved';
+        this.sent = null;
+        this.approved = true;
+        this.archived = null;
+        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+        break;
+
+      case 3:
+        this.notificationsArchived = [];
+        this.selectedTab = 'archived';
+        this.sent = null;
+        this.approved = null;
+        this.archived = true;
+        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+        break;
+
+      default:
+        this.notifications = [];
+        this.selectedTab = 'all';
+        this.sent = null;
+        this.approved = null;
+        this.archived = null;
+        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+        break;
+    }
+  }
+
+
+  archiveNotification(index) {
+    let approvedNotification;
+    if(this.sent){
+      approvedNotification = this.notificationsSent[index];
+    }else if(this.approved){
+      approvedNotification = this.notificationsApproved[index];
+    }else if(this.archived){
+      approvedNotification = this.notificationsArchived[index];
+    }else {
+      approvedNotification = this.notifications[index];
+    }
+    // get select notification to
+    if (approvedNotification.approved == true) {
+      // archive it
+      if (approvedNotification.archived == true) {
+
+        let confirm = this.alrtCtrl.create({
+          title: "Alert!",
+          message: "Do you want to restore this Notification? ",
+          buttons: [
+            {
+              text: 'No',
+              handler: () => {
+                console.log('Disagree clicked');
+              }
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                // select notification to approve it
+                let sentNotification = {
+                  "id": approvedNotification.notificationId,
+                };
+                this.loading = this.load.create({
+                  content: "Restoring Notification Now ..."
+                });
+                this.loading.present();
+
+                /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
+                this.notificationService.editNotification(sentNotification, 4).subscribe(
+                  (response) => {
+                    this.loading.dismiss();
+                    approvedNotification.archived = false;
+                    // this.notificationPage = 1;
+                    // this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+                    this.presentToast('Notification restored successfully.');
+                },  (reason) => {
+                    this.loading.dismiss();
+                    this.presentToast('Problem deleting notifications from archive.');
+                    console.error('Error: notification.module>NotificationCtrl>archiveNotification> cannot send notification -  ' + reason);
+                });
+              }
+            }
+          ]
+        });
+        confirm.present();
+      } else {
+        this.loading = this.load.create({
+          content: "Archive Notification Now ..."
+        });
+        this.loading.present();
+        /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
+        let sentNotification = {
+          "id": approvedNotification.notificationId,
+        };
+        // calling update service.
+        this.notificationService.editNotification(sentNotification, 3).subscribe(
+          (response) => {
+            this.loading.dismiss();
+            approvedNotification.archived = true;
+            // this.notificationPage = 1;
+            // this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+            this.presentToast('Notification archived successfully.');
+        },(reason) => {
+            this.loading.dismiss();
+            this.presentToast('Problem archiving notifications.');
+            console.error('Error: notification.module>NotificationCtrl>archiveNotification> cannot send notification -  ' + reason);
+        });
+      }
+    } else {
+      let confirm = this.alrtCtrl.create({
+        title: 'Alert!',
+        message: 'Notification need to be approved first.',
+        buttons: ['Ok']
+      });
+      confirm.present();
+    }
+  }
+
+
+  approveNotification(index){
+    this.loading = this.load.create({
+      content: "Approving Now ..."
+    });
+    this.loading.present();
+
+    let approvedNotification;
+    if(this.sent){
+      approvedNotification = this.notificationsSent[index];
+    }else if(this.approved){
+      approvedNotification = this.notificationsApproved[index];
+    }else if(this.archived){
+      approvedNotification = this.notificationsArchived[index];
+    }else {
+      approvedNotification = this.notifications[index];
+    }
+    // get select notification to approve it
+    // check if this notification need to post int to facebook or not
+    if (approvedNotification.fbPosted) {// if need
+      if (approvedNotification.attachment == null) { // check
+        // if there is attachment or not to post notification to facebook with Image or not
+        // facebookService.postNotificationText(approvedNotification.title, approvedNotification.body).then(function (response) {
+        //   messageService.message("success", messageService.messageSubject.successPostToFacebook);
+          let sentNotification = {
+            "id": approvedNotification.notificationId
+            // "fbPostId": response.id
+          };
+          // calling send notification service.
+          this.notificationService.editNotification(sentNotification, 2).subscribe(
+            (response) => {
+              approvedNotification.approved = true;
+              this.loading.dismiss();
+              // removeProcessingMessage();
+              // getNotificationNumFromServer();
+              // $scope.currentPage = 1;
+              if(this.sent){
+                this.notificationsSent = [];
+              }else if(this.approved){
+                this.notificationsApproved = [];
+              }else if(this.archived){
+                this.notificationsArchived = [];
+              }else {
+                this.notifications = [];
+              }
+              this.notificationPage = 1;
+              this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+            this.presentToast('Notification approved & sent successfully.');
+          }, (reason) => {
+              this.loading.dismiss();
+              this.presentToast('Problem approving notifications.');
+            console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot send notification -  ' + reason);
+          });
+        // }, function (reason) {
+        //   removeProcessingMessage();
+        //   messageService.message("failed", messageService.messageSubject.failedPostToFacebook);
+        //   messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
+        //   console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot approve and send notification -  ' + reason);
+        // });
+      } else {// there is not attachment
+        // facebookService.postNotificationImage(approvedNotification.attachment.url, approvedNotification.title, approvedNotification.body).then(function (response) {
+        //   messageService.message("success", messageService.messageSubject.successPostToFacebook);
+          var sentNotification = {
+            "id": approvedNotification.notificationId
+            // "fbPostId": response.id
+          };
+          // calling send notification service.
+          this.notificationService.editNotification(sentNotification, 2).subscribe(
+            (response) => {
+              approvedNotification.approved = true;
+              this.loading.dismiss();
+              // removeProcessingMessage();
+              // getNotificationNumFromServer();
+              // $scope.currentPage = 1;
+              if(this.sent){
+                this.notificationsSent = [];
+              }else if(this.approved){
+                this.notificationsApproved = [];
+              }else if(this.archived){
+                this.notificationsArchived = [];
+              }else {
+                this.notifications = [];
+              }
+              this.notificationPage = 1;
+              this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+              this.presentToast('Notification approved & sent successfully.');
+            // messageService.message("success", messageService.messageSubject.successApprovedNotification);
+          },(reason) => {
+              this.loading.dismiss();
+            // removeProcessingMessage();
+              this.presentToast('Problem approving notifications.');
+            // messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
+            console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot send notification -  ' + reason);
+          });
+        // }, function (reason) {
+        //   removeProcessingMessage();
+        //   messageService.message("failed", messageService.messageSubject.failedPostToFacebook);
+        //   messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
+        //   console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot approve and send notification -  ' + reason);
+        // });
+      }
+    } else {
+      var sentNotification = {
+        "id": approvedNotification.notificationId
+      };
+      // calling send notification service.
+      this.notificationService.editNotification(sentNotification, 2).subscribe(
+        (response) => {
+          approvedNotification.approved = true;
+          this.loading.dismiss();
+        // removeProcessingMessage();
+        // getNotificationNumFromServer();
+        // $scope.currentPage = 1;
+          if(this.sent){
+            this.notificationsSent = [];
+          }else if(this.approved){
+            this.notificationsApproved = [];
+          }else if(this.archived){
+            this.notificationsArchived = [];
+          }else {
+            this.notifications = [];
+          }
+          this.notificationPage = 1;
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+          this.presentToast('Notification approved & sent successfully.');
+        // messageService.message("success", messageService.messageSubject.successApprovedNotification);
+      },(reason) => {
+          this.loading.dismiss();
+        // removeProcessingMessage();
+          this.presentToast('Problem approving notifications.');
+        // messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
+        console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot send notification -  ' + reason);
+      });
+    }
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
+
+
+  getSeencount(notificationsIds,load){
+    this.notificationService.getSeencount(notificationsIds).subscribe(
+      (data) => {
+        console.log("Date Is", data);
+        let AllData:any = [];
+        AllData = data;
+        this.notificationIds = [];
+        for (let id in AllData){
+          if(this.sent){
+            for(let notify of this.notificationsSent){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else if(this.approved){
+            for(let notify of this.notificationsApproved){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else if(this.archived){
+            for(let notify of this.notificationsArchived){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }else {
+            for(let notify of this.notifications){
+              if(notify.notificationId.toString() == id){
+                notify.seenCount = AllData[id];
+              }
+            }
+          }
+        }
+        load.dismiss();
+      },
+      err => {
+        console.log("POST call in error", err);
+      },
+      () => {
+        console.log("The POST observable is now completed.");
+      });
+  }
+
+
+
+  openNotificationViewBy(notification){
+    let model = this.modalCtrl.create(NotificationViewReceiver,{notification:notification});
+    model.onDidDismiss(data=>{
+      this.console.log('Page Dismissed');
+    });
+    model.present();
+  }
 
 }
