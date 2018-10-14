@@ -73,8 +73,8 @@ export class ReportTemplatePage{
   imgsMoodName = ['Active', 'Aggressive', 'Cheerful', 'Cranky','Different', 'Difficult', 'Energetic',
                   'Excellent','Fazzy', 'Good', 'Happy', 'Irretated', 'Lazy', 'Missed My Mummy','Naughty',
                   'Normal', 'On_off', 'Quiet','Sad', 'Sick', 'Sleepy', 'Tired', 'Unhappy', 'Very Good'];
-
-
+  reportSaveORupdates = false;
+  checkIfChangesAnswer = false;
 
 
   ///////////////////// HERE ORGANIZE THE VIEW//////////////////////
@@ -401,10 +401,40 @@ export class ReportTemplatePage{
         });
 
     }
+    this.checkIfChangesAnswer = false;
+  }
+
+  dataChanges(){
+    this.checkIfChangesAnswer = true;
   }
 
   close(){
-    this.viewCtrl.dismiss({name:'dismissed'});
+    if(!this.reportSaveORupdates && this.checkIfChangesAnswer){
+        this.alrtCtrl.create({
+          title: 'Warning!',
+          subTitle: 'Are you want to save the changes ?',
+          buttons: [
+            {
+              text: 'No',
+              role: 'cancel',
+              handler: () => {
+                this.viewCtrl.dismiss({name:'dismissed'});
+              }
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                if(this.showSaveOrUpdate() == 'save' && this.showButtonOfSaveOrUpdate()){
+                  this.saveDailyReport();
+                }else if(this.showSaveOrUpdate() == 'update' && this.showButtonOfSaveOrUpdate()){
+                  this.updateDailyReport();
+                }
+              }
+            }]
+        }).present();
+    }else{
+      this.viewCtrl.dismiss({name:'dismissed'});
+    }
   }
 
   ionViewWillLeave(){
@@ -540,6 +570,7 @@ export class ReportTemplatePage{
   }
 
   enableOther(questionN, i) {
+    this.checkIfChangesAnswer = true;
     let question = this.drQuestion[questionN];
     let key = question.parametersList[i].key;
     if (key == "OPTION_ANSWER_WITH_EDIT") {
@@ -1100,6 +1131,7 @@ export class ReportTemplatePage{
 
 
   saveDailyReport() {
+    this.reportSaveORupdates = true;
     var newReport;
     if(this.accountServ.reportId == -1) {
       newReport = {
@@ -1610,7 +1642,7 @@ export class ReportTemplatePage{
 
   KEEP_ORIGINAL_PATERN = "^_KEEP_ORIGINAL_^";
   updateDailyReport() {
-
+    this.reportSaveORupdates = true;
     // $rootScope.isdisabled = true;
     let index = this.selectedClassIndex;
     let newReport;

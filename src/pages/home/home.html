@@ -59,7 +59,11 @@
                 </ion-item>
 
                 <ion-item class="colorless">
-                  <ion-input width-5 placeholder="Password" name="password" id="passwordField" type="password" required [(ngModel)]="password"></ion-input>
+                  <ion-input #passwordInput width-5 placeholder="Password" name="password" id="passwordField" type="{{ !passOn ? 'password' : 'text' }}" required [(ngModel)]="password"></ion-input>
+                  <button ion-button clear item-right (click)="showPassword()" style="margin: 0; padding: 0;">
+                    <ion-icon name="eye" style="font-size: 2.2rem;" *ngIf="!passOn"></ion-icon>
+                    <ion-icon name="eye-off" style="font-size: 2.2rem;" *ngIf="passOn"></ion-icon>
+                  </button>
                 </ion-item>
 
               </ion-list>
