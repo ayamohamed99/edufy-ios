@@ -3,4 +3,5 @@ export class Attachment{
   name:string;
   type:string;
   url:any;
+  date;
 }

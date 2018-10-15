@@ -82,7 +82,6 @@ export class NotificationNewPage {
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
     let reciverArray = this.navParams.get('recieverList');
-    this.attachmentArray = this.navParams.get('attachmentList');
     this.tags = this.navParams.get('tagList');
     if(reciverArray) {
       this.reciverListFound = reciverArray.length;
@@ -93,7 +92,15 @@ export class NotificationNewPage {
         autoShownReciever.type = temp.type;
         this.sendTo.push(autoShownReciever);
       }
-      this.arrayToPostAttachment = this.attachmentArray;
+      for(let temp of this.navParams.get('attachmentList')){
+        let attach = new Postattachment();
+        attach.name = temp.name;
+        attach.type = temp.type;
+        attach.url = temp.url;
+        attach.uploadDate = temp.date;
+        this.attachmentArray.push(attach);
+        this.arrayToPostAttachment.push(attach);
+      }
     }
 
     //+++++++++All Classes+++++++++
@@ -424,6 +431,7 @@ export class NotificationNewPage {
         s=> {
           console.log('Success post => ' + JSON.stringify(s));
           let allData:any = s;
+
           let attach = new Postattachment();
           attach.name = allData.name;
           attach.type = allData.type;

@@ -227,6 +227,7 @@ export class NotificationPage{
             attach.name=item.name;
             attach.type=item.type;
             attach.url=item.url;
+            attach.date=item.uploadDate;
             notify.attachmentsList.push(attach);
           }
 
