@@ -34,7 +34,7 @@
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card>
+              <ion-card class="scale-up-center">
                 <ion-item style="background-color: white">
 
                   <h1>{{notify.title}}</h1>
@@ -42,9 +42,11 @@
                     <ion-icon style="color: #1daf4c;padding-right: 10px" name="checkmark"></ion-icon>
                     Approve
                   </button>
-                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i)">
+                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                  </button>
                 </ion-item>
                 <div style="padding-left: 16px;">
                   <h2 style="color: gray">{{notify.body}}</h2>
@@ -101,13 +103,15 @@
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notificationsSent; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card>
+              <ion-card class="scale-up-center">
                 <ion-item style="background-color: white">
 
                   <h1>{{notify.title}}</h1>
-                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i)">
+                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                  </button>
                 </ion-item>
                 <div style="padding-left: 16px;">
                   <h2 style="color: gray">{{notify.body}}</h2>
@@ -165,7 +169,7 @@
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notificationsApproved; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card>
+              <ion-card class="scale-up-center">
                 <ion-item style="background-color: white">
 
                   <h1>{{notify.title}}</h1>
@@ -173,9 +177,11 @@
                     <ion-icon style="color: #1daf4c;padding-right: 10px" name="checkmark"></ion-icon>
                     Approve
                   </button>
-                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i)">
+                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                  </button>
                 </ion-item>
                 <div style="padding-left: 16px;">
                   <h2 style="color: gray">{{notify.body}}</h2>
@@ -234,13 +240,15 @@
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notificationsArchived; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card>
+              <ion-card class="scale-up-center">
                 <ion-item style="background-color: white">
 
                   <h1>{{notify.title}}</h1>
-                  <ion-icon item-end style="color: #7a7a7a;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;padding-right: 10px" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon style="background: #eee0" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName, i)" class="buttonShape" name="more" class="buttonShape" ></ion-icon>
+                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
+                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList,notify.attachmentsList, i)">
+                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                  </button>
                 </ion-item>
                 <div style="padding-left: 16px;">
                   <h2 style="color: gray">{{notify.body}}</h2>

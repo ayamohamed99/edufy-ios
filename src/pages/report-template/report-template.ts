@@ -226,10 +226,27 @@ export class ReportTemplatePage{
   }
 
   showApproveButton(){
+    let roleApprove:boolean = false;
+    let studentNotFinalized:boolean = false;
     if(this.accountServ.reportId == -1) {
-      return this.accountServ.getUserRole().dailyReportApprove;
+      roleApprove = this.accountServ.getUserRole().dailyReportApprove;
     }else{
-      return this.accountServ.getUserRole().reportApprove;
+      roleApprove = this.accountServ.getUserRole().reportApprove;
+    }
+
+    if(roleApprove){
+      for(let student of this.selectedListOfStudents){
+        if(!student.reportFinalized){
+          studentNotFinalized = true;
+        }
+      }
+      if(studentNotFinalized){
+        return false;
+      }else{
+        return true;
+      }
+    }else{
+      return false;
     }
   }
 
@@ -1045,7 +1062,7 @@ export class ReportTemplatePage{
             this.dailyReportServ.approveReportByStudent(this.selectedReportDate, studentsIdsArray, this.reportId).subscribe(
               response =>{
                 this.load.dismiss();
-                this.presentToast("The report was Approved");
+                this.presentToast("Report approved successfully.");
               },err=>{
                 this.console.log(err);
                 this.load.dismiss();
@@ -1087,7 +1104,7 @@ export class ReportTemplatePage{
                 response => {
                   this.load.dismiss();
                   this.viewCtrl.dismiss(
-                    {closeView:"The report was reset"}
+                    {closeView:"Report reset successfully."}
                   )
                 }, err => {
                   this.console.log(err);
@@ -1588,15 +1605,15 @@ export class ReportTemplatePage{
       (response) => {
         this.load.dismiss();
         let successMsg;
-        if(this.accountServ.reportId == -1){
-          successMsg = 'Success saved daily report.';
-        }else{
-          successMsg = 'Success saved report.';
-        }
+        successMsg = 'Report saved successfully.';
         this.presentToast(successMsg);
         if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
+        }else{
+          for (let student of this.selectedListOfStudents){
+            student.reportFinalized = true;
+          }
         }
     },
       (reason) => {
@@ -2132,15 +2149,15 @@ export class ReportTemplatePage{
       (response)=> {
         let successMsg;
         this.load.dismiss();
-        if(this.accountServ.reportId == -1){
-          successMsg = 'Success updated daily report.';
-        }else{
-          successMsg = 'Success updated report.';
-        }
+        successMsg = 'Report updated successfully.';
         this.presentToast(successMsg);
         if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
+        }else{
+          for (let student of this.selectedListOfStudents){
+            student.reportFinalized = true;
+          }
         }
 
 

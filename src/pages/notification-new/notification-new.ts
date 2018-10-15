@@ -81,6 +81,7 @@ export class NotificationNewPage {
     this.allStudentNames=this.navParams.get('studetsNameList');
     this.allStudentsDetails=this.navParams.get('studentsdetailsList');
     let reciverArray = this.navParams.get('recieverList');
+    this.attachmentArray = this.navParams.get('attachmentList');
     this.tags = this.navParams.get('tagList');
     if(reciverArray) {
       for (let temp of reciverArray) {
@@ -95,7 +96,7 @@ export class NotificationNewPage {
     //+++++++++All Classes+++++++++
     let autoShownAllClasses = new Autocomplete_shown_array();
     autoShownAllClasses.id = -1;
-    autoShownAllClasses.name = "All Class";
+    autoShownAllClasses.name = "All Classes";
     autoShownAllClasses.dataList=this.chooseAllClasses;
 
     //+++++++++Classes+++++++++

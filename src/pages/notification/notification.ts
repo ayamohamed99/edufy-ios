@@ -63,6 +63,7 @@ export class NotificationPage{
   archived;
   sent;
   console=console;
+  editAsNewAttachmentList;
 
   constructor(private alrtCtrl:AlertController,public platform:Platform,private storage:Storage,
               private modalCtrl: ModalController,private notificationService:NotificationService,
@@ -112,7 +113,7 @@ export class NotificationPage{
   ionViewDidLoad() {
   }
 
-  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
+  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any,attachmentListData:any, i:any){
     let popover = this.popoverCtrl.create('PopoverNotificationCardPage', {id:id, title:title, details:details});
 
     popover.onDidDismiss(data => {
@@ -144,6 +145,7 @@ export class NotificationPage{
         model.present();
 
       }else if(data.done === 'newSuccess'){
+        debugger;
         this.fristOpen = false;
         this.loadNow = true;
         this.loading = this.load.create({
@@ -151,6 +153,7 @@ export class NotificationPage{
         });
         this.loading.present();
         this.NewNotification = false;
+        this.editAsNewAttachmentList = attachmentListData;
         this.getNotificationReciver(id, title, details,reciversList,tagsList, i);
       }
       }
@@ -412,7 +415,7 @@ export class NotificationPage{
 
           let model = this.modalCtrl.create('NotificationNewPage',{id:this.editId,title:this.editTitle, details:this.editDetails,
             classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
-            ,recieverList:this.reciversList, tagList:this.editTags});
+            ,recieverList:this.reciversList, tagList:this.editTags, attachmentList:this.editAsNewAttachmentList});
           model.onDidDismiss(()=>{
             this.notifications.splice(0);
             this.notificationPage = 1;

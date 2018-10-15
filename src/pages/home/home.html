@@ -77,14 +77,14 @@
           </ion-row>
         </form>
       </section>
-      <button ion-button width-5 full clear>Forget your password?</button>
+      <button ion-button width-5 full clear [hidden]="true">Forget your password?</button>
     </div>
     <div col-sm-1 col-md-3 col-lg-2 col-xl-3></div>
     </ion-row>
     <ion-row></ion-row>
   </ion-grid>
 
-  <ion-fab top right>
+  <ion-fab top right [hidden]="true">
     <button ion-fab color="danger" mini><ion-icon><img src="assets/icon/iconcs.png"/></ion-icon></button>
   </ion-fab>
 
