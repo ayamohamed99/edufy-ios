@@ -267,13 +267,64 @@ export class NotificationPage{
   doInfinite(){
 
     return new Promise((resolve) => {
-      setTimeout(() => {
+      // setTimeout(() => {
 
         this.notificationPage += this.notificationPage + 1;
-        this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
+      this.notificationService.getNotification(this.notificationPage,0,0,this.approved,this.archived,this.sent,0).subscribe(
+        (data) => {
+          this.getData = false;
+          let allData:any = data;
+          for (let value of allData){
+            let notify = new Notification;
+            for(let item of value.attachmentsList){
+              let attach = new Attachment();
+              attach.id=item.id;
+              attach.name=item.name;
+              attach.type=item.type;
+              attach.url=item.url;
+              notify.attachmentsList.push(attach);
+            }
 
-        resolve();
-      }, 1000);
+            notify.body = value.body;
+            notify.dateTime =  value.dateTime;
+            notify.notificationId = value.id;
+            notify.title = value.title;
+            notify.receiversList = value.receiversList;
+            notify.senderName = value.senderName;
+            notify.tagsList = value.tagsList;
+            notify.archived = value.archived;
+            notify.approved = value.approved;
+            if(value.tagsList != null) {
+              notify.tagsListName = value.tagsList.name;
+            }
+            this.notificationIds.push(value.id);
+            if(this.sent){
+              this.notificationsSent.push(notify);
+            }else if(this.approved){
+              this.notificationsApproved.push(notify);
+            }else if(this.archived){
+              this.notificationsArchived.push(notify);
+            }else {
+              this.notifications.push(notify);
+            }
+          }
+          this.getSeencount(this.notificationIds, this.loading);
+        },
+        err => {
+          this.loading.dismiss();
+          this.alrtCtrl.create( {
+            title: 'Error',
+            subTitle: "Please, check the internet and try again",
+            buttons: ['OK']
+          }).present();
+        },
+        () => {
+          resolve();
+        });
+
+
+
+      // }, 20000);
     })
   }
 

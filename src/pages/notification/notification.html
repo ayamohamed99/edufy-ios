@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title text-center>Notifications</ion-title>
   </ion-navbar>
-  <ion-toolbar class="toolBarShap" color="primary" *ngIf="platform.is('android')">
+  <ion-toolbar class="toolBarShap" color="primary" *ngIf="!platform.is('ios')">
     <ion-segment [(ngModel)]="selectedTab" color="light">
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
