@@ -123,7 +123,7 @@ export class DailyReportService {
     if(reportId== null){
       requestURL = '/authentication/dailyReport.ent?date=' + date;
     }else{
-      requestURL = '/authentication/report.ent?date=' + date + '&reportId=' + reportId;
+      requestURL = '/authentication/report.ent?date=' + date;
     }
     console.log(answerObject);
     return this.http.put(this.DomainUrl.Domain + requestURL,answerObject, this.httpOptions);

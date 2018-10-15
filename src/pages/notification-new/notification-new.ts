@@ -56,6 +56,7 @@ export class NotificationNewPage {
   pendingNotification:any[]=[];
   subscribtion;
   ifOpenWIFIANDNOTGOTOBACKGROUND;
+  reciverListFound = 0;
   @ViewChild('file') inputEl: ElementRef;
 
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
@@ -84,6 +85,7 @@ export class NotificationNewPage {
     this.attachmentArray = this.navParams.get('attachmentList');
     this.tags = this.navParams.get('tagList');
     if(reciverArray) {
+      this.reciverListFound = reciverArray.length;
       for (let temp of reciverArray) {
         let autoShownReciever = new Autocomplete_shown_array();
         autoShownReciever.id = temp.id;
@@ -91,6 +93,7 @@ export class NotificationNewPage {
         autoShownReciever.type = temp.type;
         this.sendTo.push(autoShownReciever);
       }
+      this.arrayToPostAttachment = this.attachmentArray;
     }
 
     //+++++++++All Classes+++++++++
@@ -481,7 +484,7 @@ export class NotificationNewPage {
         this.getNotificationINStorageNOTINBACKGROUND();
       });
 
-    }else{
+    }else {
 
       let loading = this.loadingCtrl.create({
         content: ""

@@ -1686,6 +1686,7 @@ export class ReportTemplatePage{
           "answer": "",
           "studentsList": this.selectedListOfStudentsID,
           "classId": this.selectedClassId,
+          "reportId": this.accountServ.reportId,
           "questionId": this.drQuestion[i].id
         };
       }
