@@ -92,14 +92,16 @@ export class NotificationNewPage {
         autoShownReciever.type = temp.type;
         this.sendTo.push(autoShownReciever);
       }
-      for(let temp of this.navParams.get('attachmentList')){
-        let attach = new Postattachment();
-        attach.name = temp.name;
-        attach.type = temp.type;
-        attach.url = temp.url;
-        attach.uploadDate = temp.date;
-        this.attachmentArray.push(attach);
-        this.arrayToPostAttachment.push(attach);
+      if(this.accountServ.getUserRole().notificationAttachmentUpload) {
+        for (let temp of this.navParams.get('attachmentList')) {
+          let attach = new Postattachment();
+          attach.name = temp.name;
+          attach.type = temp.type;
+          attach.url = temp.url;
+          attach.uploadDate = temp.date;
+          this.attachmentArray.push(attach);
+          this.arrayToPostAttachment.push(attach);
+        }
       }
     }
 

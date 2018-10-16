@@ -137,7 +137,6 @@ export class NotificationPage{
           if(data.name != "dismissed") {
             this.notifications.splice(0);
             this.notificationPage = 1;
-
             this.notificationService.putHeader(this.tokenKey);
             this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
           }
@@ -202,15 +201,15 @@ export class NotificationPage{
     }else{
       contentMsg = 'Loading Notifications...';
     }
-    if(!this.getData) {
-      this.getData = true;
+    // if(!this.getData) {
+    //   this.getData = true;
       if (this.fristOpen || this.loadNow) {
         this.loading = this.load.create({
           content: contentMsg
         });
         this.loading.present();
       }
-    }
+    // }
     this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
   }
 

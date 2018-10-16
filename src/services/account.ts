@@ -104,7 +104,7 @@ export class AccountService{
         'Authorization' : subHeader
       })};
 
-      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this._accountBranchesList, httpOptions).subscribe(value => {
+      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds, httpOptions).subscribe(value => {
         this.Arry = value;
         for (let tag of this.Arry) {
           this._tagArry.push(tag);

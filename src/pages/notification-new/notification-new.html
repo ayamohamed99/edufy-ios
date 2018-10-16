@@ -35,7 +35,7 @@
   <ion-textarea rows="6" [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></ion-textarea>
   </ion-item>
 
-  <ion-item>
+  <ion-item *ngIf="accountServ.getUserRole().notificationTagView">
     <ion-label class="textColor">Select Tag</ion-label>
     <ion-select [(ngModel)]="tags" multiple interface="popover">
       <ion-option *ngFor="let tag of tagsArr" >{{tag.name}}</ion-option>
