@@ -4,6 +4,42 @@ page-notification {
     background: #f4f4f4;
   }
 
+  .item-md{
+    background-color: #fff0;
+  }
+
+  .item-ios{
+    background-color: #fff0;
+  }
+
+  .item-block {
+    min-height: 0;
+    transition: all 1s ease-in-out !important;
+  }
+
+  .lableInItem{
+    .label-md {
+      margin: 0 0 2px;
+      font-size: 2.4rem;
+      font-weight: normal;
+    }
+    .label-ios {
+      margin: 0 0 2px;
+      font-size: 2.4rem;
+      font-weight: normal;
+    }
+  }
+
+  .item-md.item-block .item-inner {
+    height: fit-content;
+    transition: all 1s ease-in-out;
+  }
+
+  .item-ios.item-block .item-inner {
+    height: fit-content;
+    transition: all 1s ease-in-out;
+  }
+
   .buttonShape{
     background: #eee0;
     margin: 10px;
@@ -59,18 +95,22 @@ page-notification {
 
   .card-md {
     border-radius: 15px;
+    transition: all 1s ease-in-out;
   }
 
   .card-lg{
     border-radius: 15px;
+    transition: 1s all linear;
   }
 
   .card-xl{
     border-radius: 15px;
+    transition: 1s all linear;
   }
 
   .card-sm{
     border-radius: 15px;
+    transition: 1s all linear;
   }
 
   .card-xs{
@@ -79,10 +119,12 @@ page-notification {
 
   .card-ios {
     border-radius: 15px;
+    transition: all 1s ease-in-out;
   }
 
   ion-card{
     border-radius: 15px;
+    transition: all 1s ease-in-out;
   }
   .btn-on {
     position: absolute;
@@ -152,6 +194,22 @@ page-notification {
       -webkit-transform: scale(1);
       transform: scale(1);
     }
+  }
+
+
+
+  changeColor {
+    -webkit-animation: color_change 1s infinite alternate;
+    animation: color_change 1s infinite alternate;
+  }
+
+  @-webkit-keyframes color_change {
+    from { background-color: white; }
+    to { background-color: #1DAF4C; }
+  }
+  @keyframes color_change {
+    from { background-color: #ffffff; }
+    to { background-color: #1DAF4C; }
   }
 }
 

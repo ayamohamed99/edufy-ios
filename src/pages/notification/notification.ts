@@ -806,7 +806,6 @@ export class NotificationPage{
       if (approvedNotification.archived == true) {
 
         let confirm = this.alrtCtrl.create({
-          title: "Alert!",
           message: "Do you want to restore this Notification? ",
           buttons: [
             {
@@ -873,7 +872,6 @@ export class NotificationPage{
       }
     } else {
       let confirm = this.alrtCtrl.create({
-        title: 'Alert!',
         message: 'Notification need to be approved first.',
         buttons: ['Ok']
       });
@@ -883,10 +881,10 @@ export class NotificationPage{
 
 
   approveNotification(index){
-    this.loading = this.load.create({
-      content: "Approving Now ..."
-    });
-    this.loading.present();
+    // this.loading = this.load.create({
+    //   content: "Approving Now ..."
+    // });
+    // this.loading.present();
 
     let approvedNotification;
     if(this.sent){
@@ -912,22 +910,34 @@ export class NotificationPage{
           // calling send notification service.
           this.notificationService.editNotification(sentNotification, 2).subscribe(
             (response) => {
-              approvedNotification.approved = true;
               this.loading.dismiss();
               // removeProcessingMessage();
               // getNotificationNumFromServer();
               // $scope.currentPage = 1;
-              if(this.sent){
-                this.notificationsSent = [];
-              }else if(this.approved){
-                this.notificationsApproved = [];
-              }else if(this.archived){
-                this.notificationsArchived = [];
-              }else {
-                this.notifications = [];
-              }
-              this.notificationPage = 1;
-              this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+
+              // if(this.sent){
+              //   this.notificationsSent[index].approved = true;
+              // }else if(this.approved){
+              //   this.notificationsApproved[index].approved = true;
+              // }else if(this.archived){
+              //   this.notificationsArchived[index].approved = true;
+              // }else {
+              //   this.notifications[index].approved = true;
+              // }
+
+
+              let elItem = document.getElementById("itemView"+index);
+              let elButton = document.getElementById("buttonView"+index);
+
+
+              elButton.style.backgroundColor = '#1DAF4C';
+              elButton.style.borderColor = '#ffffff';
+              elButton.style.color = '#ffffff';
+
+              // elItem.style.maxHeight = "0px";
+
+              // this.notificationPage = 1;
+              // this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
             this.presentToast('Notification approved & sent successfully.');
           }, (reason) => {
               this.loading.dismiss();
@@ -950,22 +960,33 @@ export class NotificationPage{
           // calling send notification service.
           this.notificationService.editNotification(sentNotification, 2).subscribe(
             (response) => {
-              approvedNotification.approved = true;
+              // approvedNotification.approved = true;
               this.loading.dismiss();
               // removeProcessingMessage();
               // getNotificationNumFromServer();
               // $scope.currentPage = 1;
               if(this.sent){
-                this.notificationsSent = [];
+                this.notificationsSent[index].approved = true;
               }else if(this.approved){
-                this.notificationsApproved = [];
+                this.notificationsApproved[index].approved = true;
               }else if(this.archived){
-                this.notificationsArchived = [];
+                this.notificationsArchived[index].approved = true;
               }else {
-                this.notifications = [];
+                this.notifications[index].approved = true;
               }
-              this.notificationPage = 1;
-              this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+
+
+              let elItem = document.getElementById("itemView"+index);
+              let elButton = document.getElementById("buttonView"+index);
+
+
+              elButton.style.backgroundColor = '#1DAF4C';
+              elButton.style.borderColor = '#ffffff';
+              elButton.style.color = '#ffffff';
+
+              // elItem.style.maxHeight = "0px";
+              // this.notificationPage = 1;
+              // this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
               this.presentToast('Notification approved & sent successfully.');
             // messageService.message("success", messageService.messageSubject.successApprovedNotification);
           },(reason) => {
@@ -989,22 +1010,31 @@ export class NotificationPage{
       // calling send notification service.
       this.notificationService.editNotification(sentNotification, 2).subscribe(
         (response) => {
-          approvedNotification.approved = true;
+          // approvedNotification.approved = true;
           this.loading.dismiss();
         // removeProcessingMessage();
         // getNotificationNumFromServer();
         // $scope.currentPage = 1;
-          if(this.sent){
-            this.notificationsSent = [];
-          }else if(this.approved){
-            this.notificationsApproved = [];
-          }else if(this.archived){
-            this.notificationsArchived = [];
-          }else {
-            this.notifications = [];
-          }
-          this.notificationPage = 1;
-          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+        //   if(this.sent){
+        //     this.notificationsSent[index].approved = true;
+        //   }else if(this.approved){
+        //     this.notificationsApproved[index].approved = true;
+        //   }else if(this.archived){
+        //     this.notificationsArchived[index].approved = true;
+        //   }else {
+        //     this.notifications[index].approved = true;
+        //   }
+
+
+          let elItem = document.getElementById("itemView"+index);
+          let elButton = document.getElementById("buttonView"+index);
+
+          elButton.style.backgroundColor = '#1DAF4C';
+          elButton.style.borderColor = '#ffffff';
+          elButton.style.color = '#ffffff';
+
+          // this.notificationPage = 1;
+          // this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
           this.presentToast('Notification approved & sent successfully.');
         // messageService.message("success", messageService.messageSubject.successApprovedNotification);
       },(reason) => {

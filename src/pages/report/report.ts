@@ -495,6 +495,11 @@ export class ReportPage {
       resp=>{
         // this.load.dismiss();
         this.waitStudents(classId,index,name);
+        if(this.classesList[index].studentsList) {
+          if (this.classesList[index].studentsList.length != 0) {
+            this.load.dismiss();
+          }
+        }
       },err =>{
         this.presentToast("Can't get students reports answer");
         this.load.dismiss();
