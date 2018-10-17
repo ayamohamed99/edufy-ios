@@ -237,9 +237,12 @@ export class ProfilePage {
 
   openNav() {
     document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("myAllnav").style.width = "100%";
+
   }
   closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("myAllnav").style.width = "0";
   }
 
 }

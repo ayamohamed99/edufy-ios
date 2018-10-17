@@ -12,15 +12,13 @@ import { Component } from '@angular/core';
 })
 export class ReportFilterComponent {
 
-  text: string;
-
   constructor() {
-    console.log('Hello ReportFilterComponent Component');
-    this.text = 'Hello World';
+
   }
 
   closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("myAllnav").style.width = "0";
   }
 
 }

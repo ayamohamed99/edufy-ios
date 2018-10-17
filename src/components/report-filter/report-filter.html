@@ -1,8 +1,32 @@
 <!-- Generated template for the ReportFilterComponent component -->
-<div id="mySidenav" class="sidenav">
-  <a class="closebtn" (click)="closeNav()">Close</a>
-  <a>About</a>
-  <a>Services</a>
-  <a>Clients</a>
-  <a>Contact</a>
-</div>
+<!--<div class="filter-backdrop"-->
+     <!--[@fadeInOut]>-->
+<!--</div>-->
+  <div id="mySidenav" class="sidenav">
+    <ion-navbar class="topOfPage" color="primary">
+      <ion-buttons left>
+        <button ion-button icon-only (click)="closeNav()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title text-center>Choose students</ion-title>
+    </ion-navbar>
+
+
+    <div class="aaaaForClasses">
+      <div>
+        <span class="arrow right"></span>
+        <ion-label style="display: inline-block;margin: 0;margin-left: 8px">Class A</ion-label>
+      </div>
+    </div>
+
+
+
+
+
+
+  </div>
+
+<ion-backdrop id="myAllnav"  class="show-backdrop" (click)="closeNav()"  style="opacity: 0.35;">
+</ion-backdrop>
+
