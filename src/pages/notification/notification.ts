@@ -148,7 +148,8 @@ export class NotificationPage{
         this.fristOpen = false;
         this.loadNow = true;
         this.loading = this.load.create({
-          content: ""
+          content: '',
+          cssClass:"loadingWithoutBackground"
         });
         this.loading.present();
         this.NewNotification = false;
@@ -165,7 +166,7 @@ export class NotificationPage{
     this.notificationService.getNotificationReceivers(id).subscribe(
       (data) => {
         this.reciversList = data;
-        this.loading.dismiss();
+        // this.loading.dismiss();
         this.editId = id;
         this.editTitle = title;
         this.editDetails = details;
@@ -191,26 +192,39 @@ export class NotificationPage{
 
   getData = false;
   getNotifications(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
-    let contentMsg;
-    if(this.approved){
-      contentMsg = 'Loading Awaiting Approved Notifications...';
-    }else if(this.archived){
-      contentMsg = 'Loading Archived Notifications...';
-    }else if(this.sent){
-      contentMsg = 'Loading Sent Notifications...';
-    }else{
-      contentMsg = 'Loading Notifications...';
+    let thereIsDataInArray = false;
+    if(this.approved && this.notificationsApproved.length > 0){
+        thereIsDataInArray = true;
+    }else if(this.archived && this.notificationsArchived.length > 0){
+        thereIsDataInArray = true;
+    }else if(this.sent && this.notificationsSent.length > 0) {
+        thereIsDataInArray = true;
+    }else if(!this.sent && !this.archived && !this.approved && this.notifications.length > 0) {
+        thereIsDataInArray = true;
     }
-    // if(!this.getData) {
-    //   this.getData = true;
+
+    if(!thereIsDataInArray) {
+      let contentMsg;
+      if (this.approved) {
+        contentMsg = 'Loading Awaiting Approved Notifications...';
+      } else if (this.archived) {
+        contentMsg = 'Loading Archived Notifications...';
+      } else if (this.sent) {
+        contentMsg = 'Loading Sent Notifications...';
+      } else {
+        contentMsg = 'Loading Notifications...';
+      }
+      // if(!this.getData) {
+      //   this.getData = true;
       if (this.fristOpen || this.loadNow) {
         this.loading = this.load.create({
           content: contentMsg
         });
         this.loading.present();
       }
-    // }
-    this.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId);
+      // }
+      this.getNotification(pageNumber, userId, classId, approved, archived, sent, tagId);
+    }
   }
 
   getNotification(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
@@ -710,9 +724,12 @@ export class NotificationPage{
   }
 
   getAllDataThenNavigate(){
-    this.loading = this.load.create({
-      content: ""
-    });
+    if(this.NewNotification) {
+      this.loading = this.load.create({
+        content: "",
+        cssClass: "loadingWithoutBackground"
+      });
+    }
     this.loading.present();
     if(this.platform.is('core')) {
       this.tokenKey = localStorage.getItem(this.localStorageToken);
@@ -751,7 +768,6 @@ export class NotificationPage{
     console.log('Current index is', currentIndex);
     switch (currentIndex){
       case 1:
-        this.notificationsSent = [];
         this.selectedTab = 'sent';
         this.sent = true;
         this.approved = null;
@@ -760,7 +776,6 @@ export class NotificationPage{
         break;
 
       case 2:
-        this.notificationsApproved = [];
         this.selectedTab = 'approved';
         this.sent = null;
         this.approved = true;
@@ -769,7 +784,6 @@ export class NotificationPage{
         break;
 
       case 3:
-        this.notificationsArchived = [];
         this.selectedTab = 'archived';
         this.sent = null;
         this.approved = null;
@@ -778,7 +792,6 @@ export class NotificationPage{
         break;
 
       default:
-        this.notifications = [];
         this.selectedTab = 'all';
         this.sent = null;
         this.approved = null;
@@ -822,7 +835,7 @@ export class NotificationPage{
                   "id": approvedNotification.notificationId,
                 };
                 this.loading = this.load.create({
-                  content: "Restoring Notification Now ..."
+                  content: "Restoring Notification"
                 });
                 this.loading.present();
 
@@ -849,7 +862,7 @@ export class NotificationPage{
         confirm.present();
       } else {
         this.loading = this.load.create({
-          content: "Archive Notification Now ..."
+          content: "Archive Notification"
         });
         this.loading.present();
         /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
@@ -881,10 +894,10 @@ export class NotificationPage{
 
 
   approveNotification(index){
-    // this.loading = this.load.create({
-    //   content: "Approving Now ..."
-    // });
-    // this.loading.present();
+    this.loading = this.load.create({
+      content: "Approving"
+    });
+    this.loading.present();
 
     let approvedNotification;
     if(this.sent){
@@ -1115,5 +1128,71 @@ export class NotificationPage{
     });
     model.present();
   }
+
+
+
+  doRefresh(refresher) {
+    this.notificationPage = 1;
+    this.notificationService.getNotification(this.notificationPage,0,0,this.approved,this.archived,this.sent,0).subscribe(
+      (data) => {
+        if(this.sent){
+          this.notificationsSent = [];
+        }else if(this.approved){
+          this.notificationsApproved = [];
+        }else if(this.archived){
+          this.notificationsArchived = [];
+        }else {
+          this.notifications = [];
+        }
+        this.getData = false;
+        let allData:any = data;
+        for (let value of allData){
+          let notify = new Notification;
+          for(let item of value.attachmentsList){
+            let attach = new Attachment();
+            attach.id=item.id;
+            attach.name=item.name;
+            attach.type=item.type;
+            attach.url=item.url;
+            notify.attachmentsList.push(attach);
+          }
+
+          notify.body = value.body;
+          notify.dateTime =  value.dateTime;
+          notify.notificationId = value.id;
+          notify.title = value.title;
+          notify.receiversList = value.receiversList;
+          notify.senderName = value.senderName;
+          notify.tagsList = value.tagsList;
+          notify.archived = value.archived;
+          notify.approved = value.approved;
+          if(value.tagsList != null) {
+            notify.tagsListName = value.tagsList.name;
+          }
+          this.notificationIds.push(value.id);
+          if(this.sent){
+            this.notificationsSent.push(notify);
+          }else if(this.approved){
+            this.notificationsApproved.push(notify);
+          }else if(this.archived){
+            this.notificationsArchived.push(notify);
+          }else {
+            this.notifications.push(notify);
+          }
+        }
+        this.getSeencount(this.notificationIds, this.loading);
+      },
+      err => {
+        this.loading.dismiss();
+        this.alrtCtrl.create( {
+          title: 'Error',
+          subTitle: "Please, check the internet and try again",
+          buttons: ['OK']
+        }).present();
+      },
+      () => {
+        refresher.complete();
+      });
+    }
 
 }

@@ -31,6 +31,10 @@
     <ion-slide style="height: 100%;">
       <ion-content class="contentScroll">
 
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
@@ -100,6 +104,10 @@
     <ion-slide>
 
       <ion-content class="contentScroll">
+
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
 
         <ion-grid>
           <ion-row>
@@ -171,6 +179,11 @@
 
       <ion-content class="contentScroll">
 
+
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
         <ion-grid>
           <ion-row>
             <ion-col *ngFor="let notify of notificationsApproved; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
@@ -240,6 +253,11 @@
     <ion-slide *ngIf="accountServ.getUserRole().archiveNotificationView">
 
       <ion-content class="contentScroll">
+
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
 
         <ion-grid>
           <ion-row>
