@@ -4,7 +4,7 @@ export class Url_domain{
   // PRODUCTION:"http://104.198.175.198";
   // LOCAL:"http://192.168.1.10:8080";
 
-  static Domain = "http://104.198.175.198";
+  static Domain = "";
   Domain = Url_domain.Domain;
 
 

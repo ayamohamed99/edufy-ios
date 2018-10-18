@@ -1198,28 +1198,28 @@
 
 
     <ion-fab bottom right #fab style="z-index: -1;" >
-      <button ion-fab mini><ion-icon name="more"></ion-icon></button>
+      <button ion-fab><ion-icon name="more"></ion-icon></button>
       <ion-fab-list side="top" >
 
 
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
+        <button ion-fab mini style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
           <img src="assets/icon/reset.png">
           <ion-label>Rest</ion-label>
         </button>
 
 
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
+        <button ion-fab mini style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
           <img src="assets/icon/save.png">
           <ion-label>Save</ion-label>
         </button>
 
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
+        <button ion-fab mini style="background-color: #309CCE" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
           <img src="assets/icon/save.png">
           <ion-label>Update</ion-label>
         </button>
 
 
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)"
+        <button ion-fab mini style="background-color: #309CCE" (click)="fabSelected('approve',fab)"
                 *ngIf="showApproveButton()">
           <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
           <ion-label>Approve</ion-label>

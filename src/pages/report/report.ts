@@ -354,6 +354,7 @@ export class ReportPage {
             students.studentName = data[i].name;
             students.studentAddress = data[i].address;
             students.numberInList = i;
+            students.studentImageUrl = data[i].profileImg;
             if(this.accountServ.reportId == -1) {
               students.reportApproved = data[i].dailyReportApproved;
               students.reportFinalized = data[i].dailyReportFinalized;

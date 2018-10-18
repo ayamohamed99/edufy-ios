@@ -4,6 +4,14 @@ page-report-template {
     background: #e5e5e5;
   }
 
+  .select-md .select-icon {
+    padding-right: 16px;
+  }
+
+  .select-ios .select-icon {
+    padding-right: 16px;
+  }
+
   button[ion-fab] {
     -moz-appearance: none;
     -ms-appearance: none;
@@ -11,7 +19,7 @@ page-report-template {
     appearance: none;
     overflow: visible;
     position: relative;
-    box-shadow: 5px 5px 5px grey;
+    //box-shadow: 5px 5px 5px grey;
 
     ion-label {
       -moz-appearance: none;
@@ -25,8 +33,12 @@ page-report-template {
       line-height: 24px;
       padding: 4px 8px;
       border-radius: 4px;
-      box-shadow: 5px 5px 5px grey;
+      box-shadow: 1px 1px 1px grey;
     }
+  }
+
+  button[ion-fab][mini]{
+    padding: 8px;
   }
 
   .select-md .select-placeholder {
@@ -392,10 +404,9 @@ page-report-template {
   }
 
   .select {
-    background-color: #D9EDF7;
-    /*   background-color: #D6DDE7;
-    */
-
+    border-bottom-style: solid;
+    border-bottom-color: #c1c1c1;
+    border-bottom-width: thin;
   }
 
   .ui-select-choices-row.ng-hide {

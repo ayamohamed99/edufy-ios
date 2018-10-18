@@ -460,7 +460,8 @@ export class ReportTemplatePage{
 
   callDataAndWait(){
     this.load = this.loadCtrl.create({
-      content: "loading DropDown list Data ..."
+      content: '',
+      cssClass:"loadingWithoutBackground"
     });
     this.load.present();
     let promises = [];

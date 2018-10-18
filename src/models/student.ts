@@ -15,6 +15,7 @@ export class Student{
   reportSeenByStudent: boolean;
   numberOfUnseenComments: number;
   numberOfUnseenReportComments: object;
+  studentImageUrl = '';
   constructor() {
   }
 }
