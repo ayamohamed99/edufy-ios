@@ -1194,47 +1194,46 @@
 
 
 
-  <div style="position: fixed; bottom: 0; right: 0; width: 100%;">
-
-
-    <ion-fab bottom right #fab style="z-index: -1;" >
-      <button ion-fab mini><ion-icon name="more"></ion-icon></button>
-      <ion-fab-list side="top" >
-
-
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
-          <img src="assets/icon/reset.png">
-          <ion-label>Rest</ion-label>
-        </button>
-
-
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
-          <img src="assets/icon/save.png">
-          <ion-label>Save</ion-label>
-        </button>
-
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
-          <img src="assets/icon/save.png">
-          <ion-label>Update</ion-label>
-        </button>
-
-
-        <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)"
-                *ngIf="showApproveButton()">
-          <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
-          <ion-label>Approve</ion-label>
-        </button>
-
-
-      </ion-fab-list>
-    </ion-fab>
-
-    <report-comment *ngIf="selectedListOfStudents?.length == 1" [date]="selectedReportDate"
-                    [student]="selectedListOfStudents[0]" [reportId]="reportId"></report-comment>
-
-  </div>
-
-
 
 
 </ion-content>
+<div style="position: fixed; bottom: 0; right: 0; width: 100%; z-index: 1;">
+
+
+  <ion-fab bottom right #fab style="z-index: -1;" >
+    <button ion-fab mini><ion-icon name="more"></ion-icon></button>
+    <ion-fab-list side="top" >
+
+
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('rest',fab)" *ngIf="showRestButton() && navParams.get('selected').length == 1">
+        <img src="assets/icon/reset.png">
+        <ion-label>Rest</ion-label>
+      </button>
+
+
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
+        <img src="assets/icon/save.png">
+        <ion-label>Save</ion-label>
+      </button>
+
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
+        <img src="assets/icon/save.png">
+        <ion-label>Update</ion-label>
+      </button>
+
+
+      <button ion-fab style="background-color: #309CCE" (click)="fabSelected('approve',fab)"
+              *ngIf="showApproveButton()">
+        <img style="filter: brightness(0) invert(1);" src="assets/icon/approved_black.png">
+        <ion-label>Approve</ion-label>
+      </button>
+
+
+    </ion-fab-list>
+  </ion-fab>
+
+  <report-comment *ngIf="selectedListOfStudents?.length == 1" [date]="selectedReportDate"
+                  [student]="selectedListOfStudents[0]" [reportId]="reportId"></report-comment>
+
+</div>
+
