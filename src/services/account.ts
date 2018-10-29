@@ -83,7 +83,7 @@ export class AccountService{
 
 
   setCustomReport(data:any) {
-
+    this.customReportsList = [];
     this.customReportsValue = data;
     for (let item of this.customReportsValue) {
       let CRD = new Custom_reports_data();

@@ -36,6 +36,17 @@ export class ProfilePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService
   ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
+    let intervaldata = setInterval(() => {
+      if (document.getElementById('profilePage')) {
+        if (!document.getElementById('profilePage').classList.contains("selected")) {
+          document.getElementById('profilePage').classList.toggle("selected");
+        }
+        if (document.getElementById('logOutPage').classList.contains("selected")) {
+          document.getElementById('logOutPage').classList.toggle("selected");
+        }
+      }
+      clearInterval(intervaldata);
+    },50);
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();

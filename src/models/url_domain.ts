@@ -1,10 +1,13 @@
 
 export class Url_domain{
-  // DEV:any;
-  // PRODUCTION:"http://104.198.175.198";
-  // LOCAL:"http://192.168.1.10:8080";
-
-  static Domain = "";
+  // DEV from mobile
+  // static Domain = "http://";
+  //production from mobile
+  static Domain = "http://104.198.175.198";
+  //local from mobile
+  // static Domain = "http://192.168.1.100:8080";
+  //Proxy
+  // static Domain = "";
   Domain = Url_domain.Domain;
 
 

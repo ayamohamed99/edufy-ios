@@ -46,6 +46,8 @@ export class MyApp {
   customReportList:any = [];
 
   elementByClass:any = [];
+  oldPage = null;
+  startApp = false;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
@@ -53,6 +55,8 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      // statusBar.overlaysWebView(true);
+      statusBar.backgroundColorByHexString('#5C87F7');
       if(platform.is('core')){
         this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
         this.password = localStorage.getItem(this.loginServ.localStoragePassword);
@@ -80,6 +84,10 @@ export class MyApp {
       }
       statusBar.styleDefault();
       splashScreen.hide();
+      this.startApp = true;
+      this.oldPage = 'profilePage';
+      // document.getElementById('profilePage').classList.toggle("selected");
+      // document.getElementById('logOutPage').classList.remove("selected");
     });
   }
 
@@ -181,6 +189,8 @@ export class MyApp {
 
     }
 
+    document.getElementById('profilePage').classList.toggle("selected");
+    document.getElementById('logOutPage').classList.remove("selected");
 
   }
 
@@ -369,11 +379,18 @@ export class MyApp {
           this.load.dismiss();
           this.nav.setRoot(this.homePage);
         }
-      },
-      () => {
       });
   }
 
+  onSelectView(pageId){
+    document.getElementById(pageId).classList.toggle("selected");
+    if(this.oldPage!=null && this.oldPage!=pageId) {
+      document.getElementById(this.oldPage).classList.remove("selected");
+    }
+    if(this.oldPage!=pageId) {
+      this.oldPage = pageId;
+    }
+  }
 
 }
 

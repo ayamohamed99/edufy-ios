@@ -1,26 +1,26 @@
 <ion-split-pane [when]="whichPage()" >
   <ion-menu  [content]="content">
 
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <!--<ion-header>-->
+      <!--<ion-toolbar color="primary">-->
+        <!--<ion-title>Menu</ion-title>-->
+      <!--</ion-toolbar>-->
+    <!--</ion-header>-->
 
-    <ion-content class="outer-content">
+    <ion-content style=".content.outer-content {background: #ffffff;}">
 
-      <ion-item-group>
-        <button ion-item icon-left (click)="onLoad(profilePage)">
+      <ion-item-group class="navMenuClass">
+        <button id="profilePage" ion-item icon-left (click)="onLoad(profilePage); onSelectView('profilePage')">
           <ion-icon name="person" small></ion-icon>
-          {{names}}'s Profile
+          Profile
         </button>
 
-        <button ion-item icon-left (click)="onLoad(notificationPage)" *ngIf="appearNotification">
+        <button id="notificationPage" ion-item icon-left (click)="onLoad(notificationPage); onSelectView('notificationPage')" *ngIf="appearNotification">
           <ion-icon name="notifications" small></ion-icon>
           Notifications
         </button>
 
-        <button ion-item icon-left (click)="onLoadReport(reportPage, 'Daily Report',-1)" *ngIf="appearDailyReport">
+        <button id="dailyReportPage" ion-item icon-left (click)="onLoadReport(reportPage, 'Daily Report',-1);onSelectView('dailyReportPage')" *ngIf="appearDailyReport">
           <ion-icon name="document" small></ion-icon>
           Daily Reports
         </button>
@@ -31,20 +31,20 @@
         </button>
 
         <div class="contont">
-          <button ion-item icon-left *ngFor="let itm of customReportList"  (click)="onLoadReport(reportPage, itm.name, itm.id)">
+          <button ion-item icon-left *ngFor="let itm of customReportList; let i = index" class="item-Select"  (click)="onLoadReport(reportPage, itm.name, itm.id);onSelectView('reportPage'+i)" [id]="'reportPage'+i">
             <ion-icon name="document" small></ion-icon>
             {{itm.name}}
           </button>
         </div>
 
-        <ion-item-divider color="light">Tools</ion-item-divider>
+        <!--<ion-item-divider color="light">Tools</ion-item-divider>-->
 
-        <button ion-item icon-left (click)="onLoad(settingsPage)">
+        <button id="settingsPage" ion-item icon-left class="toolsItem" (click)="onLoad(settingsPage);onSelectView('settingsPage')">
           <ion-icon name="cog" small></ion-icon>
           Setting
         </button>
 
-        <button ion-item icon-left (click)="onSignOut()">
+        <button id="logOutPage" ion-item icon-left class="toolsItem" (click)="onSignOut();onSelectView('logOutPage')">
           <ion-icon name="log-out" small></ion-icon>
           Log-out
         </button>

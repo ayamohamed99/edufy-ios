@@ -36,7 +36,7 @@
   <ion-grid>
     <ion-row>
     <div col-sm-1 col-md-3 col-lg-2 col-xl-3></div>
-    <div col-sm-10 col-md-6 col-lg-8 col-xl-6>
+    <div col-sm-10 col-md-6 col-lg-8 col-xl-6  style="vertical-align: middle">
 
       <section class="login-container" >
         <div class = "col header text-center" no-padding no-margin>
@@ -60,9 +60,9 @@
 
                 <ion-item class="colorless">
                   <ion-input #passwordInput width-5 placeholder="Password" name="password" id="passwordField" type="{{ !passOn ? 'password' : 'text' }}" required [(ngModel)]="password"></ion-input>
-                  <button ion-button clear item-right (click)="showPassword()" style="margin: 0; padding: 0;">
-                    <ion-icon name="eye" style="font-size: 2.2rem;" *ngIf="!passOn"></ion-icon>
-                    <ion-icon name="eye-off" style="font-size: 2.2rem;" *ngIf="passOn"></ion-icon>
+                  <button ion-button clear item-right type="button" (click)="showPassword()" style="margin: 0; padding: 0;">
+                    <ion-icon name="eye-off" style="font-size: 2.2rem;" *ngIf="!passOn"></ion-icon>
+                    <ion-icon name="eye" style="font-size: 2.2rem;" *ngIf="passOn"></ion-icon>
                   </button>
                 </ion-item>
 

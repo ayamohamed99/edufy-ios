@@ -104,5 +104,66 @@
   a:not(.btn) {
     &:hover { color: $brown; }
   }
-
 }
+
+.navMenuClass{
+  margin-top: 16+8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  .item.item-block .item-inner {
+    padding-right: 0px;
+    border-bottom: 0px;
+  }
+
+  .item {
+    height: 59px;
+    border-radius: 15px;
+    margin-bottom: 16px;
+  }
+  ion-icon{
+    color: #5C87F7;
+  }
+  .input-wrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+    .label {
+      margin: 19px 8px 13px 0;
+    }
+  }
+
+  .toolsItem{
+    color: #8C92A0;
+    ion-icon{
+      color: #8C92A0;
+    }
+  }
+
+  .selected, .item:hover{
+    height: 59px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    background-color: #5C87F7;
+    color: #fff9fb;
+    animation: shadow-drop-2-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    ion-icon{
+      color: white;
+    }
+  }
+
+  @keyframes shadow-drop-2-center {
+    0% {
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+    100% {
+      -webkit-transform: translateZ(50px);
+      transform: translateZ(50px);
+      box-shadow: 0 0 20px 0px rgba(92, 135, 247, 0.35);
+    }
+  }
+}
+
+
+
+

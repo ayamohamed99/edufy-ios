@@ -34,7 +34,7 @@ $split-pane-side-max-width: 20%;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
+  primary:    #5C87F7,
   secondary: #db4241,
   danger:     #f53d3d,
   light:      #f4f4f4,
@@ -92,15 +92,19 @@ $colors: (
   color: #000000;
   cursor: pointer;
   padding: 16px;
+  padding-right: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
   width: 100%;
   border: none;
   text-align: left;
   outline: none;
   font-size: 1.6rem;
+  height: 59px;
 }
 
 .active, .collopsible:hover {
-  background-color: #e2e2e2;
+  background-color: #ffffff;
 }
 
 .collopsible:after {
@@ -116,12 +120,9 @@ $colors: (
 }
 
 .contont {
-  padding-top: 0;
-  padding-bottom: 0;
-  padding-left: 18px;
-  padding-right: 0px;
+  padding: 0;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
 }
