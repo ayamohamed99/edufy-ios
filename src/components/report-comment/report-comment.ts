@@ -180,7 +180,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     if (this.inEditModeComments[comment.id]) {
       this.isEditedCommentsLoading[comment.id] = true;
       this.commentsProvider.editComment(this.date, this.student.studentId,
-        comment.comment, comment.id, this.reportId)
+        comment.comment, comment.id, this.reportId,1)
         .subscribe(() => {
           this.isEditedCommentsLoading[comment.id] = false;
           this.inEditModeComments[comment.id] = false;
@@ -230,4 +230,32 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     });
     toast.present();
   }
+
+
+  approveComment(index){
+
+    var comment = this.currentReportComments[index] ;
+    this.commentsProvider.editComment(null, null,
+      null, comment.id, null , 2)
+      .subscribe(response => {
+        let res:any = response;
+        this.isEditedCommentsLoading[comment.id] = false;
+        this.inEditModeComments[comment.id] = false;
+        let elItem = document.getElementById("itemView"+index);
+        let elButton = document.getElementById("buttonView"+index);
+
+
+        elButton.style.backgroundColor = '#04af23';
+        elButton.style.borderColor = '#ffffff';
+        elButton.style.color = '#ffffff';
+        comment.approved = res.approved;
+        comment.awaiting = res.approved;
+      }, error1 => {
+        this.isEditedCommentsLoading[comment.id] = false;
+        this.inEditModeComments[comment.id] = false;
+        this.showErrorToast("approve comment");
+      });
+  }
+
+
 }

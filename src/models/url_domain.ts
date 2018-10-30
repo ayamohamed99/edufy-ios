@@ -3,11 +3,11 @@ export class Url_domain{
   // DEV from mobile
   // static Domain = "http://";
   //production from mobile
-  static Domain = "http://104.198.175.198";
+  // static Domain = "http://104.198.175.198";
   //local from mobile
   // static Domain = "http://192.168.1.100:8080";
   //Proxy
-  // static Domain = "";
+  static Domain = "";
   Domain = Url_domain.Domain;
 
 

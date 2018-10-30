@@ -1,0 +1,1673 @@
+webpackJsonp([6],{
+
+/***/ 513:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReportPageModule", function() { return ReportPageModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__report__ = __webpack_require__(717);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_material__ = __webpack_require__(301);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+var ReportPageModule = /** @class */ (function () {
+    function ReportPageModule() {
+    }
+    ReportPageModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_2__report__["a" /* ReportPage */],
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__report__["a" /* ReportPage */]),
+                __WEBPACK_IMPORTED_MODULE_3__angular_material__["b" /* MatExpansionModule */],
+            ],
+        })
+    ], ReportPageModule);
+    return ReportPageModule;
+}());
+
+//# sourceMappingURL=report.module.js.map
+
+/***/ }),
+
+/***/ 717:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ReportPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_account__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_students__ = __webpack_require__(302);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_classes__ = __webpack_require__(303);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_class__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__models_student__ = __webpack_require__(297);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_date_picker__ = __webpack_require__(305);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__services_dailyreport__ = __webpack_require__(304);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_report_comment_report_comment__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_transFormDate__ = __webpack_require__(306);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+var ReportPage = /** @class */ (function () {
+    function ReportPage(navCtrl, navParams, dailyReportServ, accountServ, studentsServ, classesServ, alrtCtrl, loadCtrl, platform, storage, datePicker, toastCtrl, modalCtrl, reportComment, transformDate) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.dailyReportServ = dailyReportServ;
+        this.accountServ = accountServ;
+        this.studentsServ = studentsServ;
+        this.classesServ = classesServ;
+        this.alrtCtrl = alrtCtrl;
+        this.loadCtrl = loadCtrl;
+        this.platform = platform;
+        this.storage = storage;
+        this.datePicker = datePicker;
+        this.toastCtrl = toastCtrl;
+        this.modalCtrl = modalCtrl;
+        this.reportComment = reportComment;
+        this.transformDate = transformDate;
+        this.localStorageToken = 'LOCAL_STORAGE_TOKEN';
+        this.classesList = [];
+        this.studentsList = [];
+        this.clickedAdded = [];
+        this.foundBefore = true;
+        this.openCloseNumber = 0;
+        this.NoClasses = false;
+        this.showAllButton = false;
+        this.panelOpenState = 0;
+        this.hideShowReport = true;
+        this.reportAnswersNoOfItems = [];
+        this.reportQuestionsRecovery = {};
+        this.reportQuestionsEditParamTemps = {};
+        this.editQuestionAllowed = false;
+        //////////////////////////////////
+        this.selectedStudentListId = [];
+        this.listOfFinalized = [];
+        this.studnetsAnswersList = [];
+        this.conflictListByQuestions = [];
+        this.reportAnswerForSelectedStudent = [];
+        //////////////////////////////////
+        this.selectedMultiStudent = [];
+        this.isChecked = [];
+        this.studentsSelected = false;
+        this.isNotValid = true;
+        this.selectedMultiStudentId = [];
+        // studentName;
+        this.classChecked = [];
+        this.isSave = true;
+        this.overrideAnswer = false;
+        if (this.accountServ.reportId == -1) {
+            this.reportAnswer = {
+                // to show the well of comments to spacific
+                // student according to its index
+                "dailyReportAnswersObjectsList": []
+            };
+        }
+        else {
+            this.reportAnswer = {
+                // to show the well of comments to spacific
+                // student according to its index
+                "reportAnswersObjectsList": []
+            };
+        }
+        this.isAll = false;
+        this.pageName = this.accountServ.reportPage;
+        this.pickerStartDate = new Date();
+        var date = this.transformDate.transformTheDate(this.pickerStartDate, 'dd-MM-yyyy');
+        var dateData = date.split('-');
+        var year = dateData[2];
+        var month = dateData[1];
+        var day = dateData[0];
+        this.selectedDate = day + "-" + month + "-" + year;
+        this.dateView = day + "/" + month + "/" + year;
+        this.dayOfToDay = Number(day);
+        this.monthOfToday = Number(month) - 1;
+        this.yearOfToday = Number(year);
+        console.log("Selected Date is: " + this.selectedDate);
+        if (this.accountServ.reportId == -1) {
+            this.viewName = "DAILY_REPORT";
+            this.classOpId = 4;
+            this.studentOpId = 8;
+            this.reportId = null;
+        }
+        else {
+            this.viewName = "REPORT";
+            this.classOpId = 5;
+            this.studentOpId = 10;
+            this.reportId = this.accountServ.reportId;
+        }
+        if (platform.is('core')) {
+            this.tokenKey = localStorage.getItem(this.localStorageToken);
+            this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
+            this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
+            this.studentsServ.putHeader(localStorage.getItem(this.localStorageToken));
+            this.getAllClasses();
+        }
+        else {
+            storage.get(this.localStorageToken).then(function (val) {
+                _this.tokenKey = val;
+                _this.reportComment.putHeader(val);
+                _this.dailyReportServ.putHeader(val);
+                _this.classesServ.putHeader(val);
+                _this.studentsServ.putHeader(val);
+                _this.getAllClasses();
+            });
+        }
+    }
+    ReportPage.prototype.ionViewDidEnter = function () {
+        if (this.questionListForRecovary) {
+            this.reportQuestions = this.questionListForRecovary;
+            this.ReportQuestionsList = this.questionListForRecovary;
+        }
+    };
+    ReportPage.prototype.getDailyReportForClass = function (classId, loadS) {
+        var _this = this;
+        this.dailyReportServ.getDailyReportTemplate("English", this.selectedDate, classId, this.reportId).subscribe(function (val) {
+            var allData;
+            allData = val;
+            var template = allData[0];
+            var reportQuestinsFirst = [];
+            reportQuestinsFirst = template.questionsList;
+            for (var i = 0; i < reportQuestinsFirst.length; i++) {
+                reportQuestinsFirst[i].questionNumber = i;
+                if (_this.accountServ.reportId == -1) {
+                    _this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                        answer: null
+                    };
+                }
+                else {
+                    _this.reportAnswer.reportAnswersObjectsList[i] = {
+                        answer: null
+                    };
+                }
+                _this.reportAnswersNoOfItems[i] = {
+                    noOfItems: null
+                };
+                reportQuestinsFirst[i].editQuestion = false;
+                reportQuestinsFirst[i].isEdited = false;
+            }
+            _this.reportQuestions = reportQuestinsFirst;
+            _this.reportQuestionsRecovery = _this.getNewInstanceOf(_this.reportQuestions);
+            for (var i = 0; i < _this.reportQuestions.length; i++) {
+                if (_this.accountServ.reportId == -1) {
+                    _this.mappingDefaultAnswers(_this.reportAnswer.dailyReportAnswersObjectsList[i], _this.reportQuestions[i]);
+                }
+                else {
+                    _this.mappingDefaultAnswers(_this.reportAnswer.reportAnswersObjectsList[i], _this.reportQuestions[i]);
+                }
+                _this.reportQuestionsEditParamTemps[i] = {};
+                _this.reportQuestionsEditParamTemps[i].parameters = [];
+                for (var j = 0; j < _this.reportQuestions[i].parametersList.length; j++) {
+                    var param = {
+                        "id": '',
+                        "key": '',
+                        "value": ''
+                    };
+                    _this.reportQuestionsEditParamTemps[i].parameters[j] = param;
+                    _this.reportQuestionsEditParamTemps[i].parameters[j].key = _this.reportQuestions[i].parametersList[j].key;
+                }
+                // let temp = this.reportQuestions;
+            }
+            if (_this.accountServ.reportId == -1) {
+                _this.editQuestionAllowed = _this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+            }
+            else {
+                _this.editQuestionAllowed = _this.accountServ.getUserRole().reportEditQuestionCreate;
+            }
+            // let temp2 = reportQuestinsFirst;
+            _this.questionListForRecovary = _this.reportQuestions;
+            _this.ReportQuestionsList = _this.reportQuestions;
+            for (var _i = 0, _a = _this.classesList; _i < _a.length; _i++) {
+                var oneClass = _a[_i];
+                if (oneClass.classId == classId) {
+                    oneClass.reportTemplate = _this.reportQuestions;
+                }
+            }
+            loadS.dismiss();
+        }, function (err) {
+            _this.loadC.dismiss();
+            console.log("GetAllTemplates Error : " + err);
+            _this.NoClasses = true;
+            _this.alrtCtrl.create({
+                title: 'Error',
+                subTitle: 'Can\'t load your report shape, please refresh the page.',
+                buttons: ['OK']
+            }).present();
+            loadS.dismiss();
+        });
+    };
+    ReportPage.prototype.getAllClasses = function () {
+        var _this = this;
+        this.loadC = this.loadCtrl.create({
+            content: "Loading classes ..."
+        });
+        this.loadC.present();
+        this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null, this.reportId).subscribe(function (value) {
+            var allData = value;
+            console.log(allData);
+            if (allData) {
+                for (var _i = 0, allData_1 = allData; _i < allData_1.length; _i++) {
+                    var data = allData_1[_i];
+                    var item = new __WEBPACK_IMPORTED_MODULE_5__models_class__["a" /* Class */]();
+                    console.log(value);
+                    item.classId = data.id;
+                    item.className = data.name;
+                    item.grade.gradeId = data.grade.id;
+                    item.grade.gradeName = data.grade.name;
+                    item.branch.branchId = data.branch.id;
+                    item.branch.branchName = data.branch.name;
+                    item.branch.managerId = data.branch.managerId;
+                    item.studentsList = data.studentsList;
+                    item.noOfAllStudent = data.noOfAllStudent;
+                    item.noOfStudentDailyReportApproved = data.noOfStudentDailyReportApproved;
+                    item.noOfStudentDailyReportFinalized = data.noOfStudentDailyReportFinalized;
+                    if (_this.accountServ.reportId != -1) {
+                        item.noOfStudentReportApproved = data.noOfStudentReportApproved[_this.accountServ.reportId];
+                        item.noOfStudentReportFinalized = data.noOfStudentReportFinalized[_this.accountServ.reportId];
+                    }
+                    item.noOfUnseenComments = data.noOfUnseenComments;
+                    item.noOfUnseenReportComments = data.noOfUnseenReportComments;
+                    if (_this.accountServ.reportId == -1) {
+                        if (data.noOfAllStudent - data.noOfStudentDailyReportApproved == 0) {
+                            item.allStudentApproved = true;
+                        }
+                        if (data.noOfAllStudent - data.noOfStudentDailyReportFinalized == 0) {
+                            if (item.allStudentApproved == false) {
+                                item.allStudentFinalized = true;
+                            }
+                        }
+                    }
+                    else {
+                        if (data.noOfAllStudent - data.noOfStudentReportApproved[_this.accountServ.reportId] == 0) {
+                            item.allStudentApproved = true;
+                        }
+                        if (data.noOfAllStudent - data.noOfStudentReportFinalized[_this.accountServ.reportId] == 0) {
+                            if (item.allStudentApproved == false) {
+                                item.allStudentFinalized = true;
+                            }
+                        }
+                    }
+                    _this.classesList.push(item);
+                }
+                _this.foundBefore = true;
+                _this.loadC.dismiss();
+                if (_this.classesList.length == 1) {
+                    var classDataId = allData[0].id;
+                    var classNameData = allData[0].grade.name + " " + allData[0].name;
+                    _this.waitStudents(classDataId, -1, classNameData);
+                }
+            }
+            else {
+                _this.NoClasses = true;
+            }
+        }, function (err) {
+            console.log("GetAllClasses Error : " + err);
+            _this.NoClasses = true;
+            _this.alrtCtrl.create({
+                title: 'Error',
+                subTitle: 'Can\'t load your classes, please refresh the page.',
+                buttons: ['OK']
+            }).present();
+            _this.loadC.dismiss();
+        }, function () {
+            // this.waitStudents();
+        });
+    };
+    ReportPage.prototype.getAllStudent = function (classId, name) {
+        var _this = this;
+        this.studentsList = [];
+        this.load.setContent("Just a few more...");
+        // this.load.present();
+        // let loadS = this.loadCtrl.create({
+        //   content:
+        // });
+        // loadS.present();
+        return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId, this.selectedDate, this.reportId).toPromise().then(function (val) {
+            for (var _i = 0, _a = _this.classesList; _i < _a.length; _i++) {
+                var oneClass = _a[_i];
+                if (oneClass.classId == classId) {
+                    if (oneClass.reportTemplate == null) {
+                        _this.getDailyReportForClass(classId, _this.load);
+                    }
+                }
+            }
+            var data = val;
+            console.log(data);
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var students = new __WEBPACK_IMPORTED_MODULE_6__models_student__["a" /* Student */]();
+                    students.studentClass.classId = data[i].classes.id;
+                    students.studentClass.className = data[i].classes.name;
+                    students.studentClass.grade.gradeId = data[i].classes.grade.id;
+                    students.studentClass.grade.gradeName = data[i].classes.grade.name;
+                    students.studentClass.branch.branchId = data[i].classes.branch.id;
+                    students.studentClass.branch.branchName = data[i].classes.branch.name;
+                    students.studentClass.branch.managerId = data[i].classes.branch.managerId;
+                    students.numberOfUnseenComments = data[i].numberOfUnseenComments;
+                    students.numberOfUnseenReportComments = data[i].numberOfUnseenReportComments;
+                    students.studentId = data[i].id;
+                    students.studentName = data[i].name;
+                    students.studentAddress = data[i].address;
+                    students.numberInList = i;
+                    students.studentImageUrl = data[i].profileImg;
+                    if (_this.accountServ.reportId == -1) {
+                        students.reportApproved = data[i].dailyReportApproved;
+                        students.reportFinalized = data[i].dailyReportFinalized;
+                        students.reportSeenByParent = data[i].dailyReportSeenByParent;
+                        students.reportSeenByStudent = data[i].dailyReportSeenByStudent;
+                    }
+                    else {
+                        students.reportApproved = data[i].reportApproved[_this.accountServ.reportId];
+                        students.reportFinalized = data[i].reportFinalized[_this.accountServ.reportId];
+                        students.reportSeenByParent = data[i].reportSeenByParent[_this.accountServ.reportId];
+                        students.reportSeenByStudent = data[i].reportSeenByStudent[_this.accountServ.reportId];
+                    }
+                    _this.studentsList.push(students);
+                }
+            }
+            _this.showAllButton = true;
+            if (_this.classesList.length != 1) {
+                _this.addToClasses(classId, _this.load);
+            }
+        }, function (err) {
+            console.log('GetAllStudent Error: ' + err);
+            _this.alrtCtrl.create({
+                title: 'Error',
+                subTitle: 'Can\'t load your students, please refresh the page.',
+                buttons: ['OK']
+            }).present();
+            _this.load.dismiss();
+        });
+    };
+    ReportPage.prototype.addToClasses = function (classId, load) {
+        for (var i in this.classesList) {
+            if (this.classesList[i].classId == classId) {
+                this.classesList[i].studentsList = this.studentsList;
+                break; //Stop this loop, we found it!
+            }
+        }
+    };
+    ReportPage.prototype.waitStudents = function (classId, index, name) {
+        var promisesArray = [];
+        for (var j = 0; j < 1; j++) {
+            for (var i in this.classesList) {
+                if ((this.classesList[i].classId == classId) && (this.classesList[i].studentsList == null)) {
+                    promisesArray.push(this.getAllStudent(classId, name));
+                    break; //Stop this loop, we found it!
+                }
+                else if ((this.classesList[i].classId == classId) && (this.classesList[i].studentsList != null)) {
+                    this.showAllButton = true;
+                    this.studentsList = [];
+                    this.studentsList = this.classesList[i].studentsList;
+                    break; //Stop this loop, we found it!
+                }
+            }
+        }
+        Promise.all(promisesArray).then(function (data) {
+            // this.load.dismiss();
+        }, function (err) {
+            console.log(err);
+        });
+    };
+    ReportPage.prototype.checkedStudent = function (studentid, classId, studentList, index, studentFinalized, checked, studentName, classIndex) {
+        if (studentid == -1 && classId == -1) {
+            for (var i in studentList) {
+                studentList[i].reportChecked = this.isAll;
+            }
+        }
+        else {
+            var oneisNot = 0;
+            for (var j in studentList) {
+                if (studentList[j].reportChecked == true) {
+                    oneisNot++;
+                }
+            }
+            if (studentList.length == oneisNot) {
+                this.isAll = true;
+            }
+            else {
+                this.isAll = false;
+            }
+        }
+        var foundOneChecked = false;
+        for (var i in studentList) {
+            if (studentList[i].reportChecked) {
+                foundOneChecked = true;
+                break;
+            }
+        }
+        if (foundOneChecked) {
+            this.hideShowReport = false;
+        }
+        else {
+            this.hideShowReport = true;
+        }
+        if (studentid == -1) {
+            console.log("ALl");
+        }
+        else if (studentid != -1) {
+            this.getMultiSelectedStudents(studentid, index, checked, studentFinalized, studentName, classIndex);
+        }
+    };
+    ReportPage.prototype.whenClosed = function (studentList, index) {
+        this.hideShowReport = true;
+        var ref = index;
+        ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down';
+        this.isAll = false;
+        for (var j in studentList) {
+            studentList[j].reportChecked = false;
+            this.showAllButton = false;
+        }
+        this.studentsList = [];
+        this.isChecked = [];
+    };
+    ReportPage.prototype.whenOpen = function (itmRef, classId, index, name) {
+        this.selectedClassIndex = index;
+        this.hideShowReport = true;
+        this.isAll = false;
+        this.selectedClassId = classId;
+        this.hideShowReport = true;
+        var ref = itmRef;
+        this.studentsList = [];
+        this.isChecked = [];
+        ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
+        this.getStudentsAnswer(classId, index, name);
+    };
+    ReportPage.prototype.getStudentsAnswer = function (classId, index, name) {
+        var _this = this;
+        this.massageChange = "Getting reports ...";
+        this.load = this.loadCtrl.create({
+            content: this.massageChange
+        });
+        this.load.present();
+        this.dailyReportServ.getStudentReportAnswers(this.selectedClassId, this.selectedDate, this.reportId).subscribe(function (resp) {
+            // this.load.dismiss();
+            _this.waitStudents(classId, index, name);
+            if (_this.classesList[index].studentsList) {
+                if (_this.classesList[index].studentsList.length != 0) {
+                    _this.load.dismiss();
+                }
+            }
+        }, function (err) {
+            _this.presentToast("Can't get students reports answer");
+            _this.load.dismiss();
+        });
+    };
+    ReportPage.prototype.oonClickonMenuCalender = function () {
+        var _this = this;
+        this.datePicker.show({
+            date: this.pickerStartDate,
+            mode: 'date',
+            androidTheme: this.datePicker.ANDROID_THEMES.THEME_DEVICE_DEFAULT_LIGHT,
+            minDate: new Date(2014, 0, 1).valueOf(),
+            maxDate: new Date(this.yearOfToday, this.monthOfToday, this.dayOfToDay).valueOf(),
+            allowFutureDates: false
+        }).then(function (date) {
+            console.log('Got date: ', _this.transformDate.transformTheDate(date, 'dd-MM-yyyy'));
+            _this.pickerStartDate = date;
+            var newDate = _this.transformDate.transformTheDate(date, 'dd-MM-yyyy');
+            var dateData = newDate.split('-');
+            var year = dateData[2];
+            var month = dateData[1];
+            var day = dateData[0];
+            _this.selectedDate = day + "-" + month + "-" + year;
+            _this.dateView = day + "/" + month + "/" + year;
+            _this.classesList = [];
+            _this.getAllClasses();
+        }, function (err) {
+            console.log('Error occurred while getting date: ', err);
+        });
+    };
+    ReportPage.prototype.openReportTemplate = function () {
+        var _this = this;
+        var selectedStudents = [];
+        var selectStudentIndex;
+        var TempIndex;
+        for (var i in this.studentsList) {
+            if (this.studentsList[i].reportChecked) {
+                selectedStudents.push(this.studentsList[i]);
+                TempIndex = i;
+            }
+        }
+        if (selectedStudents.length == 1) {
+            selectStudentIndex = TempIndex;
+        }
+        var SelectedClass;
+        for (var _i = 0, _a = this.classesList; _i < _a.length; _i++) {
+            var oneClass = _a[_i];
+            if (oneClass.classId == this.selectedClassId) {
+                this.ReportQuestionsList = oneClass.reportTemplate;
+                SelectedClass = oneClass;
+            }
+        }
+        var model;
+        if (this.ReportQuestionsList) {
+            model = this.modalCtrl.create('ReportTemplatePage', {
+                selected: selectedStudents,
+                template: this.ReportQuestionsList,
+                reportDate: this.dateView,
+                selectedDate: this.selectedDate,
+                reportAnswer: this.reportAnswer,
+                reportAnswersNoOfItems: this.reportAnswersNoOfItems,
+                reportQuestionsRecovery: this.reportQuestionsRecovery,
+                reportQuestionsEditParamTemps: this.reportQuestionsEditParamTemps,
+                editQuestionAllowed: this.editQuestionAllowed,
+                class: SelectedClass,
+                classIndex: this.selectedClassIndex,
+                selectedStudentIndex: selectStudentIndex,
+                theClassIsSelected: this.isAll,
+                reportConflict: this.questionsToBeReset
+            });
+            model.present();
+        }
+        model.onDidDismiss(function (data) {
+            _this.pickerStartDate = new Date();
+            var date = _this.transformDate.transformTheDate(_this.pickerStartDate, 'dd-MM-yyyy');
+            var dateData = date.split('-');
+            var year = dateData[2];
+            var month = dateData[1];
+            var day = dateData[0];
+            _this.selectedDate = day + "-" + month + "-" + year;
+            _this.studentsList = [];
+            _this.isChecked = [];
+            _this.classesList = [];
+            _this.selectedMultiStudent = [];
+            _this.questionsToBeReset = [];
+            _this.hideShowReport = true;
+            _this.getAllClasses();
+        });
+    };
+    ReportPage.prototype.getNewInstanceOf = function (obj) {
+        var copy;
+        // Handle the 3 simple types, and null or
+        // undefined
+        if (null == obj || "object" != typeof obj)
+            return obj;
+        // Handle Date
+        if (obj instanceof Date) {
+            copy = new Date();
+            copy.setTime(obj.getTime());
+            return copy;
+        }
+        // Handle Array
+        if (obj instanceof Array) {
+            copy = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = this.getNewInstanceOf(obj[i]);
+            }
+            return copy;
+        }
+        // Handle Object
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr))
+                    copy[attr] = this.getNewInstanceOf(obj[attr]);
+            }
+            return copy;
+        }
+        throw new Error("Unable to copy obj! Its type isn't supported.");
+    };
+    ReportPage.prototype.mappingDefaultAnswers = function (defaultReportAnswer, question) {
+        return defaultReportAnswer.answer = this.getDefaultValue(question);
+    };
+    ReportPage.prototype.getDefaultValue = function (drQuestion) {
+        var questionTitle;
+        if (this.accountServ.reportId == -1) {
+            questionTitle = drQuestion.dailyReportQuestionType.title;
+        }
+        else {
+            questionTitle = drQuestion.reportQuestionType.title;
+        }
+        if (questionTitle == 'TEXT_QUESTION') {
+            return "";
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+            questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR') {
+            var val = [];
+            var firstTime = true;
+            var firstTextField = true;
+            var counter = 0;
+            var defailtValueArray = [];
+            for (var v = 0; v < drQuestion.parametersList.length; v++) {
+                if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
+                    defailtValueArray[counter] = {};
+                    defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                    defailtValueArray[counter].value = "";
+                    counter++;
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+                    defailtValueArray[counter] = {};
+                    defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                    defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+                    counter++;
+                }
+                else {
+                }
+            }
+            for (var d_1 = 0; d_1 < defailtValueArray.length; d_1++) {
+                if (defailtValueArray[d_1].key == "OPTION_HELPER_TEXT") {
+                    val[d_1] = defailtValueArray[d_1].value;
+                }
+                else if (defailtValueArray[d_1].key == "OPTION_ANSWER") {
+                    val[d_1] = defailtValueArray[d_1].value;
+                }
+            }
+            return val;
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+            questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' ||
+            questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER' ||
+            questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER') {
+            return {};
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT') {
+            return {};
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT') {
+            return [drQuestion.parametersList[0].value];
+        }
+        else if (questionTitle == 'MULTI_SHORT_TEXT_MULTISELECT_VIEW_SELECTED') {
+            return {};
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION') {
+            return [drQuestion.parametersList[0].value];
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION') {
+            return [false];
+        }
+        else if (questionTitle == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER' ||
+            questionTitle == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER') {
+            return drQuestion.parametersList[0].value;
+        }
+        else if (questionTitle == 'CONSTANT_SHORT_HELPER_TEXT_QUESTION' ||
+            questionTitle == 'CONSTANT_LONG_HELPER_TEXT_QUESTION' ||
+            questionTitle == 'SHORT_HELPER_TEXT_QUESTION' ||
+            questionTitle == 'LONG_HELPER_TEXT_QUESTION') {
+            return {};
+        }
+        else if (questionTitle == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED') {
+            var val = {};
+            var firstTime = true;
+            var counter = 0;
+            var defailtValueArray = [];
+            for (var v = 0; v < drQuestion.parametersList.length; v++) {
+                if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
+                    defailtValueArray[counter] = {};
+                    defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                    defailtValueArray[counter].value = "";
+                    counter++;
+                    firstTime = true;
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+                    if (firstTime) {
+                        defailtValueArray[counter] = {};
+                        defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                        defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+                        counter++;
+                        firstTime = false;
+                    }
+                    else {
+                    }
+                }
+            }
+            var textTemp = 0;
+            for (var d_2 = 0; d_2 < defailtValueArray.length; d_2++) {
+                if (defailtValueArray[d_2].key == "OPTION_HELPER_TEXT") {
+                    textTemp = d_2;
+                    val[d_2] = defailtValueArray[d_2].value;
+                }
+                else if (defailtValueArray[d_2].key == "OPTION_ANSWER") {
+                    val[textTemp + 1] = defailtValueArray[d_2].value;
+                }
+            }
+            return val;
+        }
+        else if (questionTitle == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED') {
+            var val = [];
+            var firstTime = true;
+            var firstTextField = true;
+            var counter = 0;
+            var defailtValueArray = [];
+            for (var v = 0; v < drQuestion.parametersList.length; v++) {
+                if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_HELPER_TEXT") {
+                    if (firstTextField) {
+                        defailtValueArray[counter] = {};
+                        defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                        defailtValueArray[counter].value = "";
+                        counter++;
+                        firstTextField = false;
+                    }
+                    else {
+                        defailtValueArray[counter] = {};
+                        defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                        defailtValueArray[counter].value = "00";
+                        counter++;
+                        firstTextField = true;
+                    }
+                    firstTime = true;
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+                    if (firstTime) {
+                        defailtValueArray[counter] = {};
+                        defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                        defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+                        counter++;
+                        firstTime = false;
+                    }
+                    else {
+                    }
+                }
+            }
+            for (var d_3 = 0; d_3 < defailtValueArray.length; d_3++) {
+                if (defailtValueArray[d_3].key == "OPTION_HELPER_TEXT") {
+                    val[d_3] = defailtValueArray[d_3].value;
+                }
+                else if (defailtValueArray[d_3].key == "OPTION_ANSWER") {
+                    val[d_3] = defailtValueArray[d_3].value;
+                }
+            }
+            return val;
+        }
+        else if (questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR' ||
+            questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN') {
+            var val = {};
+            var firstTime = true;
+            var counter = 0;
+            var defailtValueArray = [];
+            for (var v = 0; v < drQuestion.parametersList.length; v++) {
+                if (drQuestion.parametersList[v].key == "OPTION_HELPER_TITLE") {
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_DROP_DOWN") {
+                    defailtValueArray[counter] = {};
+                    defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                    defailtValueArray[counter].value = "";
+                    counter++;
+                    firstTime = true;
+                }
+                else if (drQuestion.parametersList[v].key == "OPTION_ANSWER") {
+                    if (firstTime) {
+                        defailtValueArray[counter] = {};
+                        defailtValueArray[counter].key = drQuestion.parametersList[v].key;
+                        defailtValueArray[counter].value = drQuestion.parametersList[v].value;
+                        counter++;
+                        firstTime = false;
+                    }
+                    else {
+                    }
+                }
+            }
+            var tempDrop = 0;
+            for (var d = 0; d < defailtValueArray.length; d++) {
+                if (defailtValueArray[d].key == "OPTION_DROP_DOWN") {
+                    tempDrop = d;
+                    val[d] = "";
+                }
+                else if (defailtValueArray[d].key == "OPTION_ANSWER") {
+                    val[tempDrop + 1] = defailtValueArray[d].value;
+                }
+            }
+            return val;
+        }
+        else {
+            return "";
+        }
+    };
+    ReportPage.prototype.checkStudent = function (j) {
+        if (this.isChecked[j].checked) {
+            return this.isChecked[j].checked;
+        }
+        return false;
+    };
+    ReportPage.prototype.getMultiSelectedStudents = function (StudentId, index, isChecked, studentFinalized, studentName, classIndex) {
+        this.Sellected = 1000;
+        var idx = this.selectedMultiStudent.indexOf(StudentId);
+        if (idx > -1) {
+            this.selectedMultiStudent.splice(idx, 1);
+            this.isChecked[index] = {};
+            this.isChecked[index].checked = false;
+            this.listOfFinalized.splice(idx, 1);
+        }
+        else {
+            this.listOfFinalized.push(studentFinalized);
+            this.selectedMultiStudent.push(StudentId);
+            this.isChecked[index] = {};
+            this.isChecked[index].checked = true;
+            this.studentsSelected = true;
+        }
+        this.isNotValid = false;
+        this.selectedMultiStudentId = [];
+        for (var i = 0; i < this.selectedMultiStudent.length; i++) {
+            this.selectedMultiStudentId[i] = {};
+            this.selectedMultiStudentId[i].id = this.selectedMultiStudent[i];
+        }
+        this.getDailyReportData(StudentId, index, this.isChecked[index].checked, 'checkBox', studentName, studentFinalized, classIndex);
+    };
+    ReportPage.prototype.getDailyReportData = function (studentId, index, checkedSudent, caller, studentName, studentFinalized, selectedClassIndex) {
+        // this.studentName = studentName + '\'s daily report';
+        var studentID = studentId;
+        if (caller == 'checkBox' && checkedSudent == true) {
+            this.classChecked[selectedClassIndex] = {};
+            this.classChecked[selectedClassIndex].selected = false;
+            if (this.selectedMultiStudent.length == 1) {
+                this.reportAnswerForSelectedStudent = [];
+                console.log(this.dailyReportServ.reportClassQuestionsGroups);
+                for (var _i = 0, _a = Object.keys(this.dailyReportServ.reportClassQuestionsGroups); _i < _a.length; _i++) {
+                    var qId = _a[_i];
+                    console.log(qId);
+                    for (var _b = 0, _c = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId]); _b < _c.length; _b++) {
+                        var answer = _c[_b];
+                        console.log(answer);
+                        for (var _d = 0, _e = this.dailyReportServ.reportClassQuestionsGroups[qId][answer]; _d < _e.length; _d++) {
+                            var answerTemp = _e[_d];
+                            console.log(answerTemp);
+                            console.log(studentID);
+                            if (answerTemp == studentID) {
+                                this.reportAnswerForSelectedStudent.push({ "questionId": qId, "answer": answer });
+                                console.log(this.reportAnswerForSelectedStudent);
+                            }
+                        }
+                    }
+                }
+                console.log(this.reportAnswerForSelectedStudent.length);
+                if (this.reportAnswerForSelectedStudent.length == 0) {
+                    this.isSave = true;
+                    this.isNotValid = false;
+                    this.resetReportTemplate(null, null);
+                }
+                else {
+                    this.studnetsAnswersList[studentId] = this.reportAnswerForSelectedStudent;
+                    this.isNotValid = false;
+                    this.isSave = false;
+                    this.reverseAnswerToViewAnswer(this.reportAnswerForSelectedStudent);
+                }
+            }
+            else if (this.selectedMultiStudent.length > 1) {
+                if (this.isChecked[index].checked) {
+                    this.reportAnswerForSelectedStudent = [];
+                    console.log(this.dailyReportServ.reportClassQuestionsGroups);
+                    for (var _f = 0, _g = Object.keys(this.dailyReportServ.reportClassQuestionsGroups); _f < _g.length; _f++) {
+                        var qId = _g[_f];
+                        console.log(qId);
+                        for (var _h = 0, _j = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId]); _h < _j.length; _h++) {
+                            var answer = _j[_h];
+                            console.log(answer);
+                            for (var _k = 0, _l = this.dailyReportServ.reportClassQuestionsGroups[qId][answer]; _k < _l.length; _k++) {
+                                var answerTemp = _l[_k];
+                                console.log(answerTemp);
+                                console.log(studentID);
+                                if (answerTemp == studentID) {
+                                    this.reportAnswerForSelectedStudent.push({ "questionId": qId, "answer": answer });
+                                    console.log(this.reportAnswerForSelectedStudent);
+                                }
+                            }
+                        }
+                    }
+                    if (this.reportAnswerForSelectedStudent.length == 0) {
+                        this.isSave = true;
+                        this.isNotValid = false;
+                        var idx = this.listOfFinalized.indexOf(true);
+                        if (idx == -1) {
+                            this.isNotValid = false;
+                            this.isSave = true;
+                            this.firstStudentId = this.selectedMultiStudent[0];
+                        }
+                        else {
+                            this.isNotValid = false;
+                            this.isSave = false;
+                            this.firstStudentId = this.selectedMultiStudent[0];
+                        }
+                    }
+                    else {
+                        this.studnetsAnswersList[studentId] = this.reportAnswerForSelectedStudent;
+                        for (var i = 0; i < this.reportAnswerForSelectedStudent.length; i++) {
+                            var questionIdGroup = this.dailyReportServ.reportClassQuestionsGroups[this.reportAnswerForSelectedStudent[i].questionId];
+                            var sameAnswerStudentsIds = questionIdGroup[this.reportAnswerForSelectedStudent[i].answer];
+                            var sameAnswers = true;
+                            var _loop_1 = function (key) {
+                                var intKey_1 = parseInt(key, 10);
+                                if (!sameAnswerStudentsIds.some(function (e) { return e === intKey_1; })) {
+                                    sameAnswers = false;
+                                    return "break";
+                                }
+                            };
+                            for (var _m = 0, _o = this.studnetsAnswersList; _m < _o.length; _m++) {
+                                var key = _o[_m];
+                                var state_1 = _loop_1(key);
+                                if (state_1 === "break")
+                                    break;
+                            }
+                            this.questionsToBeReset[i] = sameAnswers;
+                        }
+                        this.resetReportTemplate(this.questionsToBeReset, this.reportAnswerForSelectedStudent);
+                        this.isNotValid = false;
+                        this.isSave = false;
+                    }
+                }
+            }
+        }
+        else if (caller == 'checkBox' && checkedSudent == false) {
+            this.studnetsAnswersList.splice(studentId, 1);
+            if (this.studnetsAnswersList.length < 1) {
+                this.resetReportTemplate(null, null);
+            }
+            else {
+                this.reportAnswerForSelectedStudent = [];
+                var oneStudentCheckedId = parseInt(Object.keys(this.studnetsAnswersList)[0], 10);
+                console.log(this.dailyReportServ.reportClassQuestionsGroups);
+                for (var _p = 0, _q = Object.keys(this.dailyReportServ.reportClassQuestionsGroups); _p < _q.length; _p++) {
+                    var qId = _q[_p];
+                    console.log(qId);
+                    for (var _r = 0, _s = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId]); _r < _s.length; _r++) {
+                        var answer = _s[_r];
+                        console.log(answer);
+                        for (var _t = 0, _u = this.dailyReportServ.reportClassQuestionsGroups[qId][answer]; _t < _u.length; _t++) {
+                            var answerTemp = _u[_t];
+                            console.log(answerTemp);
+                            console.log(studentID);
+                            if (answerTemp == oneStudentCheckedId) {
+                                this.reportAnswerForSelectedStudent.push({ "questionId": qId, "answer": answer });
+                                console.log(this.reportAnswerForSelectedStudent);
+                            }
+                        }
+                    }
+                }
+                if (this.reportAnswerForSelectedStudent.length == 0) {
+                    this.isSave = true;
+                    this.isNotValid = false;
+                    this.resetReportTemplate(null, null);
+                }
+                else {
+                    this.isNotValid = false;
+                    this.isSave = false;
+                }
+                for (var i_1 = 0; i_1 < this.reportAnswerForSelectedStudent.length; i_1++) {
+                    var questionIdGroup_1 = this.dailyReportServ.reportClassQuestionsGroups[this.reportAnswerForSelectedStudent[i_1].questionId];
+                    var sameAnswerStudentsIds_1 = questionIdGroup_1[this.reportAnswerForSelectedStudent[i_1].answer];
+                    var sameAnswers_1 = true;
+                    for (var _v = 0, _w = this.studnetsAnswersList; _v < _w.length; _v++) {
+                        var key = _w[_v];
+                        var intKey = parseInt(key, 10);
+                        if (!sameAnswerStudentsIds_1.includes(intKey)) {
+                            sameAnswers_1 = false;
+                            break;
+                        }
+                    }
+                    this.questionsToBeReset[i_1] = sameAnswers_1;
+                }
+                this.resetReportTemplate(this.questionsToBeReset, this.reportAnswerForSelectedStudent);
+            }
+            if (this.selectedMultiStudent.length == 1) {
+                for (var j = 0; j < this.classesList[selectedClassIndex].studentsList.length; j++) {
+                    if (this.classesList[selectedClassIndex].studentsList[j].id == this.selectedMultiStudentId[0].id) {
+                        // this.studentName = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
+                        break;
+                    }
+                }
+            }
+        }
+        console.log(this.reportAnswerForSelectedStudent);
+        console.log(this.selectedMultiStudentId);
+        console.log(this.reportAnswer);
+        console.log(this.isChecked);
+    };
+    ReportPage.prototype.resetReportTemplate = function (questionsToBeReset, answers) {
+        if (!questionsToBeReset) {
+            for (var i = 0; i < this.reportQuestions.length; i++) {
+                if (this.accountServ.reportId == -1) {
+                    this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+                }
+                else {
+                    this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+                }
+                // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
+                // this.studentName = "";
+            }
+        }
+        else {
+            for (var i = 0; i < this.reportQuestions.length; i++) {
+                if (!questionsToBeReset[i]) {
+                    // not same answer>>> display empty answer.
+                    // $('#' + $scope.reportQuestions[i].id).removeClass("ng-hide");
+                    // mappingDefaultAnswers(
+                    // $scope.reportAnswer.dailyReportAnswersObjectsList[i],
+                    // $scope.reportQuestions[i]);
+                    var questionTitle = void 0;
+                    if (this.accountServ.reportId == -1) {
+                        questionTitle = this.reportQuestions[i].dailyReportQuestionType.title;
+                    }
+                    else {
+                        questionTitle = this.reportQuestions[i].reportQuestionType.title;
+                    }
+                    switch (questionTitle) {
+                        case "TEXT_QUESTION":
+                        case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER":
+                            if (this.accountServ.reportId == -1) {
+                                this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                                    "answer": ""
+                                };
+                            }
+                            else {
+                                this.reportAnswer.reportAnswersObjectsList[i] = {
+                                    "answer": ""
+                                };
+                            }
+                            break;
+                        case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION":
+                            if (this.accountServ.reportId == -1) {
+                                this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                                    "answer": ["", ""]
+                                };
+                            }
+                            else {
+                                this.reportAnswer.reportAnswersObjectsList[i] = {
+                                    "answer": ["", ""]
+                                };
+                            }
+                            break;
+                        default:
+                            var questionTitle_1 = void 0;
+                            if (this.accountServ.reportId == -1) {
+                                questionTitle_1 = this.reportQuestions[i].dailyReportQuestionType.title;
+                            }
+                            else {
+                                questionTitle_1 = this.reportQuestions[i].reportQuestionType.title;
+                            }
+                            if (questionTitle_1 == 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED' || questionTitle_1 == 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED') {
+                                this.overrideAnswer = false;
+                            }
+                            if (this.reportQuestions[i].parametersList) {
+                                var emptyAnswer = [];
+                                for (var j = 0; j < this.reportQuestions[i].parametersList.length; j++) {
+                                    emptyAnswer.push("");
+                                }
+                                if (this.accountServ.reportId == -1) {
+                                    this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                                        "answer": emptyAnswer
+                                    };
+                                }
+                                else {
+                                    this.reportAnswer.reportAnswersObjectsList[i] = {
+                                        "answer": emptyAnswer
+                                    };
+                                }
+                            }
+                            break;
+                    }
+                }
+                else {
+                    if (this.accountServ.reportId == -1) {
+                        this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+                    }
+                    else {
+                        this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+                    }
+                    // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
+                }
+            }
+        }
+    };
+    ReportPage.prototype.getViewQuestionAnswer = function (question, dbAnswer) {
+        var questionTitle;
+        if (this.accountServ.reportId == -1) {
+            questionTitle = question.dailyReportQuestionType.title;
+        }
+        else {
+            questionTitle = question.reportQuestionType.title;
+        }
+        switch (questionTitle) {
+            case 'TEXT_QUESTION':
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
+            case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return "";
+                }
+                return dbAnswer;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
+            case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
+            case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                var midResult = dbAnswer.split("||");
+                var arrayIds = midResult[1].split("$$");
+                var value = {};
+                for (var i = 0; i < arrayIds.length; i++) {
+                    value[arrayIds[i]] = true;
+                }
+                return value;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                var answersList = dbAnswer.split("$$");
+                value = {};
+                for (var i = 0; i < question.parametersList.length; i++) {
+                    if (question.parametersList[i].key == "OPTION_ANSWER") {
+                        if (answersList.indexOf(question.parametersList[i].value) > -1) {
+                            value[i] = true;
+                        }
+                        else {
+                            value[i] = false;
+                        }
+                    }
+                    else if (question.parametersList[i].key == "OPTION_HELPER_TEXT") {
+                        if (answersList[answersList.length - 1] == null || answersList[answersList.length - 1] == "" || answersList[answersList.length - 1] == " " || answersList[answersList.length - 1] == undefined || answersList[answersList.length - 1] == "undefined") {
+                            value[i] = "";
+                        }
+                        else {
+                            value[i] = answersList[answersList.length - 1];
+                        }
+                    }
+                }
+                return value;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                answersList = dbAnswer.split("$$");
+                value = {};
+                value[0] = answersList[0];
+                if (answersList[1] == null || answersList[1] == "" || answersList[1] == " ") {
+                }
+                else {
+                    value[1] = answersList[1];
+                }
+                return value;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                answersList = dbAnswer.split("$$");
+                value = {};
+                value[0] = answersList[0];
+                value[1] = answersList[1];
+                return value;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                value = {};
+                if (dbAnswer == question.parametersList[0].value) {
+                    value[0] = true;
+                }
+                else {
+                    value[0] = false;
+                    value[1] = dbAnswer;
+                }
+                return value;
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN':
+            case 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                midResult = dbAnswer.split("||");
+                var arrayValues = midResult[0].split(/[$&]+/);
+                arrayIds = midResult[1].split(/[$&]+/);
+                value = {};
+                for (var i = 0; i < arrayIds.length; i++) {
+                    if ((i % 2) == 0) {
+                        if (arrayValues[i] == null || arrayValues[i] == "" || arrayValues[i] == " " || arrayValues[i] == "0") {
+                            value[arrayIds[i]] = false;
+                        }
+                        else {
+                            value[arrayIds[i]] = true;
+                        }
+                    }
+                    else {
+                        if (arrayValues[i] == "0") {
+                            value[arrayIds[i]] = "";
+                        }
+                        else {
+                            value[arrayIds[i]] = arrayValues[i];
+                        }
+                    }
+                }
+                return value;
+            case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
+            case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
+                var counter = 0;
+                var getAnswerValueArray = [];
+                var firstTimeFullArray = true;
+                var questionCount = 0;
+                for (var j = 0; j < question.parametersList.length; j++) {
+                    if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+                    }
+                    else if (question.parametersList[j].key == "OPTION_DROP_DOWN") {
+                        getAnswerValueArray[counter] = {};
+                        getAnswerValueArray[counter].key = question.parametersList[j].key;
+                        counter++;
+                        firstTimeFullArray = true;
+                    }
+                    else if (question.parametersList[j].key == "OPTION_ANSWER") {
+                        if (firstTimeFullArray) {
+                            getAnswerValueArray[counter] = {};
+                            getAnswerValueArray[counter].key = question.parametersList[j].key;
+                            counter++;
+                            firstTimeFullArray = false;
+                            questionCount++;
+                        }
+                        else {
+                        }
+                    }
+                }
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                var answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+                value = {};
+                for (var i = 0; i < getAnswerValueArray.length; i++) {
+                    if (answersQuestionList[i] == 0) {
+                        value[i] = "";
+                    }
+                    else {
+                        value[i] = answersQuestionList[i];
+                    }
+                }
+                return value;
+            case 'SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED':
+            case 'MULTI_SHORT_TEXT_ONE_VIEW_SELECTED':
+                counter = 0;
+                getAnswerValueArray = [];
+                firstTimeFullArray = true;
+                questionCount = 0;
+                for (var j = 0; j < question.parametersList.length; j++) {
+                    if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+                    }
+                    else if (question.parametersList[j].key == "OPTION_HELPER_TEXT") {
+                        getAnswerValueArray[counter] = {};
+                        getAnswerValueArray[counter].key = question.parametersList[j].key;
+                        counter++;
+                        firstTimeFullArray = true;
+                    }
+                    else if (question.parametersList[j].key == "OPTION_ANSWER") {
+                        if (firstTimeFullArray) {
+                            getAnswerValueArray[counter] = {};
+                            getAnswerValueArray[counter].key = question.parametersList[j].key;
+                            counter++;
+                            firstTimeFullArray = false;
+                            questionCount++;
+                        }
+                        else {
+                        }
+                    }
+                }
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                // var answersQuestionList =
+                // dbAnswer.split("||");
+                answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+                value = {};
+                for (var i = 0; i < getAnswerValueArray.length; i++) {
+                    value[i] = answersQuestionList[i];
+                }
+                console.log('SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED');
+                console.log(value);
+                return value;
+            case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR':
+            case 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN':
+                counter = 0;
+                getAnswerValueArray = [];
+                firstTimeFullArray = true;
+                questionCount = 0;
+                for (var j = 0; j < question.parametersList.length; j++) {
+                    if (question.parametersList[j].key == "OPTION_HELPER_TITLE") {
+                    }
+                    else if (question.parametersList[j].key == "OPTION_DROP_DOWN") {
+                        getAnswerValueArray[counter] = {};
+                        getAnswerValueArray[counter].key = question.parametersList[j].key;
+                        counter++;
+                        firstTimeFullArray = true;
+                    }
+                    else if (question.parametersList[j].key == "OPTION_ANSWER") {
+                        if (firstTimeFullArray) {
+                            getAnswerValueArray[counter] = {};
+                            getAnswerValueArray[counter].key = question.parametersList[j].key;
+                            counter++;
+                            firstTimeFullArray = false;
+                            questionCount++;
+                        }
+                        else {
+                        }
+                    }
+                }
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                answersQuestionList = dbAnswer.replace(/&/g, "$").split("$$");
+                value = {};
+                for (var i = 0; i < getAnswerValueArray.length; i++) {
+                    value[i] = answersQuestionList[i];
+                }
+                return value;
+            case 'CONSTANT_SHORT_HELPER_TEXT_QUESTION':
+            case 'CONSTANT_LONG_HELPER_TEXT_QUESTION':
+            case 'SHORT_HELPER_TEXT_QUESTION':
+            case 'LONG_HELPER_TEXT_QUESTION':
+                if (dbAnswer == null || dbAnswer == "" || dbAnswer == " ") {
+                    return {};
+                }
+                answersList = dbAnswer.split("$$");
+                value = {};
+                for (var i = 0; i < question.parametersList.length; i++) {
+                    value[i] = answersList[i];
+                }
+                return value;
+        }
+    };
+    ReportPage.prototype.reverseAnswerToViewAnswer = function (reportAnswerDb) {
+        var reportAnswerView;
+        if (this.accountServ.reportId == -1) {
+            reportAnswerView = {
+                "dailyReportAnswersObjectsList": []
+            };
+        }
+        else {
+            reportAnswerView = {
+                "reportAnswersObjectsList": []
+            };
+        }
+        for (var i = 0; i < this.reportQuestions.length; i++) {
+            var question = this.reportQuestions[i];
+            if (this.accountServ.reportId == -1) {
+                reportAnswerView.dailyReportAnswersObjectsList[i] = {
+                    "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+                };
+            }
+            else {
+                reportAnswerView.reportAnswersObjectsList[i] = {
+                    "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+                };
+            }
+        }
+        this.reportAnswer = reportAnswerView;
+    };
+    ReportPage.prototype.selectClass = function (classId, checked, index, studentid, studentList) {
+        this.selectedClassIndex = index;
+        if (studentid == -1) {
+            for (var i_2 in studentList) {
+                studentList[i_2].reportChecked = this.isAll;
+            }
+        }
+        else {
+            var oneisNot = 0;
+            for (var j in studentList) {
+                if (studentList[j].reportChecked == true) {
+                    oneisNot++;
+                }
+            }
+        }
+        this.selectedClass = classId;
+        var foundOneChecked = false;
+        for (var i_3 in studentList) {
+            if (studentList[i_3].reportChecked) {
+                foundOneChecked = true;
+                break;
+            }
+        }
+        if (foundOneChecked) {
+            this.hideShowReport = false;
+        }
+        else {
+            this.hideShowReport = true;
+        }
+        // // *******
+        //
+        // this.getClassGroups();
+        //
+        // var seconds = Math.floor(200000 / 1000);
+        // var days = Math.floor(seconds / 86400);
+        // var hours = Math.floor((seconds % 86400) / 3600);
+        // var minutes = Math.floor(((seconds % 86400) % 3600) / 60);
+        //
+        // // 200000 -->> is  3 minutes
+        //
+        // $interval(getClassGroups , 200000);
+        //
+        // // *******
+        this.firstStudentId = null;
+        this.listOfFinalized = [];
+        var noOfStudentFinalized;
+        if (this.accountServ.reportId == -1) {
+            noOfStudentFinalized = this.classesList[index].noOfStudentDailyReportFinalized;
+        }
+        else {
+            noOfStudentFinalized = this.classesList[index].noOfStudentReportFinalized;
+        }
+        if (noOfStudentFinalized == 0) {
+            this.isNotValid = false;
+            this.isSave = true;
+            if (checked == true) {
+                // this.isAbsent = false;
+                // this.isPresent = true;
+                // $rootScope.isdisabled = false;
+                // var studentsList = this.getStudents();
+                var studentsList = this.studentsList;
+                for (var i = 0; i < studentsList.length; i++) {
+                    var studentId = studentsList[i].studentId;
+                    this.isChecked[i] = {};
+                    this.isChecked[i].checked = true;
+                    this.selectedMultiStudentId[i] = {};
+                    this.selectedMultiStudentId[i].id = studentId;
+                    this.selectedMultiStudent[i] = studentId;
+                    // if(!this.attendanceStudents[studentId]) {
+                    //   this.attendanceStudents[studentId] = {isAbsent: false};
+                    // }
+                }
+            }
+            else {
+                // this.isAbsent = false;
+                // this.isPresent = false;
+                // this.isdisabled = true;
+                this.Sellected = 1000;
+                // var studentsList = $scope.getStudents();
+                studentsList = this.studentsList;
+                for (var i_4 = 0; i_4 < studentsList.length; i_4++) {
+                    this.isChecked[i_4] = {};
+                    this.isChecked[i_4].checked = false;
+                    this.selectedMultiStudentId = [];
+                    this.selectedMultiStudent = [];
+                    this.isNotValid = true;
+                    // $rootScope.isdisabled = true;
+                    this.isSave = true;
+                    // $scope.attendanceStudents=[];
+                }
+            }
+        }
+        else {
+            // showEmptyDailyReportTemplate();
+            var firstStudentAnswers = [];
+            if (checked == true) {
+                // $scope.isAbsent = false;
+                // $scope.isPresent = true;
+                this.isSave = false;
+                this.isNotValid = false;
+                // this.isdisabled = false;
+                this.selectedMultiStudentId = [];
+                this.selectedMultiStudent = [];
+                //$scope.attendanceStudents=[];
+                this.isChecked = [];
+                var done = false;
+                this.studnetsAnswersList = [];
+                var reportAnswerForSelectedStudent = [];
+                this.questionsToBeReset = {};
+                // var studentsList = $scope.getStudents();
+                studentsList = this.studentsList;
+                for (var i_5 = 0; i_5 < studentsList.length; i_5++) {
+                    var studentId_1 = studentsList[i_5].studentId;
+                    this.isChecked[i_5] = {};
+                    this.isChecked[i_5].checked = true;
+                    this.selectedMultiStudentId[i_5] = {};
+                    this.selectedMultiStudentId[i_5].id = studentId_1;
+                    this.selectedMultiStudent[i_5] = studentId_1;
+                    // if(!this.attendanceStudents[studentId] || $scope.attendanceStudents[studentId].isAbsent ==null || $scope.attendanceStudents[studentId].isAbsent==undefined){
+                    //   $scope.attendanceStudents[studentId] = {isAbsent:false};
+                    // }
+                    if (studentsList[i_5].reportFinalized && !done) {
+                        done = true;
+                        for (var _i = 0, _a = Object.keys(this.dailyReportServ.reportClassQuestionsGroups); _i < _a.length; _i++) {
+                            var qId = _a[_i];
+                            for (var _b = 0, _c = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId]); _b < _c.length; _b++) {
+                                var answer = _c[_b];
+                                for (var _d = 0, _e = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId][answer]); _d < _e.length; _d++) {
+                                    var id = _e[_d];
+                                    if (this.studnetsAnswersList[this.dailyReportServ.reportClassQuestionsGroups[qId][answer][id]]) {
+                                        this.studnetsAnswersList[this.dailyReportServ.reportClassQuestionsGroups[qId][answer][id]].push({
+                                            "questionId": qId,
+                                            "answer": answer
+                                        });
+                                    }
+                                    else {
+                                        var answersList = [];
+                                        answersList.push({
+                                            "questionId": qId,
+                                            "answer": answer
+                                        });
+                                        this.studnetsAnswersList[this.dailyReportServ.reportClassQuestionsGroups[qId][answer][id]] = answersList;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    //
+                }
+                if (Object.keys(this.studnetsAnswersList).length > 0) {
+                    var counter = 0;
+                    for (var _f = 0, _g = Object.keys(this.dailyReportServ.reportClassQuestionsGroups); _f < _g.length; _f++) {
+                        var key = _g[_f];
+                        var intKey = parseInt(key, 10);
+                        var countAnswers = 0;
+                        // we need to check if answer is for selected student after adding attendance view
+                        for (var _h = 0, _j = Object.keys(this.dailyReportServ.reportClassQuestionsGroups[intKey]); _h < _j.length; _h++) {
+                            var a = _j[_h];
+                            var id = this.dailyReportServ.reportClassQuestionsGroups[intKey][a];
+                            var studentFound = false;
+                            for (var _k = 0, _l = Object.keys(studentsList); _k < _l.length; _k++) {
+                                var s = _l[_k];
+                                if (studentsList[s].studentId == id) {
+                                    studentFound = true;
+                                    break;
+                                }
+                            }
+                            if (studentFound) {
+                                countAnswers++;
+                            }
+                        }
+                        if (countAnswers > 1) {
+                            this.questionsToBeReset[counter++] = false;
+                        }
+                        else {
+                            this.questionsToBeReset[counter++] = true;
+                        }
+                    }
+                    this.resetReportTemplate(this.questionsToBeReset, this.studnetsAnswersList[Object.keys(this.studnetsAnswersList)[0]]);
+                }
+                // saving Answers  in the first Time when open Class.
+                firstStudentAnswers = this.studnetsAnswersList;
+                this.AnswersBeforeEdit = {};
+                if (firstStudentAnswers) {
+                    for (var i_6 in this.selectedMultiStudent) {
+                        var selectedStudent = this.selectedMultiStudent[i_6];
+                        for (var studentID in firstStudentAnswers) {
+                            if (studentID == selectedStudent) {
+                                this.AnswersBeforeEdit = firstStudentAnswers[studentID];
+                            }
+                        }
+                    }
+                }
+                // keeping track of  StudentAnswers before editting
+            }
+            else {
+                // $scope.isAbsent = false;
+                // $scope.isPresent = false;
+                //
+                //
+                // $rootScope.isdisabled = true;
+                this.Sellected = 1000;
+                // var studentsList = $scope.getStudents();
+                studentsList = this.studentsList;
+                for (var i_7 = 0; i_7 < studentsList.length; i_7++) {
+                    this.isChecked[i_7] = {};
+                    this.isChecked[i_7].checked = false;
+                    this.selectedMultiStudentId = [];
+                    this.selectedMultiStudent = [];
+                    // $scope.attendanceStudents=[];
+                    this.isNotValid = true;
+                    this.isSave = true;
+                    // $rootScope.isdisabled = true;
+                }
+                this.resetReportTemplate(null, null);
+            }
+        }
+    };
+    ReportPage.prototype.presentToast = function (message) {
+        var toast = this.toastCtrl.create({
+            message: message,
+            duration: 3000,
+            position: 'bottom'
+        });
+        toast.onDidDismiss(function () {
+            console.log('Dismissed toast');
+        });
+        toast.present();
+    };
+    ReportPage.prototype.shouldHighlightComment = function (stud) {
+        return this.reportId ? stud.numberOfUnseenReportComments[this.reportId] > 0 : stud.numberOfUnseenComments > 0;
+    };
+    ReportPage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-report',template:/*ion-inline-start:"D:\Entrepreware\Edufy-mostafa\src\pages\report\report.html"*/'<ion-header>\n\n  <ion-navbar color="primary">\n\n    <ion-buttons left>\n\n      <button ion-button icon-only menuToggle>\n\n        <ion-icon name="menu"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n    <ion-title text-center>{{pageName}}</ion-title>\n\n    <ion-buttons right>\n\n      <button ion-button icon-only (click)="oonClickonMenuCalender()">\n\n        <ion-icon name="md-calendar"></ion-icon>\n\n      </button>\n\n    </ion-buttons>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content padding class="contentColor">\n\n  <div *ngIf="classesList.length > 1">\n\n    <mat-accordion class="example-headers-align">\n\n      <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId,i,itm.grade.gradeName+\' \'+itm.className)">\n\n        <mat-expansion-panel-header>\n\n          <mat-panel-title>\n\n            <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>\n\n            {{itm.grade.gradeName}} {{itm.className}}\n\n          </mat-panel-title>\n\n          <mat-panel-description *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>\n\n          <mat-panel-description *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a;">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>\n\n          <mat-panel-description style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>\n\n          <mat-panel-description style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>\n\n        </mat-expansion-panel-header>\n\n\n\n        <div *ngIf="showAllButton">\n\n          <ion-row *ngIf="itm.noOfAllStudent > 0">\n\n            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(itm.classId, isAll, i, -1, studentsList)" style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>\n\n            <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>\n\n          </ion-row>\n\n        </div>\n\n\n\n        <ion-card style="height: 50px;padding: 5px; display:inline-block;border-radius: 15px"\n\n                  *ngFor="let stud of itm.studentsList;let j = index">\n\n\n\n          <ion-row style="position: relative;">\n\n\n\n            <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.studentName,i)"\n\n                          style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>\n\n\n\n            <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">\n\n              <img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == null">\n\n              <img style="border-radius: 100px;" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != null">\n\n            </ion-avatar>\n\n\n\n            <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>\n\n\n\n            <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>\n\n            <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>\n\n            <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>\n\n            <span class="circleGreen" item-end style="float: right;padding-top: 10px;"\n\n                  *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>\n\n            <span class="circleRed" item-end style="float: right;padding-top: 10px;"\n\n                  *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>\n\n            <div class="unseen-comments-container">\n\n              <div class="unseen-comments-count-active"\n\n                   [ngClass]="shouldHighlightComment(stud)? \'unseen-comments-count-active\':\'unseen-comments-count-inactive\'">\n\n                <span\n\n                  [innerText]="reportId? stud.numberOfUnseenReportComments[reportId]:stud.numberOfUnseenComments"></span>\n\n              </div>\n\n            </div>\n\n\n\n          </ion-row>\n\n\n\n        </ion-card>\n\n      </mat-expansion-panel>\n\n    </mat-accordion>\n\n  </div>\n\n\n\n\n\n\n\n  <div *ngIf="classesList.length == 1">\n\n\n\n    <div *ngIf="showAllButton">\n\n      <ion-row *ngIf="studentsList.length > 0">\n\n        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].classId, isAll, i, -1, studentsList)"\n\n                      style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>\n\n        <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>\n\n      </ion-row>\n\n    </div>\n\n\n\n    <ion-card style="height: 50px;padding: 5px; display:inline-block; border-radius: 15px"\n\n              *ngFor="let stud of studentsList;let j = index">\n\n\n\n      <ion-row>\n\n\n\n        <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"\n\n                      style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>\n\n\n\n        <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">\n\n          <img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == \'\'">\n\n          <img style="border-radius: 100px;" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != \'\'">\n\n        </ion-avatar>\n\n\n\n        <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>\n\n\n\n        <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>\n\n        <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>\n\n        <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>\n\n        <span class="circleGreen" item-end style="float: right;padding-top: 10px;"\n\n              *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>\n\n        <span class="circleRed" item-end style="float: right;padding-top: 10px;"\n\n              *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>\n\n        <div class="unseen-comments-container">\n\n          <div class="unseen-comments-count-active"\n\n               [ngClass]="shouldHighlightComment(stud)? \'unseen-comments-count-active\':\'unseen-comments-count-inactive\'">\n\n                <span\n\n                  [innerText]="reportId? stud.numberOfUnseenReportComments[reportId]:stud.numberOfUnseenComments"></span>\n\n          </div>\n\n        </div>\n\n      </ion-row>\n\n\n\n    </ion-card>\n\n  </div>\n\n\n\n  <div *ngIf="NoClasses">\n\n      <ion-label justify-content-center align-self-center align-items-center text-center\n\n                 style="-webkit-text-fill-color: #707070;width: 100%;height: 100%">\n\n        You have no role on any class\n\n      </ion-label>\n\n  </div>\n\n\n\n  <ion-fab bottom right>\n\n    <button ion-button color="light" style="border-radius: 20px;color: #488aff; box-shadow: 5px 5px 5px grey;" [disabled]="hideShowReport" (click)="openReportTemplate()">SHOW REPORT</button>\n\n  </ion-fab>\n\n</ion-content>\n\n'/*ion-inline-end:"D:\Entrepreware\Edufy-mostafa\src\pages\report\report.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavParams */], __WEBPACK_IMPORTED_MODULE_9__services_dailyreport__["a" /* DailyReportService */], __WEBPACK_IMPORTED_MODULE_2__services_account__["a" /* AccountService */],
+            __WEBPACK_IMPORTED_MODULE_3__services_students__["a" /* StudentsService */], __WEBPACK_IMPORTED_MODULE_4__services_classes__["a" /* ClassesService */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Platform */], __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_8__ionic_native_date_picker__["a" /* DatePicker */],
+            __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["p" /* ToastController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* ModalController */], __WEBPACK_IMPORTED_MODULE_10__providers_report_comment_report_comment__["a" /* ReportCommentProvider */], __WEBPACK_IMPORTED_MODULE_11__services_transFormDate__["a" /* TransFormDate */]])
+    ], ReportPage);
+    return ReportPage;
+}());
+
+//# sourceMappingURL=report.js.map
+
+/***/ })
+
+});
+//# sourceMappingURL=6.js.map

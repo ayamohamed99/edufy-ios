@@ -10,6 +10,7 @@ export class ReportComment {
   public deleted: boolean;
   public approved: boolean;
   public dailyReportDate: string;
+  public awaiting:boolean = false;
   animationStatus: string = 'loaded';
 }
 

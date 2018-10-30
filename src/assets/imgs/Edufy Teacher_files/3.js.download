@@ -1,0 +1,408 @@
+webpackJsonp([3],{
+
+/***/ 511:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfilePageModule", function() { return ProfilePageModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__profile__ = __webpack_require__(714);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_components_module__ = __webpack_require__(296);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+var ProfilePageModule = /** @class */ (function () {
+    function ProfilePageModule() {
+    }
+    ProfilePageModule = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_2__profile__["a" /* ProfilePage */],
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__profile__["a" /* ProfilePage */]),
+                __WEBPACK_IMPORTED_MODULE_3__components_components_module__["a" /* ComponentsModule */],
+            ],
+        })
+    ], ProfilePageModule);
+    return ProfilePageModule;
+}());
+
+//# sourceMappingURL=profile.module.js.map
+
+/***/ }),
+
+/***/ 520:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Pendingnotification; });
+var Pendingnotification = /** @class */ (function () {
+    function Pendingnotification() {
+    }
+    return Pendingnotification;
+}());
+
+//# sourceMappingURL=pendingnotification.js.map
+
+/***/ }),
+
+/***/ 524:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Postattachment; });
+var Postattachment = /** @class */ (function () {
+    function Postattachment() {
+    }
+    return Postattachment;
+}());
+
+//# sourceMappingURL=postattachment.js.map
+
+/***/ }),
+
+/***/ 714:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfilePage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_account__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_postattachment__ = __webpack_require__(524);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_pendingnotification__ = __webpack_require__(520);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__ = __webpack_require__(166);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_notification__ = __webpack_require__(165);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [0, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+
+var ProfilePage = /** @class */ (function () {
+    function ProfilePage(navCtrl, navParams, platform, accountServ, storage, network, notiServ) {
+        var _this = this;
+        this.navCtrl = navCtrl;
+        this.navParams = navParams;
+        this.platform = platform;
+        this.storage = storage;
+        this.network = network;
+        this.notiServ = notiServ;
+        this.pendingNotification = [];
+        this.arrayToPostAttachment = [];
+        this.wifiUploadKey = 'WIFI_UPLOAD';
+        this.localStorageToken = 'LOCAL_STORAGE_TOKEN';
+        var intervaldata = setInterval(function () {
+            if (document.getElementById('profilePage')) {
+                if (!document.getElementById('profilePage').classList.contains("selected")) {
+                    document.getElementById('profilePage').classList.toggle("selected");
+                }
+                if (document.getElementById('logOutPage').classList.contains("selected")) {
+                    document.getElementById('logOutPage').classList.toggle("selected");
+                }
+            }
+            clearInterval(intervaldata);
+        }, 50);
+        this.name = accountServ.getUserName();
+        this.userName = accountServ.getUserUserName();
+        this.userPhone = accountServ.getUserTelephone();
+        this.userMail = accountServ.getUserEmail();
+        this.userAddress = accountServ.getUserAddress();
+        if (!this.name || this.name == "") {
+            this.name = "No Name";
+        }
+        if (!this.userName || this.userName == "") {
+            this.userName = "No User Name";
+        }
+        if (!this.userPhone || this.userPhone == "") {
+            this.userPhone = "No Phone";
+        }
+        if (!this.userMail || this.userMail == "") {
+            this.userMail = "No Mail";
+        }
+        if (!this.userAddress || this.userAddress == "") {
+            this.userAddress = "No Address";
+        }
+        if (platform.is('core')) {
+            notiServ.putHeader(localStorage.getItem(this.localStorageToken));
+            this.getNotificationINStorage();
+        }
+        else {
+            storage.get(this.localStorageToken).then(function (val) {
+                notiServ.putHeader(val);
+                _this.getNotificationINStorage();
+            });
+        }
+    }
+    ProfilePage.prototype.onCore = function () {
+        if (this.platform.is('core')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    ProfilePage.prototype.onMobile = function () {
+        if (!this.platform.is('core')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    // opend = true;
+    // openComment(){
+    //   if(this.opend) {
+    //     this.commentAppear.nativeElement.className = "slideUp";
+    //     this.opend = false;
+    //   }else{
+    //     this.commentAppear.nativeElement.className = "slideDown";
+    //     this.opend = true;
+    //   }
+    // }
+    ProfilePage.prototype.ionViewDidLoad = function () {
+    };
+    ProfilePage.prototype.getNotificationINStorage = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.storage.get('Notifications').then(function (data) {
+                            var notis = data;
+                            if (notis.length > 0) {
+                                for (var _i = 0, notis_1 = notis; _i < notis_1.length; _i++) {
+                                    var temp = notis_1[_i];
+                                    var PN = new __WEBPACK_IMPORTED_MODULE_4__models_pendingnotification__["a" /* Pendingnotification */]();
+                                    PN.title = temp.title;
+                                    PN.body = temp.body;
+                                    PN.attachmentsList = temp.attachmentsList;
+                                    PN.tagsList = temp.tagsList;
+                                    PN.receiversList = temp.receiversList;
+                                    _this.pendingNotification.push(PN);
+                                }
+                            }
+                            _this.storage.get(_this.wifiUploadKey).then(function (wi) {
+                                var wifiUpload = wi.wifi;
+                                var WIFIOn = false;
+                                if (wifiUpload) {
+                                    WIFIOn = true;
+                                }
+                                if (WIFIOn && _this.network.type == 'wifi') {
+                                    if (_this.pendingNotification.length > 0) {
+                                        var _loop_1 = function (temp) {
+                                            if (temp.attachmentsList) {
+                                                var promisesArray = [];
+                                                for (var index = 0; index < temp.attachmentsList.length; index++) {
+                                                    // let form: FormData = temp.attachmentsList[index];
+                                                    var form = new FormData();
+                                                    form.append('file', temp.attachmentsList[index]);
+                                                    promisesArray.push(_this.uploadAttach(form));
+                                                }
+                                                Promise.all(promisesArray).then(function (data) {
+                                                    _this.SendNotificationBackground(temp.title, temp.body, _this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                                                }).catch(function (e) {
+                                                });
+                                            }
+                                            else {
+                                                _this.SendNotificationBackground(temp.title, temp.body, _this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                                            }
+                                        };
+                                        for (var _i = 0, _a = _this.pendingNotification; _i < _a.length; _i++) {
+                                            var temp = _a[_i];
+                                            _loop_1(temp);
+                                        }
+                                    }
+                                }
+                                else if (!WIFIOn) {
+                                    var _loop_2 = function (temp) {
+                                        if (temp.attachmentsList) {
+                                            var promisesArray = [];
+                                            for (var index = 0; index < temp.attachmentsList.length; index++) {
+                                                // let form: FormData = temp.attachmentsList[index];
+                                                var form = new FormData();
+                                                form.append('file', temp.attachmentsList[index]);
+                                                promisesArray.push(_this.uploadAttach(form));
+                                            }
+                                            Promise.all(promisesArray).then(function (data) {
+                                                _this.SendNotificationBackground(temp.title, temp.body, _this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                                            }).catch(function (e) {
+                                            });
+                                        }
+                                        else {
+                                            _this.SendNotificationBackground(temp.title, temp.body, _this.arrayToPostAttachment, temp.receiversList, temp.tagsList);
+                                        }
+                                    };
+                                    for (var _b = 0, _c = _this.pendingNotification; _b < _c.length; _b++) {
+                                        var temp = _c[_b];
+                                        _loop_2(temp);
+                                    }
+                                }
+                            }).catch(function (e) {
+                            });
+                        }).catch(function (e) {
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ProfilePage.prototype.SendNotificationBackground = function (title, details, postAttachment, RecieverArray, SelectedTags) {
+        var _this = this;
+        var sentNotify = [];
+        this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(function (data) {
+            var PN = new __WEBPACK_IMPORTED_MODULE_4__models_pendingnotification__["a" /* Pendingnotification */]();
+            PN.title = title;
+            PN.body = details;
+            PN.attachmentsList = postAttachment;
+            PN.tagsList = RecieverArray;
+            PN.receiversList = SelectedTags;
+            sentNotify.push(PN);
+        }, function (err) {
+        }, function () {
+            _this.deleteFromStorage(sentNotify);
+        });
+    };
+    ProfilePage.prototype.deleteFromStorage = function (sentNotify) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var pendingNotification;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        pendingNotification = [];
+                        return [4 /*yield*/, this.storage.get('Notifications').then(function (data) {
+                                var notis = data;
+                                if (notis) {
+                                    var _loop_3 = function (temp) {
+                                        var PN = new __WEBPACK_IMPORTED_MODULE_4__models_pendingnotification__["a" /* Pendingnotification */]();
+                                        var found = false;
+                                        sentNotify.some(function (x) { found = true; });
+                                        if (!found) {
+                                            PN.title = temp.title;
+                                            PN.body = temp.body;
+                                            PN.attachmentsList = temp.attachmentsList;
+                                            PN.tagsList = temp.tagsList;
+                                            PN.receiversList = temp.receiversList;
+                                            pendingNotification.push(PN);
+                                        }
+                                    };
+                                    for (var _i = 0, notis_2 = notis; _i < notis_2.length; _i++) {
+                                        var temp = notis_2[_i];
+                                        _loop_3(temp);
+                                    }
+                                }
+                                _this.storage.remove("Notifications");
+                                _this.storage.set("Notifications", pendingNotification);
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ProfilePage.prototype.uploadAttach = function (formData) {
+        var _this = this;
+        this.notiServ.postAttachment(formData).toPromise().then(function (s) {
+            var allData = s;
+            if (allData.data != null) {
+                allData = JSON.parse(allData.data);
+            }
+            var attach = new __WEBPACK_IMPORTED_MODULE_3__models_postattachment__["a" /* Postattachment */]();
+            attach.name = allData.name;
+            attach.type = allData.type;
+            attach.url = allData.url;
+            attach.uploadDate = allData.date;
+            _this.arrayToPostAttachment.push(attach);
+            return true;
+        }, function (e) {
+            return true;
+        }).catch(function (e) { });
+    };
+    ProfilePage.prototype.openNav = function () {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("myAllnav").style.width = "100%";
+    };
+    ProfilePage.prototype.closeNav = function () {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("myAllnav").style.width = "0";
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('commentDiv'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"])
+    ], ProfilePage.prototype, "commentAppear", void 0);
+    ProfilePage = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'page-profile',template:/*ion-inline-start:"D:\Entrepreware\Edufy-mostafa\src\pages\profile\profile.html"*/'<ion-header>\n  <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->\n  <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>-->\n  <!--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>-->\n\n  <ion-navbar color="primary">\n    <ion-buttons left>\n      <button ion-button icon-only menuToggle>\n        <ion-icon name="menu"></ion-icon>\n      </button>\n    </ion-buttons>\n    <ion-title text-center>{{name}}\'s Profile</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content has-header="true">\n\n  <!--<ion-buttons left style="position: absolute; background-color: #eee0">-->\n    <!--<button ion-button icon-only  menuToggle style="background-color: #eee0">-->\n      <!--<ion-icon color="primary" name="menu"></ion-icon>-->\n    <!--</button>-->\n  <!--</ion-buttons>-->\n\n  <div class="container">\n    <div class="fb-profile">\n      <img align="left" class="fb-image-lg" src="assets/imgs/soon.png" alt="Profile image example"/>\n      <img align="left" class="fb-image-profile thumbnail" src="assets/imgs/profile.png" alt="Profile image example"/>\n      <div class="fb-profile-text">\n        <h1 style="margin-left: 240px;" *ngIf="onCore()">{{name}}</h1>\n        <h1 *ngIf="onMobile()">{{name}}</h1>\n\n        <ion-list inset no-lines>\n\n          <ion-item margin-left="20px"> <ion-icon name="person" margin-right="5px"></ion-icon>\n            {{userName}}\n          </ion-item>\n\n          <ion-item margin-left="20px"> <ion-icon name="call" margin-right="5px"></ion-icon>\n            {{userPhone}}\n          </ion-item>\n\n          <ion-item margin-left="20px"> <ion-icon name="mail" margin-right="5px"></ion-icon>\n            {{userMail}}\n          </ion-item>\n\n          <ion-item margin-left="20px"> <ion-icon name="locate" margin-right="5px"></ion-icon>\n            {{userAddress}}\n          </ion-item>\n\n        </ion-list>\n\n        <div style="height: 1px; background-color: lightgray; margin-left: 80px; margin-right: 80px; margin-top: 40px"></div>\n\n      </div>\n    </div>\n  </div>\n\n  <!--<button (click)="openNav()">Open</button>-->\n\n    <!--<report-filter></report-filter>-->\n\n</ion-content>\n'/*ion-inline-end:"D:\Entrepreware\Edufy-mostafa\src\pages\profile\profile.html"*/,
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* NavParams */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Platform */], __WEBPACK_IMPORTED_MODULE_2__services_account__["a" /* AccountService */],
+            __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */], __WEBPACK_IMPORTED_MODULE_6__ionic_native_network__["a" /* Network */], __WEBPACK_IMPORTED_MODULE_7__services_notification__["a" /* NotificationService */]])
+    ], ProfilePage);
+    return ProfilePage;
+}());
+
+//# sourceMappingURL=profile.js.map
+
+/***/ })
+
+});
+//# sourceMappingURL=3.js.map

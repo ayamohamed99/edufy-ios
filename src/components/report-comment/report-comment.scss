@@ -30,7 +30,8 @@ report-comment {
     margin-bottom: 12px;
     line-height: 24px;
     min-width: 45%;
-    max-width: 65%;
+    max-width: 75%;
+    transition: all 1s ease-in-out;
     &:after {
       content: "";
       display: table;
@@ -40,6 +41,7 @@ report-comment {
 
   .comment-message {
     margin: 0;
+    transition: all 1s ease-in-out;
   }
 
   .comment-message-sender {
@@ -48,7 +50,17 @@ report-comment {
     line-height: 12px;
     margin-top: 4px;
     margin-right: 8px;
+    display: inline-block;
+    transition: all 1s ease-in-out;
   }
+
+  .comment-message-awaiting{
+    color: #ff8f00;
+    display: inline;
+    padding-right: 15px;
+    transition: all 1s ease-in-out;
+  }
+
   .comment-message-date {
     font-size: 11px;
     opacity: 0.75;
@@ -218,6 +230,26 @@ report-comment {
     background: #000;
     opacity: 0.35;
   }
+
+  .item-md{
+    background-color: #fff0;
+  }
+
+  .item-ios{
+    background-color: #fff0;
+  }
+
+  .item-block {
+    min-height: 0;
+    transition: all 1s ease-in-out !important;
+  }
+
+  .item.item-block .item-inner {
+    padding-right: 8px;
+    padding-right: 8px;
+    border-bottom: 0;
+  }
+
 }
 
 

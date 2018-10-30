@@ -29,7 +29,10 @@
               <ion-spinner *ngIf="isEditedCommentsLoading[comment.id]" class="comment-message-actions-loading"
                            name="crescent"></ion-spinner>
             </div>
+            <span>
             <p class="comment-message comment-message-sender"> {{comment.senderObject.name}}</p>
+            <p class="comment-message comment-message-awaiting" *ngIf="!comment.approved"> Waiting Approval</p>
+            </span>
             <p class="comment-message comment-message-date"> {{comment.postDate | date:"MMM d, y, h:mm a"}}</p>
             <p *ngIf="!inEditModeComments[comment.id]"
                class="comment-message comment-message-text">{{comment.comment}}</p>
@@ -37,6 +40,13 @@
                           *ngIf="inEditModeComments[comment.id]"
                           autoresize class="comment-message  comment-message-edit" style="color: black"
                           [(ngModel)]="comment.comment"></ion-textarea>
+
+            <ion-item [id]="'itemView'+i" style="transition: all 1s ease-in-out;" *ngIf="accountService.getUserRole().dailyReportCommentApprove && !comment.approved || comment.awaiting">
+              <button [id]="'buttonView'+i"  item-end ion-button outline icon-start style="color: #04af23;border-color: #04af23;padding-right: 0;transition: all 1s ease-in-out;"
+              (click)="approveComment(i)">
+                <ion-icon name="checkmark"></ion-icon>
+              </button>
+            </ion-item>
           </div>
           <div class="clear"></div>
         </div>

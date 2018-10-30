@@ -14,6 +14,7 @@ import {Url_domain} from "../../models/url_domain";
 
 const GET_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?operationId=3&date={0}&studentId={1}";
 const SEND_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?operationId=1";
+const SEND_DAILY_REPORT_COMMENTS_APPROVE_URL = Url_domain.Domain + "/authentication/comments.ent?operationId=2";
 const DELETE_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/comments.ent?id={0}";
 const GET_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/reportComments.ent?operationId=3&date={0}&studentId={1}&reportId={2}";
 const SEND_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + "/authentication/reportComments.ent?operationId=1";
@@ -90,10 +91,10 @@ export class ReportCommentProvider {
     return this.http.delete(url, {headers: this.httpHeader})
   }
 
-  editComment(date: string, studentId: number, commentText: string, commentId: number, reportId?: number) {
+  editComment(date, studentId, commentText, commentId, reportId , operationId) {
     let url;
     let editedCommentRequest;
-    if (reportId == undefined || reportId == null) {
+    if ((reportId == undefined || reportId == null) && operationId == 1) {
       url = SEND_DAILY_REPORT_COMMENTS_URL;
       editedCommentRequest = {
         comment: commentText,
@@ -102,7 +103,12 @@ export class ReportCommentProvider {
         senderId: this.accountService.userId,
         studentId: studentId,
       };
-    } else {
+    }else if(operationId == 2){
+      url = SEND_DAILY_REPORT_COMMENTS_APPROVE_URL;
+      editedCommentRequest = {
+        id: commentId
+      };
+    }else {
       url = SEND_CUSTOM_REPORT_COMMENTS_URL;
       editedCommentRequest = {
         comment: commentText,
