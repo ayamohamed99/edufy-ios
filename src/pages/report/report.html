@@ -24,10 +24,19 @@
             <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
             {{itm.grade.gradeName}} {{itm.className}}
           </mat-panel-title>
-          <mat-panel-description *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
-          <mat-panel-description *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a;">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
+          <mat-panel-description *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
+          <mat-panel-description *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
           <mat-panel-description style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>
           <mat-panel-description style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>
+          <mat-panel-description>
+            <div class="unseen-comments-container">
+              <div class="unseen-comments-count-active"
+                   [ngClass]="shouldHighlightComment(itm)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
+                <span
+                  [innerText]="reportId? itm.noOfUnseenReportComments[reportId]:itm.noOfUnseenComments"></span>
+              </div>
+            </div>
+          </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div *ngIf="showAllButton">

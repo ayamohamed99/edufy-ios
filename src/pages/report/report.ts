@@ -1766,6 +1766,11 @@ export class ReportPage {
   }
 
   shouldHighlightComment(stud) {
-    return this.reportId ? stud.numberOfUnseenReportComments[this.reportId] > 0 : stud.numberOfUnseenComments > 0;
+
+    if(stud instanceof Class){
+      return this.reportId ? stud.noOfUnseenReportComments[this.reportId] > 0 : stud.noOfUnseenComments > 0;
+    }else {
+      return this.reportId ? stud.numberOfUnseenReportComments[this.reportId] > 0 : stud.numberOfUnseenComments > 0;
+    }
   }
 }

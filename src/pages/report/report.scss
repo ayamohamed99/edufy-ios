@@ -63,6 +63,11 @@ page-report {
   .mat-expansion-panel-header {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    padding: 8px 10px;
+    max-height: 70px !important;
+
+    min-height: 48px !important;
+    height: fit-content !important;
   }
   .mat-expansion-panel {
     border-radius: 15px;
