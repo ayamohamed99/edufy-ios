@@ -291,14 +291,14 @@ export class ReportPage {
           }
           this.foundBefore = true;
           this.loadC.dismiss();
-          if(this.classesList.length == 1){
-
-            let classDataId = allData[0].id;
-
-            let classNameData = allData[0].grade.name+" "+allData[0].name;
-
-            this.waitStudents(classDataId,-1,classNameData);
-          }
+          // if(this.classesList.length == 1){
+          //
+          //   let classDataId = allData[0].id;
+          //
+          //   let classNameData = allData[0].grade.name+" "+allData[0].name;
+          //   this.whenOpen(null,classDataId,0,name);
+          //   // this.waitStudents(classDataId,-1,classNameData);
+          // }
         }else{
           this.NoClasses = true;
         }
@@ -370,7 +370,7 @@ export class ReportPage {
           }
         }
         this.showAllButton = true;
-        if(this.classesList.length != 1) {
+        if(this.classesList.length != 0) {
           this.addToClasses(classId,this.load);
         }
       },
@@ -477,10 +477,10 @@ export class ReportPage {
     this.isAll = false;
     this.selectedClassId = classId;
     this.hideShowReport = true;
-    let ref = itmRef;
-    this.studentsList = [];
-    this.isChecked = [];
-    ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
+      let ref = itmRef;
+      this.studentsList = [];
+      this.isChecked = [];
+      ref.className = 'fa-arrow-down icon icon-md ion-ios-arrow-down open';
     this.getStudentsAnswer(classId,index,name);
   }
 

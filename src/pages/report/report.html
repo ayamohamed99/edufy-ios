@@ -16,7 +16,7 @@
 
 
 <ion-content padding class="contentColor">
-  <div *ngIf="classesList.length > 1">
+  <div *ngIf="classesList.length > 0">
     <mat-accordion class="example-headers-align">
       <mat-expansion-panel hideToggle="true" *ngFor="let itm of classesList; let i = index" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId,i,itm.grade.gradeName+' '+itm.className)">
         <mat-expansion-panel-header>
@@ -85,49 +85,49 @@
 
 
 
-  <div *ngIf="classesList.length == 1">
+  <!--<div *ngIf="classesList.length == 1">-->
 
-    <div *ngIf="showAllButton">
-      <ion-row *ngIf="studentsList.length > 0">
-        <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].classId, isAll, i, -1, studentsList)"
-                      style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>
-        <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
-      </ion-row>
-    </div>
+    <!--<div *ngIf="showAllButton">-->
+      <!--<ion-row *ngIf="studentsList.length > 0">-->
+        <!--<ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].classId, isAll, i, -1, studentsList)"-->
+                      <!--style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>-->
+        <!--<ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>-->
+      <!--</ion-row>-->
+    <!--</div>-->
 
-    <ion-card style="height: 50px;padding: 5px; display:inline-block; border-radius: 15px"
-              *ngFor="let stud of studentsList;let j = index">
+    <!--<ion-card style="height: 50px;padding: 5px; display:inline-block; border-radius: 15px"-->
+              <!--*ngFor="let stud of studentsList;let j = index">-->
 
-      <ion-row>
+      <!--<ion-row>-->
 
-        <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"
-                      style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>
+        <!--<ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"-->
+                      <!--style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>-->
 
-        <ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">
-          <img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == ''">
-          <img style="border-radius: 100px;" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != ''">
-        </ion-avatar>
+        <!--<ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">-->
+          <!--<img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == ''">-->
+          <!--<img style="border-radius: 100px;" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != ''">-->
+        <!--</ion-avatar>-->
 
-        <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>
+        <!--<ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>-->
 
-        <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
-        <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
-        <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
-        <span class="circleGreen" item-end style="float: right;padding-top: 10px;"
-              *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
-        <span class="circleRed" item-end style="float: right;padding-top: 10px;"
-              *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
-        <div class="unseen-comments-container">
-          <div class="unseen-comments-count-active"
-               [ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
-                <span
-                  [innerText]="reportId? stud.numberOfUnseenReportComments[reportId]:stud.numberOfUnseenComments"></span>
-          </div>
-        </div>
-      </ion-row>
+        <!--<label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>-->
+        <!--<label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>-->
+        <!--<label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>-->
+        <!--<span class="circleGreen" item-end style="float: right;padding-top: 10px;"-->
+              <!--*ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>-->
+        <!--<span class="circleRed" item-end style="float: right;padding-top: 10px;"-->
+              <!--*ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>-->
+        <!--<div class="unseen-comments-container">-->
+          <!--<div class="unseen-comments-count-active"-->
+               <!--[ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">-->
+                <!--<span-->
+                  <!--[innerText]="reportId? stud.numberOfUnseenReportComments[reportId]:stud.numberOfUnseenComments"></span>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</ion-row>-->
 
-    </ion-card>
-  </div>
+    <!--</ion-card>-->
+  <!--</div>-->
 
   <div *ngIf="NoClasses">
       <ion-label justify-content-center align-self-center align-items-center text-center

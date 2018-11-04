@@ -7,7 +7,7 @@ export class Url_domain{
   //local from mobile
   // static Domain = "http://192.168.1.100:8080";
   //Proxy
-  static Domain = "";
+  static Domain = "http://104.198.175.198";
   Domain = Url_domain.Domain;
 
 
