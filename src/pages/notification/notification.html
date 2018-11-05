@@ -6,6 +6,11 @@
       </button>
     </ion-buttons>
     <ion-title text-center>Notifications</ion-title>
+    <ion-buttons right>
+      <button ion-button icon-only [disabled]="true">
+        <ion-icon></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar class="toolBarShap" color="primary" *ngIf="!platform.is('ios')">
     <ion-segment [(ngModel)]="selectedTab" color="light">

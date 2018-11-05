@@ -118,7 +118,7 @@
   .item {
     height: 59px;
     border-radius: 15px;
-    margin-bottom: 16px;
+    //margin-bottom: 8px;
   }
   ion-icon{
     color: #5C87F7;
@@ -141,7 +141,7 @@
   .selected, .item:hover{
     height: 59px;
     border-radius: 10px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
     background-color: #5C87F7;
     color: #fff9fb;
     animation: shadow-drop-2-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
