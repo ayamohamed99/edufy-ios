@@ -15,17 +15,34 @@
 <ion-content padding>
 
 
-  <rl-tag-input
-    [(ngModel)]="sendTo"
-    (ngModelChange)="checkArray(selectedTag)"
-    [addOnBlur]="false"
-    [autocomplete]="true"
-    [autocompleteOprations]="autocompleteArray"
-    [autocompleteItems]="preparedTags"
-    placeholder="To :">
-  </rl-tag-input>
+  <!--<rl-tag-input-->
+    <!--[(ngModel)]="sendTo"-->
+    <!--(ngModelChange)="checkArray(selectedTag)"-->
+    <!--[addOnBlur]="false"-->
+    <!--[autocomplete]="true"-->
+    <!--[autocompleteOprations]="autocompleteArray"-->
+    <!--[autocompleteItems]="preparedTags"-->
+    <!--placeholder="To :">-->
+  <!--</rl-tag-input>-->
 
-
+  <ng-select
+    #ngSelect
+    [items]="preparedTags"
+    [multiple]="true"
+    bindLabel="name"
+    groupBy="header"
+    [selectableGroup]="false"
+    [closeOnSelect]="true"
+    placeholder="To :"
+    [(ngModel)]="this.sendTo"
+    (close)="onChange(ngSelect)">
+    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+      {{item.header | uppercase}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      {{item.name}}
+    </ng-template>
+  </ng-select>
 
   <ion-item>
   <ion-input type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></ion-input>

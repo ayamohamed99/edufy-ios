@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {
   ActionSheetController,
   AlertController, IonicPage,
@@ -34,7 +34,7 @@ export class NotificationNewPage {
   Details:string;
   name: string;
   tags:any[] = [];
-  preparedTags:any = [];
+  preparedTags:Autocomplete_shown_array[] = [];
   allStudentList:any[] = [];
   updateTags:any[]=[];
   tagsArr:any[] = [];
@@ -64,13 +64,18 @@ export class NotificationNewPage {
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingController,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private backgroundMode:BackgroundMode)
   {
-      this.backgroundMode.enable();
+    this.sendTo = [];this.preparedTags = [];
+     if(!this.platform.is('core')) {
+       this.backgroundMode.enable();
 
-    if(this.backgroundMode.isEnabled()){
-      console.log('backgroundMode isEnabled');
-    }
+       if (this.backgroundMode.isEnabled()) {
+         console.log('backgroundMode isEnabled');
+       }
 
-    this.backgroundMode.on("activate").subscribe((s)=>{ console.log('background activate:',s); });
+       this.backgroundMode.on("activate").subscribe((s) => {
+         console.log('background activate:', s);
+       });
+     }
       this.network.onConnect().subscribe((e) => {console.log('network:',e);});
     this.wifiUpload = false;
     this.placeHolder = "To :";
@@ -252,15 +257,37 @@ export class NotificationNewPage {
     }
   }
 
-  checkArray(){
+  onChange(reef){
+    console.log(reef);
     if(this.sendTo) {
       if (this.sendTo.some(x => x.id === -1)) {
-        this.sendTo.splice(0);
-        let autoShownAllClasses = new Autocomplete_shown_array();
-        autoShownAllClasses.id = -1;
-        autoShownAllClasses.name = "All Class";
-        autoShownAllClasses.dataList = this.chooseAllClasses;
-        this.sendTo.push(autoShownAllClasses)
+        // this.sendTo.splice(0);
+        // let autoShownAllClasses = new Autocomplete_shown_array();
+        // autoShownAllClasses.id = -1;
+        // autoShownAllClasses.name = "All Class";
+        // autoShownAllClasses.dataList = this.chooseAllClasses;
+        // this.sendTo.push(autoShownAllClasses);
+        for(let i=0;i<this.sendTo.length;i++){
+          if(this.sendTo[i].id != -1){
+            this.sendTo.splice(i,1);
+          }
+        }
+
+        let a;
+        for(a=0;a<reef.selectedValues.length;){
+          if(reef.selectedValues[a].id != -1){
+            // reef.itemsList._selected[reef.selectedValues[i].index].selected = false;
+            let itemIndex;
+            for(let k=0;k<reef.itemsList.items.length;k++) {
+              if(reef.itemsList.items[k].value.id != -1 && reef.itemsList.items[k].selected){
+                itemIndex = reef.itemsList.items[k].index;
+                reef.itemsList.unselect(reef.itemsList.items[itemIndex]);
+              }
+            }
+            reef.selectedValues.splice(a,1);
+            a=0;
+          }else{a++;}
+        }
       }
       else if (this.sendTo.some(x => x.type === "Class") && this.sendTo.some(y => y.type === "Student")) {
         let TempClassessArray: any[] = [];
@@ -269,16 +296,31 @@ export class NotificationNewPage {
             TempClassessArray.push(selectedClasses);
           }
         }
-
-        for (let selected of this.sendTo) {
-          if (selected.type === "Student") {
+        let tempStudentId;
+        let j;
+        for(j=0;j<this.sendTo.length;){
+          if (this.sendTo[j].type === "Student") {
             for (let tempClass of TempClassessArray) {
-                if (tempClass.id == selected.studentClassId) {
-                  let index = this.sendTo.indexOf(selected);
-                  this.sendTo.splice(index, 1);
+                if (tempClass.id == this.sendTo[j].studentClassId) {
+                  tempStudentId = this.sendTo[j].id;
+                  this.sendTo.splice(j, 1);
+                  j=0;
+                  for(let i=0;i<reef.selectedValues.length;i++){
+                    if(reef.selectedValues[i].id == tempStudentId){
+                      let itemIndex;
+                      for(let k=0;k<reef.itemsList.items.length;k++) {
+                          if(reef.itemsList.items[k].value.id == tempStudentId){
+                            itemIndex = reef.itemsList.items[k].index;
+                          }
+                      }
+                      reef.itemsList.unselect(reef.itemsList.items[itemIndex]);
+                      reef.selectedValues.splice(i,1);
+                      break;
+                    }
+                  }
                 }
             }
-          }
+          }else{j++}
         }
       }
     }
