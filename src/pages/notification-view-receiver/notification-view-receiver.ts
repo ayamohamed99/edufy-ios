@@ -126,8 +126,8 @@ tempRList =[];
                   label: '# of Votes',
                   data: [seenNumb, unseenNumb],
                   backgroundColor: [
-                    'rgba(26,198,31)',
-                    'rgba(236,27,35)'
+                    "#1AC61F",
+                    "#EC1B23"
                   ],
                   hoverBackgroundColor: [
                     "#1AC61F",

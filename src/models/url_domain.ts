@@ -23,7 +23,7 @@ export class Url_domain{
   //   }
   //   ],
   // "Production":"104.198.175.198"
-  // ionic cordova emulate ios --livereload -c --target="iPhone-6s, 11.4"
+  // ionic cordova emulate ios --livereload -c --target="iPhone-6s, 12.0"
   // open /Volumes/BOOTCAMP/Mostafa/Edufy/platforms/ios/Edufy.xcodeproj
   // <preference name="iosPersistentFileLocation" value="Library" />
   // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
