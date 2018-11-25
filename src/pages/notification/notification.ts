@@ -348,6 +348,7 @@ export class NotificationPage{
   getAllClasses(){
     this.classesServ.getClassList("NOTIFICATION",2,null,null,null,null).subscribe((value) => {
         let allData: any = value;
+        this.classes = [];
         for (let data of allData) {
           let item = new Class();
           item.classId = data.id;
@@ -375,6 +376,8 @@ export class NotificationPage{
     this.studentService.getAllStudents(7,'Notification').subscribe(
       (val)=>{
         let data:any = val;
+        this.studentwithClass = [];
+        this.studentsName = [];
         for (let value of data){
           let students = new Student();
 

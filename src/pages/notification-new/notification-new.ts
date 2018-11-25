@@ -250,7 +250,7 @@ export class NotificationNewPage {
   }
 
   activeSend(){
-    if(this.sendTo && (this.sendTo.length > 0) && this.Title && this.Details){
+    if(this.sendTo && (this.sendTo.length > 0) && this.Title && (this.Details || this.attachmentArray.length>0)){
       return true;
     }else{
       return false;
