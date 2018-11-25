@@ -31,6 +31,6 @@ export class Url_domain{
   // keytool -genkey -v -keystore edufy_teachers.jks -keyalg RSA -keysize 2048 -validity 10000 -alias edufy_teachers
   // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks app-release-unsigned.apk edufy_teachers
   //PASSWORD : @Entrepreware123
-  //zipalign -v 4 app-release-unsigned.apk 1.0.7-edufy_teachers.apk
-  //apksigner verify 1.0.7-edufy_teachers.apk
+  //zipalign -v 4 app-release-unsigned.apk 1.0.8-edufy_teachers.apk
+  //apksigner verify 1.0.8-edufy_teachers.apk
 }
