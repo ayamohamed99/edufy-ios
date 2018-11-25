@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.entrepreware.Edufy_Teachers" version="1.0.7" xmlns="http://www.w3.org/ns/widgets">
+<widget id="com.entrepreware.Edufy_Teachers" version="1.0.8" xmlns="http://www.w3.org/ns/widgets">
     <name>Edufy Teachers</name>
     <description>Edufy is an app for teachers.</description>
     <author email="" href="http://www.entrepreware.com/">Mostafa Elshafei Team</author>
@@ -123,5 +123,5 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="browser" spec="5.0.3" />
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="~7.1.3" />
+    <engine name="android" spec="7.1.3" />
 </widget>
