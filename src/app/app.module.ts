@@ -52,6 +52,8 @@ import {TransFormDate} from "../services/transFormDate";
 import {ComponentsModule} from "../components/components.module";
 import {ReportCommentProvider} from "../providers/report-comment/report-comment";
 import {FCMService} from "../services/fcm";
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
@@ -119,7 +121,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     CheckboxFunctionService,
     ReportCommentProvider,
     [DatePipe],TransFormDate,
-    FCMService
+    FCMService,FirebaseMessaging,LocalNotifications
   ]
 })
 export class AppModule {

@@ -12,6 +12,7 @@ import {ProfilePage} from "../pages/profile/profile";
 import {SettingsPage} from "../pages/settings/settings";
 import {LogoutService} from "../services/logout";
 import {ReportPage} from "../pages/report/report";
+import {FCMService} from "../services/fcm";
 
 declare var window:any;
 
@@ -51,7 +52,7 @@ export class MyApp {
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
-              private logout:LogoutService, private alertCtrl: AlertController) {
+              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -368,6 +369,7 @@ export class MyApp {
         this.knowCustomReport(this.accountServ.getCustomReportsList());
         this.load.dismiss();
         this.nav.setRoot(this.profilePage);
+        this.setupNotification();
       },
       err => {
         if(err.error == "FORBIDDEN"){
@@ -390,6 +392,38 @@ export class MyApp {
     if(this.oldPage!=pageId) {
       this.oldPage = pageId;
     }
+  }
+
+  setupNotification(){
+    this.fire.getToken();
+
+    this.fire.onBackgroundNotification().subscribe(
+      data => {
+
+        console.log('Background');
+        if(data.page === this.reportPage){
+          this.onLoadReport(this.reportPage, data.reportName,data.reportId);
+        }else{
+          this.nav.setRoot(data.page);
+        }
+
+      });
+
+    this.fire.onForgroundNotification().subscribe(
+      data => {
+        this.fire.setLocatNotification(data.gcm.title,data.gcm.body,JSON.parse(JSON.stringify(data)));
+        this.fire.onOpenLocalNotification().subscribe(
+          data => {
+
+            console.log('Foreground');
+            if(data.data.page === this.reportPage){
+              this.onLoadReport(this.reportPage, data.reportName,data.reportId);
+            }else{
+              this.nav.setRoot(data.data.page);
+            }
+
+          });
+      });
   }
 
 }
