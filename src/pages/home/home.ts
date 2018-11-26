@@ -8,6 +8,7 @@ import {ProfilePage} from "../profile/profile";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
 import {MyApp} from "../../app/app.component";
+import {FCMService} from "../../services/fcm";
 
 @Component({
   selector: 'page-home',
@@ -28,7 +29,7 @@ export class HomePage {
 
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
     , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
-              private network:Network, private notiServ:NotificationService
+              private network:Network, private notiServ:NotificationService,private fire:FCMService
               ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2) {}
 
   login(form:NgForm){
@@ -158,6 +159,7 @@ export class HomePage {
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
         this.navCtrl.setRoot('ProfilePage');
+        this.setupNotification();
       },
       err => {
         if(err.error == "FORBIDDEN"){
@@ -165,6 +167,7 @@ export class HomePage {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.navCtrl.setRoot('ProfilePage');
+          this.setupNotification();
         }else{
           this.load.dismiss();
           this.alertCtrl.create({
@@ -187,4 +190,43 @@ export class HomePage {
       this.passOn = false;
     }
   }
+
+  setupNotification(){
+    this.fire.getToken();
+
+    this.fire.onBackgroundNotification().subscribe(
+      data => {
+
+        console.log('Background');
+        if(data.page === "ReportPage"){
+          this.onLoadReport("ReportPage", data.reportName,data.reportId);
+        }else{
+          this.navCtrl.setRoot(data.page);
+        }
+
+      });
+
+    this.fire.onForgroundNotification().subscribe(
+      data => {
+        this.fire.setLocatNotification(data.gcm.title,data.gcm.body,JSON.parse(JSON.stringify(data)));
+        this.fire.onOpenLocalNotification().subscribe(
+          data => {
+            console.log(data);
+            console.log('Foreground');
+            if(data.data.page === "ReportPage"){
+              this.onLoadReport("ReportPage", data.data.reportName,data.data.reportId);
+            }else{
+              this.navCtrl.setRoot(data.data.page);
+            }
+
+          });
+      });
+  }
+
+  onLoadReport(page:any, pageName:any, reportId:any){
+    this.navCtrl.setRoot(page);
+    this.accountServ.reportPage = pageName;
+    this.accountServ.reportId = reportId;
+  }
+
 }

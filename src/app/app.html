@@ -31,7 +31,7 @@
         </button>
 
         <div class="contont">
-          <button ion-item icon-left *ngFor="let itm of customReportList; let i = index" class="item-Select"  (click)="onLoadReport(reportPage, itm.name, itm.id);onSelectView('reportPage'+i)" [id]="'reportPage'+i">
+          <button ion-item icon-left *ngFor="let itm of customReportList; let i = index" class="item-Select"  (click)="onLoadReport(reportPage, itm.name, itm.id);onSelectView('reportPage'+itm.id)" [id]="'reportPage'+itm.id">
             <ion-icon name="document" small></ion-icon>
             {{itm.name}}
           </button>

@@ -47,7 +47,7 @@ export class MyApp {
   customReportList:any = [];
 
   elementByClass:any = [];
-  oldPage = null;
+  public static oldPage = null;
   startApp = false;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
@@ -86,7 +86,7 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       this.startApp = true;
-      this.oldPage = 'profilePage';
+      MyApp.oldPage = 'profilePage';
       // document.getElementById('profilePage').classList.toggle("selected");
       // document.getElementById('logOutPage').classList.remove("selected");
     });
@@ -148,9 +148,9 @@ export class MyApp {
   }
 
   onLoadReport(page:any, pageName:any, reportId:any){
-    this.nav.setRoot(page);
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
+    this.nav.setRoot(page);
     this.menu.close();
   }
 
@@ -377,6 +377,7 @@ export class MyApp {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.nav.setRoot('ProfilePage');
+          this.setupNotification();
         }else {
           this.load.dismiss();
           this.nav.setRoot(this.homePage);
@@ -384,14 +385,18 @@ export class MyApp {
       });
   }
 
-  onSelectView(pageId){
+  public static onSelectView(pageId){
+    if(MyApp.oldPage!=null) {
+      document.getElementById(MyApp.oldPage).classList.remove("selected");
+    }
     document.getElementById(pageId).classList.toggle("selected");
-    if(this.oldPage!=null && this.oldPage!=pageId) {
-      document.getElementById(this.oldPage).classList.remove("selected");
-    }
-    if(this.oldPage!=pageId) {
-      this.oldPage = pageId;
-    }
+    // document.getElementById(pageId).classList.toggle("selected");
+    // if(MyApp.oldPage!=null && MyApp.oldPage!=pageId) {
+    //   document.getElementById(MyApp.oldPage).classList.remove("selected");
+    // }
+    // if(MyApp.oldPage!=pageId) {
+      MyApp.oldPage = pageId;
+    // }
   }
 
   setupNotification(){
@@ -417,7 +422,7 @@ export class MyApp {
 
             console.log('Foreground');
             if(data.data.page === this.reportPage){
-              this.onLoadReport(this.reportPage, data.reportName,data.reportId);
+              this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
             }else{
               this.nav.setRoot(data.data.page);
             }

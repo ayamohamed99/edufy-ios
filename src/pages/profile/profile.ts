@@ -6,6 +6,7 @@ import {Pendingnotification} from "../../models/pendingnotification";
 import {Storage} from "@ionic/storage";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
+import {MyApp} from "../../app/app.component";
 
 /**
  * Generated class for the ProfilePage page.
@@ -36,17 +37,7 @@ export class ProfilePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService
   ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
-    let intervaldata = setInterval(() => {
-      if (document.getElementById('profilePage')) {
-        if (!document.getElementById('profilePage').classList.contains("selected")) {
-          document.getElementById('profilePage').classList.toggle("selected");
-        }
-        if (document.getElementById('logOutPage').classList.contains("selected")) {
-          document.getElementById('logOutPage').classList.toggle("selected");
-        }
-      }
-      clearInterval(intervaldata);
-    },50);
+    MyApp.onSelectView('profilePage');
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -255,5 +246,19 @@ export class ProfilePage {
     document.getElementById("mySidenav").style.width = "0";
     document.getElementById("myAllnav").style.width = "0";
   }
+
+  // editMenuView(){
+  //   let intervaldata = setInterval(() => {
+  //     if (document.getElementById('profilePage')) {
+  //       if (!document.getElementById('profilePage').classList.contains("selected")) {
+  //         document.getElementById('profilePage').classList.toggle("selected");
+  //       }
+  //       if (document.getElementById('logOutPage').classList.contains("selected")) {
+  //         document.getElementById('logOutPage').classList.toggle("selected");
+  //       }
+  //     }
+  //     clearInterval(intervaldata);
+  //   },50);
+  // }
 
 }
