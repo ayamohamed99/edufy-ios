@@ -121,7 +121,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     CheckboxFunctionService,
     ReportCommentProvider,
     [DatePipe],TransFormDate,
-    FCMService,FirebaseMessaging,LocalNotifications
+    FCMService,FirebaseMessaging,
+    LocalNotifications
   ]
 })
 export class AppModule {

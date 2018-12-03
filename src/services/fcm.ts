@@ -22,8 +22,10 @@ export class FCMService{
   async getToken(){
     if(this.platform.is('ios')){
       await this.fcm.requestPermission().then(
-        token => {
-          this.regster(token);
+        tokens => {
+          this.fcm.getToken().then(token => {
+            this.regster(token);
+          });
       });
     }else {
       await this.fcm.getToken().then(token => {
@@ -39,7 +41,7 @@ export class FCMService{
   }
 
   regster(token){
-    console.log(token+",***********************,"+this.accountServ.userId);
+      console.log(token + ",***********************," + this.accountServ.userId);
   }
 
   onBackgroundNotification(){
@@ -47,10 +49,12 @@ export class FCMService{
   }
 
   onForgroundNotification(){
+    debugger;
     return this.fcm.onMessage();
   }
 
   setLocatNotification(title,body,data){
+    console.log("ForGround Notification : \n", data);
     let reportname,reportid ;
     if(data.page == "ReportPage") {
       reportname = data.reportName;

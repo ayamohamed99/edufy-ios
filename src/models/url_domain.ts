@@ -1,7 +1,7 @@
 
 export class Url_domain{
   // DEV from mobile
-  // static Domain = "http://";
+  // static Domain = "http://104.155.139.135:8080";
   //production from mobile
   // static Domain = "http://104.198.175.198";
   //local from mobile

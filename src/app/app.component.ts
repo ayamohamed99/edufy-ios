@@ -405,7 +405,7 @@ export class MyApp {
     this.fire.onBackgroundNotification().subscribe(
       data => {
 
-        console.log('Background');
+        console.log("Background Notification : \n", JSON.stringify(data));
         if(data.page === this.reportPage){
           this.onLoadReport(this.reportPage, data.reportName,data.reportId);
         }else{
@@ -416,10 +416,20 @@ export class MyApp {
 
     this.fire.onForgroundNotification().subscribe(
       data => {
-        this.fire.setLocatNotification(data.gcm.title,data.gcm.body,JSON.parse(JSON.stringify(data)));
+        debugger;
+        let title;
+        let body;
+        if(this.platform.is('ios')){
+          title = data.aps.alert.title;
+          body = data.aps.alert.body;
+        }else{
+          title = data.gcm.title;
+          body = data.gcm.body;
+        }
+        this.fire.setLocatNotification(title,body,JSON.parse(JSON.stringify(data)));
         this.fire.onOpenLocalNotification().subscribe(
           data => {
-
+            debugger;
             console.log('Foreground');
             if(data.data.page === this.reportPage){
               this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);

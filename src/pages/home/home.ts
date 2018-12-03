@@ -197,7 +197,7 @@ export class HomePage {
     this.fire.onBackgroundNotification().subscribe(
       data => {
 
-        console.log('Background');
+        console.log("Background Notification : \n", JSON.stringify(data));
         if(data.page === "ReportPage"){
           this.onLoadReport("ReportPage", data.reportName,data.reportId);
         }else{
@@ -208,9 +208,20 @@ export class HomePage {
 
     this.fire.onForgroundNotification().subscribe(
       data => {
-        this.fire.setLocatNotification(data.gcm.title,data.gcm.body,JSON.parse(JSON.stringify(data)));
+        debugger;
+        let title;
+        let body;
+        if(this.platform.is('ios')){
+          title = data.aps.alert.title;
+          body = data.aps.alert.body;
+        }else{
+          title = data.gcm.title;
+          body = data.gcm.body;
+        }
+        this.fire.setLocatNotification(title,body,JSON.parse(JSON.stringify(data)));
         this.fire.onOpenLocalNotification().subscribe(
           data => {
+            debugger;
             console.log(data);
             console.log('Foreground');
             if(data.data.page === "ReportPage"){
@@ -224,9 +235,9 @@ export class HomePage {
   }
 
   onLoadReport(page:any, pageName:any, reportId:any){
-    this.navCtrl.setRoot(page);
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
+    this.navCtrl.setRoot(page);
   }
 
 }
