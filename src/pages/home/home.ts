@@ -159,7 +159,7 @@ export class HomePage {
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
         this.navCtrl.setRoot('ProfilePage');
-        this.setupNotification();
+        // this.setupNotification();
       },
       err => {
         if(err.error == "FORBIDDEN"){
@@ -167,7 +167,7 @@ export class HomePage {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.navCtrl.setRoot('ProfilePage');
-          this.setupNotification();
+          // this.setupNotification();
         }else{
           this.load.dismiss();
           this.alertCtrl.create({

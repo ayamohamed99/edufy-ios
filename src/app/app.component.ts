@@ -369,7 +369,7 @@ export class MyApp {
         this.knowCustomReport(this.accountServ.getCustomReportsList());
         this.load.dismiss();
         this.nav.setRoot(this.profilePage);
-        this.setupNotification();
+        // this.setupNotification();
       },
       err => {
         if(err.error == "FORBIDDEN"){
@@ -377,7 +377,7 @@ export class MyApp {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.nav.setRoot('ProfilePage');
-          this.setupNotification();
+          // this.setupNotification();
         }else {
           this.load.dismiss();
           this.nav.setRoot(this.homePage);
