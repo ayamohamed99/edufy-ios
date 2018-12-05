@@ -6,13 +6,13 @@ export class Url_domain{
   // static Domain = "http://104.198.175.198";
   //local from mobile
   // static Domain = "http://192.168.1.100:8080";
-  //Proxy
-  static Domain = "http://104.198.175.198";
+  //for Proxy
+  static Domain = "";
   Domain = Url_domain.Domain;
 
 
   //      proxy
-  // "proxies": [
+  // ,"proxies": [
   //   {
   //     "path":"/oauth",
   //     "proxyUrl": "http://104.198.175.198/oauth"
@@ -21,8 +21,7 @@ export class Url_domain{
   //     "path":"/authentication",
   //     "proxyUrl": "http://104.198.175.198/authentication"
   //   }
-  //   ],
-  // "Production":"104.198.175.198"
+  //   ]
   // ionic cordova emulate ios --livereload -c --target="iPhone-6s, 12.0"
   // open /Volumes/BOOTCAMP/Mostafa/Edufy/platforms/ios/Edufy.xcodeproj
   // <preference name="iosPersistentFileLocation" value="Library" />

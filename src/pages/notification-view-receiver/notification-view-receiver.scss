@@ -1,9 +1,37 @@
 page-notification-view-receiver {
-  .mat-expansion-panel-body {
-    padding: 8px 8px 24px 16px;
-    background-color: #f7f9f9;
-    border-radius: 15px;
-    transition: all;
+
+  .ChartDataNumber{
+
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 24px;
+    text-align: center;
+    color: #7D7B7B;
+    margin: 8px 8px 0 0;
+
+  }
+
+  .ChartDataDescribtion{
+
+    ont-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 12px;
+    text-align: center;
+    color: #ABA9A9;
+    margin: 0 8px 0 0;
+
+  }
+
+  .ChartDataContainer{
+    padding: 0;
+  }
+
+  .ChartDataContainerDescrubtion{
+    padding-bottom: 10px;
   }
 
   .circleGreen:before {
@@ -24,9 +52,32 @@ page-notification-view-receiver {
     display: inline-block;
   }
 
+  .mat-expansion-panel {
+    border-radius: 15px;
+    transition: all;
+    margin-bottom: 8px;
+  }
+
   .mat-expansion-panel-header {
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 8px 8px 8px 8px;
+    background-color: #f4f4f4;
+    border-radius: 15px;
+    transition: all;
+  }
+
+  .mat-expansion-panel:not([class*=mat-elevation-z]) {
+    -webkit-box-shadow:  0 0px 0px 0px;
+    box-shadow: 0 0px 0px 0px;
+  }
+
+  .mat-expansion-panel-spacing {
+    margin: 16px 0;
+    padding-bottom: 17px;
   }
 
   .scroll-content {
@@ -35,12 +86,6 @@ page-notification-view-receiver {
 
   ion-card-header {
     font-weight: bold;
-  }
-
-  .mat-expansion-panel {
-    border-radius: 15px;
-    transition: all;
-    margin-bottom: 8px;
   }
 
   .S{

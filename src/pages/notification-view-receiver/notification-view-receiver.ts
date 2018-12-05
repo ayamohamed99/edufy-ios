@@ -26,6 +26,10 @@ export class NotificationViewReceiver {
   originalReceiverListStudents = [];
   branchesNumber = 0;
   classReceverList;
+  TotalNumOfReceivers;
+  SeenNumOfReceivers;
+  UnseenNumOfReceivers;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController,
               private accountServ:AccountService,private notificationServ:NotificationService,public load:LoadingController,
               public toastCtrl:ToastController,private platform:Platform,private file:File,private fileOpener: FileOpener) {
@@ -102,20 +106,23 @@ tempRList =[];
           this.norecievers = "No Receivers";
         }else {
           let intervaldata = setInterval(() => {
-            let seenNumb: number = 0;
-            let unseenNumb: number = 0;
+            this.TotalNumOfReceivers = 0;
+            this.SeenNumOfReceivers = 0;
+            this.UnseenNumOfReceivers = 0;
             ///GET SEEN AND UNSEEN FIRST
 
             for (let i = 0; i < this.originalReceiverListStudents.length; i++) {
               let num = this.originalReceiverListStudents[i]['studentlist'].length;
               for (let j = 0; j < num; j++) {
                 if (this.originalReceiverListStudents[i]['studentlist'][j].seenByParent || this.originalReceiverListStudents[i]['studentlist'][j].seenByStudent) {
-                  seenNumb += 1;
+                  this.SeenNumOfReceivers += 1;
                 } else {
-                  unseenNumb += 1;
+                  this.UnseenNumOfReceivers += 1;
                 }
               }
             }
+
+            this.TotalNumOfReceivers = this.SeenNumOfReceivers + this.UnseenNumOfReceivers;
             ///Put them in CHART.JS
             this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
 
@@ -124,7 +131,7 @@ tempRList =[];
                 labels: ["Seen", "UnSeen"],
                 datasets: [{
                   label: '# of Votes',
-                  data: [seenNumb, unseenNumb],
+                  data: [this.SeenNumOfReceivers, this.UnseenNumOfReceivers],
                   backgroundColor: [
                     "#1AC61F",
                     "#EC1B23"
