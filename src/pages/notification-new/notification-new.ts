@@ -512,6 +512,7 @@ export class NotificationNewPage {
           handler: () => {
             this.attachmentArray.splice(attachIndex, 1);
             this.arrayFormData.splice(attachIndex,1);
+            this.arrayToPostAttachment.splice(attachIndex,1);
           }
         }
       ]

@@ -59,6 +59,7 @@ page-notification-new {
   .fileContainer {
     overflow: hidden;
     position: relative;
+    border-radius: 8px;
   }
 
   .fileContainer [type=file] {
@@ -96,9 +97,15 @@ page-notification-new {
 
   .container .buttonOnImg {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #eee0;
+    top: -50px;
+    right: -50px;
+    padding: 0;
+    margin: 0;
+    height: 100px;
+    width: 100px;
+    //transform: rotate(20deg);
+    background: #ffffff;
+    border-radius: 50%;
   }
 
   .item{
@@ -119,6 +126,95 @@ page-notification-new {
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup {
     background-color: #cbcbcb;
     text-align: center;
+  }
+
+////////////////////////////////////
+  .cardClass{
+    border-radius: 15px;
+  }
+
+  .slide-zoom {
+    height: fit-content;
+    padding: 0;
+  }
+
+  ion-slides {
+    padding: 0;
+    height: fit-content;
+  }
+
+  .slideCard{
+    //background-color: #E5E5E5;
+  }
+  .swiper-slide, .swiper-wrapper {
+    width: 100%;
+    padding: 0;
+  }
+
+  .imgUrl{
+    height: 200px;
+    //width: 100%;
+    background: #eee0;
+    margin-bottom: 35px;
+  }
+
+  .imgAttach{
+    height: 200px;
+    background: #eee0;
+    margin-bottom: 35px;
+  }
+
+  .editInput{
+    max-width: 100%;
+    height: auto;
+    font-size: 2.4rem;
+  }
+
+  .editDescribtion{
+    max-width: 100%;
+    height: fit-content;
+  }
+
+  .text-input-ios{
+    margin: 0 0 16px 0;
+  }
+  .text-input-md{
+    margin: 0 0 8px 0;
+  }
+  .mat-form-field {
+    padding: 8px;
+    width: 100%;
+  }
+  .buttonEditCancel{
+    border-radius: 8px;
+    max-width: 47%;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 3px;
+    margin-left: 3px;
+  }
+
+  .buttonsRow{
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .fitTheView{
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #F4F4F4F4;
+  }
+
+  .closeInDiv{
+    -webkit-filter: invert(0.8);
+    filter: invert(0.8);
+    width: 20px;
+    left: 20px;
+    bottom: 20px;
+    position: absolute;
   }
 
 }

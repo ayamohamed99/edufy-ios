@@ -145,7 +145,6 @@ export class NotificationPage{
         model.present();
 
       }else if(data.done === 'newSuccess'){
-        debugger;
         this.fristOpen = false;
         this.loadNow = true;
         this.loading = this.load.create({

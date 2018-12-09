@@ -3,7 +3,7 @@
   <ion-navbar color="primary">
 
     <ion-buttons left>
-      <button ion-button icon-only (click)="createReceiversPdf()" *ngIf="receiverListStudents.length > 0">
+      <button ion-button icon-only (click)="createReceiversPdf()" [disabled]="receiverListStudents.length <= 0">
         <img src="assets/icon/download-from-cloud.png">
       </button>
     </ion-buttons>

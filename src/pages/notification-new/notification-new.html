@@ -1,18 +1,26 @@
 <ion-header>
 
   <ion-navbar color="primary">
+
+    <ion-buttons left>
+    <button style="width: 32px;height: 45px;" ion-button icon-only [disabled]="!activeSend()" (click)="sendNotification()">
+      <img src="assets/icon/upload-to-cloud.png">
+    </button>
+    </ion-buttons>
+
+    <ion-title>Send New Notification</ion-title>
+
     <ion-buttons end>
       <button ion-button icon-only (click)="close()">
         <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Send New Notification</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding style="background-color: #F4F4F4">
 
 
   <!--<rl-tag-input-->
@@ -45,22 +53,70 @@
     </ng-template>
   </ng-select>
 
-  <ion-item>
-  <ion-input type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></ion-input>
-  </ion-item>
 
-  <ion-item>
-  <ion-textarea rows="6" [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></ion-textarea>
-  </ion-item>
 
-  <ion-item *ngIf="accountServ.getUserRole().notificationTagView">
+  <ion-card class="cardClass">
+    <ion-slides pager *ngIf="attachmentArray && attachmentArray.length > 0" >
+      <ion-slide *ngFor="let item of attachmentArray; index as i">
+        <div class="container">
+          <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
+             item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
+             && item.type != 'VIDEO'">
+          <div class="buttonOnImg">
+            <img class="closeInDiv" style="height: 20px;" src="assets/icon/close.png" (click)="deleteAttach(i)">
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slides>
+
+
+    <mat-form-field>
+      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="3" *ngIf="attachmentArray.length>0" type="text" text-center id="titleBox" [(ngModel)]="Title" placeholder="Title"></textarea>
+      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="3" *ngIf="attachmentArray.length<=0" type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></textarea>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <textarea matInput class="editDescribtion" *ngIf="attachmentArray.length>0" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" text-center [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></textarea>
+      <textarea matInput class="editDescribtion" *ngIf="attachmentArray.length<=0" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" [type]="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></textarea>
+    </mat-form-field>
+
+
+    <ion-item>
+      <ion-avatar style="padding-left: 8px" item-start>
+        <img src="assets/imgs/profile.png">
+      </ion-avatar>
+      <ion-label text-capitalize>{{accountServ.getUserName()}}</ion-label>
+    </ion-item>
+  </ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <ion-item class="fitTheView" *ngIf="accountServ.getUserRole().notificationTagView">
     <ion-label class="textColor">Select Tag</ion-label>
     <ion-select [(ngModel)]="tags" multiple interface="popover">
       <ion-option *ngFor="let tag of tagsArr" >{{tag.name}}</ion-option>
     </ion-select>
   </ion-item>
 
-  <div style="height: 16px; background-color: white"></div>
+  <div style="height: 16px; background-color: #F4F4F4"></div>
 
   <button ion-button block outline class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
     Choose Files
@@ -73,33 +129,12 @@
     </ion-label>
   </div>
 
-      <ion-slides pager style="height: 316px; padding: 8px" *ngIf="attachmentArray && attachmentArray.length > 0" >
-        <ion-slide *ngFor="let item of attachmentArray; index as i">
-          <h3 padding-top="20px">{{item.name}}</h3>
-          <div class="container">
-            <img justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-            <img class="imgAttachPost" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
-             item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
-             && item.type != 'VIDEO'">
-           <ion-icon name="close-circle" class="buttonOnImg" (click)="deleteAttach(i)"></ion-icon>
-          </div>
-        </ion-slide>
-  </ion-slides>
-
-
-
-  <div style="height: 8px"></div>
-  <ion-row>
-    <button ion-button outline block style="width: calc(50% - 4px)" [disabled]="!activeSend()" (click)="sendNotification()">Send</button>
-    <span style="width: 8px"></span>
-    <button ion-button outline block style="width: calc(50% - 4px)" color="danger" (click)="close()">Cancel</button>
-  </ion-row>
+  <!--<div style="height: 8px"></div>-->
+  <!--<ion-row>-->
+    <!--<button ion-button outline block style="width: calc(50% - 4px)" [disabled]="!activeSend()" (click)="sendNotification()">Send</button>-->
+    <!--<span style="width: 8px"></span>-->
+    <!--<button ion-button outline block style="width: calc(50% - 4px)" color="danger" (click)="close()">Cancel</button>-->
+  <!--</ion-row>-->
 </ion-content>
 
 
