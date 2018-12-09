@@ -115,7 +115,7 @@ export class NotificationPage{
   ionViewDidLoad() {
   }
 
-  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any,attachmentListData:any, i:any){
+  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any,attachmentListData:any, i:any,notification:any){
     let popover = this.popoverCtrl.create('PopoverNotificationCardPage', {id:id, title:title, details:details});
 
     popover.onDidDismiss(data => {
@@ -133,8 +133,7 @@ export class NotificationPage{
       }else if (data.done === 'updateSuccess'){
         this.fristOpen = false;
         this.loadNow = true;
-        let model = this.modalCtrl.create('NotificationEditPage',{id:data.id,title:data.title,
-          details:data.details});
+        let model = this.modalCtrl.create('NotificationEditPage',{notification:notification});
         model.onDidDismiss(data=>{
           if(data.name != "dismissed") {
             this.notifications.splice(0);

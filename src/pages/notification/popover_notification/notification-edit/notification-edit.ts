@@ -21,14 +21,23 @@ export class NotificationEditPage {
   notificationID:number;
   notificationTitle:string;
   notificationDetails:string;
+  notificationAttach:any[] = [];
+  notificationUser:string;
+  TheNotification;
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams,public viewCtrl:ViewController,
-              public load:LoadingController, public alrtCtrl:AlertController, public notiServ:NotificationService,private platform:Platform) {
-    this.notificationID=this.navParams.get('id');
-    this.notificationTitle =this.navParams.get('title');
-    this.notificationDetails=this.navParams.get('details');
+              public load:LoadingController, public alrtCtrl:AlertController, public notiServ:NotificationService,
+              private platform:Platform) {
+    this.TheNotification=this.navParams.get('notification');
+    this.notificationID=this.TheNotification.notificationId;
+    this.notificationTitle =this.TheNotification.title;
+    this.notificationDetails=this.TheNotification.body;
+    this.notificationAttach = this.TheNotification.attachmentsList;
+    this.notificationUser = this.TheNotification.senderName;
+    console.log("Attacment");
+    console.log(this.TheNotification);
   }
 
   ionViewDidLoad() {
