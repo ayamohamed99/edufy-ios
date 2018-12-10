@@ -80,15 +80,18 @@ page-notification {
   .buttonShape .button {
     background: #ffffff00;
   }
+  .imgUrl{
+    height: 200px;
+    //width: 100%;
+    background: #eee0;
+    margin-bottom: 35px;
+  }
+
   .imgAttach{
     height: 200px;
     background: #eee0;
+    margin-bottom: 35px;
   }
-  .imgUrl{
-     height: 200px;
-     background: #eee0;
-   }
-
   ion-img{
     background: #eee0;
   }
@@ -96,30 +99,42 @@ page-notification {
   .card-md {
     border-radius: 15px;
     transition: all 1s ease-in-out;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   .card-lg{
     border-radius: 15px;
     transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   .card-xl{
     border-radius: 15px;
     transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   .card-sm{
     border-radius: 15px;
     transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   .card-xs{
     border-radius: 15px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   .card-ios {
     border-radius: 15px;
     transition: all 1s ease-in-out;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
   }
 
   ion-card{
@@ -171,6 +186,9 @@ page-notification {
 
 
   .scale-up-center {
+    //width: 100%;
+    position: relative;
+    text-align: -webkit-center;
     -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
     animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
   }
@@ -215,6 +233,124 @@ page-notification {
   @keyframes color_change {
     from { background-color: #ffffff; }
     to { background-color: #1DAF4C; }
+  }
+
+  .scale-up-center .buttonOnImg {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    padding: 0;
+    margin: 0;
+    height: 100px;
+    width: 100px;
+    z-index: 2;
+    //transform: rotate(20deg);
+    background: #ffffff;
+    border-radius: 50%;
+  }
+
+
+  .closeInDiv{
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 13px;
+    bottom: 11px;
+    font-size: 1.9rem;
+  }
+
+  .editDivView{
+    margin-bottom: 10px;
+    ion-fab[bottom][edge]{
+      bottom: -5px;
+      z-index: 1;
+    }
+  }
+
+
+
+
+  /////For Approve Button
+
+  $green: #1ECD97;
+  $gray: #bbbbbb;
+  //* {
+  //  font-family: 'Roboto', sans-serif;
+  //}
+  .containerApprove {
+    //position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -65px;
+    margin-top: -20px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+  }
+
+  .buttonApprove {
+    outline:none;
+    height: 25px;
+    text-align: center;
+    width: 25px;
+    border-radius:5px;
+    background: #fff;
+    border: 2px solid $green;
+    color:$green;
+    letter-spacing:1px;
+    //text-shadow:0;
+    font:{
+      size:12px;
+      weight:bold;
+    }
+    cursor: pointer;
+    transition: all 0.75s ease;
+    &:hover {
+      //color:white;
+      //background: $green;
+    }
+    &:active {
+      //letter-spacing: 2px;
+    }
+    &:after {
+      //font-family:'FontAwesome';
+      content:"\2713";
+    }
+  }
+  .onclic {
+    width: 25px;
+    border-radius:100%;
+    border-color:$gray;
+    border-width:3px;
+    font-size:12px;
+    border-left-color:$green;
+    animation: rotating 2s 0.25s linear infinite;
+
+    &:after {
+      content:"";
+    }
+    &:hover {
+      color:$green;
+      background: white;
+    }
+  }
+  .validate {
+    font-size:12px;
+    color: white;
+    background: $green;
+    &:after {
+      border-radius:5px;
+      content:"\2713";
+    }
+  }
+
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 }
 

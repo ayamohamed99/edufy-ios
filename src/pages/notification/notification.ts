@@ -115,8 +115,8 @@ export class NotificationPage{
   ionViewDidLoad() {
   }
 
-  onSelectCard(event:Event, id:number, title:string, details:string,reciversList:any,tagsList:any,attachmentListData:any, i:any,notification:any){
-    let popover = this.popoverCtrl.create('PopoverNotificationCardPage', {id:id, title:title, details:details});
+  onSelectCard(event:Event, i:any,notification:any){
+    let popover = this.popoverCtrl.create('PopoverNotificationCardPage', {notification:notification});
 
     popover.onDidDismiss(data => {
       if(data == null) {
@@ -130,6 +130,30 @@ export class NotificationPage{
         this.notificationService.putHeader(this.tokenKey);
         this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
+      }else if(data.done === 'restored'){
+        if(this.approved && data.archived === false){
+          this.notificationsApproved[i].archived = data.archived;
+        }else if(this.archived && data.archived === false){
+          this.notificationsArchived[i].archived = data.archived;
+          this.notificationsArchived.splice(i, 1);
+        }else if(this.sent && data.archived === false) {
+          this.notificationsSent[i].archived = data.archived;
+        }else if(!this.sent && !this.archived && this.approved && data.archived === false){
+          this.notifications[i].archived = data.archived;
+        }
+        this.presentToast(data.tostmsg);
+      }else if(data.done === 'archive'){
+        if(this.approved && data.archived === true){
+          this.notificationsApproved[i].archived = data.archived;
+        }else if(this.archived && data.archived === true){
+          this.notificationsArchived[i].archived = data.archived;
+          this.notificationsArchived.splice(i, 1);
+        }else if(this.sent && data.archived === true) {
+          this.notificationsSent[i].archived = data.archived;
+        }else if(!this.sent && !this.archived && this.approved && data.archived === true){
+          this.notifications[i].archived = data.archived;
+        }
+        this.presentToast(data.tostmsg);
       }else if (data.done === 'updateSuccess'){
         this.fristOpen = false;
         this.loadNow = true;
@@ -153,8 +177,8 @@ export class NotificationPage{
         });
         this.loading.present();
         this.NewNotification = false;
-        this.editAsNewAttachmentList = attachmentListData;
-        this.getNotificationReciver(id, title, details,reciversList,tagsList, i);
+        this.editAsNewAttachmentList = notification.attachmentsList;
+        this.getNotificationReciver(notification.notificationId, notification.title, notification.body,notification.recreceiversList,notification.tagsListName, i);
       }
       }
     });
@@ -326,8 +350,10 @@ export class NotificationPage{
             }
           }
           this.getSeencount(this.notificationIds, this.loading);
+          resolve();
         },
         err => {
+          resolve();
           this.loading.dismiss();
           this.alrtCtrl.create( {
             title: 'Error',
@@ -336,7 +362,7 @@ export class NotificationPage{
           }).present();
         },
         () => {
-          resolve();
+
         });
 
 
@@ -804,104 +830,13 @@ export class NotificationPage{
     }
   }
 
-
-  archiveNotification(index) {
-    let approvedNotification;
-    if(this.sent){
-      approvedNotification = this.notificationsSent[index];
-    }else if(this.approved){
-      approvedNotification = this.notificationsApproved[index];
-    }else if(this.archived){
-      approvedNotification = this.notificationsArchived[index];
-    }else {
-      approvedNotification = this.notifications[index];
-    }
-    // get select notification to
-    if (approvedNotification.approved == true) {
-      // archive it
-      if (approvedNotification.archived == true) {
-
-        let confirm = this.alrtCtrl.create({
-          message: "Do you want to restore this Notification? ",
-          buttons: [
-            {
-              text: 'No',
-              handler: () => {
-                console.log('Disagree clicked');
-              }
-            },
-            {
-              text: 'Yes',
-              handler: () => {
-                // select notification to approve it
-                let sentNotification = {
-                  "id": approvedNotification.notificationId,
-                };
-                this.loading = this.load.create({
-                  content: "Restoring Notification"
-                });
-                this.loading.present();
-
-                /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
-                this.notificationService.editNotification(sentNotification, 4).subscribe(
-                  (response) => {
-                    this.loading.dismiss();
-                    approvedNotification.archived = false;
-                    if(this.archived){
-                      this.notificationsArchived.splice(index, 1);
-                    }
-                    // this.notificationPage = 1;
-                    // this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-                    this.presentToast('Notification restored successfully.');
-                },  (reason) => {
-                    this.loading.dismiss();
-                    this.presentToast('Problem deleting notifications from archive.');
-                    console.error('Error: notification.module>NotificationCtrl>archiveNotification> cannot send notification -  ' + reason);
-                });
-              }
-            }
-          ]
-        });
-        confirm.present();
-      } else {
-        this.loading = this.load.create({
-          content: "Archive Notification"
-        });
-        this.loading.present();
-        /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
-        let sentNotification = {
-          "id": approvedNotification.notificationId,
-        };
-        // calling update service.
-        this.notificationService.editNotification(sentNotification, 3).subscribe(
-          (response) => {
-            this.loading.dismiss();
-            approvedNotification.archived = true;
-            // this.notificationPage = 1;
-            // this.getNotification(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-            this.presentToast('Notification archived successfully.');
-        },(reason) => {
-            this.loading.dismiss();
-            this.presentToast('Problem archiving notifications.');
-            console.error('Error: notification.module>NotificationCtrl>archiveNotification> cannot send notification -  ' + reason);
-        });
-      }
-    } else {
-      let confirm = this.alrtCtrl.create({
-        message: 'Notification need to be approved first.',
-        buttons: ['Ok']
-      });
-      confirm.present();
-    }
-  }
-
-
   approveNotification(index){
-    this.loading = this.load.create({
-      content: "Approving"
-    });
-    this.loading.present();
-
+    // this.loading = this.load.create({
+    //   content: "Approving"
+    // });
+    // this.loading.present();
+    let elButton = document.getElementById("buttonApprove"+index);
+    elButton.classList.add("onclic");
     let approvedNotification;
     if(this.sent){
       approvedNotification = this.notificationsSent[index];
@@ -926,7 +861,7 @@ export class NotificationPage{
           // calling send notification service.
           this.notificationService.editNotification(sentNotification, 2).subscribe(
             (response) => {
-              this.loading.dismiss();
+              // this.loading.dismiss();
               // removeProcessingMessage();
               // getNotificationNumFromServer();
               // $scope.currentPage = 1;
@@ -942,13 +877,8 @@ export class NotificationPage{
               // }
 
 
-              let elItem = document.getElementById("itemView"+index);
-              let elButton = document.getElementById("buttonView"+index);
-
-
-              elButton.style.backgroundColor = '#1DAF4C';
-              elButton.style.borderColor = '#ffffff';
-              elButton.style.color = '#ffffff';
+              elButton.classList.remove("onclic");
+              elButton.classList.add("validate");
 
               // elItem.style.maxHeight = "0px";
 
@@ -956,7 +886,7 @@ export class NotificationPage{
               // this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
             this.presentToast('Notification approved & sent successfully.');
           }, (reason) => {
-              this.loading.dismiss();
+              elButton.classList.remove("onclic");
               this.presentToast('Problem approving notifications.');
             console.error('Error: notification.module>NotificationCtrl>approveNotification> cannot send notification -  ' + reason);
           });
@@ -977,7 +907,7 @@ export class NotificationPage{
           this.notificationService.editNotification(sentNotification, 2).subscribe(
             (response) => {
               // approvedNotification.approved = true;
-              this.loading.dismiss();
+              // this.loading.dismiss();
               // removeProcessingMessage();
               // getNotificationNumFromServer();
               // $scope.currentPage = 1;
@@ -992,13 +922,8 @@ export class NotificationPage{
               }
 
 
-              let elItem = document.getElementById("itemView"+index);
-              let elButton = document.getElementById("buttonView"+index);
-
-
-              elButton.style.backgroundColor = '#1DAF4C';
-              elButton.style.borderColor = '#ffffff';
-              elButton.style.color = '#ffffff';
+              elButton.classList.remove("onclic");
+              elButton.classList.add("validate");
 
               // elItem.style.maxHeight = "0px";
               // this.notificationPage = 1;
@@ -1006,7 +931,7 @@ export class NotificationPage{
               this.presentToast('Notification approved & sent successfully.');
             // messageService.message("success", messageService.messageSubject.successApprovedNotification);
           },(reason) => {
-              this.loading.dismiss();
+              elButton.classList.remove("onclic");
             // removeProcessingMessage();
               this.presentToast('Problem approving notifications.');
             // messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
@@ -1027,7 +952,7 @@ export class NotificationPage{
       this.notificationService.editNotification(sentNotification, 2).subscribe(
         (response) => {
           // approvedNotification.approved = true;
-          this.loading.dismiss();
+          // this.loading.dismiss();
         // removeProcessingMessage();
         // getNotificationNumFromServer();
         // $scope.currentPage = 1;
@@ -1042,19 +967,15 @@ export class NotificationPage{
         //   }
 
 
-          let elItem = document.getElementById("itemView"+index);
-          let elButton = document.getElementById("buttonView"+index);
-
-          elButton.style.backgroundColor = '#1DAF4C';
-          elButton.style.borderColor = '#ffffff';
-          elButton.style.color = '#ffffff';
+          elButton.classList.remove("onclic");
+          elButton.classList.add("validate");
 
           // this.notificationPage = 1;
           // this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
           this.presentToast('Notification approved & sent successfully.');
         // messageService.message("success", messageService.messageSubject.successApprovedNotification);
       },(reason) => {
-          this.loading.dismiss();
+          elButton.classList.remove("onclic");
         // removeProcessingMessage();
           this.presentToast('Problem approving notifications.');
         // messageService.message("failed", messageService.messageSubject.failedApprovedNotification);
@@ -1184,8 +1105,10 @@ export class NotificationPage{
           }
         }
         this.getSeencount(this.notificationIds, this.loading);
+        refresher.complete();
       },
       err => {
+        refresher.complete();
         this.loading.dismiss();
         this.alrtCtrl.create( {
           title: 'Error',
@@ -1194,8 +1117,7 @@ export class NotificationPage{
         }).present();
       },
       () => {
-        refresher.complete();
+
       });
     }
-
 }

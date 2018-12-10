@@ -42,55 +42,57 @@
 
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
+            <ion-col *ngFor="let notify of notifications; let i = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+              <div class="editDivView">
               <ion-card class="scale-up-center">
-                <ion-item>
 
-                  <ion-item text-wrap class="lableInItem">{{notify.title}}</ion-item>
-                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i,notify)">
+                <div class="buttonOnImg">
+                  <button ion-button class="closeInDiv" clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
                     <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
                   </button>
-
-                </ion-item>
-                <div style="padding-left: 16px;">
-                  <h2 style="color: gray">{{notify.body}}</h2>
                 </div>
-                <ion-card-content>
-                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
-                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
-                      <h3>{{item.name.substring(17)}}</h3>
-                      <div style="text-align: -webkit-center;/">
-                        <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
-                      </div>
-                    </ion-slide>
-                  </ion-slides>
 
-                </ion-card-content>
+                <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
+                  <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                    <div style="text-align: -webkit-center;">
+                      <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+                      <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                    </div>
+                  </ion-slide>
+                </ion-slides>
 
-                <!--<div style="height: 8px; background-color: white"></div>-->
+                <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
-                <ion-item [id]="'itemView'+i" style="transition: all 1s ease-in-out;" *ngIf="accountServ.getUserRole().notificationCanApprove&&!notify.approved">
-                  <button [id]="'buttonView'+i"  item-end ion-button outline icon-start style="color: #1daf4c;border-color: #1daf4c;padding-right: 0;" (click)="approveNotification(i)"><ion-icon name="checkmark"></ion-icon></button>
-                </ion-item>
+
+                <div style="padding-left: 16px;">
+                  <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                  <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
+                </div>
 
                 <ion-item>
                   <ion-avatar item-start>
                     <img src="assets/imgs/profile.png">
                   </ion-avatar>
+
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+
+                  <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
+                    <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                  </div>
+
                   <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
                   <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                 </ion-item>
+
               </ion-card>
+            </div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -116,25 +118,19 @@
 
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsSent; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card class="scale-up-center">
-                <ion-item>
+            <ion-col *ngFor="let notify of notificationsSent; let i = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+              <div class="editDivView">
+                <ion-card class="scale-up-center">
 
-                  <ion-item text-wrap class="lableInItem">{{notify.title}}</ion-item>
-                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i,notify)">
-                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
-                  </button>
-                </ion-item>
-                <div style="padding-left: 16px;">
-                  <h2 style="color: gray">{{notify.body}}</h2>
-                </div>
-                <ion-card-content>
-                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                  <div class="buttonOnImg">
+                    <button ion-button class="closeInDiv" clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                    </button>
+                  </div>
+
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
                     <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
-                      <h3>{{item.name.substring(17)}}</h3>
-                      <div style="text-align: -webkit-center;/">
+                      <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
@@ -147,23 +143,32 @@
                     </ion-slide>
                   </ion-slides>
 
-                </ion-card-content>
+                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
-                <!--<div style="height: 8px; background-color: white"></div>-->
 
-                <ion-item [id]="'itemView'+i" style="transition: all 1s ease-in-out;" *ngIf="accountServ.getUserRole().notificationCanApprove&&!notify.approved">
-                  <button [id]="'buttonView'+i"  item-end ion-button outline icon-start style="color: #1daf4c;border-color: #1daf4c;padding-right: 0;" (click)="approveNotification(i)"><ion-icon name="checkmark"></ion-icon></button>
-                </ion-item>
+                  <div style="padding-left: 16px;">
+                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
+                  </div>
 
-                <ion-item>
-                  <ion-avatar item-start>
-                    <img src="assets/imgs/profile.png">
-                  </ion-avatar>
-                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-                  <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
-                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
-                </ion-item>
-              </ion-card>
+                  <ion-item>
+                    <ion-avatar item-start>
+                      <img src="assets/imgs/profile.png">
+                    </ion-avatar>
+
+                    <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
+                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
+                    <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                  </ion-item>
+
+                </ion-card>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -191,25 +196,19 @@
 
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsApproved; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card class="scale-up-center">
-                <ion-item>
+            <ion-col *ngFor="let notify of notificationsApproved; let i = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+              <div class="editDivView">
+                <ion-card class="scale-up-center">
 
-                  <ion-item text-wrap class="lableInItem">{{notify.title}}</ion-item>
-                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i,notify)">
-                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
-                  </button>
-                </ion-item>
-                <div style="padding-left: 16px;">
-                  <h2 style="color: gray">{{notify.body}}</h2>
-                </div>
-                <ion-card-content>
-                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                  <div class="buttonOnImg">
+                    <button ion-button class="closeInDiv" clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                    </button>
+                  </div>
+
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
                     <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
-                      <h3>{{item.name.substring(17)}}</h3>
-                      <div style="text-align: -webkit-center;/">
+                      <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
@@ -222,22 +221,32 @@
                     </ion-slide>
                   </ion-slides>
 
-                </ion-card-content>
+                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
-                <!--<div style="height: 8px; background-color: white"></div>-->
-                <ion-item [id]="'itemView'+i" style="transition: all 1s ease-in-out;" *ngIf="accountServ.getUserRole().notificationCanApprove&&!notify.approved">
-                  <button [id]="'buttonView'+i"  item-end ion-button outline icon-start style="color: #1daf4c;border-color: #1daf4c;padding-right: 0;" (click)="approveNotification(i)"><ion-icon name="checkmark"></ion-icon></button>
-                </ion-item>
 
-                <ion-item>
-                  <ion-avatar item-start>
-                    <img src="assets/imgs/profile.png">
-                  </ion-avatar>
-                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-                  <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
-                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
-                </ion-item>
-              </ion-card>
+                  <div style="padding-left: 16px;">
+                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
+                  </div>
+
+                  <ion-item>
+                    <ion-avatar item-start>
+                      <img src="assets/imgs/profile.png">
+                    </ion-avatar>
+
+                    <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
+                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
+                    <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                  </ion-item>
+
+                </ion-card>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -266,25 +275,19 @@
 
         <ion-grid>
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsArchived; let i = index" col-12 col-sm-6 col-xl-4 col-lg-6 col-md-4>
-              <ion-card class="scale-up-center">
-                <ion-item>
+            <ion-col *ngFor="let notify of notificationsArchived; let i = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+              <div class="editDivView">
+                <ion-card class="scale-up-center">
 
-                  <ion-item text-wrap class="lableInItem">{{notify.title}}</ion-item>
-                  <ion-icon item-end style="color: #7a7a7a;" name="bookmark" (click)="archiveNotification(i)" *ngIf="!notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <ion-icon item-end style="color: #488aff;" name="bookmark" (click)="archiveNotification(i)" *ngIf="notify.archived&&accountServ.getUserRole().archiveNotificationCreate"></ion-icon>
-                  <button ion-button clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event,notify.notificationId,notify.title,notify.body,notify.receiversList,notify.tagsListName,notify.attachmentsList, i,notify)">
-                    <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
-                  </button>
-                </ion-item>
-                <div style="padding-left: 16px;">
-                  <h2 style="color: gray">{{notify.body}}</h2>
-                </div>
-                <ion-card-content>
-                  <ion-slides pager style="height: 316px; padding: 8px" *ngIf="notify.attachmentsList.length>0" >
+                  <div class="buttonOnImg">
+                    <button ion-button class="closeInDiv" clear icon-only *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" class="buttonShape" ></ion-icon>
+                    </button>
+                  </div>
+
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
                     <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
-                      <h3>{{item.name.substring(17)}}</h3>
-                      <div style="text-align: -webkit-center;/">
+                      <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
                         <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
@@ -297,19 +300,32 @@
                     </ion-slide>
                   </ion-slides>
 
-                </ion-card-content>
+                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
-                <div style="height: 8px; background-color: white"></div>
 
-                <ion-item>
-                  <ion-avatar item-start>
-                    <img src="assets/imgs/profile.png">
-                  </ion-avatar>
-                  <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
-                  <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
-                  <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
-                </ion-item>
-              </ion-card>
+                  <div style="padding-left: 16px;">
+                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
+                  </div>
+
+                  <ion-item>
+                    <ion-avatar item-start>
+                      <img src="assets/imgs/profile.png">
+                    </ion-avatar>
+
+                    <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
+                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
+                    <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
+                  </ion-item>
+
+                </ion-card>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
