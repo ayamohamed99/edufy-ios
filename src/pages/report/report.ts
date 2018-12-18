@@ -268,8 +268,17 @@ export class ReportPage {
                 item.noOfStudentReportApproved = data.noOfStudentReportApproved[this.accountServ.reportId];
                 item.noOfStudentReportFinalized = data.noOfStudentReportFinalized[this.accountServ.reportId];
               }
-              item.noOfUnseenComments = data.noOfUnseenComments;
-              item.noOfUnseenReportComments = data.noOfUnseenReportComments;
+              if(this.accountServ.reportId == -1) {
+                item.noOfUnseenComments = data.noOfUnseenComments;
+              }else{
+                item.noOfUnseenComments = data.noOfUnseenReportComments[this.accountServ.reportId];
+              }
+
+            if(!data.totalNumberOfComments){
+              item.totalNumberOfComments = 0;
+            }else{
+              item.totalNumberOfComments = data.totalNumberOfComments;
+            }
               if(this.accountServ.reportId == -1) {
                 if (data.noOfAllStudent - data.noOfStudentDailyReportApproved == 0) {
                   item.allStudentApproved = true;
@@ -351,8 +360,17 @@ export class ReportPage {
             students.studentClass.branch.branchId = data[i].classes.branch.id;
             students.studentClass.branch.branchName = data[i].classes.branch.name;
             students.studentClass.branch.managerId = data[i].classes.branch.managerId;
-            students.numberOfUnseenComments = data[i].numberOfUnseenComments;
-            students.numberOfUnseenReportComments = data[i].numberOfUnseenReportComments;
+            if(this.accountServ.reportId == -1) {
+              students.numberOfUnseenComments = data[i].numberOfUnseenComments;
+            }else{
+              students.numberOfUnseenComments = data[i].numberOfUnseenReportComments[this.accountServ.reportId];
+            }
+
+            if(!data[i].totalNumberOfComments){
+              students.totalNumberOfComments = 0;
+            }else{
+              students.totalNumberOfComments = data[i].totalNumberOfComments;
+            }
             students.studentId = data[i].id;
             students.studentName = data[i].name;
             students.studentAddress = data[i].address;
@@ -1771,9 +1789,9 @@ export class ReportPage {
   shouldHighlightComment(stud) {
 
     if(stud instanceof Class){
-      return this.reportId ? stud.noOfUnseenReportComments[this.reportId] > 0 : stud.noOfUnseenComments > 0;
+      return this.reportId ? stud.noOfUnseenComments > 0 : stud.noOfUnseenComments > 0;
     }else {
-      return this.reportId ? stud.numberOfUnseenReportComments[this.reportId] > 0 : stud.numberOfUnseenComments > 0;
+      return this.reportId ? stud.noOfUnseenComments > 0 : stud.numberOfUnseenComments > 0;
     }
   }
 }

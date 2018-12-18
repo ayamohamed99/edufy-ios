@@ -75,7 +75,7 @@ export class ReportTemplatePage{
                   'Normal', 'On_off', 'Quiet','Sad', 'Sick', 'Sleepy', 'Tired', 'Unhappy', 'Very Good'];
   reportSaveORupdates = false;
   checkIfChangesAnswer = false;
-
+  showBackDrop = false;
 
   ///////////////////// HERE ORGANIZE THE VIEW//////////////////////
   showNames(){

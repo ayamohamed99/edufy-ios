@@ -41,6 +41,10 @@ export class NotificationPage{
   notificationsSent:Notification[] = [];
   notificationsApproved:Notification[] = [];
   notificationsArchived:Notification[] = [];
+  noNOtifications = false;
+  noNotificationsSent = false;
+  noNotificationsApproved = false;
+  noNotificationsArchived = false;
   notificationPage=1;
   notificationIds = [];
   loading:any;
@@ -291,6 +295,17 @@ export class NotificationPage{
             this.notifications.push(notify);
           }
         }
+
+        if (this.approved && this.notificationsApproved.length <= 0) {
+          this.noNotificationsApproved = true;
+        } else if (this.archived && this.notificationsArchived.length <= 0) {
+          this.noNotificationsArchived = true;
+        } else if (this.sent && this.notificationsSent.length <= 0) {
+          this.noNotificationsSent = true;
+        } else if(!this.sent && !this.archived && !this.approved && this.notifications.length <= 0) {
+          this.noNOtifications = true;
+        }
+
         this.getSeencount(this.notificationIds, this.loading);
       },
       err => {

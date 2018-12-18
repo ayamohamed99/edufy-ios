@@ -1,31 +1,85 @@
 page-report {
   .contentColor{
-    background: #e5e5e5;
+    background: #F4F4F4;
   }
 
-  .mat-expansion-panel-body {
-    padding: 0 0px 16px;
-    background: #e5e5e5;
+  .mainDiv{
+    margin-top: 10px;
   }
 
-  .container{
-
+//////////////////////////////////////Students Card
+  .divStudent{
+    height: 70px;
   }
 
-  .fa-arrow-down{
-    padding-right: 5px;
-    padding-left: 0;
-    -webkit-transform: rotate(0deg);
-    transition: transform 0.2s linear;
+  .studentCard{
+    height: 50px;
+    padding: 5px;
+    width: calc(100% - 15px);
+    //display:inline-block;
+    border-radius: 15px;
+    //margin-bottom: 15px;
   }
 
-
-  .fa-arrow-down.open{
-    padding-left: 5px;
-    padding-right: 0;
-    -webkit-transform: rotate(180deg);
-    transition: transform 0.2s linear;
+  .mat-checkbox-inner-container {
+    border-radius: 50%;
+    position: relative;
+    width: 21px;
+    height: 21px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #c8c7cc;
+    background-color: #fff;
   }
+  .checkboxInCard {
+    display:inline-block;
+    padding-top: 6px;
+    padding-bottom: 10px;
+  }
+  .checkbox-ios .checkbox-icon {
+    margin-top: 2.5px;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .checkbox-ios .checkbox-checked {
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  .avaterInCard{
+    height: 40px;
+    width: 40px;
+    padding-left: 10px;
+    padding-top: 5px;
+    -moz-border-radius: 20px;
+    display:inline-block;
+  }
+  .imgInAvatar{
+    border-radius: 100px;
+  }
+
+  .card-md {
+    margin-top: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-ios {
+    margin-top: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  ion-card {
+    display: flow-root;
+    overflow: inherit;
+    z-index: 0;
+  }
+////////////////////////////////End Of Students Card
+
+////////////////////////////////Students State
   .circleGreen {
     margin-left: 5px;
     margin-right: 5px;
@@ -52,107 +106,138 @@ page-report {
     vertical-align: middle;
     display: inline-block;
   }
+////////////////////////End Of Students State
 
-  .mat-expansion-panel-body {
-    padding: 8px 8px 24px 16px;
-    background-color: #f7f9f9;
-    border-radius: 15px;
-    transition: all;
+
+////////////////////////Arrows In Mat Expansion
+  .fa-arrow-down{
+    padding-right: 5px;
+    padding-left: 0;
+    -webkit-transform: rotate(0deg);
+    transition: transform 0.2s linear;
   }
 
+
+  .fa-arrow-down.open{
+    padding-left: 5px;
+    padding-right: 0;
+    padding-top: 8px;
+    -webkit-transform: rotate(180deg);
+    transition: transform 0.2s linear;
+  }
+
+////////////////////////////End Of Arrows In Mat Expansion
+
+
+////////////////////////////////////////////Mat Expansion Classes
+
+  .mat-expansion-panel-body {
+    padding: 8px 8px 8px 8px;
+    background-color: #F4F4F4;
+    border-radius: 10px;
+    transition: all;
+  }
   .mat-expansion-panel-header {
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     padding: 8px 10px;
+    display: block;
     max-height: 70px !important;
 
     min-height: 48px !important;
     height: fit-content !important;
   }
   .mat-expansion-panel {
-    border-radius: 15px;
+    border-radius: 10px;
     transition: all;
-    margin-bottom: 8px;
+    margin-bottom: 20px;
   }
 
+  .mat-expansion-panel:not([class*=mat-elevation-z]) {
+    margin-bottom: 20px;
+    box-shadow: 0 0 0 0;
+  }
+  .mat-accordion .mat-expansion-panel-spacing{
+    padding-bottom: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .mat-accordion .mat-expansion-panel-spacing:last-child {
+    margin-bottom: 20px;
+  }
+
+/////////////////////////////////////////////////////////////////////// End Of Mat Expansion
+
+/////////////////////////////////////////////Seen And UnSeen
   .unseen-comments-count-active {
+    top: -7px;
+    right: -5px;
     height: 22px;
     position: relative;
-    padding: 2px 6px;
+    padding: 2px 7px;
     color: white;
-    background: #AE2534;
-    border-radius: 25px;
+    background: #468847;
     float: right;
     display: inline-block;
     z-index: 1;
-    &:before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      bottom: -3px;
-      right: -7px;
-      height: 15px;
-      border-right: 20px solid #AE2534;
-      border-bottom-left-radius: 16px 14px;
-      -webkit-transform: translate(0, -2px);
-    }
-
-    &:after {
-      content: "";
-      position: absolute;
-      z-index: 0;
-      bottom: -4px;
-      right: -55px;
-      width: 25px;
-      height: 18px;
-      background: white;
-      border-bottom-left-radius: 10px;
-      -webkit-transform: translate(-30px, -1px);
-    }
+    border-radius: 100px;
+    margin-bottom: -20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   }
   .unseen-comments-count-inactive {
+    top: -7px;
+    right: -5px;
+    margin-bottom: -20px;
     height: 22px;
     position: relative;
-    padding: 2px 6px;
+    padding: 2px 7px;
     color: white;
-    background: #C8C5C5;
-    border-radius: 25px;
+    background: #346597;
     float: right;
     display: inline-block;
     z-index: 1;
+    border-radius: 100px;
+    box-shadow: 0 0 0 0;
+  }
 
-    &:before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      bottom: -3px;
-      right: -7px;
-      height: 15px;
-      border-right: 20px solid #C8C5C5;
-      border-bottom-left-radius: 16px 14px;
-      -webkit-transform: translate(0, -2px);
+  .comments-count-active-inactive {
+    top: -15px;
+    right: -12px;
+    margin-bottom: -20px;
+    height: 22px;
+    position: relative;
+    padding: 0;
+    float: right;
+    display: block;
+    z-index: 1;
+    border-radius: 100px;
+    box-shadow: 0 0 0 0;
+    overflow: auto;
+
+    .comments-count-inactive{
+      height: 22px;
+      position: relative;
+      padding: 3px 7px;
+      display: inline-block;
+      z-index: 1;
+      color: white;
+      background: #346597;
     }
 
-    &:after {
-      content: "";
-      position: absolute;
-      z-index: 0;
-      bottom: -4px;
-      right: -55px;
-      width: 25px;
-      height: 18px;
-      background: white;
-      border-bottom-left-radius: 10px;
-      -webkit-transform: translate(-30px, -1px);
+    .comments-count-active{
+      height: 22px;
+      position: relative;
+      padding: 3px 7px;
+      float: right;
+      display: inline-block;
+      z-index: 1;
+      color: white;
+      background: #468847;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
   }
-  .unseen-comments-container {
-    padding-bottom: 5px;
-    margin-right: 5px;
-    display: flex;
-    align-items: center;
-    margin-left: 2px;
-  }
+
+  /////////////////////////////////////////////End Of Seen And UnSeen
 
 }
 

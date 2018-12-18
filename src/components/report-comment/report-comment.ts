@@ -3,8 +3,9 @@ import {ReportCommentProvider} from "../../providers/report-comment/report-comme
 import {ReportComment} from "../../models/reportComment";
 import {Student} from "../../models";
 import {AccountService} from "../../services/account";
-import {ActionSheetController, ToastController} from "ionic-angular";
+import {ActionSheetController, Platform, ToastController} from "ionic-angular";
 import {animate, group, query, style, transition, trigger} from "@angular/animations";
+import {Storage} from "@ionic/storage";
 
 /**
  * Generated class for the ReportCommentComponent component.
@@ -93,7 +94,8 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   @ViewChild('commentsContainer') private commentsContainer: any;
 
   constructor(private commentsProvider: ReportCommentProvider, public accountService: AccountService,
-              public actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController) {
+              public actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController,
+              public storage:Storage, private platform:Platform) {
     if (this.reportId == undefined || this.reportId == null) {
       this.shouldShowComments = this.accountService.getUserRole().dailyReportCommentView;
       this.canSubmitComment = this.accountService.getUserRole().dailyReportCommentCreate;
@@ -105,6 +107,17 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
       this.canDeleteComment = this.accountService.getUserRole().dailyReportCommentDelete;
       this.canEditComment = this.accountService.getUserRole().dailyReportCommentEdit;
     }
+
+
+    if (platform.is('core')) {
+      this.commentsProvider.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
+    } else {
+      storage.get('LOCAL_STORAGE_TOKEN').then(
+        val => {
+          this.commentsProvider.putHeader(val);
+        });
+    }
+
 
   }
 

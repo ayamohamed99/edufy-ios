@@ -123,6 +123,6 @@ export class ReportCommentProvider {
   }
 
   putHeader(value) {
-    this.httpHeader = new HttpHeaders({'Authorization': value})
+    this.httpHeader = new HttpHeaders({'Authorization': value});
   };
 }

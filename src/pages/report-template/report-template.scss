@@ -1,7 +1,11 @@
 page-report-template {
 
   .contentColor{
-    background: #e5e5e5;
+    background: #f4f4f4;
+  }
+
+  .mainDiv{
+    padding-bottom: 20px;
   }
 
   .select-md .select-icon {
@@ -12,34 +16,398 @@ page-report-template {
     padding-right: 16px;
   }
 
-  button[ion-fab] {
-    -moz-appearance: none;
-    -ms-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    overflow: visible;
-    position: relative;
-    //box-shadow: 5px 5px 5px grey;
 
-    ion-label {
-      -moz-appearance: none;
-      -ms-appearance: none;
-      -webkit-appearance: none;
-      position: absolute;
-      top: -8px;
-      right: 40px;
-      color: #000000;
-      background-color: rgb(255, 255, 255);
-      line-height: 24px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      box-shadow: 1px 1px 1px grey;
-    }
-  }
-
+///////////////////////////Edit Ion-Fab
   button[ion-fab][mini]{
     padding: 8px;
   }
+
+  ion-fab-list[side=leftTop] {
+    margin: -73px 79px;
+    right: 0;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    button[ion-fab] {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+
+      ion-label {
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        position: absolute;
+        top: 31px;
+        right: -8px;
+        color: #000000;
+        background-color: white;
+        line-height: 16px;
+        padding: 3px 5px;
+        border-radius: 4px;
+        -webkit-box-shadow: 1px 1px 1px grey;
+        box-shadow: 1px 1px 1px grey;
+      }
+    }
+  }
+
+  ion-fab-list[side=top] {
+    top: auto;
+    bottom: 39px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: column-reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 20px;
+      height: 20px;
+    }
+    button[ion-fab] {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+
+      ion-label {
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        position: absolute;
+        top: 31px;
+        right: -15px;
+        color: #000000;
+        background-color: white;
+        line-height: 16px;
+        padding: 3px 5px;
+        border-radius: 4px;
+        -webkit-box-shadow: 1px 1px 1px grey;
+        box-shadow: 1px 1px 1px grey;
+      }
+    }
+  }
+
+
+  .forSave{
+    ion-label {
+      right: -8px !important;
+    }
+  }
+
+  ion-fab-list[side=left] {
+    margin: 0px 100px;
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 25px;
+      height: 25px;
+    }
+    button[ion-fab] {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+
+      ion-label {
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        position: absolute;
+        top: 31px;
+        right: -21px;
+        color: #000000;
+        background-color: white;
+        line-height: 16px;
+        padding: 3px 5px;
+        border-radius: 4px;
+        -webkit-box-shadow: 1px 1px 1px grey;
+        box-shadow: 1px 1px 1px grey;
+      }
+    }
+  }
+
+//////////////////////////////End Of Edit Ion-Fab
+
+/////////////////////////////Report Question
+  .mainDivQuestion{
+    padding-bottom: 20px;
+  }
+
+  .ErrorIcon{
+    float: right;
+    font-size: 1.8em;
+    position: relative;
+    margin-bottom: -12px;
+    right: -11px;
+    top: 1px;
+    //-webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .questionCard{
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .questionCardElse{
+    border-radius: 10px;
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .questionTitle{
+    background-color: #5c87f7;
+    .formLabel{
+      background-color: #5c87f7;
+      color: white;
+      padding: 10px;
+    }
+
+    .formLabelTen{
+      background-color: #5c87f7;
+      color: white;
+      padding: 10px;
+      width: calc(100% - 105px);
+      display: inline-block;
+    }
+    .createButton{
+      color: white;
+      float: right;
+      display: inline;
+    }
+    .cancelButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 55px;
+    }
+    .saveButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 42px;
+    }
+  }
+
+  .questionBodyMULTI_SHORT_TEXT_ONE_VIEW_SELECTED{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    .divRadioButton{
+      margin-right: 31px;
+    }
+  }
+
+  .questionBodyLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    margin-bottom: -1px;
+  }
+
+  .questionBody{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    .custom-Field_QOne{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+    }
+
+    .custom-Field_QThree{
+      .mat-form-field-infix {
+        width: fit-content;
+        padding: 0;
+
+        input{
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-bottom: 0 !important;
+          top: 0 !important;
+        }
+      }
+    }
+
+    .custom-Field_QFour{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QSix{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QEight{
+      width: 100%;
+      margin-top: -18px;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QNine{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    .custom-Field_QTen{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    .custom-Field_QTwelve{
+      width: 70px;
+      margin-top: 15px;
+      margin-right: 25px;
+    }
+
+    .divElevenCheckbox{
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+    .divElevenButtonIcon{
+      height: 25px;
+      width: 25px;
+      padding: 0;
+      bottom: 5px;
+      float: right;
+    }
+    .divElevenInput{
+      display: inline-block;
+      width: 100%;
+    }
+    .divElevenOfInput{
+      width: calc(100% - 50px);
+      height: 40px;
+      padding: 0;
+    }
+    .divElevenOfInputButton{
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      margin: 0;
+      float: right;
+    }
+    .radioButtonOfDropMenu{
+      .radio{
+        margin-right: 20px;
+        margin-bottom: 10px;
+        .mat-radio-outer-circle {
+          border-width: 1px;
+          border-radius: 50%;
+          border-color: #b4b4b4;
+          -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+      }
+    }
+
+  }
+
+/////////////////////////////End of Report Question
+
 
   .select-md .select-placeholder {
     color: #222;
@@ -76,98 +444,124 @@ page-report-template {
     color: #488aff;
     font-size: 18px;
   }
-
+/////////////////////////////////////////Edit All Mat Checkboxes
   .checkbox{
-    -webkit-appearance: none;
-    border-radius: 50%;
-    position: relative;
-    width: 21px;
-    height: 21px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #c8c7cc;
-    background-color: #fff;
-    top: 5px;
+    .mat-checkbox-frame {
+      border-width: 1px;
+      border-radius: 5px;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    .mat-checkbox-background {
+      border-radius: 5px;
+    }
+
   }
 
-  .checkbox:checked::before
-  {
-    content: '';
-    left: 7px;
-    top: 4px;
-    position: absolute;
-    width: 4px;
-    height: 9px;
-    border-width: 1px;
-    border-top-width: 0;
-    border-left-width: 0;
-    border-style: solid;
-    border-color: #fff;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #a0a0a0;
   }
 
-  .checkbox:checked
-  {
-    border-color: #488aff;
-    background-color: #488aff;
+  .mat-checkbox-input.cdk-visually-hidden.cdk-focused.cdk-program-focused{
+    color: #A0A0A0;
   }
+  .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+/////////////////////////////////////////End Of Edit All Mat Checkboxes
 
 
+/////////////////////////////////////////Edit All Mat RadioButtons
   .radio{
-    -webkit-appearance: none;
-    left: 0;
-    top: 0;
-    margin: 0;
-    border-radius: 50%;
-    position: relative;
-    //display: block;
-    width: 16px;
-    height: 16px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: #787878;
-    margin-top: auto;
-    margin-bottom: auto;
+
+    .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
   }
 
-  .radio:checked::before
-  {
-    //position: absolute;
-    //font: 11px/1 'Open Sans', sans-serif;
-    //left: 4px;
-    //top: -1px;
-    //width: 4px;
-    //height: 9px;
-    content: '';
-    left: 2px;
-    top: 2px;
-    border-radius: 50%;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background-color: #488aff;
-    -webkit-transform: scale3d(0, 0, 0);
-    transform: scale3d(0, 0, 0);
-    -webkit-transition: -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    transition: -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1), -webkit-transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
-
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-
-  .radio:checked
-  {
-    border-color: #488aff;
-  }
-
-  .longOneAnswer{
+  .radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
     display: block;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
   }
 
+  .radioNine{
+    margin-right: 20px;
+    margin-bottom: 10px;
+    .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+  }
+
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #a0a0a0;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #a0a0a0;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #a0a0a0;
+  }
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #a0a0a0;
+  }
+  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  .mat-ripple-element {
+    background-color: rgba(0,0,0,.1);
+  }
+///////////////////////////////////////End Of Edit All Mat RadioButtons
+
+//////////////////////////////////////Organize Radio - CheckBox
+  .LoopManyCheckWithEdit{
+    display:inline-block;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .LopContain{
+    display:inline-block;
+    padding-right: 0;
+    width: 50%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .LoopContainWithoutWidth{
+    display:inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+///////////////////////////////////////End Of Organize Radio - CheckBox
 
 
   butonOfEdit{
@@ -208,20 +602,6 @@ page-report-template {
 
   .label-as-badge {
     border-radius: 1em;
-  }
-
-  .LopContain{
-    display:inline-block;
-    padding-right: 0;
-    width: 50%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-
-  .LoopContainWithoutWidth{
-    display:inline-block;
-    padding-top: 10px;
-    padding-bottom: 10px;
   }
 
   .inline-group{
