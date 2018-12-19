@@ -9,6 +9,17 @@ page-notification-edit {
     width: 100%;
   }
   .cardClass{
+    position: relative;
+    text-align: -webkit-center;
+    border-radius: 15px;
+  }
+  .card-ios {
+    position: relative;
+    text-align: -webkit-center;
+    border-radius: 15px;
+  }
+
+  .swiper-container {
     border-radius: 15px;
   }
 
