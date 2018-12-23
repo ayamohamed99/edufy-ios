@@ -26,6 +26,7 @@ export class AccountService{
   thisCore:boolean;
   private customReportsValue:any = [];
   private customReportsList:any = [];
+  private _userBranchId: number;
 
   private _reportPage:string;
   private _reportId:any;
@@ -75,6 +76,7 @@ export class AccountService{
     this.userName = this.value.name;
     this.userUserName = this.value.username;
     this.userAddress = this.value.address;
+    this.userBranchId = this.value.branchId;
     this._accountBranchesList =this.value.branchesList;
     for(let branch of this.value.branchesList){
       this._accountBranchesListIds.push(branch.id);
@@ -189,4 +191,13 @@ export class AccountService{
   set userId(value: number) {
     this._userId = value;
   }
+
+  get userBranchId(): number {
+    return this._userBranchId;
+  }
+
+  set userBranchId(value: number) {
+    this._userBranchId = value;
+  }
+
 }

@@ -8,13 +8,17 @@ import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
 import {AccountService} from "./account";
 import {Platform} from "ionic-angular";
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import {LoginService} from "./login";
 
 @Injectable()
 export class FCMService{
 
   DomainUrl:Url_domain;
+  Token;
 
-  constructor(private http: HttpClient,private accountServ:AccountService,private fcm: FirebaseMessaging,private localNotifications: LocalNotifications,private platform:Platform) {
+
+  constructor(private http: HttpClient,private accountServ:AccountService,private fcm: FirebaseMessaging,
+              private localNotifications: LocalNotifications,private platform:Platform,private loginServ:LoginService) {
     this.DomainUrl=new Url_domain();
   }
 
@@ -24,24 +28,45 @@ export class FCMService{
       await this.fcm.requestPermission().then(
         tokens => {
           this.fcm.getToken().then(token => {
-            this.regster(token);
+            this.Token = token;
+            this.sendTokenToServer();
           });
       });
     }else {
       await this.fcm.getToken().then(token => {
-        this.regster(token);
+        this.Token = token;
+        this.sendTokenToServer();
       });
     }
   }
 
   async refreshToken(){
     await this.fcm.onTokenRefresh().subscribe(token => {
-      this.regster(token);
+      this.Token = token;
+      this.sendTokenToServer();
     });
   }
 
-  regster(token){
-      console.log(token + ",***********************," + this.accountServ.userId);
+  sendTokenToServer(){
+    console.log(this.Token + ",***********************," + this.accountServ.userId + "*************" + this.accountServ.userBranchId);
+    const httpOptions =  {
+      headers: new HttpHeaders({
+        'Authorization' : this.loginServ.accessToken
+      })};
+
+    const body = {
+      "branchId":this.accountServ.userBranchId,
+      "userId":this.accountServ.userId,
+      "gcmRegKey":this.Token
+    };​
+
+    this.http.post(this.DomainUrl.Domain+"/authentication/regedufyfcmtoken.ent",body,httpOptions).subscribe(
+      (val) =>{
+        console.log(val);
+      },(err)=>{
+        console.log(err);
+        this.sendTokenToServer();
+      });
   }
 
   onBackgroundNotification(){

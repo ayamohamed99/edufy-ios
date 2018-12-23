@@ -32,6 +32,7 @@ export class LoginService {
 
 
   authenticateUserManager(accessToken:string,subHeader:string){
+    this.accessToken = subHeader;
     const httpOptions =  {
       headers: new HttpHeaders({
         // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
