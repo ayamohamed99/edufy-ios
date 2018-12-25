@@ -20,7 +20,6 @@ import {DailyReportService} from "../../services/dailyreport";
 import {ReportTemplatePage} from "../report-template/report-template";
 import {ReportCommentProvider} from "../../providers/report-comment/report-comment";
 import {TransFormDate} from "../../services/transFormDate";
-import {MyApp} from "../../app/app.component";
 
 @IonicPage()
 @Component({
@@ -97,14 +96,12 @@ export class ReportPage {
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
               private toastCtrl:ToastController, private modalCtrl:ModalController,private reportComment:ReportCommentProvider,public transformDate:TransFormDate) {
     if(this.accountServ.reportId == -1){
-      MyApp.onSelectView("dailyReportPage");
       this.reportAnswer = {
         // to show the well of comments to spacific
         // student according to its index
         "dailyReportAnswersObjectsList": []
       };
     }else{
-      MyApp.onSelectView("reportPage"+this.accountServ.reportId);
       this.reportAnswer = {
         // to show the well of comments to spacific
         // student according to its index

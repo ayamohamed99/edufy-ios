@@ -6,7 +6,6 @@ import {Pendingnotification} from "../../models/pendingnotification";
 import {Storage} from "@ionic/storage";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
-import {MyApp} from "../../app/app.component";
 
 /**
  * Generated class for the ProfilePage page.
@@ -37,7 +36,6 @@ export class ProfilePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService
   ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
-    MyApp.onSelectView('profilePage');
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();

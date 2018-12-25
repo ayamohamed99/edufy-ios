@@ -7,7 +7,6 @@ import {AccountService} from "../../services/account";
 import {ProfilePage} from "../profile/profile";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
-import {MyApp} from "../../app/app.component";
 import {FCMService} from "../../services/fcm";
 
 @Component({

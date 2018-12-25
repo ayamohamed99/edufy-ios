@@ -30,6 +30,7 @@ export class MyApp {
   notificationPage = 'NotificationPage';
   settingsPage = 'SettingsPage';
   reportPage = 'ReportPage';
+  chatPage = 'ChatPage';
 
   userName:string;
   password:string;
@@ -44,10 +45,11 @@ export class MyApp {
   appearNotification:boolean = false;
   appearDailyReport:boolean = false;
   appearCustomReport:boolean = false;
+  appearChat:boolean = false;
   customReportList:any = [];
 
   elementByClass:any = [];
-  public static oldPage = null;
+  oldPage = null;
   startApp = false;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
@@ -86,9 +88,15 @@ export class MyApp {
       statusBar.styleDefault();
       splashScreen.hide();
       this.startApp = true;
-      MyApp.oldPage = 'profilePage';
       // document.getElementById('profilePage').classList.toggle("selected");
       // document.getElementById('logOutPage').classList.remove("selected");
+      this.nav.viewWillEnter.subscribe(
+        page=>{
+          console.log(page);
+          this.onSelectView(page.name);
+        },err=>{
+          console.log(err);
+        });
     });
   }
 
@@ -190,8 +198,8 @@ export class MyApp {
 
     }
 
-    document.getElementById('profilePage').classList.toggle("selected");
-    document.getElementById('logOutPage').classList.remove("selected");
+    // document.getElementById('ProfilePage').classList.toggle("selected");
+    // document.getElementById('logOutPage').classList.remove("selected");
 
   }
 
@@ -348,6 +356,12 @@ export class MyApp {
       this.appearDailyReport = false;
     }
 
+    if(this.accountServ.getUserRole().chatView && data.chatActivated){
+      this.appearChat = true;
+    }else{
+      this.appearChat = false;
+    }
+
   }
 
   knowCustomReport(data){
@@ -385,18 +399,17 @@ export class MyApp {
       });
   }
 
-  public static onSelectView(pageId){
-    if(MyApp.oldPage!=null) {
-      document.getElementById(MyApp.oldPage).classList.remove("selected");
+  onSelectView(page){
+    let TO_OPEN_PAGE = page;
+    if(page == "ReportPage" && this.accountServ.reportId > 0){
+      TO_OPEN_PAGE = page+this.accountServ.reportId;
     }
-    document.getElementById(pageId).classList.toggle("selected");
-    // document.getElementById(pageId).classList.toggle("selected");
-    // if(MyApp.oldPage!=null && MyApp.oldPage!=pageId) {
-    //   document.getElementById(MyApp.oldPage).classList.remove("selected");
-    // }
-    // if(MyApp.oldPage!=pageId) {
-      MyApp.oldPage = pageId;
-    // }
+
+    if(this.oldPage != null) {
+      document.getElementById(this.oldPage).classList.toggle("selected");
+    }
+    document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
+    this.oldPage = TO_OPEN_PAGE;
   }
 
   setupNotification(){
@@ -440,6 +453,5 @@ export class MyApp {
           });
       });
   }
-
 }
 

@@ -29,7 +29,7 @@ export class AccountService{
   private _userBranchId: number;
 
   private _reportPage:string;
-  private _reportId:any;
+  private _reportId:number;
   private _userId: number;
 
   constructor(private http: HttpClient) {

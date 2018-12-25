@@ -25,7 +25,6 @@ import {AndroidPermissions} from '@ionic-native/android-permissions';
 import {ClassesService} from "../../services/classes";
 import { Slides } from 'ionic-angular';
 import {NotificationViewReceiver} from "../notification-view-receiver/notification-view-receiver";
-import {MyApp} from "../../app/app.component";
 
 
 declare var cordova: any;
@@ -77,7 +76,6 @@ export class NotificationPage{
               private transfer: FileTransfer, public audio: Media,private fileOpener: FileOpener,
               private transferF: Transfer, public accountServ:AccountService,private network:Network,
               private androidPermissions: AndroidPermissions,private toastCtrl:ToastController,private classesServ:ClassesService) {
-    MyApp.onSelectView("notificationPage");
     this.approved = null;
     this.archived = null;
     this.sent = null;
