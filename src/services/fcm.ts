@@ -58,7 +58,7 @@ export class FCMService{
       "branchId":this.accountServ.userBranchId,
       "userId":this.accountServ.userId,
       "gcmRegKey":this.Token
-    };​
+    };
 
     this.http.post(this.DomainUrl.Domain+"/authentication/regedufyfcmtoken.ent",body,httpOptions).subscribe(
       (val) =>{
