@@ -13,6 +13,7 @@ import {SettingsPage} from "../pages/settings/settings";
 import {LogoutService} from "../services/logout";
 import {ReportPage} from "../pages/report/report";
 import {FCMService} from "../services/fcm";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 declare var window:any;
 
@@ -52,7 +53,7 @@ export class MyApp {
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
-              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService) {
+              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -409,7 +410,16 @@ export class MyApp {
         if(data.page === this.reportPage){
           this.onLoadReport(this.reportPage, data.reportName,data.reportId);
         }else{
-          this.nav.setRoot(data.page);
+          this.nav.setRoot(data.page).then(
+            value => {
+              console.log(value);
+            }).catch( err=>{
+              console.log('err');
+              console.log(err);
+              if(err.includes("invalid")){
+                this.openWeb();
+              }
+          });
         }
 
       });
@@ -434,11 +444,27 @@ export class MyApp {
             if(data.data.page === this.reportPage){
               this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
             }else{
-              this.nav.setRoot(data.data.page);
+              this.nav.setRoot(data.data.page).then(
+                value => {
+                  console.log(value);
+                }).catch(
+                  err=>{
+                    console.log('err');
+                    console.log(err);
+                    if(err.includes("invalid")){
+                      this.openWeb();
+                    }
+              });
             }
 
           });
       });
+  }
+
+  openWeb(){
+
+    this.iab.create("http://104.198.175.198/", "_self");
+
   }
 
 }

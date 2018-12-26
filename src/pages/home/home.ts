@@ -9,6 +9,7 @@ import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
 import {MyApp} from "../../app/app.component";
 import {FCMService} from "../../services/fcm";
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 
 @Component({
   selector: 'page-home',
@@ -30,7 +31,7 @@ export class HomePage {
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
     , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
               private network:Network, private notiServ:NotificationService,private fire:FCMService
-              ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2) {}
+              ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2,public iab:InAppBrowser) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -201,7 +202,15 @@ export class HomePage {
         if(data.page === "ReportPage"){
           this.onLoadReport("ReportPage", data.reportName,data.reportId);
         }else{
-          this.navCtrl.setRoot(data.page);
+          this.navCtrl.setRoot(data.page).then(
+            value => {
+              console.log(value);
+            }).catch(
+            err=>{
+              if(err.includes("invalid")){
+                this.openWeb();
+              }
+            });
         }
 
       });
@@ -227,11 +236,23 @@ export class HomePage {
             if(data.data.page === "ReportPage"){
               this.onLoadReport("ReportPage", data.data.reportName,data.data.reportId);
             }else{
-              this.navCtrl.setRoot(data.data.page);
+              this.navCtrl.setRoot(data.data.page).then(
+                value => {
+                  console.log(value);
+                }).catch(
+                err=>{
+                  if(err.includes("invalid")){
+                    this.openWeb();
+                  }
+                });
             }
 
           });
       });
+  }
+
+  openWeb(){
+    this.iab.create("http://104.198.175.198/", "_self");
   }
 
   onLoadReport(page:any, pageName:any, reportId:any){
