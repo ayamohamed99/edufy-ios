@@ -1,0 +1,186 @@
+page-chat-dialogue {
+  .contentColor{
+    background: #F8F8F8;
+  }
+////////////////////////////////Edit Scroll
+
+  .chat_scroll{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 100% !important;
+    bottom: 0;
+  }
+
+
+
+
+
+
+  .student-bubble{
+    margin: 8px;
+    margin-right: 30px;
+    margin-bottom: 35px;
+    text-align: left;
+    -webkit-animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  .editProfileImageStudent{
+    height: 50px;
+    width: 50px;
+    float: left;
+    -webkit-box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 100%;
+    margin-right: 5px;
+  }
+
+  .studentTalk{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 10px 10px 10px;
+    display: inline-block;
+    width: calc(100% - 59px);
+    margin-top: 25px;
+    padding: 8px;
+  }
+
+
+  .teacher-bubble{
+    margin: 8px;
+    margin-left: 30px;
+    margin-bottom: 35px;
+    text-align: right;
+    -webkit-animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
+
+  .teacherTalk{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px 10px 0px 10px;
+    display: inline-block;
+    width: calc(100% - 59px);
+    margin-bottom: 25px;
+    padding: 8px;
+  }
+
+  .editProfileImageTeacher{
+    position: relative;
+    height: 50px;
+    width: 50px;
+    -webkit-box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 100%;
+    margin-left: 5px;
+    float: inherit;
+    bottom: -39px;
+  }
+
+
+////////////////////////////////End Of Edit Scroll
+
+////////////////////////////////Typing Chat
+
+  .new_message{
+    background-color: #5C87F7;
+    min-height: 60px;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .card-typing{
+    background-color: white;
+    border-radius: 5px;
+    margin: 11px;
+    padding: 5px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .send-chat{
+    width: 25px;
+    height: 25px;
+    margin-bottom: 9px;
+  }
+  .editFormChat{
+    width: calc(100% - 50px);
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+  .editInput{
+    width: 100%;
+
+  }
+  .mat-form-field-label {
+    top: 1em;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-infix {
+    padding-top: 0;
+  }
+
+  .timeContent{
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+    font-size: 1.3rem;
+    color: #a9a9a9;
+  }
+  .bodyContent{
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+  }
+
+////////////////////////////////End Of Typing Chat
+
+
+////////////////////////////////Animations
+  @-webkit-keyframes slide-right {
+    0% {
+      -webkit-transform: translateX(500px);
+      transform: translateX(500px);
+    }
+    100% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-right {
+    0% {
+      -webkit-transform: translateX(500px);
+      transform: translateX(500px);
+    }
+    100% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+
+  @-webkit-keyframes slide-left {
+    0% {
+      -webkit-transform: translateX(-500px);
+      transform: translateX(-500px);
+    }
+    100% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-left {
+    0% {
+      -webkit-transform: translateX(-500px);
+      transform: translateX(-500px);
+    }
+    100% {
+      -webkit-transform: translateX(0);
+      transform: translateX(0);
+    }
+  }
+////////////////////////////////End Of Animations
+}

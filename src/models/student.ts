@@ -16,6 +16,7 @@ export class Student{
   numberOfUnseenComments: number;
   totalNumberOfComments:number;
   studentImageUrl = '';
+  searchByClassGrade:string;
   constructor() {
   }
 }

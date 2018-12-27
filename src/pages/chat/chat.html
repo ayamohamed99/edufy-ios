@@ -13,36 +13,57 @@
     </ion-buttons>
   </ion-navbar>
 
-  <ion-navbar color="primary">
+  <ion-toolbar color="primary">
     <ion-searchbar
       mode="ios"
-      [(ngModel)]="myInput"
       (ionInput)="onSearchInput($event)"
       (ionCancel)="onSearchCancel($event)">
     </ion-searchbar>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 
 <ion-content class="contentColor">
+  <div  *ngIf="loading == true || allStudents.length<=0">
+    <img class="loadingChat" src="assets/imgs/chatLoading.svg" *ngIf="loading == true">
+    <div class="ImgWithLable" *ngIf="loading == false && allStudents.length<=0">
+      <img src="assets/imgs/NoStudent.png">
+      <br>
+      <ion-title class="labelUnderImage">
+        <b>No Students, here...</b>
+      </ion-title>
+    </div>
+  </div>
 
-  <ion-list class="ListColor" mode="ios">
-    <ion-item mode="ios" *ngFor="let student of allStudents">
+  <div #LastOpenedContainer class="rowOfOpened" *ngIf="lastStudents.length>0 && loading == false">
+    <div class="OpenedPart" *ngFor="let student of lastStudents;let i = index" (click)="openDialog(student,i,'Last')">
+      <div class="ImgDiv">
+        <img class="editProfileImageOpened" src="assets/imgs/profile.png" *ngIf="!student.studentImageUrl">
+        <img class="editProfileImageOpened" [src]="student.studentImageUrl" *ngIf="student.studentImageUrl">
+      </div>
+        <label class="editUserNameOpened">{{getFristName(student.studentName)}}</label>
+    </div>
+  </div>
 
-      <span class="imgPart">
-        <img class="editProfileImage" src="assets/imgs/profile.png" *ngIf="!student.studentImageUrl">
-        <img class="editProfileImage" [src]="student.studentImageUrl" *ngIf="student.studentImageUrl">
-      </span>
+  <ion-content [class]="lastStudents.length>0? 'scrollInsideWithLastOpened' : 'scrollInsideAlone'" *ngIf="allStudents.length>0 && loading == false">
+    <ion-list class="ListColor" mode="ios">
+      <ion-item mode="ios" *ngFor="let student of allStudents" (click)="openDialog(student,-1,'All')">
 
-      <span class="dataPart">
-        <ion-title class="editUserName">{{student.studentName}}</ion-title>
-        <h2 class="moreInfo">Grade: {{student.studentClass.grade.name}}</h2>
-        <h2 class="moreInfo">Class: {{student.studentClass.name}}</h2>
-      </span>
+        <div class="itemWithAnimation">
+        <span class="imgPart">
+          <img class="editProfileImage" src="assets/imgs/profile.png" *ngIf="!student.studentImageUrl">
+          <img class="editProfileImage" [src]="student.studentImageUrl" *ngIf="student.studentImageUrl">
+        </span>
 
-      <div class="border"></div>
+        <span class="dataPart">
+          <ion-title class="editUserName">{{student.studentName}}</ion-title>
+          <h2 class="moreInfo"><b>Grade:</b> {{student.studentClass.grade.name}}</h2>
+          <h2 class="moreInfo"><b>Class:</b> {{student.studentClass.name}}</h2>
+        </span>
+        </div>
 
-    </ion-item>
-  </ion-list>
-
+        <div class="border"></div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
 </ion-content>

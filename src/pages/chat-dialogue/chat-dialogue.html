@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only [disabled]="true">
+        <ion-icon></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title text-center>{{student.studentName}}</ion-title>
+    <ion-buttons right>
+      <button ion-button icon-only (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar color="primary">
+    <ion-title text-center>{{student.searchByClassGrade}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="contentColor">
+
+  <div class="chat_scroll">
+
+    <div class="student-bubble">
+
+        <img class="editProfileImageStudent" src="assets/imgs/profile.png" *ngIf="!student.studentImageUrl">
+        <img class="editProfileImageStudent" [src]="student.studentImageUrl" *ngIf="student.studentImageUrl">
+
+      <div class="studentTalk">
+        <h4 class="timeContent">@20.121.2551 Maadi</h4>
+        <p class="bodyContent">kajsdkjansdkjanskdjnaksjndkajnskjanskjdnaksjndkajsndkajsndkjasndkjsnakdjnaksjdnkajsndkjnaksjnkajnskdanksdjnkajsnkdanskdnakjsndkjnaskjdnkjansdkjnaksjdnkajsnkdjn</p>
+      </div>
+    </div>
+
+    <div class="teacher-bubble">
+      <div class="teacherTalk">
+        <h4 class="timeContent">@20.121.2551 Maadi</h4>
+        <p class="bodyContent">kajsdkjansdkjanskdjnaksjndkajnskjanskjdnaksjndkajsndkajsndkjasndkjsnakdjnaksjdnkajsndkjnaksjnkajnskdanksdjnkajsnkdanskdnakjsndkjnaskjdnkjansdkjnaksjdnkajsnkdjn</p>
+      </div>
+
+        <img class="editProfileImageTeacher" src="assets/imgs/profile.png">
+    </div>
+
+  </div>
+
+</ion-content>
+
+<ion-footer color="primary" class="new_message">
+  <div class="card-typing">
+    <mat-form-field class="editFormChat" floatLabel="never">
+        <textarea matInput class="editInputChat" matTextareaAutosize matAutosizeMinRows="1"
+                  matAutosizeMaxRows="3" placeholder="Type here..."></textarea>
+    </mat-form-field>
+    <button ion-button icon-only clear class="send-chat">
+      <img src="assets/imgs/send-button.png">
+    </button>
+  </div>
+</ion-footer>
