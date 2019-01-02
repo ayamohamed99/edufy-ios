@@ -80,14 +80,21 @@ export class FCMService{
 
   setLocatNotification(title,body,data){
     console.log("ForGround Notification : \n", data);
-    let reportname,reportid ;
+    let reportname,reportid,chatMessage;
     if(data.page == "ReportPage") {
       reportname = data.reportName;
       reportid = data.reportId;
-    }else{
+      chatMessage="";
+    }else if(data.page == "ChatPage"){
       reportname = "";
       reportid = "";
+      chatMessage=data.chatMessage;
+    } else{
+      reportname = "";
+      reportid = "";
+      chatMessage="";
     }
+
 
     this.localNotifications.schedule({
       title: title,
@@ -96,7 +103,8 @@ export class FCMService{
       data: {
         page:data.page,
         reportName:reportname,
-        reportId:reportid
+        reportId:reportid,
+        chatMessage:chatMessage
       }
     });
   }

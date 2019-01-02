@@ -2,6 +2,21 @@ page-chat-dialogue {
   .contentColor{
     background: #F8F8F8;
   }
+
+  .loadDiv{
+    text-align: center;
+    .editloadingImageOpened{
+      position: absolute;
+      margin: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;
+      border-radius: 3px;
+    }
+  }
 ////////////////////////////////Edit Scroll
 
   .chat_scroll{
@@ -40,11 +55,21 @@ page-chat-dialogue {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 0px 10px 10px 10px;
     display: inline-block;
-    width: calc(100% - 59px);
+    max-width: calc(100% - 59px);
     margin-top: 25px;
     padding: 8px;
+    width: fit-content;
   }
 
+
+  .ErrorIcon{
+    float: right;
+    font-size: 1.8em;
+    position: absolute;
+    margin-bottom: -12px;
+    right: 49px;
+    top: -12px;
+  }
 
   .teacher-bubble{
     margin: 8px;
@@ -60,9 +85,10 @@ page-chat-dialogue {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 10px 10px 0px 10px;
     display: inline-block;
-    width: calc(100% - 59px);
+    max-width: calc(100% - 59px);
     margin-bottom: 25px;
     padding: 8px;
+    width: fit-content;
   }
 
   .editProfileImageTeacher{
@@ -180,6 +206,42 @@ page-chat-dialogue {
     100% {
       -webkit-transform: translateX(0);
       transform: translateX(0);
+    }
+  }
+
+  @-webkit-keyframes rotate-scale-up {
+    0% {
+      -webkit-transform: scale(1) rotateZ(0);
+      transform: scale(1) rotateZ(0);
+    }
+    50% {
+      -webkit-transform: scale(2) rotateZ(180deg);
+      transform: scale(2) rotateZ(180deg);
+    }
+    100% {
+      -webkit-transform: scale(1) rotateZ(360deg);
+      transform: scale(1) rotateZ(360deg);
+    }
+  }
+
+
+  .rotate-scale-up {
+    -webkit-animation: rotate-scale-up 0.65s linear both;
+    animation: rotate-scale-up 0.65s linear both;
+  }
+
+  @keyframes rotate-scale-up {
+    0% {
+      -webkit-transform: scale(1) rotateZ(0);
+      transform: scale(1) rotateZ(0);
+    }
+    50% {
+      -webkit-transform: scale(2) rotateZ(180deg);
+      transform: scale(2) rotateZ(180deg);
+    }
+    100% {
+      -webkit-transform: scale(1) rotateZ(360deg);
+      transform: scale(1) rotateZ(360deg);
     }
   }
 ////////////////////////////////End Of Animations

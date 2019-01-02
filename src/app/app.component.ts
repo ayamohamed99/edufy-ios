@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {AlertController, LoadingController, MenuController, Nav, Platform} from 'ionic-angular';
+import {AlertController, LoadingController, MenuController, ModalController, Nav, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 
@@ -14,6 +14,10 @@ import {LogoutService} from "../services/logout";
 import {ReportPage} from "../pages/report/report";
 import {FCMService} from "../services/fcm";
 import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {Url_domain} from "../models/url_domain";
+import {ChatService} from "../services/chat";
+import {Student} from "../models";
+import {tryCatch} from "rxjs/util/tryCatch";
 
 declare var window:any;
 
@@ -52,10 +56,12 @@ export class MyApp {
   elementByClass:any = [];
   oldPage = null;
   startApp = false;
+  DomainUrl:Url_domain;
+  hereONPage;
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
-              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,
-              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser) {
+              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,public chatServ:ChatService,
+              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -95,6 +101,7 @@ export class MyApp {
       this.nav.viewWillEnter.subscribe(
         page=>{
           console.log(page);
+          this.hereONPage = page.name;
           this.onSelectView(page.name);
         },err=>{
           console.log(err);
@@ -385,6 +392,7 @@ export class MyApp {
         this.knowCustomReport(this.accountServ.getCustomReportsList());
         this.load.dismiss();
         this.nav.setRoot(this.profilePage);
+        this.startSocket(this.accountServ.userId);
         this.setupNotification();
       },
       err => {
@@ -393,6 +401,7 @@ export class MyApp {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.nav.setRoot('ProfilePage');
+          this.startSocket(this.accountServ.userId);
           this.setupNotification();
         }else {
           this.load.dismiss();
@@ -423,7 +432,20 @@ export class MyApp {
         console.log("Background Notification : \n", JSON.stringify(data));
         if(data.page === this.reportPage){
           this.onLoadReport(this.reportPage, data.reportName,data.reportId);
-        }else{
+        }else if(data.page === this.chatPage){
+          let JData = JSON.parse(data.chatMessage);
+          let student = JData.chatThread.student;
+          let Stud = new Student();
+          Stud.studentId = student.id;
+          Stud.studentName = student.name;
+          Stud.studentAddress = student.address;
+          Stud.studentClass = student.classes;
+          Stud.studentImageUrl = student.profileImg;
+          Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+          let modal = this.modalCtrl.create('ChatDialoguePage',
+            {studentData:Stud});
+          modal.present();
+        } else{
           this.nav.setRoot(data.page).then(
             value => {
               console.log(value);
@@ -457,7 +479,20 @@ export class MyApp {
             console.log('Foreground');
             if(data.data.page === this.reportPage){
               this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
-            }else{
+            }else if(data.data.page === this.chatPage){
+              let JData = JSON.parse(data.data.chatMessage);
+              let student = JData.chatThread.student;
+              let Stud = new Student();
+              Stud.studentId = student.id;
+              Stud.studentName = student.name;
+              Stud.studentAddress = student.address;
+              Stud.studentClass = student.classes;
+              Stud.studentImageUrl = student.profileImg;
+              Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+              let modal = this.modalCtrl.create('ChatDialoguePage',
+                {studentData:Stud});
+              modal.present();
+            } else{
               this.nav.setRoot(data.data.page).then(
                 value => {
                   console.log(value);
@@ -479,6 +514,84 @@ export class MyApp {
 
     this.iab.create("http://104.198.175.198/", "_self");
 
+  }
+
+  startSocket(userId){
+    let that = this;
+    this.DomainUrl = new Url_domain;
+
+    let hostName= this.DomainUrl.Domain;
+
+    if (hostName == null || hostName == "") {
+      hostName = "wss://" + "education.entrepreware.com";
+    } else if(hostName.includes("192.168.1")){
+      hostName = "ws://" + hostName.substring(6);
+    }else{
+      hostName = "wss://" + "education.entrepreware.com";
+    }
+    let websocket = new WebSocket(hostName + "/socket");
+    websocket.onopen = function(message) {
+      console.log("OPEN_WEB_SOCKET");
+      websocket.send("id" + userId);
+    };
+    websocket.onmessage = function(message) {
+      console.log("onmessage");
+      console.log(JSON.parse(message.data));
+      let data = JSON.parse(message.data);
+      if(that.hereONPage == that.chatPage){
+        that.chatServ.newMessageSubject$.next(JSON.parse(message.data));
+      }else {
+        if(!data.user){
+          that.chatServ.NewChats.push(JSON.parse(message.data));
+          that.alertCtrl.create({
+            title: 'Chat',
+            message: "New chat from your student " + data.chatThread.student.name,
+            buttons: [
+              {
+                text: 'Later',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'See now',
+                handler: () => {
+                  // that.nav.setRoot(that.chatPage);
+                  let student = data.chatThread.student;
+                  let Stud = new Student();
+                  Stud.studentId = student.id;
+                  Stud.studentName = student.name;
+                  Stud.studentAddress = student.address;
+                  Stud.studentClass = student.classes;
+                  Stud.studentImageUrl = student.profileImg;
+                  Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+                  let modal = that.modalCtrl.create('ChatDialoguePage',
+                    {studentData:Stud});
+                  modal.present();
+                }
+              }
+            ]
+          }).present();
+        }
+      }
+    };
+    websocket.onclose = function(message) {
+      console.log("onclose");
+      console.log(message);
+    };
+    websocket.onerror = function(message) {
+      console.log("onerror");
+      console.log(message);
+      try {
+        websocket.onopen = function(message) {
+          console.log("OPEN_WEB_SOCKET");
+          websocket.send("id" + userId);
+        };
+      }catch (e) {
+        console.log(e);
+      }
+    };
   }
 
 }

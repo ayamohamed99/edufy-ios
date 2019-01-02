@@ -4,6 +4,8 @@ import {StudentsService} from "../../services/students";
 import {Storage} from "@ionic/storage";
 import {Student} from "../../models";
 import {ChatDialoguePage} from "../chat-dialogue/chat-dialogue";
+import {ChatDialogue} from "../../models/chat-dialogue";
+import {ChatService} from "../../services/chat";
 
 @IonicPage()
 @Component({
@@ -18,7 +20,8 @@ export class ChatPage {
   loading = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public studentServ:StudentsService,
-              public platform:Platform,private storage:Storage,public alrt:AlertController, public modalCtrl:ModalController) {
+              public platform:Platform,private storage:Storage,public alrt:AlertController, public modalCtrl:ModalController,
+              public chatServ:ChatService) {
     if (platform.is('core')) {
       studentServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
       this.getChatStudent();
@@ -29,6 +32,22 @@ export class ChatPage {
           this.getChatStudent();
         });
     }
+
+    let data = this.chatServ.NewChats;
+    for(let message of data){
+      let Stud = new Student();
+      Stud.studentId = message.chatThread.student.id;
+      Stud.studentName = message.chatThread.student.name;
+      Stud.studentAddress = message.chatThread.student.address;
+      Stud.studentClass = message.chatThread.student.classes;
+      Stud.studentImageUrl = message.chatThread.student.profileImg;
+      Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
+      if(!this.lastStudents.some( value =>value.studentId == message.chatThread.student.id)){
+        this.lastStudents.push(Stud);
+      }
+    }
+    this.chatServ.NewChats = [];
+
   }
 
   ionViewDidLoad() {
@@ -107,9 +126,13 @@ export class ChatPage {
   }
 
   getFristName(Name){
-    let FIRST_NAME:string
+    let FIRST_NAME:string;
+    try {
       let arrayName = Name.split(' ');
-    FIRST_NAME = arrayName[0];
+      FIRST_NAME = arrayName[0];
+    }catch (e) {
+      FIRST_NAME = Name;
+    }
     return FIRST_NAME;
   }
 
@@ -118,6 +141,7 @@ export class ChatPage {
       {studentData:student});
     modal.onDidDismiss(data=>{
       this.viewListsEffect(student,index,From);
+      this.checkDataStudents();
     });
     modal.present();
   }
@@ -133,6 +157,38 @@ export class ChatPage {
       }
       this.lastStudents.splice(index, 1);
       this.lastStudents.splice(0, 0,student);
+    }
+  }
+
+  checkDataStudents(){
+    for(let message of this.chatServ.NewChats){
+      let Stud = new Student();
+      Stud.studentId = message.chatThread.student.id;
+      Stud.studentName = message.chatThread.student.name;
+      Stud.studentAddress = message.chatThread.student.address;
+      Stud.studentClass = message.chatThread.student.classes;
+      Stud.studentImageUrl = message.chatThread.student.profileImg;
+      Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
+      if(!this.lastStudents.some( value =>value.studentId == message.chatThread.student.id)){
+        this.lastStudents.splice(0, 0,Stud);
+      }else{
+        for(let i=0;i<this.lastStudents.length;i++){
+          if(message.chatThread.student.id == this.lastStudents[i].studentId){
+            this.lastStudents.splice(i, 1);
+            Stud.studentId = message.chatThread.student.id;
+            Stud.studentName = message.chatThread.student.name;
+            Stud.studentAddress = message.chatThread.student.address;
+            Stud.studentClass = message.chatThread.student.classes;
+            Stud.studentImageUrl = message.chatThread.student.profileImg;
+            Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
+            this.lastStudents.splice(0, 0,Stud);
+            try {
+              this.LastOpenedContainer.nativeElement.scrollLeft = 0;
+            } catch (err) {
+            }
+          }
+        }
+      }
     }
   }
 

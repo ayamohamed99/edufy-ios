@@ -15,7 +15,7 @@ export class Url_domain{
 
 
   //      proxy
-  // ,"proxies": [
+  // "proxies": [
   //   {
   //     "path":"/oauth",
   //     "proxyUrl": "http://104.198.175.198/oauth"

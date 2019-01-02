@@ -55,6 +55,7 @@ import {FCMService} from "../services/fcm";
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import {ChatService} from "../services/chat";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -124,7 +125,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     ReportCommentProvider,
     [DatePipe],TransFormDate,
     FCMService,FirebaseMessaging,
-    LocalNotifications,InAppBrowser
+    LocalNotifications,InAppBrowser,
+    ChatService
   ]
 })
 export class AppModule {
