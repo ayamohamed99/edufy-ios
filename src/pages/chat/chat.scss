@@ -30,7 +30,7 @@ page-chat {
     .labelUnderImage {
       text-align: center;
       width: 400px;
-      color: #8e8e8e;
+      color: #8a8a8a;
     }
   }
 //////////////////////////////End Of Null State
@@ -121,6 +121,10 @@ page-chat {
     border-top: 0;
   }
 
+  .list-ios {
+    margin: 3px 0 32px;
+  }
+
   .list-ios > .item-block:last-child {
     border-bottom: 0;
   }
@@ -161,9 +165,11 @@ page-chat {
   }
 
   .moreInfo{
-    width: 50%;
+    width: 47%;
     display: inline-block;
     color: #A0A0A0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .border{
@@ -182,15 +188,21 @@ page-chat {
 
   .item-ios{
     background-color: #F8F8F8;
+    padding-left: 8px;
     h2 {
       margin: 0 8px 2px 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 
   .item-md{
     background-color: #F8F8F8;
+    padding-left: 8px;
     h2 {
       margin: 0 8px 2px 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
   }
 

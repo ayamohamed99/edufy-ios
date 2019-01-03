@@ -24,6 +24,8 @@ page-chat-dialogue {
     overflow-y: scroll;
     height: 100% !important;
     bottom: 0;
+    padding-top: 15px;
+    padding-bottom: 8px;
   }
 
 
@@ -56,7 +58,7 @@ page-chat-dialogue {
     border-radius: 0px 10px 10px 10px;
     display: inline-block;
     max-width: calc(100% - 59px);
-    margin-top: 25px;
+    margin-top: 20px;
     padding: 8px;
     width: fit-content;
   }
@@ -86,7 +88,7 @@ page-chat-dialogue {
     border-radius: 10px 10px 0px 10px;
     display: inline-block;
     max-width: calc(100% - 59px);
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     padding: 8px;
     width: fit-content;
   }
