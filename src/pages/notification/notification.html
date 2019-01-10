@@ -20,17 +20,17 @@
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
+  <ion-toolbar  class="toolBarShap" color="gray" *ngIf="platform.is('ios')">
+    <ion-segment [(ngModel)]="selectedTab" color="primary" style="padding-top: 5px;padding-right: 5px;padding-left: 5px" *ngIf="platform.is('ios')">
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="contentColor">
-
-  <ion-segment [(ngModel)]="selectedTab" color="primary" style="padding-top: 5px;padding-right: 5px;padding-left: 5px" *ngIf="platform.is('ios')">
-    <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
-    <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
-    <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval</ion-segment-button>
-    <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
-  </ion-segment>
-
 
   <ion-slides style="height: 100%;" (ionSlideDidChange)="slideChanged()">
     <ion-slide style="height: 100%;">
@@ -69,9 +69,12 @@
                   </ion-slide>
                 </ion-slides>
 
+                <ion-slides *ngIf="platform.is('ios')"></ion-slides>
+
                 <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
                 <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
+                <br>
 
                 <div style="padding-left: 16px;">
                   <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
@@ -85,8 +88,12 @@
 
                   <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
 
-                  <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
+                  <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
                     <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                  </div>
+
+                  <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                    <button [id]="'buttonApprove'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
                   </div>
 
                   <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
@@ -147,6 +154,8 @@
                     </ion-slide>
                   </ion-slides>
 
+                  <ion-slides *ngIf="platform.is('ios')"></ion-slides>
+
                   <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
                   <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
@@ -163,8 +172,12 @@
 
                     <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
-                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveSent'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveSent'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
                     </div>
 
                     <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
@@ -227,6 +240,8 @@
                     </ion-slide>
                   </ion-slides>
 
+                  <ion-slides *ngIf="platform.is('ios')"></ion-slides>
+
                   <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
                   <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
@@ -243,8 +258,12 @@
 
                     <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
-                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveApp'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveApp'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
                     </div>
 
                     <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>
@@ -308,6 +327,8 @@
                     </ion-slide>
                   </ion-slides>
 
+                  <ion-slides *ngIf="platform.is('ios')"></ion-slides>
+
                   <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
                   <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
 
@@ -324,8 +345,12 @@
 
                     <ion-label text-capitalize>{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved" >
-                      <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveArc'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    </div>
+
+                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveArc'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
                     </div>
 
                     <button ion-button outline item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</button>

@@ -1,5 +1,12 @@
 import {Component, ElementRef, Renderer, Renderer2, ViewChild} from '@angular/core';
-import {AlertController, IonicFormInput, LoadingController, NavController, Platform} from 'ionic-angular';
+import {
+  AlertController,
+  IonicFormInput,
+  LoadingController,
+  ModalController,
+  NavController,
+  Platform
+} from 'ionic-angular';
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/login";
 import {Storage} from "@ionic/storage";
@@ -9,6 +16,9 @@ import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
 import {FCMService} from "../../services/fcm";
 import {InAppBrowser} from "@ionic-native/in-app-browser";
+import {Url_domain} from "../../models/url_domain";
+import {Student} from "../../models";
+import {ChatService} from "../../services/chat";
 
 @Component({
   selector: 'page-home',
@@ -26,11 +36,15 @@ export class HomePage {
   load:any;
   elementByClass:any = [];
   @ViewChild('passwordInput') inp  : any ;
+  chatPage = 'ChatPage';
+  hereONPage;
+  DomainUrl;
 
   constructor(private navCtrl: NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
     , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
-              private network:Network, private notiServ:NotificationService,private fire:FCMService
-              ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2,public iab:InAppBrowser) {}
+              private network:Network, private notiServ:NotificationService,private fire:FCMService,public chatServ:ChatService
+              ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2,public iab:InAppBrowser,
+              public modalCtrl:ModalController) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -159,6 +173,7 @@ export class HomePage {
         this.accountServ.setCustomReport(data);
         this.accountServ.getTags(this.fullToken());
         this.navCtrl.setRoot('ProfilePage');
+        this.startSocket(this.accountServ.userId);
         this.setupNotification();
       },
       err => {
@@ -167,6 +182,7 @@ export class HomePage {
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.navCtrl.setRoot('ProfilePage');
+          this.startSocket(this.accountServ.userId);
           this.setupNotification();
         }else{
           this.load.dismiss();
@@ -260,4 +276,93 @@ export class HomePage {
     this.navCtrl.setRoot(page);
   }
 
+
+  startSocket(userId){
+    let that = this;
+    this.navCtrl.viewDidEnter.subscribe(
+      page=>{
+        console.log(page);
+        if(page.name) {
+          this.hereONPage = page.name;
+        }else{
+          this.hereONPage = page.id;
+        }
+      },err=>{
+        console.log(err);
+      });
+    this.DomainUrl = new Url_domain;
+
+    let hostName= this.DomainUrl.Domain;
+
+    if (hostName == null || hostName == "") {
+      hostName = "wss://" + "education.entrepreware.com";
+    } else if(hostName.includes("192.168.1")){
+      hostName = "ws://" + hostName.substring(6);
+    }else{
+      hostName = "wss://" + "education.entrepreware.com";
+    }
+    let websocket = new WebSocket(hostName + "/socket");
+    websocket.onopen = function(message) {
+      console.log("OPEN_WEB_SOCKET");
+      websocket.send("id" + userId);
+    };
+    websocket.onmessage = function(message) {
+      console.log("onmessage");
+      console.log(JSON.parse(message.data));
+      let data = JSON.parse(message.data);
+      if(that.hereONPage == that.chatPage){
+        that.chatServ.newMessageSubject$.next(JSON.parse(message.data));
+      }else {
+        if(!data.user){
+          that.chatServ.NewChats.push(JSON.parse(message.data));
+          that.alertCtrl.create({
+            title: 'Chat',
+            message: "New chat from your student " + data.chatThread.student.name,
+            buttons: [
+              {
+                text: 'Later',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'See now',
+                handler: () => {
+                  // that.nav.setRoot(that.chatPage);
+                  let student = data.chatThread.student;
+                  let Stud = new Student();
+                  Stud.studentId = student.id;
+                  Stud.studentName = student.name;
+                  Stud.studentAddress = student.address;
+                  Stud.studentClass = student.classes;
+                  Stud.studentImageUrl = student.profileImg;
+                  Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+                  let modal = that.modalCtrl.create('ChatDialoguePage',
+                    {studentData:Stud});
+                  modal.present();
+                }
+              }
+            ]
+          }).present();
+        }
+      }
+    };
+    websocket.onclose = function(message) {
+      console.log("onclose");
+      console.log(message);
+    };
+    websocket.onerror = function(message) {
+      console.log("onerror");
+      console.log(message);
+      try {
+        websocket.onopen = function(message) {
+          console.log("OPEN_WEB_SOCKET");
+          websocket.send("id" + userId);
+        };
+      }catch (e) {
+        console.log(e);
+      }
+    };
+  }
 }

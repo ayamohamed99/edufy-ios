@@ -98,10 +98,14 @@ export class MyApp {
       // this.oldPage = 'profilePage';
       // document.getElementById('profilePage').classList.toggle("selected");
       // document.getElementById('logOutPage').classList.remove("selected");
-      this.nav.viewWillEnter.subscribe(
+      this.nav.viewDidEnter.subscribe(
         page=>{
           console.log(page);
-          this.hereONPage = page.name;
+          if(page.name) {
+            this.hereONPage = page.name;
+          }else{
+            this.hereONPage = page.id;
+          }
           this.onSelectView(page.name);
         },err=>{
           console.log(err);

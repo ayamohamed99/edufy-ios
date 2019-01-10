@@ -848,7 +848,16 @@ export class NotificationPage{
     //   content: "Approving"
     // });
     // this.loading.present();
-    let elButton = document.getElementById("buttonApprove"+index);
+    let elButton;
+    if(this.approved && this.notificationsApproved.length > 0){
+      elButton = document.getElementById("buttonApproveApp"+index);
+    }else if(this.archived && this.notificationsArchived.length > 0){
+      elButton = document.getElementById("buttonApproveArc"+index);
+    }else if(this.sent && this.notificationsSent.length > 0) {
+      elButton = document.getElementById("buttonApproveSent"+index);
+    }else if(!this.sent && !this.archived && !this.approved && this.notifications.length > 0) {
+      elButton = document.getElementById("buttonApprove"+index);
+    }
     elButton.classList.add("onclic");
     let approvedNotification;
     if(this.sent){
