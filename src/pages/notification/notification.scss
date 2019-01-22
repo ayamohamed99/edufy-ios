@@ -19,7 +19,8 @@ page-notification {
 
   .lableInItem{
     float: left;
-    width: calc(100% - 20px);
+    padding-right: 20px;
+    width: 100%;
     .label-md {
       margin: 0 0 2px;
       font-size: 2.4rem;
