@@ -56,22 +56,14 @@ import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import {ChatService} from "../services/chat";
+import {BackgroundNotificationService} from "../services/background-notification";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
 @NgModule({
   declarations: [
     MyApp,
-    // ProfilePage,
     HomePage,
-    // NotificationPage,
-    // NotificationNewPage,
-    // PopoverNotificationCardPage,
-    // SettingsPage,
-    // NotificationEditPage,
-    // NotificationViewReceiver
-    // ReportPage,
-   // ReportTemplatePage
   ],
   imports: [
     BrowserModule,
@@ -86,16 +78,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    // ProfilePage,
     HomePage,
-    // NotificationPage,
-    // NotificationNewPage,
-    // PopoverNotificationCardPage,
-    // SettingsPage,
-    // NotificationEditPage,
-    // NotificationViewReceiver
-    //ReportPage,
-   // ReportTemplatePage,
   ],
   providers: [
     StatusBar,
@@ -126,7 +109,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     [DatePipe],TransFormDate,
     FCMService,FirebaseMessaging,
     LocalNotifications,InAppBrowser,
-    ChatService
+    ChatService,BackgroundNotificationService
   ]
 })
 export class AppModule {

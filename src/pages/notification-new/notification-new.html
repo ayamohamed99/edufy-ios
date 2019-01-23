@@ -43,7 +43,7 @@
     [selectableGroup]="false"
     [closeOnSelect]="true"
     placeholder="To :"
-    [(ngModel)]="this.sendTo"
+    [(ngModel)]="this.backNotify.sendTo"
     (close)="onChange(ngSelect)">
     <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
       {{item.header | uppercase}}
@@ -111,8 +111,8 @@
 
   <ion-item class="fitTheView" *ngIf="accountServ.getUserRole().notificationTagView">
     <ion-label class="textColor">Select Tag</ion-label>
-    <ion-select [(ngModel)]="tags" multiple interface="popover">
-      <ion-option *ngFor="let tag of tagsArr" >{{tag.name}}</ion-option>
+    <ion-select [(ngModel)]="backNotify.tags" multiple interface="popover">
+      <ion-option *ngFor="let tag of backNotify.tagsArr" >{{tag.name}}</ion-option>
     </ion-select>
   </ion-item>
 
