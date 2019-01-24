@@ -21,5 +21,9 @@ module.exports = {
   },
   copyMaterialThemeCSS: {
     src: ['{{ROOT}}/node_modules/@angular/material/prebuilt-themes/indigo-pink.css'],
-    dest: '{{WWW}}/assets'      }
+    dest: '{{WWW}}/assets'      },
+  copycanvas:{
+    src:['"{{ROOT}}/node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"'],
+    dest: '{{WWW}}/assets'
+  }
 }

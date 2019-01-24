@@ -3,9 +3,9 @@
   <ion-navbar color="primary">
 
     <ion-buttons left>
-    <button style="width: 32px;height: 45px;" ion-button icon-only [disabled]="!activeSend()" (click)="sendNotification()">
-      <img src="assets/icon/upload-to-cloud.png">
-    </button>
+    <!--<button style="width: 32px;height: 45px;" ion-button icon-only [disabled]="!activeSend()" (click)="sendNotification()">-->
+      <!--<img src="assets/icon/upload-to-cloud.png">-->
+    <!--</button>-->
     </ion-buttons>
 
     <ion-title>Send New Notification</ion-title>
@@ -129,12 +129,12 @@
     </ion-label>
   </div>
 
-  <!--<div style="height: 8px"></div>-->
-  <!--<ion-row>-->
-    <!--<button ion-button outline block style="width: calc(50% - 4px)" [disabled]="!activeSend()" (click)="sendNotification()">Send</button>-->
-    <!--<span style="width: 8px"></span>-->
-    <!--<button ion-button outline block style="width: calc(50% - 4px)" color="danger" (click)="close()">Cancel</button>-->
-  <!--</ion-row>-->
+  <div style="height: 8px"></div>
+  <ion-row>
+    <button ion-button outline block style="width: calc(50% - 4px)" [disabled]="!activeSend()" (click)="sendNotification()">Send</button>
+    <span style="width: 8px"></span>
+    <button ion-button outline block style="width: calc(50% - 4px)" color="danger" (click)="close()">Cancel</button>
+  </ion-row>
 </ion-content>
 
 

@@ -42,6 +42,7 @@ export class NotificationService{
 
   postNotification(title:string, body:string, attachment, notificationRecieversSet:any, selectedTags:any)
   {
+    debugger;
     const newNotification = {
       "title": title,
       "body": body,
@@ -96,6 +97,7 @@ export class NotificationService{
 
 
   postAttachment(data){
+    debugger;
     let option = {
       headers: new HttpHeaders({
         'optional-header':'header-value',

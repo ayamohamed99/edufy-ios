@@ -145,7 +145,12 @@ export class BackgroundNotificationService{
         for (let index = 0; index <this.arrayFormData.length; index++) {
           // let form: FormData = this.arrayFormData[index];
           let form = new FormData();
-          form.append('file', this.arrayFormData[index]);
+          let fileType = this.getFileType(this.arrayFormData[index].name);
+          if(fileType == "IMAGE") {
+            form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
+          }else{
+            form.append('file', this.arrayFormData[index]);
+          }
           promisesArray.push(this.uploadAttach(form));
         }
         Promise.all(promisesArray).then( data=> {
@@ -275,8 +280,14 @@ export class BackgroundNotificationService{
                   let promisesArray = [];
                   for (let index = 0; index < temp.attachmentsList.length; index++) {
                     // let form: FormData = temp.attachmentsList[index];
+                    debugger;
                     let form = new FormData();
-                    form.append('file', temp.attachmentsList[index]);
+                    let fileType = this.getFileType(this.arrayFormData[index].name);
+                    if(fileType == "IMAGE") {
+                      form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
+                    }else{
+                      form.append('file', this.arrayFormData[index]);
+                    }
                     promisesArray.push(this.uploadAttach(form));
                   }
                   Promise.all(promisesArray).then(data => {
@@ -308,6 +319,7 @@ export class BackgroundNotificationService{
   uploadAttach(formData){
     this.startLocalNotification();
     let errorAppear:boolean;
+    debugger;
     return this.notiServ.postAttachment(formData).toPromise().then(
       s=> {
         console.log('Success post => ' + JSON.stringify(s));
@@ -418,7 +430,12 @@ export class BackgroundNotificationService{
                 for (let index = 0; index < temp.attachmentsList.length; index++) {
                   // let form: FormData = temp.attachmentsList[index];
                   let form = new FormData();
-                  form.append('file', temp.attachmentsList[index]);
+                  let fileType = this.getFileType(this.arrayFormData[index].name);
+                  if(fileType == "IMAGE") {
+                    form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
+                  }else{
+                    form.append('file', this.arrayFormData[index]);
+                  }
                   promisesArray.push(this.uploadAttach(form));
                 }
                 Promise.all(promisesArray).then(data => {
@@ -549,4 +566,61 @@ export class BackgroundNotificationService{
   }
 
 
+
+  getFileType(fileName) {
+    let pos = fileName.lastIndexOf('.');
+    let extension = fileName.substring(pos + 1);
+
+    switch (extension.toLowerCase()) {
+      case "jpg":
+        return "IMAGE";
+      case "jpeg":
+        return "IMAGE";
+      case "png":
+        return "IMAGE";
+      case "gif":
+        return "IMAGE";
+      case "ico":
+        return "IMAGE";
+      case "bmp":
+        return "IMAGE";
+      case "webp":
+        return "IMAGE";
+      case "tiff":
+        return "IMAGE";
+
+      case "pdf":
+        return "PDF";
+
+      case "txt":
+        return "TXT";
+
+      case "xls":
+        return "EXCEL";
+      case "xlsx":
+        return "EXCEL";
+      case "doc":
+      case "docx":
+        return "WORD";
+      case "ppt":
+      case "pptx":
+        return "POWERPOINT";
+      case "mp4":
+        return "VIDEO";
+      case "flv":
+        return "VIDEO";
+      case "avi":
+        return "VIDEO";
+      case "mov":
+        return "VIDEO";
+      case "wmv":
+        return "VIDEO";
+      case "mp3":
+        return "AUDIO";
+      case "wma":
+        return "AUDIO";
+      default:
+        return "OTHER";
+    }
+  }
 }

@@ -57,6 +57,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import {ChatService} from "../services/chat";
 import {BackgroundNotificationService} from "../services/background-notification";
+import {ImageCompressorService} from "../services/image-compress";
+import {Ng2ImgMaxModule} from "ng2-img-max";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -71,7 +73,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     HttpClientModule,
     IonicStorageModule.forRoot(),
     RlTagInputModule,
-    mods,
+    mods,Ng2ImgMaxModule,
     BrowserAnimationsModule,
     ComponentsModule,
   ],
@@ -109,7 +111,8 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     [DatePipe],TransFormDate,
     FCMService,FirebaseMessaging,
     LocalNotifications,InAppBrowser,
-    ChatService,BackgroundNotificationService
+    ChatService,BackgroundNotificationService,
+    ImageCompressorService
   ]
 })
 export class AppModule {

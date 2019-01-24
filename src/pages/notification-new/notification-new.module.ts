@@ -7,6 +7,7 @@ import {FormsModule} from "@angular/forms";
 import {NG_SELECT_DEFAULT_CONFIG, NgSelectModule} from "@ng-select/ng-select";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {Ng2ImgMaxModule} from "ng2-img-max";
 
 
 @NgModule({

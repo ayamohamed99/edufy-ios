@@ -18,11 +18,11 @@ export class Url_domain{
   // "proxies": [
   //   {
   //     "path":"/oauth",
-  //     "proxyUrl": "http://192.168.1.90:8080/oauth"
+  //     "proxyUrl": "http://104.198.175.198/oauth"
   //   },
   //   {
   //     "path":"/authentication",
-  //     "proxyUrl": "http://192.168.1.90:8080/authentication"
+  //     "proxyUrl": "http://104.198.175.198/authentication"
   //   }
   //   ]
   // ionic cordova emulate ios --livereload -c --target="iPhone-6s, 12.0"

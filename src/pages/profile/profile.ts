@@ -6,6 +6,8 @@ import {Pendingnotification} from "../../models/pendingnotification";
 import {Storage} from "@ionic/storage";
 import {Network} from "@ionic-native/network";
 import {NotificationService} from "../../services/notification";
+import {Ng2ImgMaxService} from "ng2-img-max";
+import {DomSanitizer} from "@angular/platform-browser";
 
 /**
  * Generated class for the ProfilePage page.
@@ -33,6 +35,45 @@ export class ProfilePage {
   arrayToPostAttachment:any[]=[];
   wifiUploadKey = 'WIFI_UPLOAD';
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+
+
+  uploadedImage: File;
+  imagePreview:any[]=[];
+
+
+
+
+  // async onImageChange(event) {
+  //   let images = event.target.files;
+  //
+  //   for(let image of images) {
+  //     await this.optimizeImages(image);
+  //   }
+  // }
+  //
+  // async optimizeImages(image){
+  //   await this.ng2ImgMax.resizeImage(image, 1024, 1024).subscribe(
+  //     async result => {
+  //       this.uploadedImage = new File([result], result.name);
+  //       console.log(result.name);
+  //       await this.getImagePreview(this.uploadedImage);
+  //     },
+  //     error => {
+  //       console.log('😢 Oh no!', error);
+  //     }
+  //   );
+  // }
+  //
+  // async getImagePreview(file: File) {
+  //   const reader: FileReader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = async () => {
+  //      this.imagePreview.push(reader.result);
+  //   };
+  // }
+
+
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private platform:Platform,accountServ:AccountService
   ,private storage:Storage, private network:Network, private notiServ:NotificationService) {

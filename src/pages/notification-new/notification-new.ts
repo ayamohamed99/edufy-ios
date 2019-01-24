@@ -21,6 +21,7 @@ import {Postattachment} from "../../models/postattachment";
 import {BackgroundMode} from '@ionic-native/background-mode';
 import {Pendingnotification} from "../../models/pendingnotification";
 import {BackgroundNotificationService} from "../../services/background-notification";
+import {ImageCompressorService} from "../../services/image-compress";
 
 @IonicPage()
 @Component({
@@ -56,7 +57,7 @@ export class NotificationNewPage {
   constructor(public navParams: NavParams,public viewCtrl: ViewController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastController, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingController,
-              public actionSheetCtrl: ActionSheetController, private storage:Storage,
+              public actionSheetCtrl: ActionSheetController, private storage:Storage,private compress:ImageCompressorService,
               public backNotify:BackgroundNotificationService)
   {
     this.backNotify.sendTo = [];this.preparedTags = [];
@@ -274,8 +275,8 @@ export class NotificationNewPage {
     });
     alert.present();
   }
-
-  filesChange() {
+  loading;
+  async filesChange() {
     let inputEl: HTMLInputElement = this.inputEl.nativeElement;
     let fileCount: number = inputEl.files.length;
     let faildFilesNamesSize: any[] = [];
@@ -288,23 +289,37 @@ export class NotificationNewPage {
         fileExtintion = fileExtintion.replace('.', '');
         if (num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
           let formData = new FormData();
-          formData.append('file', inputEl.files.item(i));
-          console.log(JSON.stringify(formData));
-          this.backNotify.arrayFormData.push(inputEl.files.item(i));
-           // this.uploadAttach(formData);
-              let file: File = inputEl.files.item(i);
+          debugger;
+          let file: File=inputEl.files.item(i);
+          let fileType = this.getFileType(inputEl.files.item(i).name);
+          if (fileType == "IMAGE") {
+            this.loading = this.loadingCtrl.create({
+              content: '',
+              cssClass:"loadingWithoutBackground"
+            });
+            this.loading.present();
+            this.compress.compressImage(inputEl.files.item(i)).subscribe(
+              result=>{
+                debugger;
+                file = result;
+                formData.append('file', result,result.name);
+                console.log(JSON.stringify(formData));
+                this.backNotify.arrayFormData.push(result);
+                this.organizeData(inputEl,i,formData,result,fileType,fileName);
+              },error => {
+                console.log('😢 Oh no!', error);
+              });
 
-              let fileType = this.getFileType(file.name);
-              if(fileType == "IMAGE"){
+          }else{
+            file = inputEl.files.item(i);
+            formData.append('file', file);
+            console.log(JSON.stringify(formData));
+            this.backNotify.arrayFormData.push(file);
+            this.organizeData(inputEl,i,formData,inputEl.files.item(i),fileType,fileName);
+          }
 
-                this.readFile(file);
-              } else {
-                let attach = new Postattachment();
-                attach.name = fileName;
-                attach.type = fileType;
-                attach.file = inputEl.files.item(i);
-                this.attachmentArray.push(attach);
-              }
+
+
         } else if (num > 26214400) {
           faildFilesNamesSize.push(inputEl.files.item(i).name);
         } else {
@@ -321,6 +336,21 @@ export class NotificationNewPage {
       this.showSupportFiles = true;
       alert('Can\'t upload files name: ' + faildFilesNamesSize.join(',') + ' because it is bigger than 25 Mb and' +
         ' files name: ' + faildFilesNameseExtantion.join(',') + ' because it is not supported.');
+    }
+  }
+
+  organizeData(inputEl,i,formData,file,fileType,fileName){
+    // this.uploadAttach(formData);
+
+    if (fileType == "IMAGE") {
+
+      this.readFile(file);
+    } else {
+      let attach = new Postattachment();
+      attach.name = fileName;
+      attach.type = fileType;
+      attach.file = inputEl.files.item(i);
+      this.attachmentArray.push(attach);
     }
   }
 
@@ -387,6 +417,7 @@ export class NotificationNewPage {
     reader.onloadend = function(e){
       // you can perform an action with readed data here
       console.log(reader.result);
+      that.loading.dismiss();
       let attach = new Postattachment();
       attach.name = file.name;
       attach.type = "IMAGE";
@@ -449,6 +480,3 @@ export class NotificationNewPage {
   }
 
 }
-
-
-
