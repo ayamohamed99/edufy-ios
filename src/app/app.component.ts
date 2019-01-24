@@ -18,6 +18,7 @@ import {Url_domain} from "../models/url_domain";
 import {ChatService} from "../services/chat";
 import {Student} from "../models";
 import {tryCatch} from "rxjs/util/tryCatch";
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 declare var window:any;
 
@@ -61,7 +62,8 @@ export class MyApp {
 
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,public chatServ:ChatService,
-              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController) {
+              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController,
+              private localNotifications:LocalNotifications) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -260,7 +262,7 @@ export class MyApp {
       content: 'Logging in...'
     });
     this.load.present();
-
+    this.localNotifications.clear(2481993);
     let getToken:string;
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
     this.loginServ.postlogin(this.userName,this.password).subscribe(
