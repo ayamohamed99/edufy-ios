@@ -37,6 +37,7 @@ export class MyApp {
   settingsPage = 'SettingsPage';
   reportPage = 'ReportPage';
   chatPage = 'ChatPage';
+  medicalcarePage = 'MedicalCarePage';
 
   userName:string;
   password:string;

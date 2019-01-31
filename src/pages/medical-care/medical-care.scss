@@ -1,0 +1,235 @@
+page-medical-care {
+  .contentColor{
+    background: #f4f4f4;
+  }
+
+//////////////////////////////////START CARD WITH FLIP ANIMATION
+  .container {
+    width: 100%;
+    height: 220px;
+    position: relative;
+    perspective: 800px;
+    border-radius: 4px;
+
+    .button-ios {
+      border-radius: 10px;
+      height: 2em;
+      font-size: 1.6rem;
+      margin-right: 8px;
+      padding: 8px;
+    }
+  }
+
+
+  .cards {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+
+    .front{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      background: #fff;
+      padding: 8px;
+      display: block;
+      font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-smoothing: antialiased;
+      color: #47525D;
+    }
+
+    .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      padding: 8px;
+      display: flex;
+      font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-smoothing: antialiased;
+      color: #47525D;
+      transform: rotateY(180deg);
+      background: white;
+    }
+
+    &.flipped {
+      transform: rotateY(180deg);
+    }
+
+  }
+
+//////////////////////////////////END CARD WITH FLIP ANIMATION
+
+/////////////////////////////////START FRONT OF THE CARD
+
+  .studentName{
+    padding: 0 12px;
+    font-size: 18px;
+    color: #7D7B7B;
+    font-weight:bold;
+    width: 100%;
+    display: block;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center !important;
+  }
+
+  .studentClass{
+    padding: 0 12px;
+    font-size: 12px;
+    color: #7D7B7B;
+    position: relative;
+    //font-weight:bold;
+    display: block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center !important;
+  }
+
+  .studentMedication{
+    padding: 0 12px;
+    font-size: 24px;
+    color: #7D7B7B;
+    position: relative;
+    font-weight:bold;
+    width: 100%;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center !important;
+  }
+
+  .dosagePart{
+    margin-top: 8px;
+    height: 18px;
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .imgDosage{
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+  }
+
+  .separatImg{
+    width: 100%;
+    display: flex;
+  }
+
+  .dosageNumber{
+    font-size: 12px;
+    font-weight:bold;
+    width: 50%;
+    font-style: normal;
+    align-self: center;
+    color: #454545;
+  }
+
+  .dosageType{
+    font-size: 12px;
+    font-weight:bold;
+    width: 50%;
+    font-style: normal;
+    align-self: center;
+    color: #454545;
+  }
+
+
+
+  .dosagePartWithoutMargin{
+    height: 18px;
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .imgSpace{
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    display: inline-flex;
+  }
+
+  .separatValue{
+    height: 18px;
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .dosageNumberValue{
+    font-size: 12px;
+    font-weight:bold;
+    width: 50%;
+    font-style: normal;
+    text-align: center;
+    align-self: center;
+    color: #454545;
+  }
+
+  .dosageTypeValue{
+    font-size: 12px;
+    font-weight:bold;
+    width: 50%;
+    font-style: normal;
+    text-align: center;
+    align-self: center;
+    color: #454545;
+  }
+
+
+  .dosageTimes{
+    font-size: 12px;
+    font-weight:bold;
+    width: 50%;
+    font-style: normal;
+    align-self: center;
+    color: #454545;
+  }
+
+
+  .imgSpaceButton{
+    width: 18px;
+    margin-right: 8px;
+    display: inline-flex;
+  }
+
+  .dosagePartForButton{
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .separatButtonValue{
+    width: 100%;
+    display: block;
+  }
+
+  .buttonTime{
+    margin-right: 8px;
+  }
+
+  .confirmTime{
+    color: white;
+    background: #37D80F;
+    border-color: #37D80F;
+    transition: 1s ease-in-out;
+  }
+
+/////////////////////////////////END FRONT OF THE CARD
+
+/////////////////////////////////START BACK OF THE CARD
+
+
+
+/////////////////////////////////END BACK OF THE CARD
+
+}

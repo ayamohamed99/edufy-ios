@@ -1,0 +1,76 @@
+<ion-header>
+<ion-navbar color="primary">
+  <ion-buttons left style="width: 30px;">
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+  </ion-buttons>
+  <ion-title text-center>MedicalCare</ion-title>
+  <ion-buttons right>
+    <button ion-button [disabled]="true">
+    </button>
+  </ion-buttons>
+</ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="contentColor">
+
+
+  <div id="cardContainer" class="container">
+    <div class="cards" id="card" (click)="flipCard('turn')">
+
+      <div class="front">
+
+        <label class="studentName">Ahmed Tarek</label>
+
+        <label class="studentClass">Baby Class - A</label>
+
+        <label class="studentMedication">Panadol</label>
+
+        <div class="dosagePart">
+          <img class="imgDosage" src="assets/icon/pills.png"/>
+          <div class="separatImg">
+            <label class="dosageNumber">Dosage Number</label>
+            <label class="dosageType">Dosage Type</label>
+          </div>
+        </div>
+
+        <div class="dosagePartWithoutMargin">
+          <div class="imgSpace"></div>
+          <div class="separatValue">
+            <label class="dosageNumberValue">9</label>
+            <label class="dosageTypeValue">Spoon</label>
+          </div>
+        </div>
+
+        <div class="dosagePart">
+          <img class="imgDosage" src="assets/icon/times.png"/>
+          <div class="separatImg">
+            <label class="dosageTimes">Times</label>
+          </div>
+        </div>
+
+        <div class="dosagePartForButton">
+          <div class="imgSpaceButton"></div>
+          <div id="buttonDiv" class="separatButtonValue">
+            <span *ngFor="let time of times;let i = index">
+              {{optimizeData()}}
+              <button mode="ios" class="buttonTime" [id]="'timeButton'+i" ion-button outline (click)="confirmTime($event,'timeButton'+i)">
+                {{time}}
+              </button>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="back">
+        Yo, what up? What're you fuck'n doin' here man!
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>

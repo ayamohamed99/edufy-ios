@@ -42,6 +42,11 @@
           Chat
         </button>
 
+        <button id="MedicalCarePage" ion-item icon-left (click)="onLoad(medicalcarePage);" *ngIf="appearChat">
+          <ion-icon name="heart" small></ion-icon>
+          MedicalCare
+        </button>
+
         <!--<ion-item-divider color="light">Tools</ion-item-divider>-->
 
         <button id="SettingsPage" ion-item icon-left class="toolsItem" (click)="onLoad(settingsPage);">
