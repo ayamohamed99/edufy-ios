@@ -16,9 +16,15 @@
 
 <ion-content padding class="contentColor">
 
+<ion-grid>
+  <ion-row>
+    <ion-col col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+  <!--START THE CARD-->
 
   <div id="cardContainer" class="container">
     <div class="cards" id="card" (click)="flipCard('turn')">
+
+      <!--FRONT CARD START HERE-->
 
       <div class="front">
 
@@ -27,6 +33,12 @@
         <label class="studentClass">Baby Class - A</label>
 
         <label class="studentMedication">Panadol</label>
+
+        <div class="buttonOnImg">
+          <button ion-button class="closeInDiv" clear icon-only *ngIf="true" item-end (click)="openMenu($event)">
+            <ion-icon style="background: #eee0;color: #000000;" name="md-more" class="buttonShape" ></ion-icon>
+          </button>
+        </div>
 
         <div class="dosagePart">
           <img class="imgDosage" src="assets/icon/pills.png"/>
@@ -54,10 +66,76 @@
         <div class="dosagePartForButton">
           <div class="imgSpaceButton"></div>
           <div id="buttonDiv" class="separatButtonValue">
-            <span *ngFor="let time of times;let i = index">
+            <div class="buttonDiv" *ngFor="let time of times;let i = index">
               {{optimizeData()}}
               <button mode="ios" class="buttonTime" [id]="'timeButton'+i" ion-button outline (click)="confirmTime($event,'timeButton'+i)">
                 {{time}}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!--FRONT CARD END HERE-->
+
+
+      <!--BACK CARD START HERE-->
+
+      <div class="back">
+
+        <div class="dosagePart">
+          <img class="imgDosage" src="assets/icon/sand-clock.png"/>
+          <div class="separatImg">
+            <label class="dosageNumber">From</label>
+            <label class="dosageType">To</label>
+          </div>
+        </div>
+
+
+        <div class="dosagePartWithoutMargin">
+          <div class="imgSpace"></div>
+          <div class="separatValue">
+            <label class="dosageNumberValue">01/12/2019</label>
+            <img class="imgDosage" src="assets/icon/FromToArrow.png"/>
+            <label class="dosageTypeValue">01/12/2020</label>
+          </div>
+        </div>
+
+
+        <div class="dosagePart">
+          <img class="imgDosage" src="assets/icon/calendar.png"/>
+          <div class="separatImg">
+            <label class="dosageNumber">Days</label>
+            <label class="dosageType"></label>
+          </div>
+        </div>
+
+
+        <div class="dosagePartWithoutMargin">
+          <div class="imgSpace"></div>
+          <div class="separatValue">
+            <label class="DaysValue">Monday, Tuesday, Wednesday, Thursday</label>
+          </div>
+        </div>
+
+
+        <div class="dosagePart">
+          <img class="imgDosage" src="../../assets/icon/warning.png"/>
+          <div class="separatImg">
+            <label class="dosageNumber">Instructions</label>
+            <label class="dosageType"></label>
+          </div>
+        </div>
+
+
+        <div class="dosagePartForInstruction">
+          <div class="imgSpaceButton"></div>
+          <div id="instDiv" class="separatInstructionValue">
+            <span *ngFor="let inst of instructions;let i = index">
+              {{optimizeBackData()}}
+              <button mode="ios" class="Instructions" color="dark" ion-button outline [disabled]="true">
+                {{inst}}
               </button>
             </span>
           </div>
@@ -65,12 +143,14 @@
 
       </div>
 
+      <!--BACK CARD END HERE-->
 
-      <div class="back">
-        Yo, what up? What're you fuck'n doin' here man!
-      </div>
     </div>
   </div>
 
+  <!--END THE CARD-->
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
 </ion-content>

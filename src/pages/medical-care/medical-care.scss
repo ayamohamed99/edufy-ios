@@ -52,16 +52,22 @@ page-medical-care {
       backface-visibility: hidden;
       border-radius: 15px;
       padding: 8px;
-      display: flex;
+      display: block;
       font: 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
       font-smoothing: antialiased;
       color: #47525D;
       transform: rotateY(180deg);
       background: white;
+      button[disabled], [ion-button][disabled] {
+        opacity: 1;
+      }
     }
 
     &.flipped {
       transform: rotateY(180deg);
+      .front{
+        display: none;
+      }
     }
 
   }
@@ -69,6 +75,15 @@ page-medical-care {
 //////////////////////////////////END CARD WITH FLIP ANIMATION
 
 /////////////////////////////////START FRONT OF THE CARD
+
+  .closeInDiv{
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    top: 0px;
+    right: 2px;
+    font-size: 1.9rem;
+  }
 
   .studentName{
     padding: 0 12px;
@@ -224,11 +239,39 @@ page-medical-care {
     transition: 1s ease-in-out;
   }
 
+  .buttonDiv{
+    width: fit-content;
+    display: inline-table;
+    height: fit-content;
+    position: relative;
+  }
 /////////////////////////////////END FRONT OF THE CARD
 
 /////////////////////////////////START BACK OF THE CARD
 
+  .DaysValue{
+    font-size: 12px;
+    font-weight:bold;
+    width: 100%;
+    font-style: normal;
+    text-align: center;
+    align-self: center;
+    color: #848484;
+  }
 
+  .dosagePartForInstruction{
+    width: 100%;
+    display: inline-flex;
+  }
+
+  .separatInstructionValue{
+    width: 100%;
+    display: block;
+  }
+
+  .Instructions{
+    margin-right: 8px;
+  }
 
 /////////////////////////////////END BACK OF THE CARD
 

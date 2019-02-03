@@ -1,0 +1,52 @@
+page-popovermedicalcarecard{
+  ion-popover {
+    width: 110px;
+    height: fit-content;
+  }
+
+  .popover-content{
+    width: 110px;
+    height: fit-content;
+  }
+
+  .popover-md .popover-content{
+    width: 110px;
+    height: fit-content;
+  }
+
+  ion-list{
+    width: 150px;
+    //height: 120px;
+    height: fit-content;
+  }
+}
+.popover-md .popover-content{
+  width: 150px;
+  border-radius:10px;
+  height: fit-content;
+}
+.popover-lg .popover-content{
+  border-radius:10px;
+  width: 150px;
+  height: fit-content;
+}
+.popover-xl .popover-content{
+  width: 150px;
+  border-radius:10px;
+  height: fit-content;
+}
+.popover-sm .popover-content{
+  width: 150px;
+  border-radius:10px;
+  height: fit-content;
+}
+.popover-xs .popover-content{
+   width: 150px;
+  border-radius:10px;
+  height: fit-content;
+}
+.popover-ios .popover-content{
+  width: 150px;
+  border-radius:10px;
+  height: fit-content;
+}
