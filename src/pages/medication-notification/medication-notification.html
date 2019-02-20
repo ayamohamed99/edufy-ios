@@ -2,26 +2,26 @@
 
   <div class="containerDIV">
 
-    <label class="medicationLable">Panadol</label>
+    <label class="medicationLable">{{notificationMedication.medicationName}}</label>
 
-    <label class="dosageNumberType">3 Spoon</label>
+    <label class="dosageNumberType">{{notificationMedication.dosageNumber+' '+notificationMedication.dosageType}}</label>
 
-    <label class="studentData">Ahmed Tarek</label>
+    <label class="studentData">{{notificationMedication.student.name}}</label>
 
-    <label class="studentData">Baby Class - A</label>
+    <label class="studentData">{{notificationMedication.student.classes.grades.name+' - '+notificationMedication.student.classes.name}}</label>
 
 
     <div class="divOfImg">
-      <img class="medicationTypeImg" src="assets/medication-type/any.png"/>
+      <img class="medicationTypeImg" [src]="setImageOfNotification(notificationMedication.dosageType)"/>
     </div>
 
-    <label class="studentData">02:30</label>
+    <label class="studentData">{{notificationMedication.medicationTime}}</label>
 
-    <label class="studentData">next at Sunday 05:30</label>
+    <label class="studentData">next at {{notificationMedication.medicationNextTime}}</label>
 
     <div class="midScreen">
-      <button mode="ios" ion-button outline color="white" class="leftButtonClass">Take</button>
-      <button mode="ios" ion-button outline color="white" class="rightButtonClass">Late</button>
+      <button mode="ios" ion-button outline color="white" class="leftButtonClass" (click)="confimTime(notificationMedication.shceduleId)">Give</button>
+      <button mode="ios" ion-button outline color="white" class="rightButtonClass" (click)="cancelTime()">Late</button>
     </div>
 
   </div>

@@ -16,26 +16,43 @@
 
 <ion-content padding class="contentColor">
 
+  <!--SCROLL TO REFRESH-->
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="loading && medicalRecords.length < 1">
+    <img class="loadingMedicalCare" src="assets/imgs/heartbeat.svg">
+  </div>
+
+  <ion-item class="fitTheView" *ngIf="true">
+    <ion-label class="textColor">Status</ion-label>
+    <ion-select [(ngModel)]="theStatus" (ngModelChange)="statusModelChange(true)" interface="popover">
+      <ion-option [selected]="theStatus" *ngFor="let status of allStatusInMedication" >{{status}}</ion-option>
+    </ion-select>
+  </ion-item>
+
 <ion-grid>
   <ion-row>
-    <ion-col col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
+    <ion-col *ngFor="let medicine of medicalRecords;let k = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
   <!--START THE CARD-->
 
-  <div id="cardContainer" class="container">
-    <div class="cards" id="card" (click)="flipCard('turn')">
+  <div [id]="'cardContainer'+k" class="container">
+    <div class="cards" [id]="'card'+k" (click)="flipCard('turn',k)">
 
       <!--FRONT CARD START HERE-->
 
       <div class="front">
 
-        <label class="studentName">Ahmed Tarek</label>
+        <label class="studentName">{{medicine.student.name}}</label>
 
-        <label class="studentClass">Baby Class - A</label>
+        <label class="studentClass">{{medicine.student.classes.grade.name+" - "+medicine.student.classes.name}}</label>
 
-        <label class="studentMedication">Panadol</label>
+        <label class="studentMedication">{{medicine.oneMedication.medicine.name}}</label>
 
         <div class="buttonOnImg">
-          <button ion-button class="closeInDiv" clear icon-only *ngIf="true" item-end (click)="openMenu($event)">
+          <button ion-button class="closeInDiv" clear icon-only *ngIf="false" item-end (click)="openMenu($event)">
+          <!--<button ion-button class="closeInDiv" clear icon-only *ngIf="medicine.createdFrom == 'web'" item-end (click)="openMenu($event)">-->
             <ion-icon style="background: #eee0;color: #000000;" name="md-more" class="buttonShape" ></ion-icon>
           </button>
         </div>
@@ -51,8 +68,8 @@
         <div class="dosagePartWithoutMargin">
           <div class="imgSpace"></div>
           <div class="separatValue">
-            <label class="dosageNumberValue">9</label>
-            <label class="dosageTypeValue">Spoon</label>
+            <label class="dosageNumberValue">{{medicine.oneMedication.dosageNumber}}</label>
+            <label class="dosageTypeValue">{{medicine.oneMedication.dosageType.type}}</label>
           </div>
         </div>
 
@@ -66,10 +83,11 @@
         <div class="dosagePartForButton">
           <div class="imgSpaceButton"></div>
           <div id="buttonDiv" class="separatButtonValue">
-            <div class="buttonDiv" *ngFor="let time of times;let i = index">
-              {{optimizeData()}}
-              <button mode="ios" class="buttonTime" [id]="'timeButton'+i" ion-button outline (click)="confirmTime($event,'timeButton'+i)">
-                {{time}}
+            <div class="buttonDiv" *ngFor="let time of medicine.oneMedication.medicationSchedule;let i = index">
+              {{optimizeData(k,medicine.oneMedication.medicationSchedule)}}
+              <button mode="ios" class="buttonTime" [ngClass]="checkIfTaken(time.medicationsNotifications)?'confirmTime':'buttonTime'" [id]="'timeButton'+k+'med'+i" ion-button outline (click)="confirmTime($event,'timeButton'+k+'med'+i,time.id,checkIfTaken(time.medicationsNotifications))"
+              [disabled]="checkMedicationTime(time.time,medicine.oneMedication) && !checkIfTaken(time.medicationsNotifications)">
+                {{time.time.slice(0, -3)}}
               </button>
             </div>
           </div>
@@ -96,9 +114,9 @@
         <div class="dosagePartWithoutMargin">
           <div class="imgSpace"></div>
           <div class="separatValue">
-            <label class="dosageNumberValue">01/12/2019</label>
+            <label class="dosageNumberValue">{{medicine.oneMedication.startDate?.slice(0,-6)}}</label>
             <img class="imgDosage" src="assets/icon/FromToArrow.png"/>
-            <label class="dosageTypeValue">01/12/2020</label>
+            <label class="dosageTypeValue">{{medicine.oneMedication.endDate?.slice(0,-6)}}</label>
           </div>
         </div>
 
@@ -115,13 +133,13 @@
         <div class="dosagePartWithoutMargin">
           <div class="imgSpace"></div>
           <div class="separatValue">
-            <label class="DaysValue">Monday, Tuesday, Wednesday, Thursday</label>
+            <label class="DaysValue">{{setDaysOfMedication(medicine.oneMedication.medicationSchedule[0])}}</label>
           </div>
         </div>
 
 
         <div class="dosagePart">
-          <img class="imgDosage" src="../../assets/icon/warning.png"/>
+          <img class="imgDosage" src="assets/icon/warning.png"/>
           <div class="separatImg">
             <label class="dosageNumber">Instructions</label>
             <label class="dosageType"></label>
@@ -132,10 +150,10 @@
         <div class="dosagePartForInstruction">
           <div class="imgSpaceButton"></div>
           <div id="instDiv" class="separatInstructionValue">
-            <span *ngFor="let inst of instructions;let i = index">
-              {{optimizeBackData()}}
+            <span *ngFor="let inst of medicine.oneMedication.instructions;let i = index">
+              {{optimizeBackData(k, medicine.oneMedication.instructions)}}
               <button mode="ios" class="Instructions" color="dark" ion-button outline [disabled]="true">
-                {{inst}}
+                {{inst.name}}
               </button>
             </span>
           </div>
@@ -152,5 +170,10 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+
+  <!--SCROLL TO ADD MORE-->
+  <ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

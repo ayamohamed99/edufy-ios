@@ -59,6 +59,7 @@ import {ChatService} from "../services/chat";
 import {BackgroundNotificationService} from "../services/background-notification";
 import {ImageCompressorService} from "../services/image-compress";
 import {Ng2ImgMaxModule} from "ng2-img-max";
+import {MedicalCareService} from '../services/medicalcare';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
@@ -112,7 +113,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     FCMService,FirebaseMessaging,
     LocalNotifications,InAppBrowser,
     ChatService,BackgroundNotificationService,
-    ImageCompressorService
+    ImageCompressorService,MedicalCareService
   ]
 })
 export class AppModule {

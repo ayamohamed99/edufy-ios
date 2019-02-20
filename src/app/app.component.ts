@@ -452,6 +452,8 @@ export class MyApp {
           let modal = this.modalCtrl.create('ChatDialoguePage',
             {studentData:Stud});
           modal.present();
+        } else if(data.page === this.medicalcarePage){
+          this.openMedicalCare(data);
         } else{
           this.nav.setRoot(data.page).then(
             value => {
@@ -499,7 +501,9 @@ export class MyApp {
               let modal = this.modalCtrl.create('ChatDialoguePage',
                 {studentData:Stud});
               modal.present();
-            } else{
+            } else if(data.data.page === this.medicalcarePage){
+              this.openMedicalCare(data.data);
+            }else{
               this.nav.setRoot(data.data.page).then(
                 value => {
                   console.log(value);
@@ -601,5 +605,9 @@ export class MyApp {
     };
   }
 
+
+  openMedicalCare(data){
+
+  }
 }
 

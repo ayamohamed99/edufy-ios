@@ -3,6 +3,25 @@ page-medical-care {
     background: #f4f4f4;
   }
 
+//////////////////////////////////Start Loading
+  .loadingMedicalCare{
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    border-radius: 3px;
+  }
+  .fitTheView{
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #F4F4F4F4;
+  }
+////////////////////////////////////End Of Loading
+
 //////////////////////////////////START CARD WITH FLIP ANIMATION
   .container {
     width: 100%;
