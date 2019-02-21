@@ -44,4 +44,7 @@ export class StudentsService{
       this.httpOptions);
   }
 
+  findStudentByID(id,students){
+    return students.find(x => x.studentId === id);
+  }
 }

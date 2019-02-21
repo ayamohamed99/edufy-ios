@@ -55,7 +55,7 @@ export class ChatService{
   }
 
   getNewMessages(){
-    return this.http.post(this.DomainUrl.Domain + this.commonUrl+"?operationId=1", this.httpOptions);
+    return this.http.get(this.DomainUrl.Domain + "authentication/chat.ent?operationId=1", this.httpOptions);
   }
 
   getChatMessagesHistory(studentId,branchId){

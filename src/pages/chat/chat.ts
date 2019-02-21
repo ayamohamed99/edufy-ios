@@ -14,6 +14,7 @@ import {ChatService} from "../../services/chat";
 })
 export class ChatPage {
   @ViewChild('LastOpenedContainer') private LastOpenedContainer: any;
+  recentChatKey = "LOCAL_STORAGE_RECENT_CHAT";
   allStudents:any = [];
   lastStudents:any = [];
   MAIN_STUDENTS_ARRAY:any[] = [];
@@ -25,11 +26,25 @@ export class ChatPage {
     if (platform.is('core')) {
       studentServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
       this.getChatStudent();
+      let recentChat = localStorage.getItem(this.recentChatKey);
+      if(recentChat){
+        this.lastStudents = JSON.parse(recentChat);
+      }
+      chatServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
+      this.getNewChat();
     }else{
       storage.get('LOCAL_STORAGE_TOKEN').then(
         val => {
           studentServ.putHeader(val);
           this.getChatStudent();
+          chatServ.putHeader(val);
+          storage.get(this.recentChatKey).then(
+            val => {
+              if(val) {
+                this.lastStudents = JSON.parse(val);
+              }
+              this.getNewChat();
+            });
         });
     }
 
@@ -147,9 +162,22 @@ export class ChatPage {
   }
 
   viewListsEffect(student,index,From){
-    if(!this.lastStudents.some( value =>value.studentId == student.studentId)
-      && index == -1 && From == 'All'){
+    let findStudent = this.lastStudents.some( value =>value.studentId == student.studentId);
+    if(!findStudent && index == -1 && From == 'All'){
       this.lastStudents.splice(0, 0,student);
+
+    }else if(findStudent && index == -1 && From == 'All') {
+      for(let i=0;i<this.lastStudents.length;i++) {
+        if (student.studentId == this.lastStudents[i].studentId ) {
+          try {
+            this.LastOpenedContainer.nativeElement.scrollLeft = 0;
+          } catch (err) {
+          }
+          this.lastStudents.splice(i, 1);
+          this.lastStudents.splice(0, 0, student);
+        }
+      }
+
     }else if(index > -1 && From == 'Last'){
       try {
         this.LastOpenedContainer.nativeElement.scrollLeft = 0;
@@ -157,6 +185,31 @@ export class ChatPage {
       }
       this.lastStudents.splice(index, 1);
       this.lastStudents.splice(0, 0,student);
+    }else if(index == -1 && From == 'server') {
+      let found = false;
+      for (let i = 0; i < this.lastStudents.length; i++) {
+        if (student.studentId == this.lastStudents[i].studentId) {
+          try {
+            this.LastOpenedContainer.nativeElement.scrollLeft = 0;
+          } catch (err) {
+          }
+          this.lastStudents.splice(i, 1);
+          this.lastStudents.splice(0, 0, student);
+          found = true;
+        }
+      }
+
+      if(!found){
+        this.lastStudents.splice(0, 0,student);
+      }
+
+    }
+
+
+    if (this.platform.is('core')) {
+      localStorage.setItem(this.recentChatKey, JSON.stringify(this.lastStudents));
+    }else {
+      this.storage.set(this.recentChatKey, JSON.stringify(this.lastStudents));
     }
   }
 
@@ -192,4 +245,22 @@ export class ChatPage {
     }
   }
 
+
+  getNewChat(){
+    this.chatServ.getNewMessages().subscribe(
+      val => {
+        let values:any = [];
+        values = val;
+
+        if(values.length > 0) {
+          for (let data of values) {
+            let stu: any = this.studentServ.findStudentByID(data.senderId,this.MAIN_STUDENTS_ARRAY);
+            this.viewListsEffect(stu,-1,'server');
+          }
+        }
+      },err => {
+        console.log("cant get recent chat from server");
+        console.log(err);
+      });
+  }
 }
