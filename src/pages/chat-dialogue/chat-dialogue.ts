@@ -43,33 +43,6 @@ export class ChatDialoguePage {
           this.getChatHistory();
         });
     }
-
-    this.chatServ.newMessageSubject$.subscribe(
-      value => {
-        if(value){
-          let message:any = value;
-          if(message.chatThread.student.id == this.student.studentId) {
-            let chat = new ChatDialogue();
-            chat.chatMessageRecieverStatesList = message.chatMessageRecieverStatesList;
-            chat.chatThread = message.chatThread;
-            chat.dateTimeRead = message.dateTimeRead;
-            chat.dateTimeRecieved = message.dateTimeRecieved;
-            chat.dateTimeSent = message.dateTimeSent;
-            chat.id = message.id;
-            chat.message = message.message;
-            chat.senderId = message.senderId;
-            chat.status = message.status;
-            chat.user = message.user;
-            this.chatDialogs.push(chat);
-            this.scrollDown();
-          }else{
-            this.chatServ.NewChats.push(message);
-          }
-        }
-      },error1 => {
-        console.log(error1);
-      });
-
   }
 
   ionViewDidLoad() {
@@ -103,6 +76,31 @@ export class ChatDialoguePage {
           this.chatDialogs.push(chat);
         }
 
+        this.chatServ.newMessageSubject$.subscribe(
+          value => {
+            if(value){
+              let message:any = value;
+              if(message.chatThread.student.id == this.student.studentId) {
+                let chat = new ChatDialogue();
+                chat.chatMessageRecieverStatesList = message.chatMessageRecieverStatesList;
+                chat.chatThread = message.chatThread;
+                chat.dateTimeRead = message.dateTimeRead;
+                chat.dateTimeRecieved = message.dateTimeRecieved;
+                chat.dateTimeSent = message.dateTimeSent;
+                chat.id = message.id;
+                chat.message = message.message;
+                chat.senderId = message.senderId;
+                chat.status = message.status;
+                chat.user = message.user;
+                this.chatDialogs.push(chat);
+                this.scrollDown();
+              }else{
+                this.chatServ.NewChats.push(message);
+              }
+            }
+          },error1 => {
+            console.log(error1);
+          });
         this.scrollDown();
         this.loading = false;
         },error1 => {

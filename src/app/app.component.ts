@@ -451,6 +451,15 @@ export class MyApp {
           Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
           let modal = this.modalCtrl.create('ChatDialoguePage',
             {studentData:Stud});
+          modal.onDidDismiss(
+            val=>{
+              this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
+                val => {
+                  if(val) {
+                    this.updateRecentChatData(val,student);
+                  }
+                });
+            });
           modal.present();
         } else if(data.page === this.medicalcarePage){
           this.openMedicalCare(data);
@@ -500,6 +509,15 @@ export class MyApp {
               Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
               let modal = this.modalCtrl.create('ChatDialoguePage',
                 {studentData:Stud});
+              modal.onDidDismiss(
+                val=>{
+                  this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
+                    val => {
+                      if(val) {
+                        this.updateRecentChatData(val,student);
+                      }
+                    });
+                });
               modal.present();
             } else if(data.data.page === this.medicalcarePage){
               this.openMedicalCare(data.data);
@@ -579,6 +597,15 @@ export class MyApp {
                   Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
                   let modal = that.modalCtrl.create('ChatDialoguePage',
                     {studentData:Stud});
+                  modal.onDidDismiss(
+                    val=>{
+                      that.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
+                        val => {
+                          if(val) {
+                            that.updateRecentChatData(val,student);
+                          }
+                        });
+                    });
                   modal.present();
                 }
               }
@@ -605,6 +632,28 @@ export class MyApp {
     };
   }
 
+
+  updateRecentChatData(val,student){
+    let studentsInStorage:any = JSON.parse(val);
+    let found = false;
+    for (let i = 0; i < studentsInStorage.length; i++) {
+      if (student.studentId == studentsInStorage[i].studentId) {
+        studentsInStorage.splice(i, 1);
+        studentsInStorage.splice(0, 0, student);
+        found = true;
+      }
+    }
+
+    if(!found){
+      studentsInStorage.splice(0, 0,student);
+    }
+
+    if (this.platform.is('core')) {
+      localStorage.setItem('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
+    }else {
+      this.storage.set('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
+    }
+  }
 
   openMedicalCare(data){
 
