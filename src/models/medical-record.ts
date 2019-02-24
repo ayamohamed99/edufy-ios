@@ -11,4 +11,8 @@ export class MedicalRecord {
   prescription:any;
   oneMedication:any;
   student:Student;
+  activeMedication:boolean;
+  activeMedicationTaken:boolean;
+  timeOfActiveMedication:string;
+  otherTimeOfTakenMedication:any;
 }

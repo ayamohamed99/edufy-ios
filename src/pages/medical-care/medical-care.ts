@@ -7,6 +7,7 @@ import {Storage} from "@ionic/storage";
 import {MedicalRecord} from "../../models/medical-record";
 import {Student} from "../../models";
 import {TransFormDate} from "../../services/transFormDate";
+import {a} from "@angular/core/src/render3";
 
 
 /**
@@ -98,12 +99,37 @@ export class MedicalCarePage {
     }
   }
 
+  setStartAndEndDate(date){
+    if(date){
+      return date.slice(0,-6);
+    }else{
+      return '';
+    }
+  }
+
   checkIfTaken(medicationSchadule){
     if(medicationSchadule){
       return medicationSchadule.taken;
     }else{
       return false;
     }
+  }
+
+  writeOnTimeButton(medication){
+    let writeThis;
+    if(medication.activeMedication && medication.activeMedicationTaken) {
+      let arrayOfTimes = [];
+      arrayOfTimes  = medication.otherTimeOfTakenMedication;
+      if(arrayOfTimes.length > 0) {
+        writeThis = "Took " + medication.oneMedication.dosageNumber + " " + medication.oneMedication.dosageType.type + " at " + medication.timeOfActiveMedication.time.slice(0,-3)+", "+ arrayOfTimes;
+      }else{
+        writeThis = "Took " + medication.oneMedication.dosageNumber + " " + medication.oneMedication.dosageType.type + " at " + medication.timeOfActiveMedication.time.slice(0,-3);
+      }
+    }else if(medication.activeMedication && !medication.activeMedicationTaken){
+      writeThis = "Give "+medication.oneMedication.dosageNumber+" "+medication.oneMedication.dosageType.type +" at "+ medication.timeOfActiveMedication.time.slice(0,-3);
+    }
+
+    return writeThis;
   }
 
   checkMedicationTime(time,medication){
@@ -176,54 +202,45 @@ export class MedicalCarePage {
       }
   }
 
-  optimizeData(index,times){
-    let lineNumber = times.length %4;
-    if(lineNumber > 0){
-      // let height = 220 + (((this.times.length-lineNumber)/4)*40);
-      let elName = 'cardContainer'+index;
-      let cardContainer = document.getElementById(elName);
-      let buttonDiv = document.getElementById('buttonDiv');
-      if(cardContainer) {
-        let getheight = buttonDiv.clientHeight;
-        this.frontHeight = 250 + (getheight - 40);
-        cardContainer.style.height = this.frontHeight + "px";
-      }
+  optimizeTimesData(schadule){
+    let times:any[] = [];
+    for(let time of schadule){
+      times.push(" "+time.time.slice(0, -3));
     }
+    return times;
   }
 
 
-  optimizeBackData(index,instruction){
-    let lineNumber = instruction.length;
-    if(lineNumber > 0){
-      // let height = 220 + (((this.times.length-lineNumber)/4)*40);
-      let elName = 'cardContainer'+index;
-      let cardContainer = document.getElementById(elName);
-      let buttonDiv = document.getElementById('instDiv');
-      if(cardContainer) {
-        let getheight = buttonDiv.clientHeight;
-        let height = this.frontHeight + (getheight - 40);
-        if(height > this.frontHeight) {
-          cardContainer.style.height = height + "px";
-        }
-      }
+  optimizeInstructionData(instructions){
+    let allInstructions:any[] = [];
+    for(let instruction of instructions){
+      allInstructions.push(" "+instruction.name);
+    }
+    if(allInstructions.length > 0) {
+      return allInstructions;
+    }else{
+      return "No Instructions"
     }
   }
 
   setDaysOfMedication(days){
     let daysOfMedication = [];
-    if(days.friday == true){daysOfMedication.push("Friday")}
-    if(days.monday == true){daysOfMedication.push("monday")}
-    if(days.saturday == true){daysOfMedication.push("saturday")}
-    if(days.sunday == true){daysOfMedication.push("sunday")}
-    if(days.thursday == true){daysOfMedication.push("thursday")}
-    if(days.tuesday == true){daysOfMedication.push("tuesday")}
-    if(days.wednesday == true){daysOfMedication.push("wednesday")}
-
-    return daysOfMedication.toString();
+    if(days.friday == true){daysOfMedication.push(" Friday")}
+    if(days.monday == true){daysOfMedication.push(" Monday")}
+    if(days.saturday == true){daysOfMedication.push(" Saturday")}
+    if(days.sunday == true){daysOfMedication.push(" Sunday")}
+    if(days.thursday == true){daysOfMedication.push(" Thursday")}
+    if(days.tuesday == true){daysOfMedication.push(" Tuesday")}
+    if(days.wednesday == true){daysOfMedication.push(" Wednesday")}
+    if(daysOfMedication.length == 5){
+     return "EveryDay";
+    }else {
+      return daysOfMedication.toString();
+    }
   }
 
   openMenu(ev:Event){
-    ev.stopPropagation();
+    // ev.stopPropagation();
     let popover = this.popoverCtrl.create('PopoverMedicalCareCardPage', {data:"Wait"});
 
     popover.onDidDismiss(data => {
@@ -254,6 +271,9 @@ export class MedicalCarePage {
           for(let val of Data){
             for(let medicine of val.medicalRecord.prescription.medications){
               let medicalRec = new MedicalRecord();
+
+              let statusData = this.checkIfTimeToTakeMedication(medicine,'there_is_active_medication');
+
               medicalRec.accountId=val.medicalRecord.accountId;
               medicalRec.approved=val.medicalRecord.approved;
               medicalRec.branchId=val.medicalRecord.branchId;
@@ -264,6 +284,11 @@ export class MedicalCarePage {
               medicalRec.prescription=val.medicalRecord.prescription;
               medicalRec.oneMedication=medicine;
               medicalRec.student=val.medicalRecord.student;
+              medicalRec.activeMedication = statusData.status;
+              medicalRec.activeMedicationTaken = statusData.taken;
+              medicalRec.timeOfActiveMedication = statusData.data;
+              medicalRec.otherTimeOfTakenMedication = statusData.otherTaken;
+
               this.medicalRecords.push(medicalRec);
             }
           }
@@ -398,4 +423,42 @@ export class MedicalCarePage {
   }
 
 
+  checkIfTimeToTakeMedication(medication, forWhat){
+    let booleanArrayOfMedTime = [];
+    let statusData:any ={'status':false,'data':{},'taken':false,'otherTaken':[]};
+    let otherTaken = [];
+
+    for(let schadual of medication.medicationSchedule){
+
+      let ifTaken = this.checkIfTaken(schadual.medicationsNotifications);
+
+      if(this.checkMedicationTime(schadual.time,medication) && !ifTaken){
+        statusData.status = false;
+        booleanArrayOfMedTime.push(statusData);
+      }else if(this.checkMedicationTime(schadual.time,medication) && ifTaken){
+        otherTaken.push(schadual.time.slice(0,-3));
+      } else{
+        statusData.status = true;
+        statusData.data = schadual;
+        statusData.taken = ifTaken;
+      }
+      statusData.otherTaken = otherTaken;
+      booleanArrayOfMedTime.push(statusData);
+    }
+
+    // let WhatIFound:any;
+    // if(forWhat == 'there_is_active_medication'){
+    //   for(let data of booleanArrayOfMedTime){
+    //     if(data.status != false){
+    //       WhatIFound = data;
+    //     }
+    //   }
+    //   if(WhatIFound == null || WhatIFound == ''){
+    //     WhatIFound = false;
+    //   }
+    // }
+
+
+    return statusData;
+  }
 }

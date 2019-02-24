@@ -37,136 +37,106 @@
     <ion-col *ngFor="let medicine of medicalRecords;let k = index" col-12 col-sm-12 col-xl-4 col-lg-6 col-md-6>
   <!--START THE CARD-->
 
-  <div [id]="'cardContainer'+k" class="container">
-    <div class="cards" [id]="'card'+k" (click)="flipCard('turn',k)">
+      <div class="editDivView">
+        <!--<ion-card class="scale-up-center" *ngIf="checkMedicationTime(time.time,medicine.oneMedication) && !checkIfTaken(time.medicationsNotifications)">-->
+        <ion-card class="scale-up-center">
 
-      <!--FRONT CARD START HERE-->
+          <ion-item mode="md">
 
-      <div class="front">
+            <ion-avatar item-start>
+              <img src="assets/imgs/profile.png" *ngIf="!medicine.student.profileImg">
+              <img [src]="medicine.student.profileImg" *ngIf="medicine.student.profileImg">
+            </ion-avatar>
 
-        <label class="studentName">{{medicine.student.name}}</label>
+            <label class="studentName" text-capitalize>{{ medicine.student.name}}</label>
+            <label class="studentClass" text-capitalize>{{medicine.student.classes.grade.name+" - "+medicine.student.classes.name}}</label>
+            <label class="creationDate" text-capitalize>{{ medicine.oneMedication.creationDate}}</label>
 
-        <label class="studentClass">{{medicine.student.classes.grade.name+" - "+medicine.student.classes.name}}</label>
 
-        <label class="studentMedication">{{medicine.oneMedication.medicine.name}}</label>
-
-        <div class="buttonOnImg">
-          <button ion-button class="closeInDiv" clear icon-only *ngIf="false" item-end (click)="openMenu($event)">
-          <!--<button ion-button class="closeInDiv" clear icon-only *ngIf="medicine.createdFrom == 'web'" item-end (click)="openMenu($event)">-->
-            <ion-icon style="background: #eee0;color: #000000;" name="md-more" class="buttonShape" ></ion-icon>
-          </button>
-        </div>
-
-        <div class="dosagePart">
-          <img class="imgDosage" src="assets/icon/pills.png"/>
-          <div class="separatImg">
-            <label class="dosageNumber">Dosage Number</label>
-            <label class="dosageType">Dosage Type</label>
-          </div>
-        </div>
-
-        <div class="dosagePartWithoutMargin">
-          <div class="imgSpace"></div>
-          <div class="separatValue">
-            <label class="dosageNumberValue">{{medicine.oneMedication.dosageNumber}}</label>
-            <label class="dosageTypeValue">{{medicine.oneMedication.dosageType.type}}</label>
-          </div>
-        </div>
-
-        <div class="dosagePart">
-          <img class="imgDosage" src="assets/icon/times.png"/>
-          <div class="separatImg">
-            <label class="dosageTimes">Times</label>
-          </div>
-        </div>
-
-        <div class="dosagePartForButton">
-          <div class="imgSpaceButton"></div>
-          <div id="buttonDiv" class="separatButtonValue">
-            <div class="buttonDiv" *ngFor="let time of medicine.oneMedication.medicationSchedule;let i = index">
-              {{optimizeData(k,medicine.oneMedication.medicationSchedule)}}
-              <button mode="ios" class="buttonTime" [ngClass]="checkIfTaken(time.medicationsNotifications)?'confirmTime':'buttonTime'" [id]="'timeButton'+k+'med'+i" ion-button outline (click)="confirmTime($event,'timeButton'+k+'med'+i,time.id,checkIfTaken(time.medicationsNotifications))"
-              [disabled]="checkMedicationTime(time.time,medicine.oneMedication) && !checkIfTaken(time.medicationsNotifications)">
-                {{time.time.slice(0, -3)}}
+            <div class="buttonOnImg">
+              <button ion-button class="closeInDiv" clear icon-only *ngIf="false" item-end (click)="openMenu($event)">
+                <!--<button ion-button class="closeInDiv" clear icon-only *ngIf="medicine.createdFrom == 'web'" item-end (click)="openMenu($event)">-->
+                <ion-icon style="background: #eee0;color: #000000;" name="md-more" class="buttonShape" ></ion-icon>
               </button>
             </div>
-          </div>
-        </div>
+          </ion-item>
 
+          <label class="studentMedication">{{medicine.oneMedication.medicine.name}}</label>
+
+          <div class="dosagePart">
+
+            <img class="imgDosage" src="assets/icon/times.png"/>
+            <label class="dosageTimes">Times of Dosages</label>
+
+          </div>
+
+
+          <div class="dosagePartForButton">
+            <div class="imgSpaceButton"></div>
+            <div class="buttonDiv">
+              <label class="timesColor">{{optimizeTimesData(medicine.oneMedication.medicationSchedule)}}</label>
+            </div>
+          </div>
+
+
+          <span *ngIf="medicine.activeMedication && !medicine.activeMedicationTaken">
+            <div class="dosagePart">
+              <img class="imgDosage" src="assets/icon/warning.png"/>
+              <label class="dosageTimes">Instructions</label>
+            </div>
+
+
+            <div class="dosagePartForButton">
+              <div class="imgSpaceButton"></div>
+              <div class="buttonDiv">
+                <label class="timesColor">{{optimizeInstructionData(medicine.oneMedication.instructions)}}</label>
+              </div>
+            </div>
+          </span>
+
+          <span *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || !medicine.activeMedication">
+            <div class="dosagePart">
+              <img class="imgDosage" src="assets/icon/calendar.png"/>
+              <label class="dosageTimes">Days</label>
+            </div>
+
+            <div class="dosagePartForButton">
+              <div class="imgSpaceButton"></div>
+              <div class="buttonDiv">
+                <label class="timesColor">{{setDaysOfMedication(medicine.oneMedication.medicationSchedule[0])}}</label>
+              </div>
+            </div>
+          </span>
+
+          <span *ngIf="!medicine.activeMedication && !medicine.activeMedicationTaken">
+            <div class="dosagePart">
+              <img class="imgDosage" src="assets/icon/sand-clock.png"/>
+              <div class="separatImg">
+                <label class="dosageNumber">From</label>
+                <label class="dosageType">To</label>
+              </div>
+            </div>
+
+            <div class="dosagePartWithoutMargin">
+              <div class="imgSpace"></div>
+              <div class="separatValue">
+                <label class="dosageNumberValue">{{setStartAndEndDate(medicine.oneMedication.startDate)}}</label>
+                <img class="imgDosage" src="assets/icon/FromToArrow.png"/>
+                <label class="dosageTypeValue">{{setStartAndEndDate(medicine.oneMedication.endDate)}}</label>
+              </div>
+            </div>
+          </span>
+
+          <div class="buttonActionTime" [ngClass]="medicine.activeMedicationTaken?'buttonActionTimeConfirm':'buttonActionTime'" *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || ( medicine.activeMedication && !medicine.activeMedicationTaken)">
+            <button mode="ios" class="buttonTime" [ngClass]="medicine.activeMedicationTaken?'confirmTime':'buttonTime'" [id]="'timeButton'+k" ion-button block  (click)="confirmTime($event,'timeButton'+k,medicine.timeOfActiveMedication.id,checkIfTaken(medicine.timeOfActiveMedication.medicationsNotifications))">
+              {{writeOnTimeButton(medicine)}}
+            </button>
+          </div>
+
+          <div class="bottomSpace"></div>
+        </ion-card>
       </div>
 
-      <!--FRONT CARD END HERE-->
-
-
-      <!--BACK CARD START HERE-->
-
-      <div class="back">
-
-        <div class="dosagePart">
-          <img class="imgDosage" src="assets/icon/sand-clock.png"/>
-          <div class="separatImg">
-            <label class="dosageNumber">From</label>
-            <label class="dosageType">To</label>
-          </div>
-        </div>
-
-
-        <div class="dosagePartWithoutMargin">
-          <div class="imgSpace"></div>
-          <div class="separatValue">
-            <label class="dosageNumberValue">{{medicine.oneMedication.startDate?.slice(0,-6)}}</label>
-            <img class="imgDosage" src="assets/icon/FromToArrow.png"/>
-            <label class="dosageTypeValue">{{medicine.oneMedication.endDate?.slice(0,-6)}}</label>
-          </div>
-        </div>
-
-
-        <div class="dosagePart">
-          <img class="imgDosage" src="assets/icon/calendar.png"/>
-          <div class="separatImg">
-            <label class="dosageNumber">Days</label>
-            <label class="dosageType"></label>
-          </div>
-        </div>
-
-
-        <div class="dosagePartWithoutMargin">
-          <div class="imgSpace"></div>
-          <div class="separatValue">
-            <label class="DaysValue">{{setDaysOfMedication(medicine.oneMedication.medicationSchedule[0])}}</label>
-          </div>
-        </div>
-
-
-        <div class="dosagePart">
-          <img class="imgDosage" src="assets/icon/warning.png"/>
-          <div class="separatImg">
-            <label class="dosageNumber">Instructions</label>
-            <label class="dosageType"></label>
-          </div>
-        </div>
-
-
-        <div class="dosagePartForInstruction">
-          <div class="imgSpaceButton"></div>
-          <div id="instDiv" class="separatInstructionValue">
-            <span *ngFor="let inst of medicine.oneMedication.instructions;let i = index">
-              {{optimizeBackData(k, medicine.oneMedication.instructions)}}
-              <button mode="ios" class="Instructions" color="dark" ion-button outline [disabled]="true">
-                {{inst.name}}
-              </button>
-            </span>
-          </div>
-        </div>
-
-      </div>
-
-      <!--BACK CARD END HERE-->
-
-    </div>
-  </div>
-
-  <!--END THE CARD-->
     </ion-col>
   </ion-row>
 </ion-grid>
