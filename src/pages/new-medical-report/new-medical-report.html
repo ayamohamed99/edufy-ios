@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title text-center>New {{pageName}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="contentColor">
+
+
+  <ion-spinner></ion-spinner>
+
+  <!-- Lines -->
+  <ion-spinner name="lines"></ion-spinner>
+
+  <!-- Lines Small -->
+  <ion-spinner name="lines-small"></ion-spinner>
+
+  <!-- Dots -->
+  <ion-spinner name="dots"></ion-spinner>
+
+  <!-- Bubbles -->
+  <ion-spinner name="bubbles"></ion-spinner>
+
+  <!-- Circles -->
+  <ion-spinner name="circles"></ion-spinner>
+
+  <!-- Crescent -->
+  <ion-spinner name="crescent"></ion-spinner>
+
+  <!-- Paused Default Spinner -->
+  <ion-spinner paused></ion-spinner>
+
+
+</ion-content>
+
+
+<ion-fab bottom right #fab>
+
+  <button ion-fab><ion-icon name="add"></ion-icon></button>
+  <ion-fab-list side="top" >
+    <button class="forSave" ion-fab style="padding: 0;background-color: white" (click)="fabSelected(0,fab)">
+      <img class="turnImgToBlack" src="assets/icon/pills.png">
+      <ion-label>Medication</ion-label>
+    </button>
+  </ion-fab-list>
+
+
+  <ion-fab-list side="left" *ngIf="pageName=='Incident'">
+    <button ion-fab style="padding: 0;background-color: white" (click)="fabSelected(1,fab)">
+      <img src="assets/icon/mc.png">
+      <ion-label>Checkup</ion-label>
+    </button>
+  </ion-fab-list>
+
+</ion-fab>

@@ -1,0 +1,37 @@
+page-new-medical-report-medicine {
+  .contentColor{
+    background: #f4f4f4;
+  }
+
+  .ng-select .ng-select-container {
+    border: 0px;
+  }
+
+  .mat-form-field {
+    //margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    padding-bottom: 0;
+    width: 100%;
+    background: white;
+    border-radius: 3px;
+  }
+
+  .mat-form-field-wrapper {
+    padding-bottom: 2px;
+  }
+
+  .mat-form-field-underline {
+    bottom: -0.04em;
+    //width: 106%;
+    //left: -9px;
+  }
+
+  .mat-input-element:disabled {
+    color: black;
+  }
+
+  .spaceBetNgSelect{
+    margin-bottom: 15px;
+  }
+}

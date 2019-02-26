@@ -5,6 +5,8 @@ import {Url_domain} from "../models/url_domain";
 import 'rxjs/observable/fromPromise';
 import 'rxjs/add/operator/mergeMap';
 import {Platform} from "ionic-angular";
+import {BehaviorSubject} from "rxjs";
+import {tap} from "rxjs/operators";
 
 @Injectable()
 export class ClassesService{
@@ -12,7 +14,7 @@ export class ClassesService{
   httpOptions:any;
   headers:any;
   DomainUrl:Url_domain = new Url_domain;
-
+  getClassListWithID_2_AND_NOT_REPORTS:BehaviorSubject<object> = new BehaviorSubject(null);
   constructor(public http:HttpClient,private platform:Platform){}
 
   putHeader(value){
@@ -28,7 +30,7 @@ export class ClassesService{
   }
 
 
-  getClassList(viewName,opId,date,id,branchId,reportId){
+  getClassList(viewName,opId,date,id,branchId,reportId):any{
 
     let URL = this.DomainUrl.Domain + '/authentication/class.ent?view='+viewName+'&operationId='+opId;
     if(id!=null){
@@ -44,7 +46,18 @@ export class ClassesService{
       URL += '&reportId='+reportId;
     }
 
-    return this.http.get(URL, this.httpOptions);
+    if(opId == 2 && this.getClassListWithID_2_AND_NOT_REPORTS.getValue() != null){
+      return this.getClassListWithID_2_AND_NOT_REPORTS;
+    }else {
+      return this.http.get(URL, this.httpOptions).pipe(
+        tap(response => {
+          if(opId == 2){
+          this.getClassListWithID_2_AND_NOT_REPORTS.next(response);
+          }
+        },err => {
+
+        }));
+    }
   }
 
 }

@@ -25,9 +25,9 @@
     <img class="loadingMedicalCare" src="assets/imgs/heartbeat.svg">
   </div>
 
-  <ion-item class="fitTheView" *ngIf="true">
+  <ion-item class="fitTheView" >
     <ion-label class="textColor">Status</ion-label>
-    <ion-select [(ngModel)]="theStatus" (ngModelChange)="statusModelChange(true)" interface="popover">
+    <ion-select [(ngModel)]="theStatus" (ngModelChange)="statusModelChange(true)" interface="popover" [disabled]="loading && medicalRecords.length < 1">
       <ion-option [selected]="theStatus" *ngFor="let status of allStatusInMedication" >{{status}}</ion-option>
     </ion-select>
   </ion-item>
@@ -147,3 +147,24 @@
   </ion-infinite-scroll>
 
 </ion-content>
+
+<ion-fab bottom right #fab>
+
+  <!--<button ion-fab [disabled]="loading && medicalRecords.length < 1" ><ion-icon name="add"></ion-icon></button>-->
+  <button ion-fab ><ion-icon name="add"></ion-icon></button>
+  <ion-fab-list side="top" >
+    <button class="forSave" ion-fab style="padding: 0;background-color: white" (click)="fabSelected(0,fab)">
+      <img src="assets/icon/firstAid.png">
+      <ion-label>Incident</ion-label>
+    </button>
+  </ion-fab-list>
+
+
+  <ion-fab-list side="left" >
+    <button ion-fab style="padding: 0;background-color: white" (click)="fabSelected(1,fab)">
+      <img src="assets/icon/mc.png">
+      <ion-label>Checkup</ion-label>
+    </button>
+  </ion-fab-list>
+
+</ion-fab>

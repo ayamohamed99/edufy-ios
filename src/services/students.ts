@@ -5,6 +5,8 @@ import {Url_domain} from "../models/url_domain";
 import 'rxjs/observable/fromPromise';
 import 'rxjs/add/operator/mergeMap';
 import {Platform} from "ionic-angular";
+import {tap} from "rxjs/operators";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable()
 export class StudentsService{
@@ -12,7 +14,7 @@ export class StudentsService{
   httpOptions:any;
   headers:any;
   DomainUrl:Url_domain = new Url_domain;
-
+  getAllStudentWithID_7:BehaviorSubject<object> = new BehaviorSubject(null);
   constructor(public http:HttpClient,private platform:Platform){}
 
   putHeader(value){
@@ -27,9 +29,18 @@ export class StudentsService{
     };
   }
 
-  getAllStudents(operationId,fromPage:string){
-      return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId='+operationId+'&name=' +
-        fromPage, this.httpOptions);
+  getAllStudents(operationId,fromPage:string):any{
+    if(operationId == 7 && this.getAllStudentWithID_7.getValue() != null){
+      return this.getAllStudentWithID_7;
+    }else {
+      return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId=' + operationId + '&name=' +
+        fromPage, this.httpOptions).pipe(
+          tap(response => {
+              if(operationId == 7) {
+                this.getAllStudentWithID_7.next(response);
+              }
+            },err => {}));
+    }
   }
 
   getAllStudentsForReport(operationId,id,date,reportId){

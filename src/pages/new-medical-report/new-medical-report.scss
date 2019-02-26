@@ -1,0 +1,117 @@
+page-new-medical-report {
+  .contentColor{
+    background: #f4f4f4;
+  }
+
+
+
+  ///////////////////////////Edit Ion-Fab
+  .turnImgToBlack{
+    -webkit-filter: grayscale(100%) contrast(999%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%) contrast(999%);
+  }
+
+
+  .fab[mini] {
+    margin: 8px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .fab {
+    contain: layout;
+    background-color: #0A73A4;
+  }
+
+  ion-fab[bottom] {
+    bottom: 10px;
+  }
+
+  button[ion-fab][mini]{
+    padding: 8px;
+  }
+
+  ion-fab-list[side=top] {
+    top: auto;
+    bottom: 10px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: column-reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 20px;
+      height: 20px;
+    }
+    button[ion-fab] {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+
+      ion-label {
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        position: absolute;
+        top: -2px;
+        right: 40px;
+        color: #000000;
+        background-color: white;
+        line-height: 16px;
+        padding: 3px 5px;
+        border-radius: 4px;
+        -webkit-box-shadow: 1px 1px 1px grey;
+        box-shadow: 1px 1px 1px grey;
+      }
+    }
+  }
+
+  ion-fab-list[side=left] {
+    margin: 0px 70px;
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 25px;
+      height: 25px;
+    }
+    button[ion-fab] {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+
+      ion-label {
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        position: absolute;
+        top: -2px;
+        right: 38px;
+        color: #000000;
+        background-color: white;
+        line-height: 16px;
+        padding: 3px 5px;
+        border-radius: 4px;
+        -webkit-box-shadow: 1px 1px 1px grey;
+        box-shadow: 1px 1px 1px grey;
+      }
+    }
+  }
+
+  //////////////////////////////End Of Edit Ion-Fab
+}

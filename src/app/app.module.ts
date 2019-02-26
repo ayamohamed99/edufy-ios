@@ -60,9 +60,10 @@ import {BackgroundNotificationService} from "../services/background-notification
 import {ImageCompressorService} from "../services/image-compress";
 import {Ng2ImgMaxModule} from "ng2-img-max";
 import {MedicalCareService} from '../services/medicalcare';
+import {MatNativeDateModule} from "@angular/material";
 
 
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule];
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule];
 @NgModule({
   declarations: [
     MyApp,

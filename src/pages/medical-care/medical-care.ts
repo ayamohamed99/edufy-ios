@@ -1,13 +1,24 @@
 import { Component } from '@angular/core';
 import {
-  IonicPage, NavController, NavParams, PopoverController, AlertController, LoadingController, ModalController, Platform, ToastController
+  IonicPage,
+  NavController,
+  NavParams,
+  PopoverController,
+  AlertController,
+  LoadingController,
+  ModalController,
+  Platform,
+  ToastController,
+  FabContainer
 } from 'ionic-angular';
 import {MedicalCareService} from "../../services/medicalcare";
 import {Storage} from "@ionic/storage";
 import {MedicalRecord} from "../../models/medical-record";
-import {Student} from "../../models";
+import {Class, Student} from "../../models";
 import {TransFormDate} from "../../services/transFormDate";
 import {a} from "@angular/core/src/render3";
+import {ClassesService} from "../../services/classes";
+import {StudentsService} from "../../services/students";
 
 
 /**
@@ -24,6 +35,7 @@ import {a} from "@angular/core/src/render3";
 })
 export class MedicalCarePage {
 
+  justEnter:boolean;
   loading:boolean = false;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   refresher:any;
@@ -48,8 +60,11 @@ export class MedicalCarePage {
   allStatusInMedication:any[]=["All Status","Active","inActive"];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl:PopoverController,public platform:Platform,
-              public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDate,private toastCtrl:ToastController) {
+              public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDate,private toastCtrl:ToastController,
+              private modalCtrl:ModalController,private classServ:ClassesService,private studentServ:StudentsService, private  alrtCtrl:AlertController,
+              private  loadCtrl:LoadingController) {
     console.log(this.search);
+    this.justEnter = true;
     this.selectedClasses = 0;
     this.selectedStudent = 0;
     this.selectedStatus = -1;
@@ -62,11 +77,15 @@ export class MedicalCarePage {
     //Start Code
     if (platform.is('core')) {
       medicalService.putHeader(localStorage.getItem(this.localStorageToken));
+      classServ.putHeader(localStorage.getItem(this.localStorageToken));
+      studentServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getAllMedicalRecords();
     } else {
       storage.get(this.localStorageToken).then(
         val => {
           medicalService.putHeader(val);
+          classServ.putHeader(val);
+          studentServ.putHeader(val);
           this.getAllMedicalRecords();
         });
     }
@@ -302,6 +321,12 @@ export class MedicalCarePage {
             this.nextPageIsStarted = false;
           }
           this.loading = false;
+
+          if(this.justEnter){
+            this.callData();
+            this.justEnter = false;
+          }
+
         },error=>{
         if(this.refresherIsStart) {
           this.refresher.complete();
@@ -460,5 +485,30 @@ export class MedicalCarePage {
 
 
     return statusData;
+  }
+
+
+  fabSelected(index,fab:FabContainer){
+    fab.close();
+    let modal;
+    if(index == 0){
+      modal = this.modalCtrl.create('NewMedicalReportPage',{
+        for:'Incident',
+      });
+    }else{
+      modal = this.modalCtrl.create('NewMedicalReportPage',{
+        for:'Checkup',
+      });
+    }
+    modal.onDidDismiss();
+    modal.present();
+  }
+
+  callData(){
+    this.classServ.getClassList("Medical Care",2,null,null,null,null).subscribe();
+    this.studentServ.getAllStudents(7,"Medical Care").subscribe();
+    this.medicalService.getMedicines().subscribe();
+    this.medicalService.getDosageTypes().subscribe();
+    this.medicalService.getInstructions().subscribe();
   }
 }
