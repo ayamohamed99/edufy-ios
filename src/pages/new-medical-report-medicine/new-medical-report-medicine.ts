@@ -69,12 +69,17 @@ export class NewMedicalReportMedicinePage {
     this.getDosageTypesList();
     this.getInstructionsList();
 
+    let todayDate = navParams.get('Date');
     this.fromMinDate = new Date();
     this.toMinDate = new Date();
-    this.fromMaxDate = new Date(2080,12,31);
-    this.toMaxDate = new Date(2080,12,31);
     this.fromShowDate = new FormControl(new Date()).value;
     this.toShowDate = new FormControl(new Date()).value;
+    let getYear = parseInt(todayDate.split("-")[2]);
+    this.fromMaxDate = new Date(getYear+10,11,31);
+    this.toMaxDate = new Date(getYear+10,11,31);
+    this.fromSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
+    this.toSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
+
   }
 
   close(){
@@ -109,8 +114,15 @@ export class NewMedicalReportMedicinePage {
       this.medication.endDate = null;
     }
     this.medication.instructions=[];
-    for(let instruction of this.selectedInstruction){
-      this.medication.instructions.push({'id':instruction.id,'name':instruction.name});
+    if(this.everyDay || !this.sameDay()){
+      for(let data of this.allDays){
+          data.selected = true;
+      }
+    }
+    if(this.selectedInstruction) {
+      for (let instruction of this.selectedInstruction) {
+        this.medication.instructions.push({'id': instruction.id, 'name': instruction.name});
+      }
     }
 
     let schaduleObject = {
@@ -148,6 +160,38 @@ export class NewMedicalReportMedicinePage {
       this.toSelectedDate = this.transDate.transformTheDate(event.value, "dd-MM-yyyy") +" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
     }
   }
+
+  sameDay(){
+    if(this.fromShowDate) {
+      let toshow = this.transDate.transformTheDate(this.toShowDate,"dd-MM-yyyy");
+      let fromshow = this.transDate.transformTheDate(this.fromShowDate,"dd-MM-yyyy");
+      if (toshow == fromshow) {
+        return false;
+      } else {
+        return true;
+      }
+    }else{
+      return false;
+    }
+  }
+
+  selectEveryDay(lastEl){
+    let found = false;
+    for(let data of this.allDays){
+      if(!data.selected){
+        found = true;
+      }
+    }
+
+    if(!found){
+      for(let data of this.allDays){
+        data.selected = false;
+      }
+
+      this.everyDay = true;
+    }
+  }
+
 
   getMedicineList(){
     this.medicalService.getMedicines().subscribe(

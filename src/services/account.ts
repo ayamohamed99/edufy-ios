@@ -19,6 +19,7 @@ export class AccountService{
   private userName:string;
   private userUserName:string;
   private userAddress:string;
+  private _userAccount:any;
   private _accountBranchesListIds:any = [];
   private _accountBranchesList:any = [];
   private _tagArry:any = [];
@@ -72,6 +73,7 @@ export class AccountService{
     this.accountFeature = this.value.accountFeatures;
     this.userRole = this.value.userRoles;
     this.userTelephone = this.value.telephone;
+    this._userAccount = this.value.userAccount;
     this.userEmail = this.value.email;
     this.userName = this.value.name;
     this.userUserName = this.value.username;
@@ -200,4 +202,8 @@ export class AccountService{
     this._userBranchId = value;
   }
 
+
+  get userAccount(): any {
+    return this._userAccount;
+  }
 }

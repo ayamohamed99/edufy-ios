@@ -510,5 +510,7 @@ export class MedicalCarePage {
     this.medicalService.getMedicines().subscribe();
     this.medicalService.getDosageTypes().subscribe();
     this.medicalService.getInstructions().subscribe();
+    this.medicalService.getIncidentTemplate().subscribe();
+    this.medicalService.getCheckupTemplate().subscribe();
   }
 }

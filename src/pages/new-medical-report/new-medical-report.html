@@ -1,53 +1,192 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title text-center>New {{pageName}}</ion-title>
+    <ion-buttons left style="width: 30px;">
+      <button ion-button icon-only color="light" [disabled]="enableDoneAllButton()" (click)="allDataDone()">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title text-center>{{pageName}}</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only color="light" (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding class="contentColor">
 
-
-  <ion-spinner></ion-spinner>
-
-  <!-- Lines -->
-  <ion-spinner name="lines"></ion-spinner>
-
-  <!-- Lines Small -->
-  <ion-spinner name="lines-small"></ion-spinner>
-
-  <!-- Dots -->
-  <ion-spinner name="dots"></ion-spinner>
-
-  <!-- Bubbles -->
-  <ion-spinner name="bubbles"></ion-spinner>
-
-  <!-- Circles -->
-  <ion-spinner name="circles"></ion-spinner>
-
-  <!-- Crescent -->
-  <ion-spinner name="crescent"></ion-spinner>
-
-  <!-- Paused Default Spinner -->
-  <ion-spinner paused></ion-spinner>
+  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+    <ng-select [items]="allclasses"
+               bindLabel="classWithGrade"
+               [loading]="classesLoading"
+               [addTag]="true"
+               [placeholder]="'Select Class'"
+               [(ngModel)]="selectedClass"
+               (ngModelChange)="setStudents()">
+    </ng-select>
+  </div>
 
 
+  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+    <ng-select [items]="showAllStudents"
+               bindLabel="studentName"
+               [loading]="studentsLoading"
+               [addTag]="true"
+               [placeholder]="'Select Student'"
+               [(ngModel)]="selectedStudent"
+               [disabled]="!selectedClass">
+    </ng-select>
+  </div>
+
+  <mat-form-field>
+    <input matInput placeholder="Incident Title" [(ngModel)]="incidentTitle" *ngIf="newIncident">
+    <input matInput placeholder="Checkup Title" [(ngModel)]="checkupTitle" *ngIf="!newIncident">
+  </mat-form-field>
+
+  <div class="timeDate">
+    <mat-form-field class="dateField" *ngIf="newIncident">
+      <input matInput [min]="incidentMinDate" [max]="incidentMaxDate" [matDatepicker]="pickerIncident" placeholder="Select Incident Date" [value]="incidentShowDate"
+             (dateChange)="setSelectedDate('Incident',$event)" disabled>
+      <mat-datepicker-toggle matSuffix [for]="pickerIncident"></mat-datepicker-toggle>
+      <mat-datepicker #pickerIncident disabled="false"></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="dateField"  *ngIf="!newIncident">
+      <input matInput [min]="checkupMinDate" [max]="checkupMaxDate" [matDatepicker]="pickerCheckup" placeholder="Select Checkup Date" [value]="checkupShowDate"
+             (dateChange)="setSelectedDate('Checkup',$event)" disabled>
+      <mat-datepicker-toggle matSuffix [for]="pickerCheckup"></mat-datepicker-toggle>
+      <mat-datepicker #pickerCheckup disabled="false"></mat-datepicker>
+    </mat-form-field>
+
+    <div class="editNgView">
+    <ng-select class="timeField"
+               [items]="showAllTimes"
+               bindLabel="time"
+               [placeholder]="'Time'"
+               [(ngModel)]="selectedIncidentTime"
+               *ngIf="newIncident">
+    </ng-select>
+
+    <ng-select class="timeField"
+               [items]="showAllTimes"
+               bindLabel="time"
+               [placeholder]="'Time'"
+               [(ngModel)]="selectedCheckupTime"
+               *ngIf="!newIncident">
+    </ng-select>
+    </div>
+  </div>
+
+  <mat-form-field *ngIf="!addCheckup">
+    <input matInput maxlength="15" placeholder="Follow up phone number (Optional)" [(ngModel)]="phoneNumber" *ngIf="!addCheckup">
+    <mat-hint align="end">{{phoneNumber.length}} / 15</mat-hint>
+  </mat-form-field>
+
+
+
+  <div *ngIf="!addCheckup">
+
+
+
+
+    <div class="mainDivQuestion">
+      <ion-card class="questionCard">
+        <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
+        <div class="questionTitle">
+
+          <ion-card-header text-wrap class="formLabel">
+            Medication
+          </ion-card-header>
+
+          <ion-card-content class="questionBody">
+
+            <div *ngFor="let parameter of medicalRecord.prescription.medications;let i = index" class="LoopContainFitContent" >
+              <div class="medicienCell">
+                <div class="cancelCell" (click)="deleteData('Medication',i)">
+                  <img class="cancelIcon" src="assets/imgs/cancel-button.png">
+                </div>
+                <div class="medicineLable">
+                  {{parameter.medicine.name}}
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+
+        </div>
+      </ion-card>
+    </div>
+
+
+
+    <div class="mainDivQuestion" *ngIf="!addCheckup && newIncident">
+      <ion-card class="questionCard">
+        <img class="topRightIcon turnImgToWhite" src="assets/icon/mc.png">
+        <div class="questionTitle">
+
+          <ion-card-header text-wrap class="formLabel">
+            Checkup
+          </ion-card-header>
+
+          <ion-card-content class="questionBody">
+
+            <div  class="LoopContainWithFullWidth" *ngIf="medicalRecord.checkup">
+              <div class="medicienCellFullWidth">
+                <div class="cancelCell"  (click)="deleteData('Checkup',-1)">
+                  <img class="cancelIcon" src="assets/imgs/cancel-button.png">
+                </div>
+                <div class="medicineLable">
+                  {{medicalRecord.checkup.title}}
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+
+        </div>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>
 
 
-<ion-fab bottom right #fab>
+
+
+
+
+
+
+
+
+
+
+
+
+<ion-fab bottom right #fab1 *ngIf="!newIncident && !addCheckup">
+
+  <button ion-fab style="padding: 0;" (click)="fabSelected(0,fab1)">
+    <img class="turnImgToWhite imageInBigFab" src="assets/imgs/drugs.png">
+  </button>
+
+</ion-fab>
+
+<ion-fab bottom right #fab *ngIf="newIncident">
 
   <button ion-fab><ion-icon name="add"></ion-icon></button>
   <ion-fab-list side="top" >
     <button class="forSave" ion-fab style="padding: 0;background-color: white" (click)="fabSelected(0,fab)">
-      <img class="turnImgToBlack" src="assets/icon/pills.png">
+      <img class="imageInSmallFab" src="assets/imgs/drugs.png">
       <ion-label>Medication</ion-label>
     </button>
   </ion-fab-list>
 
 
-  <ion-fab-list side="left" *ngIf="pageName=='Incident'">
-    <button ion-fab style="padding: 0;background-color: white" (click)="fabSelected(1,fab)">
+  <ion-fab-list side="left">
+    <button ion-fab style="padding: 0;background-color: white" (click)="fabSelected(1,fab)" [disabled]="medicalRecord.checkup">
       <img src="assets/icon/mc.png">
       <ion-label>Checkup</ion-label>
     </button>

@@ -18,6 +18,7 @@ export class Class{
   noOfUnseenComments:number;
   reportTemplet;
   totalNumberOfComments:number;
+  classWithGrade;
 
   constructor() {
   }

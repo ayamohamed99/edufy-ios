@@ -5,7 +5,7 @@ import {ComponentsModule} from "../../components/components.module";
 import {RlTagInputModule} from "angular2-tag-input/dist";
 import {NG_SELECT_DEFAULT_CONFIG, NgSelectModule} from "@ng-select/ng-select";
 import {FormsModule} from "@angular/forms";
-import {MatFormFieldModule, MatInputModule} from "@angular/material";
+import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -23,7 +23,12 @@ import {MatFormFieldModule, MatInputModule} from "@angular/material";
     IonicPageModule.forChild(NewMedicalReportPage),
     ComponentsModule,
     RlTagInputModule,
-    NgSelectModule, FormsModule,MatFormFieldModule,MatInputModule
+    NgSelectModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
 })
 export class NewMedicalReportPageModule {}

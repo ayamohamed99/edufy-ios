@@ -403,14 +403,21 @@ export class MyApp {
         this.setupNotification();
       },
       err => {
-        if(err.error == "FORBIDDEN"){
+        if(err.error == "FORBIDDEN" ||err.error ==  "NO_REPORTS_FOUNDED_FOR_YOUR_ACCOUNT"){
           this.load.dismiss();
           console.log('Has No Custom report(s)');
           this.accountServ.getTags(this.fullToken());
           this.nav.setRoot('ProfilePage');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
-        }else {
+        }else if(!err.error){
+          this.load.dismiss();
+          console.log('Has No Custom report(s)');
+          this.accountServ.getTags(this.fullToken());
+          this.nav.setRoot('ProfilePage');
+          this.startSocket(this.accountServ.userId);
+          this.setupNotification();
+        } else {
           this.load.dismiss();
           this.nav.setRoot(this.homePage);
         }

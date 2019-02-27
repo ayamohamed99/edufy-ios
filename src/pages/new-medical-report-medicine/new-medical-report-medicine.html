@@ -46,18 +46,22 @@
     <mat-datepicker #picker disabled="false"></mat-datepicker>
   </mat-form-field>
 
-  <div class="spaceBetNgSelect">
-    <ion-item>
-      <ion-label item-start>Continues</ion-label>
-      <ion-toggle color="primary" item-end [(ngModel)]="continues"></ion-toggle>
-    </ion-item>
-  </div>
+
   <mat-form-field *ngIf="!continues">
     <input matInput id="toInput" [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="pickerto" placeholder="To" [value]="toShowDate"
            (dateChange)="addSelectedDate('To',$event)" disabled>
     <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
     <mat-datepicker #pickerto [disabled]="!fromShowDate"></mat-datepicker>
   </mat-form-field>
+
+
+  <div class="spaceBetNgSelect">
+    <ion-item *ngIf="sameDay()">
+      <ion-label item-start>Continues</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="continues"></ion-toggle>
+    </ion-item>
+  </div>
+
 
   <div class="spaceBetNgSelect">
     <ng-select [items]="allTimes"
@@ -69,14 +73,14 @@
     </ng-select>
   </div>
 
-  <ion-list>
+  <ion-list *ngIf="sameDay()">
     <ion-item>
       <ion-label item-start>Everyday</ion-label>
       <ion-toggle color="primary" item-end [(ngModel)]="everyDay" (ngModelChange)="clickEveryday($event)"></ion-toggle>
     </ion-item>
     <ion-item *ngFor="let day of allDays">
       <ion-label item-start>{{day.Name}}</ion-label>
-      <ion-toggle color="primary" item-end [(ngModel)]="day.selected" [disabled]="everyDay"></ion-toggle>
+      <ion-toggle color="primary" item-end [(ngModel)]="day.selected" (ngModelChange)="selectEveryDay(day.selected)" [disabled]="everyDay"></ion-toggle>
     </ion-item>
   </ion-list>
 

@@ -41,7 +41,7 @@ import {DailyReportService} from "../services/dailyreport";
 
 import {DatePicker} from '@ionic-native/date-picker';
 
-import {MatAutocompleteModule, MatExpansionModule, MatFormFieldModule} from '@angular/material';
+import {MatAutocompleteModule, MatExpansionModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatIconModule} from '@angular/material/icon';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -63,7 +63,7 @@ import {MedicalCareService} from '../services/medicalcare';
 import {MatNativeDateModule} from "@angular/material";
 
 
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule];
+let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
 @NgModule({
   declarations: [
     MyApp,

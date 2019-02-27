@@ -22,6 +22,8 @@ export class MedicalCareService {
   getMedicines_FOR_MedicalReport:BehaviorSubject<object> = new BehaviorSubject(null);
   getDosageTypes_FOR_MedicalReport:BehaviorSubject<object> = new BehaviorSubject(null);
   getInstructions_FOR_MedicalReport:BehaviorSubject<object> = new BehaviorSubject(null);
+  getIncidentTemplate_FOR_MEDICALREPORT:BehaviorSubject<object> = new BehaviorSubject(null);
+  getCheckupTemplate_FOR_MEDICALREPORT:BehaviorSubject<object> = new BehaviorSubject(null);
 
 
   constructor(private http: HttpClient, private platform: Platform) {
@@ -157,16 +159,33 @@ export class MedicalCareService {
     }
   }
 
-  getIncidentTemplate() {
+  getIncidentTemplate():any  {
     let requestURL = '/authentication/incident.ent/incidentTemplate.ent' ;
+    if(this.getIncidentTemplate_FOR_MEDICALREPORT.getValue() != null){
+      return this.getIncidentTemplate_FOR_MEDICALREPORT;
+    }else {
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
+        tap(response => {
+          this.getIncidentTemplate_FOR_MEDICALREPORT.next(response);
+        }, err => {
 
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+        }));
+    }
   }
 
-  getCheckupTemplate() {
+  getCheckupTemplate():any {
     let requestURL = '/authentication/checkup.ent/CheckupTemplate.ent' ;
 
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    if(this.getCheckupTemplate_FOR_MEDICALREPORT.getValue() != null){
+      return this.getCheckupTemplate_FOR_MEDICALREPORT;
+    }else {
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
+        tap(response => {
+          this.getCheckupTemplate_FOR_MEDICALREPORT.next(response);
+        }, err => {
+
+        }));
+    }
   }
 
   getIncidentAnswers(incidentId , date) {
