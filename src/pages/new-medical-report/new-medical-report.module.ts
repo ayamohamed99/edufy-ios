@@ -5,7 +5,13 @@ import {ComponentsModule} from "../../components/components.module";
 import {RlTagInputModule} from "angular2-tag-input/dist";
 import {NG_SELECT_DEFAULT_CONFIG, NgSelectModule} from "@ng-select/ng-select";
 import {FormsModule} from "@angular/forms";
-import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateModule} from "@angular/material";
+import {
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatNativeDateModule, MatRadioModule
+} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -28,7 +34,7 @@ import {MatDatepickerModule, MatFormFieldModule, MatInputModule, MatNativeDateMo
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,MatInputModule,MatCheckboxModule,MatRadioModule
   ],
 })
 export class NewMedicalReportPageModule {}

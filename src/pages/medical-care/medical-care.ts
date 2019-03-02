@@ -494,10 +494,12 @@ export class MedicalCarePage {
     if(index == 0){
       modal = this.modalCtrl.create('NewMedicalReportPage',{
         for:'Incident',
+        operation:"new"
       });
     }else{
       modal = this.modalCtrl.create('NewMedicalReportPage',{
         for:'Checkup',
+        operation:"new"
       });
     }
     modal.onDidDismiss();

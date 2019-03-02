@@ -4,5 +4,8 @@ export class Postattachment{
   url:string;
   uploadDate:string;
   file:any;
+  data:any;
+  description:string;
+  questionId:any;
   imgLoc:any;
 }

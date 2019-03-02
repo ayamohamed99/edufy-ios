@@ -21,6 +21,7 @@ import {FormControl} from "@angular/forms";
 })
 export class NewMedicalReportMedicinePage {
 
+  EditView = false;
   dosageTypeObject = {'id': null, 'type': "", 'medication':null, 'url': null};
   medicationObject = {'id': null, 'name': "", 'details': "", 'autoComplete': false, 'medication': null};
   allMedicines:any[]=[];
@@ -79,6 +80,37 @@ export class NewMedicalReportMedicinePage {
     this.toMaxDate = new Date(getYear+10,11,31);
     this.fromSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
     this.toSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
+
+    if(this.navParams.get('operation') == 'edit'){
+      this.selectedMedicine = '';
+      this.dosageNumber = '';
+      this.selectedDosageType = '';
+      this.fromShowDate = '';
+      if(this.fromShowDate){
+        this.toShowDate = '';
+      }else{
+        this.continues=true;
+      }
+
+      if(this.transDate.transformTheDate(this.fromShowDate, "dd-MM-yyyy") == this.transDate.transformTheDate(this.toShowDate, "dd-MM-yyyy")){
+        let days:any[] = [];
+        let oneDayWasTrue = false;
+        for(let data of this.allDays){
+          if(data.Name.toLowerCase() == 'sunday' && days[0].sunday){data.selected = true;oneDayWasTrue=true;}
+          if(data.Name.toLowerCase() == 'monday'&& days[0].monday){data.selected = true;oneDayWasTrue=true;}
+          if(data.Name.toLowerCase() == 'tuesday'&& days[0].tuesday){data.selected = true;oneDayWasTrue=true;}
+          if(data.Name.toLowerCase() == 'wednesday'&& days[0].wednesday){data.selected = true;oneDayWasTrue=true;}
+          if(data.Name.toLowerCase() == 'thursday'&& days[0].thursday){data.selected = true;oneDayWasTrue=true;}
+        }
+        if(oneDayWasTrue){
+          this.everyDay = false;
+        }else{
+          this.everyDay = true;
+        }
+      }
+
+
+    }
 
   }
 
