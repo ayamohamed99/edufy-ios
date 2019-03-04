@@ -4,7 +4,7 @@ import {Url_domain} from "../models/url_domain";
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/mergeMap';
 import {HttpClient} from "@angular/common/http";
-import {AlertController, Platform, ToastController} from "ionic-angular";
+import {AlertController, LoadingController, Platform, ToastController} from "ionic-angular";
 import {NotificationService} from "./notification";
 import {Pendingnotification} from "../models/pendingnotification";
 import {BackgroundMode} from "@ionic-native/background-mode";
@@ -46,9 +46,10 @@ export class BackgroundMedicalcareService {
   selectedIncidentTime;
   //////Views//////
   viewCtrl;
+  LoadView;
   constructor(private accountServ:AccountService,private  medicalService:MedicalCareService,private toastCtrl:ToastController,
               private checkboxFunctionService:CheckboxFunctionService,private localNotifications: LocalNotifications,
-              private notiServ:NotificationService,private alrtCtrl:AlertController){
+              private notiServ:NotificationService,private alrtCtrl:AlertController,private loadCtrl:LoadingController){
 
   }
 
@@ -70,7 +71,11 @@ export class BackgroundMedicalcareService {
     this.incidentAnswer=incidentAnswer;
     this.checkupQuestions=checkupQuestions;
 
-
+    this.LoadView = this.loadCtrl.create({
+      content: '',
+      cssClass:"loadingWithoutBackground"
+    });
+    this.LoadView.present();
     let icidentQ=this.incidentQuestions[0];
     let foundIMAGE_WITH_DESCRIPTION_Q = false;
     let IMAGE_WITH_DESCRIPTION_ARRAY:any[]=[];
@@ -128,6 +133,13 @@ export class BackgroundMedicalcareService {
     this.incidentQuestions=incidentQuestions;
     this.incidentAnswer=incidentAnswer;
     this.checkupQuestions=checkupQuestions;
+
+    this.LoadView = this.loadCtrl.create({
+      content: '',
+      cssClass:"loadingWithoutBackground"
+    });
+    this.LoadView.present();
+
     this.sendCheckup(null);
   }
 
@@ -252,9 +264,11 @@ export class BackgroundMedicalcareService {
             let result = response;
             // messageService.message("success", messageService.messageSubject.successUpdateIncident);
             this.presentToast('Incident was updated successfully.');
+            this.LoadView.dismiss();
             this.viewCtrl.dismiss();
 
           }, reason => {
+            this.LoadView.dismiss();
             this.presentToast('Something went wrong, can\'t update incident report');
             console.error('Medical Care : Error Updating Incident From Server' + reason);
             // $modalInstance.close('incident');
@@ -267,6 +281,7 @@ export class BackgroundMedicalcareService {
           response => {
             // $rootScope.allFilesResponse = [];
             let result = response;
+            this.LoadView.dismiss();
             if (!this.accountServ.getUserRole().medicalRecordCanApprove && !this.accountServ.getUserRole().medicalRecordApproved) {
               this.presentToast('Incident is waiting Approval.');
             } else {
@@ -274,6 +289,7 @@ export class BackgroundMedicalcareService {
             }
             this.viewCtrl.dismiss();
           }, function (reason) {
+            this.LoadView.dismiss();
             this.presentToast('Something went wrong, can\'t send incident report.');
             console.error('Medical Care : Error Addin Incident From Server' + reason);
           });
@@ -353,6 +369,7 @@ export class BackgroundMedicalcareService {
         // $scope.addnewCheckupButton = "Sending....";
         this.medicalService.postMedicalRecord(medicalRecordObject).subscribe(
           response=> {
+            this.LoadView.dismiss();
             let result = response;
           if(!this.accountServ.getUserRole().medicalRecordCanApprove &&  !this.accountServ.getUserRole().medicalRecordApproved){
             this.presentToast("Checkup is waiting Approval.");
@@ -362,6 +379,7 @@ export class BackgroundMedicalcareService {
           this.viewCtrl.dismiss();
 
         }, function (reason) {
+            this.LoadView.dismiss();
             this.presentToast("Failed to send checkup.");
           console.error('Medical Care : Error Add Checkup From Server' + reason);
         });
@@ -407,10 +425,12 @@ export class BackgroundMedicalcareService {
 
         this.medicalService.updateMedicalRecord(medicalRecordObject, 'checkup').subscribe(
           response=> {
+            this.LoadView.dismiss();
           let result = response;
             this.presentToast("Checkup was updated successfully.");
           this.viewCtrl.dismiss();
         }, function (reason) {
+            this.LoadView.dismiss();
             this.presentToast("Failed to update checkup.");
           console.error('Medical Care : Error Update Checkup From Server' + reason);
         });

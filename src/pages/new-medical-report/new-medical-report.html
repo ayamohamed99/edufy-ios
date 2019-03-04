@@ -93,7 +93,7 @@
 
 
 
-    <div class="mainDivQuestion">
+    <div class="mainDivQuestion" *ngIf="accountServ.getUserRole().createMedication">
       <ion-card class="questionCard">
         <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
         <div class="questionTitle">
@@ -123,7 +123,7 @@
 
 
 
-    <div class="mainDivQuestion" *ngIf="!addCheckup && newIncident">
+    <div class="mainDivQuestion" *ngIf="!addCheckup && newIncident && accountServ.getUserRole().createCheckup">
       <ion-card class="questionCard">
         <img class="topRightIcon turnImgToWhite" src="assets/icon/mc.png">
         <div class="questionTitle">
@@ -186,7 +186,7 @@
 
               <button ion-button block outline class="fileContainer">
                 Choose Files
-                <input type="file" multiple #file id="inputFiles" (change)="filesChange(itm.questionNumber,itm.id)">
+                <input type="file" multiple #file id="inputFiles" (change)="filesChange(itm.questionNumber,itm.id)" accept="image/*">
               </button>
 
               <div >
@@ -1639,7 +1639,7 @@
 <ion-fab bottom right #fab *ngIf="newIncident">
 
   <button ion-fab><ion-icon name="add"></ion-icon></button>
-  <ion-fab-list side="top" >
+  <ion-fab-list side="top" *ngIf="accountServ.getUserRole().createMedication">
     <button class="forSave" ion-fab style="padding: 0;background-color: white" (click)="fabSelected(0,fab)">
       <img class="imageInSmallFab" src="assets/imgs/drugs.png">
       <ion-label>Medication</ion-label>
@@ -1647,7 +1647,7 @@
   </ion-fab-list>
 
 
-  <ion-fab-list side="left">
+  <ion-fab-list side="left" *ngIf="accountServ.getUserRole().createCheckup">
     <button ion-fab style="padding: 0;background-color: white" (click)="fabSelected(1,fab)" [disabled]="checkup.title != ''">
       <img src="assets/icon/mc.png">
       <ion-label>Checkup</ion-label>

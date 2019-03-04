@@ -24,6 +24,7 @@ export class MedicalCareService {
   getInstructions_FOR_MedicalReport:BehaviorSubject<object> = new BehaviorSubject(null);
   getIncidentTemplate_FOR_MEDICALREPORT:BehaviorSubject<object> = new BehaviorSubject(null);
   getCheckupTemplate_FOR_MEDICALREPORT:BehaviorSubject<object> = new BehaviorSubject(null);
+  getSETINGS_FOR_MEDICALREPORT:BehaviorSubject<object> = new BehaviorSubject(null);
 
 
   constructor(private http: HttpClient, private platform: Platform) {
@@ -55,9 +56,19 @@ export class MedicalCareService {
     return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
   }
 
-  getAccountMedicalCareSettings(accountId) {
+  getAccountMedicalCareSettings(accountId):any {
     let requestURL = '/getAccountMedicalCareSettings.ent?accountId='+accountId;
-    return this.http.get(this.DomainUrl.Domain + this.commonUrl + requestURL, this.httpOptions);
+
+    if(this.getSETINGS_FOR_MEDICALREPORT.getValue() != null){
+      return this.getSETINGS_FOR_MEDICALREPORT;
+    }else {
+      return this.http.get(this.DomainUrl.Domain + this.commonUrl + requestURL, this.httpOptions).pipe(
+        tap(response => {
+          this.getSETINGS_FOR_MEDICALREPORT.next(response);
+        },err => {
+
+        }));
+    }
   }
 
 

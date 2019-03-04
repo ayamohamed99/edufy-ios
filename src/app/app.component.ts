@@ -19,6 +19,7 @@ import {ChatService} from "../services/chat";
 import {Student} from "../models";
 import {tryCatch} from "rxjs/util/tryCatch";
 import {LocalNotifications} from "@ionic-native/local-notifications";
+import {MedicalCareService} from "../services/medicalcare";
 
 declare var window:any;
 
@@ -53,6 +54,7 @@ export class MyApp {
   appearDailyReport:boolean = false;
   appearCustomReport:boolean = false;
   appearChat:boolean = false;
+  appearMedicalReport:boolean = false;
   customReportList:any = [];
 
   elementByClass:any = [];
@@ -64,7 +66,7 @@ export class MyApp {
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,public chatServ:ChatService,
               private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController,
-              private localNotifications:LocalNotifications) {
+              private localNotifications:LocalNotifications,public medicalService:MedicalCareService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -378,6 +380,12 @@ export class MyApp {
       this.appearChat = false;
     }
 
+    if(this.accountServ.getUserRole().viewMedicalCare && data.medicalCareActivated && this.accountServ.getUserRole().viewMedicalRecord){
+      this.appearMedicalReport = true;
+    }else{
+      this.appearMedicalReport = false;
+    }
+
   }
 
   knowCustomReport(data){
@@ -410,6 +418,9 @@ export class MyApp {
           this.nav.setRoot('ProfilePage');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
+          if(this.accountServ.getUserRole().viewMedicalRecord) {
+            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+          }
         }else if(!err.error){
           this.load.dismiss();
           console.log('Has No Custom report(s)');
@@ -417,6 +428,9 @@ export class MyApp {
           this.nav.setRoot('ProfilePage');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
+          if(this.accountServ.getUserRole().viewMedicalRecord) {
+            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+          }
         } else {
           this.load.dismiss();
           this.nav.setRoot(this.homePage);

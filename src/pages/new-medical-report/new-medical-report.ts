@@ -129,9 +129,10 @@ export class NewMedicalReportPage {
         this.getCheckUpTemplate();
       }
     } else {
+      let date = navParams.get("selectedIncidentDate");
       this.pageName = "Add " + navParams.get("forAdd");
       this.addCheckup = true;
-      this.checkupMinDate = new Date(2016, 0, 1);
+      this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
       this.checkupShowDate = new FormControl(new Date()).value;
       this.selectedCheckupTime = {'id': 1, 'time': '00:00'};
@@ -179,6 +180,7 @@ export class NewMedicalReportPage {
   }
 
   fabSelected(index, fab: FabContainer) {
+    let dateArray:any[] = this.incidentSelectedDate.split("-");
     fab.close();
     let modal;
     if (index == 0) {
@@ -187,7 +189,8 @@ export class NewMedicalReportPage {
       modal = this.modalCtrl.create('NewMedicalReportPage', {
         forAdd: "Checkup",
         Date: this.todayDate,
-        operation: 'new'
+        operation: 'new',
+        selectedIncidentDate:dateArray
       });
     }
     modal.onDidDismiss(

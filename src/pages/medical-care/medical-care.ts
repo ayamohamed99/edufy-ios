@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {IonicPage} from 'ionic-angular';
 import {
-  IonicPage,
   NavController,
   NavParams,
   PopoverController,
@@ -9,7 +9,8 @@ import {
   ModalController,
   Platform,
   ToastController,
-  FabContainer
+  FabContainer,
+  Slides
 } from 'ionic-angular';
 import {MedicalCareService} from "../../services/medicalcare";
 import {Storage} from "@ionic/storage";
@@ -19,6 +20,7 @@ import {TransFormDate} from "../../services/transFormDate";
 import {a} from "@angular/core/src/render3";
 import {ClassesService} from "../../services/classes";
 import {StudentsService} from "../../services/students";
+import {AccountService} from "../../services/account";
 
 
 /**
@@ -34,7 +36,19 @@ import {StudentsService} from "../../services/students";
   templateUrl: 'medical-care.html',
 })
 export class MedicalCarePage {
-
+  @ViewChild(Slides) slides: Slides;
+  MEDICATIONS_NAME = "medications";
+  INCIDENTS_NAME = "incidents";
+  CHECKUPS_NAME = "checkups";
+  WAITING_APPROVAL_NAME = "waitingApproval";
+  MEDICATIONS_INDEX = 99999;
+  INCIDENTS_INDEX = 99999;
+  CHECKUPS_INDEX = 99999;
+  WAITING_APPROVAL_INDEX = 99999;
+  MEDICATIONS_OPEND = false;
+  INCIDENTS_OPEND = false;
+  CHECKUPS_OPEND = false;
+  WAITING_APPROVAL_OPEND = false;
   justEnter:boolean;
   loading:boolean = false;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
@@ -43,6 +57,9 @@ export class MedicalCarePage {
   nextPage:any;
   nextPageIsStarted:boolean = false;
   medicalRecords:any[]=[];
+  incidentRecords:any[]=[];
+  checkupRecords:any[]=[];
+  approvalRecords:any[]=[];
   frontHeight;
   filterDate;
   search = {'object': {}};
@@ -58,25 +75,38 @@ export class MedicalCarePage {
   pageSize:any = null;
   theStatus:any = "All Status";
   allStatusInMedication:any[]=["All Status","Active","inActive"];
+  MEDICATION_TAB = "Medications";
+  INCIDENT_TAB = "Incidents";
+  CHECKUP_TAB = "Checkups";
+  APPROVING_TAB = "Approval";
+  pageMedication:any;
+  pageIncident:any;
+  pageCheckup:any;
+  pageApproval:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl:PopoverController,public platform:Platform,
               public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDate,private toastCtrl:ToastController,
               private modalCtrl:ModalController,private classServ:ClassesService,private studentServ:StudentsService, private  alrtCtrl:AlertController,
-              private  loadCtrl:LoadingController) {
+              private  loadCtrl:LoadingController,private accountServ:AccountService) {
     console.log(this.search);
     this.justEnter = true;
+    this.getTabsIndex();
     this.selectedClasses = 0;
     this.selectedStudent = 0;
     this.selectedStatus = -1;
     this.date = null;
-    this.page = 1;
-    this.View = 'medications';
+    this.pageMedication = 1;
+    this.pageIncident = 1;
+    this.pageCheckup = 1;
+    this.pageApproval = 1;
+    this.setFristView();
     this.startDate = null;
     this.endDate = null;
     this.startSearchObject();
     //Start Code
     if (platform.is('core')) {
       medicalService.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getMedicalCareSettings();
       classServ.putHeader(localStorage.getItem(this.localStorageToken));
       studentServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getAllMedicalRecords();
@@ -84,6 +114,7 @@ export class MedicalCarePage {
       storage.get(this.localStorageToken).then(
         val => {
           medicalService.putHeader(val);
+          this.getMedicalCareSettings();
           classServ.putHeader(val);
           studentServ.putHeader(val);
           this.getAllMedicalRecords();
@@ -118,11 +149,15 @@ export class MedicalCarePage {
     }
   }
 
-  setStartAndEndDate(date){
+  setStartAndEndDate(date,from){
     if(date){
       return date.slice(0,-6);
     }else{
-      return '';
+      if(from =='end'){
+        return 'No End Date';
+      }else {
+        return '';
+      }
     }
   }
 
@@ -279,6 +314,21 @@ export class MedicalCarePage {
 
   getAllMedicalRecords(){
     this.loading = true;
+
+    if(this.View == this.MEDICATIONS_NAME){
+      this.page = this.pageMedication;
+      this.MEDICATIONS_OPEND = true;
+    }else if(this.View == this.INCIDENTS_NAME){
+      this.page = this.pageIncident;
+      this.INCIDENTS_OPEND = true;
+    }else if(this.View == this.CHECKUPS_NAME){
+      this.page = this.pageCheckup;
+      this.CHECKUPS_OPEND = true;
+    }else if(this.View == this.WAITING_APPROVAL_NAME){
+      this.page = this.pageApproval;
+      this.WAITING_APPROVAL_OPEND = true;
+    }
+
     this.medicalService.getMedicalRecords(this.selectedClasses,this.selectedStudent, this.selectedStatus, this.date,this.page,this.View,
       this.startDate,this.endDate,this.pageSize).subscribe(
         value =>{
@@ -287,31 +337,15 @@ export class MedicalCarePage {
             this.medicalRecords = [];
           }
           let Data:any = value;
-          for(let val of Data){
-            for(let medicine of val.medicalRecord.prescription.medications){
-              let medicalRec = new MedicalRecord();
-
-              let statusData = this.checkIfTimeToTakeMedication(medicine,'there_is_active_medication');
-
-              medicalRec.accountId=val.medicalRecord.accountId;
-              medicalRec.approved=val.medicalRecord.approved;
-              medicalRec.branchId=val.medicalRecord.branchId;
-              medicalRec.checkup=val.medicalRecord.checkup;
-              medicalRec.createdFrom=val.medicalRecord.createdFrom;
-              medicalRec.id=val.medicalRecord.id;
-              medicalRec.incident=val.medicalRecord.incident;
-              medicalRec.prescription=val.medicalRecord.prescription;
-              medicalRec.oneMedication=medicine;
-              medicalRec.student=val.medicalRecord.student;
-              medicalRec.activeMedication = statusData.status;
-              medicalRec.activeMedicationTaken = statusData.taken;
-              medicalRec.timeOfActiveMedication = statusData.data;
-              medicalRec.otherTimeOfTakenMedication = statusData.otherTaken;
-
-              this.medicalRecords.push(medicalRec);
-            }
+          if(this.View == this.MEDICATIONS_NAME){
+            this.getAllMedications(Data);
+          }else{
+            this.getAllOtheData(Data);
           }
           console.log(this.medicalRecords);
+          console.log(this.incidentRecords);
+          console.log(this.checkupRecords);
+          console.log(this.approvalRecords);
           if(this.refresherIsStart) {
             this.refresher.complete();
             this.refresherIsStart = false;
@@ -340,10 +374,76 @@ export class MedicalCarePage {
       });
   }
 
+  getAllMedications(Data){
+    for(let val of Data){
+      for(let medicine of val.medicalRecord.prescription.medications){
+        let medicalRec = new MedicalRecord();
+
+        let statusData = this.checkIfTimeToTakeMedication(medicine,'there_is_active_medication');
+
+        medicalRec.accountId=val.medicalRecord.accountId;
+        medicalRec.approved=val.medicalRecord.approved;
+        medicalRec.branchId=val.medicalRecord.branchId;
+        medicalRec.checkup=val.medicalRecord.checkup;
+        medicalRec.createdFrom=val.medicalRecord.createdFrom;
+        medicalRec.id=val.medicalRecord.id;
+        medicalRec.incident=val.medicalRecord.incident;
+        medicalRec.prescription=val.medicalRecord.prescription;
+        medicalRec.oneMedication=medicine;
+        medicalRec.student=val.medicalRecord.student;
+        medicalRec.activeMedication = statusData.status;
+        medicalRec.activeMedicationTaken = statusData.taken;
+        medicalRec.timeOfActiveMedication = statusData.data;
+        medicalRec.otherTimeOfTakenMedication = statusData.otherTaken;
+
+        this.medicalRecords.push(medicalRec);
+      }
+    }
+  }
+
+  getAllOtheData(Data){
+    for(let val of Data){
+      let medicalRec = new MedicalRecord();
+      medicalRec.accountId=val.medicalRecord.accountId;
+      medicalRec.approved=val.medicalRecord.approved;
+      medicalRec.branchId=val.medicalRecord.branchId;
+      medicalRec.checkup=val.medicalRecord.checkup;
+      medicalRec.createdFrom=val.medicalRecord.createdFrom;
+      medicalRec.id=val.medicalRecord.id;
+      medicalRec.incident=val.medicalRecord.incident;
+      medicalRec.prescription=val.medicalRecord.prescription;
+      medicalRec.student=val.medicalRecord.student;
+
+      let fullReport = {
+        'checkupAnswers':val.checkupAnswers,
+        'checkupTemplate':val.checkupTemplate,
+        'incidentAnswers':val.incidentAnswers,
+        'incidentTemplate':val.incidentTemplate,
+        'medicalRecord':medicalRec
+      };
+
+      if(this.View == this.INCIDENTS_NAME){
+        this.incidentRecords.push(fullReport);
+      }else if(this.View == this.CHECKUPS_NAME){
+        this.checkupRecords.push(fullReport);
+      }else if(this.View == this.WAITING_APPROVAL_NAME){
+        this.approvalRecords.push(fullReport);
+      }
+    }
+  }
+
   doRefresh(refresher){
     this.refresher = refresher;
     this.refresherIsStart = true;
-    this.page = 1;
+    if(this.View == this.MEDICATIONS_NAME){
+      this.pageMedication = 1;
+    }else if(this.View == this.INCIDENTS_NAME){
+      this.pageIncident = 1;
+    }else if(this.View == this.CHECKUPS_NAME){
+      this.pageCheckup = 1;
+    }else if(this.View == this.WAITING_APPROVAL_NAME){
+      this.pageApproval = 1;
+    }
     this.getAllMedicalRecords();
   }
 
@@ -351,7 +451,15 @@ export class MedicalCarePage {
     return new Promise((resolve) => {
       this.nextPage = resolve;
       this.nextPageIsStarted = true;
-      this.page += 1;
+      if(this.View == this.MEDICATIONS_NAME){
+        this.pageMedication += 1;
+      }else if(this.View == this.INCIDENTS_NAME){
+        this.pageIncident += 1;
+      }else if(this.View == this.CHECKUPS_NAME){
+        this.pageCheckup += 1;
+      }else if(this.View == this.WAITING_APPROVAL_NAME){
+        this.pageApproval += 1;
+      }
       this.getAllMedicalRecords();
     });
   }
@@ -388,7 +496,15 @@ export class MedicalCarePage {
   }
 
   statusModelChange(fromModule){
-    this.page = 1;
+    if(this.View == this.MEDICATIONS_NAME){
+      this.pageMedication = 1;
+    }else if(this.View == this.INCIDENTS_NAME){
+      this.pageIncident = 1;
+    }else if(this.View == this.CHECKUPS_NAME){
+      this.pageCheckup = 1;
+    }else if(this.View == this.WAITING_APPROVAL_NAME){
+      this.pageApproval = 1;
+    }
     if(fromModule){
       if(this.theStatus == "All Status"){
         // @ts-ignore
@@ -506,6 +622,76 @@ export class MedicalCarePage {
     modal.present();
   }
 
+  tabThatSelectedDo(tabName){
+    console.log("TabName "+this.View);
+    let speed = 500;
+    if(tabName == this.MEDICATIONS_NAME){
+      this.slides.slideTo(this.MEDICATIONS_INDEX, speed);
+    }else if(tabName == this.INCIDENTS_NAME){
+      this.slides.slideTo(this.INCIDENTS_INDEX, speed);
+    }else if(tabName == this.CHECKUPS_NAME){
+      this.slides.slideTo(this.CHECKUPS_INDEX, speed);
+    }else if(tabName == this.WAITING_APPROVAL_NAME){
+      this.slides.slideTo(this.WAITING_APPROVAL_INDEX, speed);
+    }
+  }
+
+  slideChanged() {
+    let currentIndex = this.slides.getActiveIndex();
+    console.log('Current index is', currentIndex);
+    switch (currentIndex){
+      case this.MEDICATIONS_INDEX:
+        this.View = this.MEDICATIONS_NAME;
+        if(!this.MEDICATIONS_OPEND){
+          this.getAllMedicalRecords();
+        }
+        break;
+      case this.INCIDENTS_INDEX:
+        this.View = this.INCIDENTS_NAME;
+        if(!this.INCIDENTS_OPEND){
+          this.getAllMedicalRecords();
+        }
+        break;
+
+      case this.CHECKUPS_INDEX:
+        this.View = this.CHECKUPS_NAME;
+        if(!this.CHECKUPS_OPEND){
+          this.getAllMedicalRecords();
+        }
+        break;
+
+      case this.WAITING_APPROVAL_INDEX:
+        this.View = this.WAITING_APPROVAL_NAME;
+        if(!this.WAITING_APPROVAL_OPEND){
+          this.getAllMedicalRecords();
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+
+
+
+  getMedicalCareSettings(){
+    this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe(
+      val=>{
+        // console.log(val);
+        let Data = val;
+        this.MEDICATION_TAB = Data.medicationsTapName;
+        this.INCIDENT_TAB = Data.incidentTapName;
+        this.CHECKUP_TAB = Data.checkupTapName;
+        if(!Data.id){
+          this.presentToast("Can\'t load medical care settings,\n Medical care setting will be default");
+        }
+      },err=>{
+        // console.log(err);
+        this.presentToast("Can\'t load medical care settings,\n Medical care setting will be default");
+      });
+  }
+
+
   callData(){
     this.classServ.getClassList("Medical Care",2,null,null,null,null).subscribe();
     this.studentServ.getAllStudents(7,"Medical Care").subscribe();
@@ -515,4 +701,54 @@ export class MedicalCarePage {
     this.medicalService.getIncidentTemplate().subscribe();
     this.medicalService.getCheckupTemplate().subscribe();
   }
+
+
+  setFristView(){
+    if(this.accountServ.getUserRole().viewMedication){
+      this.View = "medications";
+    }else if(this.accountServ.getUserRole().viewIncident){
+      this.View = "";
+    }else if(this.accountServ.getUserRole().viewCheckup){
+      this.View = "";
+    }
+  }
+
+  getTabsIndex(){
+    let foundMED = false;let foundINC = false;let foundCHE = false;let foundWAP = false;
+    let index = 0;
+    for(let i=0;i<5;i++){
+      if(this.accountServ.getUserRole().viewMedication && !foundMED){
+        foundMED = true;
+        this.MEDICATIONS_INDEX = index;
+        index += 1;
+      }else if(this.accountServ.getUserRole().viewIncident && !foundINC){
+        foundINC = true;
+        this.INCIDENTS_INDEX = index;
+        index += 1;
+      }else if(this.accountServ.getUserRole().viewCheckup && !foundCHE){
+        foundCHE = true;
+        this.CHECKUPS_INDEX = index;
+        index += 1;
+      }else if(this.accountServ.getUserRole().medicalRecordCanApprove && !foundWAP){
+        foundWAP = true;
+        this.WAITING_APPROVAL_INDEX = index;
+        index += 1;
+      }
+    }
+  }
+
+
+  getDateForApproval(medicalReport){
+    if(medicalReport.incident){
+      return medicalReport.incident.incidentDate.slice(0,-6);
+    }else if(medicalReport.checkup){
+      return medicalReport.checkup.checkupDate.slice(0,-6);
+    }else{
+      return '';
+    }
+
+  }
+
+
+
 }

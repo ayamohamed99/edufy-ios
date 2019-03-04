@@ -157,19 +157,30 @@ export class NewMedicalReportMedicinePage {
       }
     }
 
-    let schaduleObject = {
-      'saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false, 'time': ""
-    };
     this.medication.medicationSchedule=[];
+    let sunday = false;
+    let monday = false;
+    let tuesday = false;
+    let wednesday = false;
+    let thursday = false;
     for(let day of this.allDays){
-      if(day.Name.toLowerCase() == 'sunday' && day.selected){schaduleObject.sunday = true}
-      if(day.Name.toLowerCase() == 'monday' && day.selected){schaduleObject.monday = true}
-      if(day.Name.toLowerCase() == 'tuesday' && day.selected){schaduleObject.tuesday = true}
-      if(day.Name.toLowerCase() == 'wednesday' && day.selected){schaduleObject.wednesday = true}
-      if(day.Name.toLowerCase() == 'thursday' && day.selected){schaduleObject.thursday = true}
+      if(day.Name.toLowerCase() == 'sunday' && day.selected){sunday = true}
+      if(day.Name.toLowerCase() == 'monday' && day.selected){monday = true}
+      if(day.Name.toLowerCase() == 'tuesday' && day.selected){tuesday = true}
+      if(day.Name.toLowerCase() == 'wednesday' && day.selected){wednesday = true}
+      if(day.Name.toLowerCase() == 'thursday' && day.selected){thursday = true}
     }
     for(let addTime of this.selectedTimes){
-      schaduleObject.time = addTime.time;
+      let schaduleObject = {
+        'saturday': false,
+        'sunday': sunday,
+        'monday': monday,
+        'tuesday': tuesday,
+        'wednesday': wednesday,
+        'thursday': thursday,
+        'friday': false,
+        'time': addTime.time
+      };
       this.medication.medicationSchedule.push(schaduleObject);
     }
     this.viewCtrl.dismiss({medication:this.medication});

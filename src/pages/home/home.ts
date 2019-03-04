@@ -19,6 +19,7 @@ import {InAppBrowser} from "@ionic-native/in-app-browser";
 import {Url_domain} from "../../models/url_domain";
 import {Student} from "../../models";
 import {ChatService} from "../../services/chat";
+import {MedicalCareService} from "../../services/medicalcare";
 
 @Component({
   selector: 'page-home',
@@ -44,7 +45,7 @@ export class HomePage {
     , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
               private network:Network, private notiServ:NotificationService,private fire:FCMService,public chatServ:ChatService
               ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2,public iab:InAppBrowser,
-              public modalCtrl:ModalController) {}
+              public modalCtrl:ModalController,public medicalService:MedicalCareService) {}
 
   login(form:NgForm){
     this.userName = form.value.username;
@@ -184,6 +185,9 @@ export class HomePage {
           this.navCtrl.setRoot('ProfilePage');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
+          if(this.accountServ.getUserRole().viewMedicalRecord) {
+            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+          }
         }else if(!err.error){
           this.load.dismiss();
           console.log('Has No Custom report(s)');
@@ -191,6 +195,9 @@ export class HomePage {
           this.navCtrl.setRoot('ProfilePage');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
+          if(this.accountServ.getUserRole().viewMedicalRecord) {
+            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+          }
         } else{
           this.load.dismiss();
           this.alertCtrl.create({
