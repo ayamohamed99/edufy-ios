@@ -682,9 +682,6 @@ export class MedicalCarePage {
         this.MEDICATION_TAB = Data.medicationsTapName;
         this.INCIDENT_TAB = Data.incidentTapName;
         this.CHECKUP_TAB = Data.checkupTapName;
-        if(!Data.id){
-          this.presentToast("Can\'t load medical care settings,\n Medical care setting will be default");
-        }
       },err=>{
         // console.log(err);
         this.presentToast("Can\'t load medical care settings,\n Medical care setting will be default");

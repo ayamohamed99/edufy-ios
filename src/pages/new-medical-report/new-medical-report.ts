@@ -1049,9 +1049,9 @@ export class NewMedicalReportPage {
     this.SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX = i;
   }
 
-  // setImageOrLable(question,pramName){
-  //   return 'Label';
-  // }
+  setImageOrLable(question,pramName){
+    return 'Label';
+  }
   checkIfChangesAnswer = false;
 
   dataChanges() {
