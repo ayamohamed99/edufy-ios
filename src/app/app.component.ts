@@ -20,6 +20,9 @@ import {Student} from "../models";
 import {tryCatch} from "rxjs/util/tryCatch";
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import {MedicalCareService} from "../services/medicalcare";
+import {StudentsService} from "../services/students";
+import {ClassesService} from "../services/classes";
+import {BehaviorSubject} from "rxjs";
 
 declare var window:any;
 
@@ -66,7 +69,7 @@ export class MyApp {
   constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
               private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,public chatServ:ChatService,
               private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController,
-              private localNotifications:LocalNotifications,public medicalService:MedicalCareService) {
+              private localNotifications:LocalNotifications,public medicalService:MedicalCareService,public studentServ:StudentsService,public classesServ:ClassesService) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -185,6 +188,15 @@ export class MyApp {
       content: 'Wait please ...'
     });
     this.load.present();
+
+    this.classesServ.getClassListWithID_2_AND_NOT_REPORTS = new BehaviorSubject(null);
+    this.studentServ.getAllStudentWithID_7 = new BehaviorSubject(null);
+    this.medicalService.getMedicines_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getDosageTypes_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getInstructions_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getIncidentTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
+    this.medicalService.getCheckupTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
+    this.medicalService.getSETINGS_FOR_MEDICALREPORT = new BehaviorSubject(null);
 
     let plat=this.platform.is('core');
 
