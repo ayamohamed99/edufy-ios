@@ -83,12 +83,14 @@
     "ionicons": "3.0.0",
     "ios-sim": "^7.0.0",
     "jspdf": "^1.4.1",
+    "lodash": "^4.17.11",
     "ng-tags-input": "^3.2.0",
     "ng2-img-max": "^2.1.18",
     "npm": "^6.1.0",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "ui-select": "^0.19.8",
+    "xlsx": "^0.14.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {

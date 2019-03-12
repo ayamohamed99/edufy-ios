@@ -11,6 +11,7 @@ export class MedicalRecord {
   prescription;
   oneMedication;
   student;
+  medicationIndex;
   ///////////////////////
   activeMedication:boolean;
   activeMedicationTaken:boolean;

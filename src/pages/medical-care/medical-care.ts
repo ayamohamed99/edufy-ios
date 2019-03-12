@@ -21,6 +21,9 @@ import {a} from "@angular/core/src/render3";
 import {ClassesService} from "../../services/classes";
 import {StudentsService} from "../../services/students";
 import {AccountService} from "../../services/account";
+import {TemplateFunctionsService} from "../../services/templateFunctionsService";
+import {Excel} from "../../services/excel";
+import _ from "lodash";
 
 
 /**
@@ -50,7 +53,10 @@ export class MedicalCarePage {
   CHECKUPS_OPEND = false;
   WAITING_APPROVAL_OPEND = false;
   justEnter:boolean;
-  loading:boolean = false;
+  loadingMedication:boolean = false;
+  loadingIncident:boolean = false;
+  loadingCheckup:boolean = false;
+  loadingApprove:boolean = false;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   refresher:any;
   refresherIsStart:boolean = false;
@@ -74,6 +80,7 @@ export class MedicalCarePage {
   endDate:any;
   pageSize:any = null;
   theStatus:any = "All Status";
+  medicalReportNumber;
   allStatusInMedication:any[]=["All Status","Active","inActive"];
   MEDICATION_TAB = "Medications";
   INCIDENT_TAB = "Incidents";
@@ -83,11 +90,38 @@ export class MedicalCarePage {
   pageIncident:any;
   pageCheckup:any;
   pageApproval:any;
+  allclasses:any[]=[];
+  allStudents:any[]=[];
+  justRefresher = false;
+  load;
+
+  ///////////////////////////////////////////
+  incidentTemplate:any[] = [];
+  incidentQuestions:any[] = [];
+  incidentQuestionsFirst:any[] = [];
+  medicalRecordObject;
+
+  medicalRecordsForIncident = [];
+
+  result;
+
+  incidentAnswers:any[]=[];
+  incidentAnswer:any[]=[];
+  incidentAnswersNoOfItems:any[]=[];
+  incidentQuestionsEditParamTemps:any[]=[];
+
+  exAllIncidents:any[]=[];
+  selectedRecord;
+
+  oldIncidentQuestionsList:any[]=[];
+  elementDone=0;
+  recordsNumber;
+  loading;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl:PopoverController,public platform:Platform,
               public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDate,private toastCtrl:ToastController,
               private modalCtrl:ModalController,private classServ:ClassesService,private studentServ:StudentsService, private  alrtCtrl:AlertController,
-              private  loadCtrl:LoadingController,private accountServ:AccountService) {
+              private  loadCtrl:LoadingController,private accountServ:AccountService,private templetService:TemplateFunctionsService,private excal:Excel) {
     console.log(this.search);
     this.justEnter = true;
     this.getTabsIndex();
@@ -109,7 +143,9 @@ export class MedicalCarePage {
       this.getMedicalCareSettings();
       classServ.putHeader(localStorage.getItem(this.localStorageToken));
       studentServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getAllMedicalRecords();
+      this.getAllMedicalRecords(this.View);
+      this.getAllClasses();
+      this.getAllStudents();
     } else {
       storage.get(this.localStorageToken).then(
         val => {
@@ -117,7 +153,9 @@ export class MedicalCarePage {
           this.getMedicalCareSettings();
           classServ.putHeader(val);
           studentServ.putHeader(val);
-          this.getAllMedicalRecords();
+          this.getAllMedicalRecords(this.View);
+          this.getAllClasses();
+          this.getAllStudents();
         });
     }
   }
@@ -259,7 +297,11 @@ export class MedicalCarePage {
   optimizeTimesData(schadule){
     let times:any[] = [];
     for(let time of schadule){
-      times.push(" "+time.time.slice(0, -3));
+      if(time.time.toString().length > 5) {
+        times.push(" " + time.time.slice(0, -3));
+      }else{
+        times.push(" " + time.time);
+      }
     }
     return times;
   }
@@ -293,18 +335,80 @@ export class MedicalCarePage {
     }
   }
 
-  openMenu(ev:Event){
+  openMenu(ev:Event,medRecord,view,index){
     // ev.stopPropagation();
-    let popover = this.popoverCtrl.create('PopoverMedicalCareCardPage', {data:"Wait"});
+    let editButton = false;
+    let deleteButton = false;
+    if(view == this.MEDICATIONS_NAME) {
+
+      if(this.accountServ.getUserRole().editMedication){
+        editButton = true;
+      }
+      if(this.accountServ.getUserRole().deleteMedication && !medRecord.oneMedication.status){
+        deleteButton = true;
+      }
+
+    }else if(view == this.INCIDENTS_NAME){
+
+      if(this.accountServ.getUserRole().editIncident){
+        editButton = true;
+      }
+      if(this.accountServ.getUserRole().deleteIncident){
+        deleteButton = true;
+      }
+
+    }else if(view == this.CHECKUPS_NAME){
+
+      if(this.accountServ.getUserRole().editCheckup){
+        editButton = true;
+      }
+      if(this.accountServ.getUserRole().deleteCheckup){
+        deleteButton = true;
+      }
+
+    }else if(view == this.WAITING_APPROVAL_NAME){
+
+      if(medRecord.medicalRecord.incident){
+        if(this.accountServ.getUserRole().editIncident){
+          editButton = true;
+        }
+        if(this.accountServ.getUserRole().deleteIncident){
+          deleteButton = true;
+        }
+
+      }else if(medRecord.medicalRecord.checkup || !medRecord.medicalRecord.incident){
+
+        if(this.accountServ.getUserRole().editCheckup){
+          editButton = true;
+        }
+        if(this.accountServ.getUserRole().deleteCheckup){
+          deleteButton = true;
+        }
+
+      }
+
+    }
+
+
+    let popover = this.popoverCtrl.create('PopoverMedicalCareCardPage', {
+      Edit:editButton,
+      Delete:deleteButton
+    });
 
     popover.onDidDismiss(data => {
-      if(data == null) {
-      }else{
-        if(data == "edit"){
-
-        }
-        if(data == "delete"){
-
+      if(data) {
+        if(view == this.MEDICATIONS_NAME){
+          this.editOrDeleteMedication(data.done,medRecord,index,view);
+        }else if(view == this.INCIDENTS_NAME){
+          this.editOrDeleteIncident(data.done,medRecord,index,view);
+        }else if(view == this.CHECKUPS_NAME){
+          this.editOrDeleteCheckup(data.done,medRecord,index,view);
+        }else if(view == this.WAITING_APPROVAL_NAME){
+          if(medRecord.medicalRecord.incident){
+            this.editOrDeleteIncident(data.done,medRecord,index,view);
+          }else if(medRecord.medicalRecord.checkup || !medRecord.medicalRecord.incident){
+            this.editOrDeleteCheckup(data.done,medRecord,index,view);
+          }
         }
       }
     });
@@ -312,19 +416,22 @@ export class MedicalCarePage {
     popover.present({ev: event});
   }
 
-  getAllMedicalRecords(){
-    this.loading = true;
+  getAllMedicalRecords(view){
 
-    if(this.View == this.MEDICATIONS_NAME){
+    if(view == this.MEDICATIONS_NAME){
+      this.loadingMedication = true;
       this.page = this.pageMedication;
       this.MEDICATIONS_OPEND = true;
-    }else if(this.View == this.INCIDENTS_NAME){
+    }else if(view == this.INCIDENTS_NAME){
+      this.loadingIncident = true;
       this.page = this.pageIncident;
       this.INCIDENTS_OPEND = true;
-    }else if(this.View == this.CHECKUPS_NAME){
+    }else if(view == this.CHECKUPS_NAME){
+      this.loadingCheckup = true;
       this.page = this.pageCheckup;
       this.CHECKUPS_OPEND = true;
-    }else if(this.View == this.WAITING_APPROVAL_NAME){
+    }else if(view == this.WAITING_APPROVAL_NAME){
+      this.loadingApprove = true;
       this.page = this.pageApproval;
       this.WAITING_APPROVAL_OPEND = true;
     }
@@ -334,13 +441,40 @@ export class MedicalCarePage {
         value =>{
           this.oldSearch =  JSON.parse(JSON.stringify(this.search));
           if(this.refresherIsStart) {
-            this.medicalRecords = [];
+            if(view == this.MEDICATIONS_NAME){
+              this.medicalRecords = [];
+              this.MEDICATIONS_OPEND = true;
+            }else if(view == this.INCIDENTS_NAME){
+              this.incidentRecords = [];
+            }else if(view == this.CHECKUPS_NAME){
+              this.checkupRecords = [];
+            }else if(view == this.WAITING_APPROVAL_NAME){
+              this.approvalRecords = [];
+            }
+          }
+          if(this.justRefresher) {
+            if(view == this.MEDICATIONS_NAME){
+              this.medicalRecords = [];
+              this.MEDICATIONS_OPEND = true;
+            }else if(view == this.INCIDENTS_NAME){
+              this.incidentRecords = [];
+            }else if(view == this.CHECKUPS_NAME){
+              this.checkupRecords = [];
+            }else if(view == this.WAITING_APPROVAL_NAME){
+              this.approvalRecords = [];
+            }
+            this.justRefresher = false;
+            try {
+              this.load.dismiss();
+            }catch (e) {
+              
+            }
           }
           let Data:any = value;
           if(this.View == this.MEDICATIONS_NAME){
             this.getAllMedications(Data);
           }else{
-            this.getAllOtheData(Data);
+            this.getAllOtheData(Data,view);
           }
           console.log(this.medicalRecords);
           console.log(this.incidentRecords);
@@ -354,7 +488,15 @@ export class MedicalCarePage {
             this.nextPage();
             this.nextPageIsStarted = false;
           }
-          this.loading = false;
+          if(view == this.MEDICATIONS_NAME){
+            this.loadingMedication = false;
+          }else if(view == this.INCIDENTS_NAME){
+            this.loadingIncident = false;
+          }else if(view == this.CHECKUPS_NAME){
+            this.loadingCheckup = false;
+          }else if(view == this.WAITING_APPROVAL_NAME){
+            this.loadingApprove = false;
+          }
 
           if(this.justEnter){
             this.callData();
@@ -370,13 +512,23 @@ export class MedicalCarePage {
         }
         console.log("Data failed");
         console.log(error);
-        this.loading = false;
+        if(view == this.MEDICATIONS_NAME){
+          this.loadingMedication = false;
+        }else if(view == this.INCIDENTS_NAME){
+          this.loadingIncident = false;
+        }else if(view == this.CHECKUPS_NAME){
+          this.loadingCheckup = false;
+        }else if(view == this.WAITING_APPROVAL_NAME){
+          this.loadingApprove = false;
+        }
       });
   }
 
   getAllMedications(Data){
     for(let val of Data){
-      for(let medicine of val.medicalRecord.prescription.medications){
+      // for(let medicine of val.medicalRecord.prescription.medications){
+      for(let i=0;i<val.medicalRecord.prescription.medications.length;i++){
+        let medicine = val.medicalRecord.prescription.medications[i];
         let medicalRec = new MedicalRecord();
 
         let statusData = this.checkIfTimeToTakeMedication(medicine,'there_is_active_medication');
@@ -395,13 +547,14 @@ export class MedicalCarePage {
         medicalRec.activeMedicationTaken = statusData.taken;
         medicalRec.timeOfActiveMedication = statusData.data;
         medicalRec.otherTimeOfTakenMedication = statusData.otherTaken;
+        medicalRec.medicationIndex = i;
 
         this.medicalRecords.push(medicalRec);
       }
     }
   }
 
-  getAllOtheData(Data){
+  getAllOtheData(Data,view){
     for(let val of Data){
       let medicalRec = new MedicalRecord();
       medicalRec.accountId=val.medicalRecord.accountId;
@@ -422,11 +575,11 @@ export class MedicalCarePage {
         'medicalRecord':medicalRec
       };
 
-      if(this.View == this.INCIDENTS_NAME){
+      if(view == this.INCIDENTS_NAME){
         this.incidentRecords.push(fullReport);
-      }else if(this.View == this.CHECKUPS_NAME){
+      }else if(view == this.CHECKUPS_NAME){
         this.checkupRecords.push(fullReport);
-      }else if(this.View == this.WAITING_APPROVAL_NAME){
+      }else if(view == this.WAITING_APPROVAL_NAME){
         this.approvalRecords.push(fullReport);
       }
     }
@@ -444,7 +597,7 @@ export class MedicalCarePage {
     }else if(this.View == this.WAITING_APPROVAL_NAME){
       this.pageApproval = 1;
     }
-    this.getAllMedicalRecords();
+    this.getAllMedicalRecords(this.View);
   }
 
   doInfinite(){
@@ -460,7 +613,7 @@ export class MedicalCarePage {
       }else if(this.View == this.WAITING_APPROVAL_NAME){
         this.pageApproval += 1;
       }
-      this.getAllMedicalRecords();
+      this.getAllMedicalRecords(this.View);
     });
   }
 
@@ -559,8 +712,16 @@ export class MedicalCarePage {
 
     this.filterDate = null;
     this.medicalRecords = [];
-    this.loading = true;
-    this.getAllMedicalRecords();
+    if(this.View == this.MEDICATIONS_NAME){
+      this.loadingMedication = true;
+    }else if(this.View == this.INCIDENTS_NAME){
+      this.loadingIncident = true;
+    }else if(this.View == this.CHECKUPS_NAME){
+      this.loadingCheckup = true;
+    }else if(this.View == this.WAITING_APPROVAL_NAME){
+      this.loadingApprove = true;
+    }
+    this.getAllMedicalRecords(this.View);
   }
 
 
@@ -610,12 +771,12 @@ export class MedicalCarePage {
     if(index == 0){
       modal = this.modalCtrl.create('NewMedicalReportPage',{
         for:'Incident',
-        operation:"new"
+        operation:'new'
       });
     }else{
       modal = this.modalCtrl.create('NewMedicalReportPage',{
         for:'Checkup',
-        operation:"new"
+        operation:'new'
       });
     }
     modal.onDidDismiss();
@@ -643,27 +804,27 @@ export class MedicalCarePage {
       case this.MEDICATIONS_INDEX:
         this.View = this.MEDICATIONS_NAME;
         if(!this.MEDICATIONS_OPEND){
-          this.getAllMedicalRecords();
+          this.getAllMedicalRecords(this.MEDICATIONS_INDEX);
         }
         break;
       case this.INCIDENTS_INDEX:
         this.View = this.INCIDENTS_NAME;
         if(!this.INCIDENTS_OPEND){
-          this.getAllMedicalRecords();
+          this.getAllMedicalRecords(this.INCIDENTS_NAME);
         }
         break;
 
       case this.CHECKUPS_INDEX:
         this.View = this.CHECKUPS_NAME;
         if(!this.CHECKUPS_OPEND){
-          this.getAllMedicalRecords();
+          this.getAllMedicalRecords(this.CHECKUPS_NAME);
         }
         break;
 
       case this.WAITING_APPROVAL_INDEX:
         this.View = this.WAITING_APPROVAL_NAME;
         if(!this.WAITING_APPROVAL_OPEND){
-          this.getAllMedicalRecords();
+          this.getAllMedicalRecords(this.WAITING_APPROVAL_NAME);
         }
         break;
 
@@ -747,5 +908,508 @@ export class MedicalCarePage {
   }
 
 
+  openExportIncidentsPage(){
+    let model;
+
+    model = this.popoverCtrl.create('FilterViewPage', {
+      theFilter: JSON.stringify(this.search),
+      pageName: 'Export Incidents',
+      doneButton: 'Export',
+      students:this.allStudents,
+      classes:this.allclasses
+    }, {cssClass: 'contact-popovers'});
+
+    model.onDidDismiss(
+      data => {
+        console.log(data);
+        if(data) {
+          let search = JSON.parse(JSON.stringify(data.search.object));
+          let startDateFilter;
+          let endDateFilter;
+          if (search.date.from) {
+            startDateFilter = this.transformDate.transformTheDate(new Date(search.date.from), "dd-MM-yyy HH:mm:ss");
+          }
+          if (search.date.to) {
+            endDateFilter = this.transformDate.transformTheDate(new Date(search.date.to), "dd-MM-yyy HH:mm:ss");
+          }
+          let selectedPage = 1;
+
+          let selectedClass = 0, selectedStudent = 0;
+
+          if (selectedStudent != search.student.id) {
+            selectedStudent = search.student.id;
+          }
+          if (selectedClass != search.classes.id) {
+            selectedClass = search.classes.id;
+          }
+
+          this.getMedicalReportCount(selectedClass, selectedStudent, -1, null, 0, "incidents", startDateFilter, endDateFilter, null);
+        }
+      });
+
+    model.present();
+  }
+
+
+  getAllClasses() {
+    this.classServ.getClassList("Medical Care", 2, null, null, null, null).subscribe(
+      classVal => {
+        let allData: any = classVal;
+        this.allclasses = allData;
+      }, classErr => {
+        this.alrtCtrl.create({
+          title: 'Error',
+          subTitle: 'Something went wrong, please refresh the page',
+          buttons: ['OK']
+        }).present();
+      });
+  }
+
+  getAllStudents() {
+    this.studentServ.getAllStudents(7, "Medical Care").subscribe(
+      studentVal => {
+        let data: any = studentVal;
+        this.allStudents = data;
+      }, studentErr => {
+        this.alrtCtrl.create({
+          title: 'Error',
+          subTitle: 'Something went wrong, please refresh the page',
+          buttons: ['OK']
+        }).present();
+      });
+  }
+
+  approveMedicalRecord(medicalRecordId){
+
+    this.alrtCtrl.create({
+      title: 'Approve',
+      subTitle: 'Are you sure you want approve this report now',
+      buttons: [{
+        text: 'No',
+        role: 'cancel'
+      },{
+        text: 'Yes',
+        handler: () => {
+
+          this.load = this.loadCtrl.create({
+            content: "",
+            cssClass: "loadingWithoutBackground"
+          });
+          this.load.present();
+          this.medicalService.approveMedicalRecord(medicalRecordId).subscribe(
+            response => {
+              this.load.dismiss();
+              this.presentToast("Success to approve medical record");
+              this.getAllMedicalRecords(this.View);
+              this.refresherIsStart = true;
+
+            }, reason => {
+              if(reason && reason.statusText && reason.statusText == "OK"){
+                this.justRefresher = true;
+                this.presentToast("Success to approve medical record");
+                this.load.dismiss();
+                this.getAllMedicalRecords(this.View);
+              }else {
+                this.presentToast("Failed to approve medical record");
+                console.log(reason);
+              }
+
+            });
+        }
+      },]
+    }).present();
+  }
+
+  editOrDeleteMedication(data,medRecord,index,view){
+    if(data == "edit"){
+      let modal;
+      modal = this.modalCtrl.create('NewMedicalReportMedicinePage',{
+        operation:"edit",
+        medicalRecord:medRecord,
+        pageName:"Edit Medication"
+      });
+      modal.onDidDismiss(
+        data =>{
+          if(data){
+            if(data.done == 'edit') {
+              this.justRefresher = true;
+              this.getAllMedicalRecords(view);
+            }
+          }
+        });
+      modal.present();
+    }
+    if(data == "delete"){
+      this.alrtCtrl.create({
+        subTitle: 'Do you want to delete this Medication ?',
+        buttons: [{
+          text: 'No',
+          role: 'cancel'
+        },{
+          text: 'Yes',
+          handler: () => {
+
+            this.load = this.loadCtrl.create({
+              content: "",
+              cssClass: "loadingWithoutBackground"
+            });
+            this.load.present();
+            this.medicalService.deleteMedication(medRecord.id,medRecord.oneMedication.id).subscribe(
+              response=> {
+                this.load.dismiss();
+              let result = response;
+              this.medicalRecords.splice(index,1);
+                this.justRefresher=true;
+              this.presentToast('Medication deleted successfully');
+              this.getAllMedicalRecords(view);
+            }, reason=> {
+                this.load.dismiss();
+                this.presentToast('Failed to delete medication');
+            });
+          }
+        }]
+      }).present();
+    }
+  }
+
+  editOrDeleteIncident(data,medRecord,index,view){
+    if(data == "edit"){
+      let modal;
+      modal = this.modalCtrl.create('NewMedicalReportPage',{
+        for:'Incident',
+        operation:"edit",
+        medicalRecord:medRecord,
+        pageName:"Edit Incident"
+      });
+      modal.onDidDismiss(
+        data =>{
+          if(data){
+            if(data.done == 'edit') {
+              let data = medRecord.medicalRecord;
+              let students = new Student();
+
+              students.studentClass.classId = data.classes.id;
+              students.studentClass.className = data.classes.name;
+              students.studentClass.grade.gradeId = data.classes.grade.id;
+              students.studentClass.grade.gradeName = data.classes.grade.name;
+              students.studentClass.branch.branchId = data.classes.branch.id;
+              students.studentClass.branch.branchName = data.classes.branch.name;
+              students.studentClass.branch.managerId = data.classes.branch.managerId;
+              students.studentId = data.id;
+              students.studentName = data.name;
+              students.studentAddress = data.address;
+              students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
+              medRecord.medicalRecord.student = students;
+              this.justRefresher = true;
+              this.getAllMedicalRecords(view);
+            }
+          }
+        });
+      modal.present();
+    }
+    if(data == "delete"){
+      this.alrtCtrl.create({
+        subTitle: 'Do you want to delete this Incident ?',
+        buttons: [{
+          text: 'No',
+          role: 'cancel'
+        },{
+          text: 'Yes',
+          handler: () => {
+
+            this.load = this.loadCtrl.create({
+              content: "",
+              cssClass: "loadingWithoutBackground"
+            });
+            this.load.present();
+            this.medicalService.deleteIncident(medRecord.medicalRecord.id).subscribe(
+              response=> {
+              this.load.dismiss();
+              let result = response;
+                if(view == this.INCIDENTS_NAME){
+                  this.incidentRecords.splice(index,1);
+                }else if(view == this.WAITING_APPROVAL_NAME){
+                  this.approvalRecords.splice(index,1);
+                }
+                this.justRefresher=true;
+              this.presentToast('Incident deleted successfully');
+              this.getAllMedicalRecords(view);
+            }, reason=> {
+              this.load.dismiss();
+              this.presentToast('Failed to delete incident');
+            });
+          }
+        }]
+      }).present();
+    }
+  }
+
+  editOrDeleteCheckup(data,medRecord,index,view){
+    if(data == "edit"){
+      let modal;
+      modal = this.modalCtrl.create('NewMedicalReportPage',{
+        for:'Checkup',
+        operation:"edit",
+        medicalRecord:medRecord,
+        pageName:"Edit Checkup"
+      });
+      modal.onDidDismiss(
+        data =>{
+          if(data){
+            if(data.done == 'edit') {
+              let data = medRecord.medicalRecord;
+              let students = new Student();
+
+              students.studentClass.classId = data.classes.id;
+              students.studentClass.className = data.classes.name;
+              students.studentClass.grade.gradeId = data.classes.grade.id;
+              students.studentClass.grade.gradeName = data.classes.grade.name;
+              students.studentClass.branch.branchId = data.classes.branch.id;
+              students.studentClass.branch.branchName = data.classes.branch.name;
+              students.studentClass.branch.managerId = data.classes.branch.managerId;
+              students.studentId = data.id;
+              students.studentName = data.name;
+              students.studentAddress = data.address;
+              students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
+              medRecord.medicalRecord.student = students;
+              this.justRefresher = true;
+              this.getAllMedicalRecords(view);
+            }
+          }
+        });
+      modal.present();
+    }
+    if(data == "delete"){
+      this.alrtCtrl.create({
+        subTitle: 'Do you want to delete this Checkup ?',
+        buttons: [{
+          text: 'No',
+          role: 'cancel'
+        },{
+          text: 'Yes',
+          handler: () => {
+
+            this.load = this.loadCtrl.create({
+              content: "",
+              cssClass: "loadingWithoutBackground"
+            });
+            this.load.present();
+            this.medicalService.deleteCheckup(medRecord.medicalRecord.id).subscribe(
+              response=> {
+                this.load.dismiss();
+                let result = response;
+                if(view == this.CHECKUPS_NAME){
+                  this.checkupRecords.splice(index,1);
+                }else if(view == this.WAITING_APPROVAL_NAME){
+                  this.approvalRecords.splice(index,1);
+                }
+                this.justRefresher=true;
+                this.presentToast('Checkup deleted successfully');
+                this.getAllMedicalRecords(view);
+              }, reason=> {
+                this.load.dismiss();
+                this.presentToast('Failed to delete incident');
+              });
+          }
+        }]
+      }).present();
+    }
+  }
+
+//////////////////////EXPORT INCIDENTS//////////////////////////////////
+
+
+  getMedicalReportCount(selectedClass,selectedStudent,selectedStatus,date,page,view,startdate,enddate,pagesize){
+    this.loading = this.loadCtrl.create({
+      content: "",
+      cssClass: "loadingWithoutBackground"
+    });
+    this.loading.present();
+    this.medicalService.countMedicalRecords(selectedClass,selectedStudent,selectedStatus,date,0,view,startdate,enddate,pagesize).subscribe(
+      response=> {
+
+        console.log(response);
+        let that = this;
+
+        let gettingData = false;
+        let medicalRecordsNum = response ;
+        this.recordsNumber = response;
+        this.medicalService.getMedicalRecords(selectedClass , selectedStudent,-1,null ,1,"incidents",startdate,enddate,this.recordsNumber)
+          .subscribe(
+            response => {
+
+              this.medicalRecordObject = response;
+
+              this.medicalRecordsForIncident = [];
+
+              this.result = response;
+
+              // @ts-ignore
+              for (let i = 0; i < this.medicalRecordObject.length; i++) {
+                let medicalRecord = this.medicalRecordObject[i].medicalRecord;
+                this.medicalRecordsForIncident.push(medicalRecord);
+                if (medicalRecord.incident) {
+                  this.incidentAnswers[medicalRecord.incident.id] = (this.medicalRecordObject[i].incidentAnswers);
+                  medicalRecord.incident.incidentTemplateObject = this.medicalRecordObject[i].incidentTemplate;
+                  medicalRecord.incident.answers = this.medicalRecordObject[i].incidentAnswers;
+                  this.incidentAnswer[medicalRecord.incident.id] = {
+                    "incidentAnswersObjectsList": []
+                  };
+                  this.incidentAnswersNoOfItems[medicalRecord.incident.id] = {};
+                  this.incidentQuestionsEditParamTemps[medicalRecord.incident.id] = {};
+
+                  if (view == 'incidents')
+                    this.getIncidentTemplate(medicalRecord.incident);
+                }
+                if (i == this.medicalRecordObject.length - 1) {
+                  this.prepareExcelSections(function (result) {
+                    if (result) {
+                      let table = document.getElementById('field1');
+                      let interval = setInterval(() => {
+                        if(that.elementDone == that.recordsNumber -1) {
+                          that.loading.dismiss();
+                          that.excal.tableToExcel(table, 'IncidentExport(' + that.recordsNumber + ').xlsx');
+                          clearInterval(interval);
+                        }
+                      },100);
+
+                    }
+                  })
+
+                }
+              }
+          },reason =>{
+              this.loading.dismiss();
+              this.presentToast('Failed to export incident report(s)');
+            });
+
+      }, reason=> {
+        this.loading.dismiss();
+        this.presentToast('Failed to export incident report(s)');
+      });
+  }
+
+
+  prepareExcelSections (callback){
+
+    this.exAllIncidents = [];
+    for(let i in this.medicalRecordsForIncident){
+      this.selectedRecord = this.medicalRecordsForIncident[i];
+      let incident = this.selectedRecord.incident;
+
+      let questions  = this.incidentQuestions[incident.id];
+      let answers = this.incidentAnswer[incident.id].incidentAnswersObjectsList;
+      let incidentAnswers = [];
+
+      for(let i=0;i<questions.length;i++){
+        let question = questions[i].question;
+        let answer = answers[i].answer;
+
+        if(answer.toString()){
+          let object = {q:question,a:answer};
+          incidentAnswers.push(JSON.parse(JSON.stringify(object)));
+        } else {
+          let result  = this.getQuestionAnswer(questions[i].parametersList,answers[i].answer);
+          let object = {q:question,a:result};
+          incidentAnswers.push(JSON.parse(JSON.stringify(object)));
+        }
+      }
+      let ArrayOfQuestions:any[]=[];
+      for(let item of incidentAnswers){
+        ArrayOfQuestions.push(item.q);
+      }
+      let startNewLine = false;
+      if (_.isEqual(ArrayOfQuestions,this.oldIncidentQuestionsList)) {
+        startNewLine = false;
+      } else {
+        this.oldIncidentQuestionsList = JSON.parse(JSON.stringify(ArrayOfQuestions));
+        startNewLine = true;
+      }
+
+      this.exAllIncidents.push({list:JSON.parse(JSON.stringify(incidentAnswers)),id:incident.id,title:incident.title,date:incident.incidentDate,
+        student:this.selectedRecord.student.name,class:this.selectedRecord.student.classes.grade.name+'-'+this.selectedRecord.student.classes.name,newLine:startNewLine});
+    }
+
+    if(this.exAllIncidents.length>0){
+      callback(true);
+    }else{
+      callback(false);
+    }
+
+
+
+  }
+
+  getQuestionAnswer (parameters ,answer) {
+    let list = "";
+    let comma = "";
+    for (let j in parameters) {
+      let parameter = parameters[j];
+      if (answer[parameter.id]) {
+        list += parameter.value + ' , ';
+      } else if (answer[j]) {
+        list += parameter.value + ":" + answer[j] + ' , ';
+      }
+    }
+    list = list.slice(0, -2);
+    return list;
+  }
+
+    getIncidentTemplate(incident) {
+    let incidentId = incident.id ;
+    this.incidentTemplate[incidentId] = incident.incidentTemplateObject;
+    this.incidentQuestions[incidentId] = this.incidentTemplate[incidentId].questionsList ;
+    this.incidentQuestionsFirst = this.incidentTemplate[incidentId].questionsList;
+    for (let i = 0; i < this.incidentQuestionsFirst.length; i++) {
+      this.incidentQuestionsFirst[i].questionNumber = i;
+      this.incidentAnswer[incidentId].incidentAnswersObjectsList[i] = {
+        answer: null
+      };
+      this.incidentAnswersNoOfItems[i] = {
+        noOfItems: null
+      };
+      this.incidentQuestionsFirst[i].editQuestion = false;
+      this.incidentQuestionsFirst[i].isEdited = false;
+    }
+    this.incidentQuestions[incidentId] = this.incidentQuestionsFirst;
+    for (let i = 0; i < this.incidentQuestions[incidentId].length; i++) {
+      this.templetService.mappingDefaultAnswers(this.incidentAnswer[incidentId].incidentAnswersObjectsList[i], this.incidentQuestions[incidentId][i]);
+      this.templetService.mappQuestionsAnswers(this.incidentAnswer[incidentId].incidentAnswersObjectsList[i] ,this.incidentQuestions[incidentId][i].id , incident );
+      if(incident.answers[i]) {
+        this.incidentAnswer[incidentId].incidentAnswersObjectsList[i].answer =
+          this.templetService.getViewQuestionAnswer(this.incidentQuestions[incidentId][i], incident.answers[i].answer);
+      }
+      this.incidentQuestionsEditParamTemps[incidentId][i] = {};
+      this.incidentQuestionsEditParamTemps[incidentId][i].parameters = [];
+      for (let j = 0; j < this.incidentQuestions[incidentId][i].parametersList.length; j++) {
+        let param = {
+          "id": '',
+          "key": '',
+          "value": ''
+        };
+        this.incidentQuestionsEditParamTemps[incidentId][i].parameters[j] = param;
+        this.incidentQuestionsEditParamTemps[incidentId][i].parameters[j].key = this.incidentQuestions[incidentId][i].parametersList[j].key;
+      }
+    }
+  }
+
+  compareIncidentList(newList,i){
+    this.elementDone = i;
+    // let ArrayOfQuestions:any[]=[];
+    // for(let item of newList){
+    //   ArrayOfQuestions.push(item.q);
+    // }
+    // if(i > 0) {
+    //   if (_.isEqual(ArrayOfQuestions,this.oldIncidentQuestionsList)) {
+    //     return false;
+    //   } else {
+    //     this.oldIncidentQuestionsList = JSON.parse(JSON.stringify(ArrayOfQuestions));
+    //     return true;
+    //   }
+    // }else{
+    //   this.oldIncidentQuestionsList = JSON.parse(JSON.stringify(ArrayOfQuestions));
+    //   return true;
+    // }
+  }
 
 }

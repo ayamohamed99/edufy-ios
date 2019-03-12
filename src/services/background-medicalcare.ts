@@ -55,6 +55,10 @@ export class BackgroundMedicalcareService {
 
   addIncident(checkup,checkupAnswer,incident,incidentSelectedDate,selectedIncidentTime,operation,checkupTemplate,incidentTemplate,
               prescription,medicalRecord,selectedStudent,viewCtrl,incidentQuestions,incidentAnswer,checkupQuestions){
+    this.checkupAnswersList = [];
+    this.incidentAnswersList = [];
+    this.finalCheckupTemplateAnswers = [];
+    this.finalIncidentTemplateAnswers = [];
     this.checkup = checkup;
     this.checkupAnswer = checkupAnswer;
     this.incident=incident;
@@ -102,7 +106,7 @@ export class BackgroundMedicalcareService {
             }
             if(found) {
               let form = new FormData();
-              form.append('file', attachmentsArray[j].file);
+              form.append('file', attachmentsArray[j].file,attachmentsArray[j].file.name);
               promisesArray.push(this.uploadAttach(form, i, j,attachmentsArray[j].description));
             }
           }
@@ -118,6 +122,10 @@ export class BackgroundMedicalcareService {
 
   addCheckup(checkup,checkupAnswer,incident,incidentSelectedDate,selectedIncidentTime,operation,checkupTemplate,incidentTemplate,
              prescription,medicalRecord,selectedStudent,viewCtrl,incidentQuestions,incidentAnswer,checkupQuestions){
+    this.checkupAnswersList = [];
+    this.incidentAnswersList = [];
+    this.finalCheckupTemplateAnswers = [];
+    this.finalIncidentTemplateAnswers = [];
     this.checkup = checkup;
     this.checkupAnswer = checkupAnswer;
     this.incident=incident;
@@ -218,7 +226,69 @@ export class BackgroundMedicalcareService {
     //   console.log("I am sending Notification !!");
     //   console.log(attachmentList);
     // }
-    this.medicalRecord.student = {id: this.selectedStudent.studentId};
+
+    if(this.medicalRecord.student && this.medicalRecord.student.studentClass) {
+
+      let Branch = {
+        'id': this.medicalRecord.student.studentClass.branch.branchId,
+        'name': this.medicalRecord.student.studentClass.branch.branchName,
+        'managerId': this.medicalRecord.student.studentClass.branch.managerId
+      };
+
+      let Grade = {
+        'branchId': Branch.id,
+        'id': this.medicalRecord.student.studentClass.grade.gradeId,
+        'name': this.medicalRecord.student.studentClass.grade.gradeName
+      };
+
+      let Class = {
+        'branch': Branch,
+        'grade': Grade,
+        'id': this.medicalRecord.student.studentClass.classId,
+        'name': this.medicalRecord.student.studentClass.className
+      };
+
+
+      let student = {
+        'classes': Class,
+        'id': this.medicalRecord.student.studentId,
+        'name': this.medicalRecord.student.studentName,
+        'address': this.medicalRecord.student.studentAddress,
+        'branchId': Branch.id
+      };
+
+      this.medicalRecord.student = student;
+    }else if(this.selectedStudent && this.selectedStudent.studentName){
+      let Branch = {
+        'id': this.selectedStudent.studentClass.branch.branchId,
+        'name': this.selectedStudent.studentClass.branch.branchName,
+        'managerId': this.selectedStudent.studentClass.branch.managerId
+      };
+
+      let Grade = {
+        'branchId': Branch.id,
+        'id': this.selectedStudent.studentClass.grade.gradeId,
+        'name': this.selectedStudent.studentClass.grade.gradeName
+      };
+
+      let Class = {
+        'branch': Branch,
+        'grade': Grade,
+        'id': this.selectedStudent.studentClass.classId,
+        'name': this.selectedStudent.studentClass.className
+      };
+
+
+      let student = {
+        'classes': Class,
+        'id': this.selectedStudent.studentId,
+        'name': this.selectedStudent.studentName,
+        'address': this.selectedStudent.studentAddress,
+        'branchId': Branch.id
+      };
+
+      this.medicalRecord.student = student;
+    }
     this.medicalRecord.incident = this.incident;
     this.medicalRecord.incident = {
       "id": this.incident.id,
@@ -257,6 +327,9 @@ export class BackgroundMedicalcareService {
       // this.isSending = true;
       if (this.operation == 'edit') {
         // this.addnewIncidentButton = "Updating....";
+
+
+
 
         this.medicalService.updateMedicalRecord(medicalRecordObject, 'incident').subscribe(
           response => {
@@ -338,7 +411,69 @@ export class BackgroundMedicalcareService {
 
         this.medicalRecord.incident=null;
 
-        this.medicalRecord.student={id:this.selectedStudent.studentId};
+        if(this.medicalRecord.student && this.medicalRecord.student.studentClass) {
+
+          let Branch = {
+            'id': this.medicalRecord.student.studentClass.branch.branchId,
+            'name': this.medicalRecord.student.studentClass.branch.branchName,
+            'managerId': this.medicalRecord.student.studentClass.branch.managerId
+          };
+
+          let Grade = {
+            'branchId': Branch.id,
+            'id': this.medicalRecord.student.studentClass.grade.gradeId,
+            'name': this.medicalRecord.student.studentClass.grade.gradeName
+          };
+
+          let Class = {
+            'branch': Branch,
+            'grade': Grade,
+            'id': this.medicalRecord.student.studentClass.classId,
+            'name': this.medicalRecord.student.studentClass.className
+          };
+
+
+          let student = {
+            'classes': Class,
+            'id': this.medicalRecord.student.studentId,
+            'name': this.medicalRecord.student.studentName,
+            'address': this.medicalRecord.student.studentAddress,
+            'branchId': Branch.id
+          };
+
+          this.medicalRecord.student = student;
+        }else if(this.selectedStudent && this.selectedStudent.studentName){
+          let Branch = {
+            'id': this.selectedStudent.studentClass.branch.branchId,
+            'name': this.selectedStudent.studentClass.branch.branchName,
+            'managerId': this.selectedStudent.studentClass.branch.managerId
+          };
+
+          let Grade = {
+            'branchId': Branch.id,
+            'id': this.selectedStudent.studentClass.grade.gradeId,
+            'name': this.selectedStudent.studentClass.grade.gradeName
+          };
+
+          let Class = {
+            'branch': Branch,
+            'grade': Grade,
+            'id': this.selectedStudent.studentClass.classId,
+            'name': this.selectedStudent.studentClass.className
+          };
+
+
+          let student = {
+            'classes': Class,
+            'id': this.selectedStudent.studentId,
+            'name': this.selectedStudent.studentName,
+            'address': this.selectedStudent.studentAddress,
+            'branchId': Branch.id
+          };
+
+          this.medicalRecord.student = student;
+        }
+
         if(this.incident.title.length > 1) {
           this.medicalRecord.incident = this.incident;
         }
@@ -419,8 +554,36 @@ export class BackgroundMedicalcareService {
 
 
 
+        // if(medicalRecordObject.medicalRecord.student.studentClass) {
+          let Branch = {
+            'id': medicalRecordObject.medicalRecord.student.studentClass.branch.branchId,
+            'name': medicalRecordObject.medicalRecord.student.studentClass.branch.branchName,
+            'managerId': medicalRecordObject.medicalRecord.student.studentClass.branch.managerId
+          };
+
+          let Grade = {
+            'branchId': Branch.id,
+            'id': medicalRecordObject.medicalRecord.student.studentClass.grade.gradeId,
+            'name': medicalRecordObject.medicalRecord.student.studentClass.grade.gradeName
+          };
+
+          let Class = {
+            'branch': Branch,
+            'grade': Grade,
+            'id': medicalRecordObject.medicalRecord.student.studentClass.classId,
+            'name': medicalRecordObject.medicalRecord.student.studentClass.className
+          };
 
 
+          let student = {
+            'classes': Class,
+            'id': medicalRecordObject.medicalRecord.student.studentId,
+            'name': medicalRecordObject.medicalRecord.student.studentName,
+            'address': medicalRecordObject.medicalRecord.student.studentAddress,
+            'branchId': Branch.id
+          };
+          medicalRecordObject.medicalRecord.student = student;
+        // }
         // $scope.addnewCheckupButton = "Updating....";
 
         this.medicalService.updateMedicalRecord(medicalRecordObject, 'checkup').subscribe(
@@ -459,7 +622,7 @@ export class BackgroundMedicalcareService {
         answerObject = {
           "answer": answer,
           "questionId": questionsId,
-          "incidentId": this.incidentTemplate.id
+          "incidentId": this.incident.id
         };
       }
 
@@ -820,7 +983,7 @@ export class BackgroundMedicalcareService {
         answerObject = {
           "answer": answer,
           "questionId": questionsId,
-          "checkupId": this.checkupTemplate.id
+          "checkupId": this.checkup.id
         };
       }
 
@@ -1220,4 +1383,5 @@ export class BackgroundMedicalcareService {
 
     toast.present();
   }
+
 }

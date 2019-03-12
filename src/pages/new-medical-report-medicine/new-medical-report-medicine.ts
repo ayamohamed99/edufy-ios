@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {IonicPage} from 'ionic-angular';
-import { NavController, NavParams, AlertController,ViewController } from 'ionic-angular';
+import { NavController, NavParams, AlertController,ViewController,ToastController,LoadingController } from 'ionic-angular';
 import {MedicalCareService} from "../../services/medicalcare";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {TransFormDate} from "../../services/transFormDate";
 import {Medication} from "../../models/medication";
 import {FormControl} from "@angular/forms";
+import {MedicalRecord} from "../../models/medical-record";
 
 /**
  * Generated class for the NewMedicalReportMedicinePage page.
@@ -21,6 +22,7 @@ import {FormControl} from "@angular/forms";
 })
 export class NewMedicalReportMedicinePage {
 
+  pageName = "Add Medication";
   EditView = false;
   dosageTypeObject = {'id': null, 'type': "", 'medication':null, 'url': null};
   medicationObject = {'id': null, 'name': "", 'details': "", 'autoComplete': false, 'medication': null};
@@ -50,66 +52,90 @@ export class NewMedicalReportMedicinePage {
   continues = false;
   fromShowDate;
   toShowDate;
+  /////////////////////EDIT VIEW
+  tempMedicalRecord:MedicalRecord;
+  load;
 
   print(data){
     return JSON.stringify(data);
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, private medicalService:MedicalCareService,
-              private alrtCtrl:AlertController,private transDate:TransFormDate,private viewCtrl:ViewController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private medicalService:MedicalCareService,private loadCtrl:LoadingController,
+              private alrtCtrl:AlertController,private transDate:TransFormDate,private viewCtrl:ViewController,private toastCtrl:ToastController) {
     this.medication = new Medication();
     this.medicineLoading = true;
     this.dosageLoading = true;
     this.instructionLoading = true;
-    this.allTimes = [{'id': 1,'time': '00:00'}, {'id': 2,'time': '00:30'}, {'id': 3,'time': '01:00'}, {'id': 4, 'time': '01:30' }, { 'id': 5,'time': '02:00'  }, { 'id': 6,'time': '02:30' }, {'id': 7,'time': '03:00' }, {'id': 8,'time': '03:30' },
-      {'id': 9,'time': '04:00' }, {'id': 10,'time': '04:30'}, {'id': 11,'time': '05:00'}, {'id': 12,'time': '05:30'}, {'id': 13,'time': '06:00'}, {'id': 14,'time': '06:30'}, {'id': 15,'time': '07:00'}, {'id': 16,'time': '07:30'}, {'id': 17, 'time': '08:00'},
-      {'id': 18,'time': '08:30' }, {'id': 19,'time': '09:00'}, {'id': 20,'time': '09:30'}, { 'id': 21,'time': '10:00'}, {'id': 22,'time': '10:30'}, {'id': 23,'time': '11:00' }, {'id': 24,'time': '11:30'}, { 'id': 25, 'time': '12:00' }, {  'id': 26,'time': '12:30'},
-      {'id': 27, 'time': '13:00' }, {  'id': 28,'time': '13:30' }, { 'id': 29, 'time': '14:00' }, {  'id': 30,'time': '14:30' }, {  'id': 31,'time': '15:00'  }, {'id': 32,'time': '15:30'}, {'id': 33,'time': '16:00' }, {'id': 34,'time': '16:30'}, {'id': 35, 'time': '17:00'},
-      {'id': 36,'time': '17:30'}, {'id': 37,'time': '18:00'}, {'id': 38,'time': '18:30'}, {'id': 39,'time': '19:00' }, { 'id': 40, 'time': '19:30'}, { 'id': 41,'time': '20:00' }, {'id': 42, 'time': '20:30'}, {'id': 43,'time': '21:00'}, {'id': 44,'time': '21:30'}, {  'id': 45,'time': '22:00'},
-      {'id': 46,'time': '22:30'}, {'id': 47,'time': '23:00'}, {'id': 48, 'time': '23:30'}];
+    this.allTimes = [{'id': '','time': '00:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '00:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '01:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '', 'time': '01:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, { 'id': '','time': '02:00' ,'saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false },{'id': '','time': '02:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '03:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '03:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false },
+                     {'id': '','time': '04:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '04:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '05:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '05:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '06:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '06:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '07:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '07:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '', 'time': '08:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},
+                     {'id':'','time': '08:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '09:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '09:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, { 'id': '','time': '10:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '10:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '11:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '11:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, { 'id': '', 'time': '12:00' ,'saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {  'id': '','time': '12:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},
+                     {'id': '', 'time': '13:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '13:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '', 'time': '14:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},{ 'id': '','time': '14:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false },{'id': '','time': '15:00' ,'saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},{'id': '','time': '15:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '16:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '','time': '16:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '', 'time': '17:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},
+                     {'id': '','time': '17:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '18:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '18:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '19:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, { 'id': '', 'time': '19:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '20:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false }, {'id': '', 'time': '20:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '21:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '21:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {  'id': '','time': '22:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false},
+                     {'id': '','time': '22:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '','time': '23:00','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}, {'id': '', 'time': '23:30','saturday': false, 'sunday': false, 'monday': false, 'tuesday': false, 'wednesday': false, 'thursday': false, 'friday': false}];
     this.getMedicineList();
     this.getDosageTypesList();
     this.getInstructionsList();
 
-    let todayDate = navParams.get('Date');
+    let todayDate;
+    if(navParams.get('Date')) {
+      todayDate = navParams.get('Date');
+    }
     this.fromMinDate = new Date();
     this.toMinDate = new Date();
     this.fromShowDate = new FormControl(new Date()).value;
     this.toShowDate = new FormControl(new Date()).value;
-    let getYear = parseInt(todayDate.split("-")[2]);
-    this.fromMaxDate = new Date(getYear+10,11,31);
-    this.toMaxDate = new Date(getYear+10,11,31);
+    if(navParams.get('Date')) {
+      let getYear = parseInt(todayDate.split("-")[2]);
+      this.fromMaxDate = new Date(getYear + 10, 11, 31);
+      this.toMaxDate = new Date(getYear + 10, 11, 31);
+    }
     this.fromSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
     this.toSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
 
     if(this.navParams.get('operation') == 'edit'){
-      this.selectedMedicine = '';
-      this.dosageNumber = '';
-      this.selectedDosageType = '';
-      this.fromShowDate = '';
-      if(this.fromShowDate){
-        this.toShowDate = '';
+      this.pageName = this.navParams.get('pageName');
+      this.EditView = true;
+      let nullEndDateState = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
+      this.tempMedicalRecord = this.navParams.get('medicalRecord');
+      this.selectedMedicine = this.tempMedicalRecord.oneMedication.medicine;
+      this.dosageNumber = this.tempMedicalRecord.oneMedication.dosageNumber;
+      this.selectedDosageType = this.tempMedicalRecord.oneMedication.dosageType;
+      this.fromSelectedDate = this.tempMedicalRecord.oneMedication.startDate;
+      this.toSelectedDate = this.tempMedicalRecord.oneMedication.endDate;
+      let startDate:any[] = this.fromSelectedDate.slice(0,-6).split("-");
+      let endDate:any[];
+      if(this.toSelectedDate){
+        endDate = this.toSelectedDate.slice(0,-6).split("-");
+      }else {
+        endDate = nullEndDateState.slice(0,-6).split("-");
+      }
+      this.fromShowDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
+      this.toMinDate = new Date(startDate[2],startDate[1]-1,startDate[0]);
+      let getYear = parseInt(startDate[2]);
+      this.fromMaxDate = new Date(getYear + 10, 11, 31);
+      this.toMaxDate = new Date(getYear + 10, 11, 31);
+
+      if(this.tempMedicalRecord.oneMedication.endDate){
+        this.toShowDate = new Date(endDate[2],endDate[1]-1,endDate[0]);
       }else{
         this.continues=true;
       }
 
-      if(this.transDate.transformTheDate(this.fromShowDate, "dd-MM-yyyy") == this.transDate.transformTheDate(this.toShowDate, "dd-MM-yyyy")){
-        let days:any[] = [];
-        let oneDayWasTrue = false;
-        for(let data of this.allDays){
-          if(data.Name.toLowerCase() == 'sunday' && days[0].sunday){data.selected = true;oneDayWasTrue=true;}
-          if(data.Name.toLowerCase() == 'monday'&& days[0].monday){data.selected = true;oneDayWasTrue=true;}
-          if(data.Name.toLowerCase() == 'tuesday'&& days[0].tuesday){data.selected = true;oneDayWasTrue=true;}
-          if(data.Name.toLowerCase() == 'wednesday'&& days[0].wednesday){data.selected = true;oneDayWasTrue=true;}
-          if(data.Name.toLowerCase() == 'thursday'&& days[0].thursday){data.selected = true;oneDayWasTrue=true;}
-        }
-        if(oneDayWasTrue){
-          this.everyDay = false;
-        }else{
-          this.everyDay = true;
-        }
+      let days:any[] = this.tempMedicalRecord.oneMedication.medicationSchedule;
+      let oneDayWasTrue = false;
+      for(let data of this.allDays){
+        if(data.Name.toLowerCase() == 'sunday' && days[0].sunday){data.selected = true;oneDayWasTrue=true;}
+        if(data.Name.toLowerCase() == 'monday'&& days[0].monday){data.selected = true;oneDayWasTrue=true;}
+        if(data.Name.toLowerCase() == 'tuesday'&& days[0].tuesday){data.selected = true;oneDayWasTrue=true;}
+        if(data.Name.toLowerCase() == 'wednesday'&& days[0].wednesday){data.selected = true;oneDayWasTrue=true;}
+        if(data.Name.toLowerCase() == 'thursday'&& days[0].thursday){data.selected = true;oneDayWasTrue=true;}
+      }
+      this.everyDay = !oneDayWasTrue;
+      this.selectedTimes = this.tempMedicalRecord.oneMedication.medicationSchedule;
+      for (let tempT of this.selectedTimes) {
+        tempT.time = tempT.time.slice(0,-3);
       }
 
-
+      this.selectedInstruction = this.tempMedicalRecord.oneMedication.instructions;
     }
 
   }
@@ -118,8 +144,17 @@ export class NewMedicalReportMedicinePage {
     this.viewCtrl.dismiss({medication:null});
   }
   enableDoneAllButton(){
+    let oneDayWasTrue = false;
+    for(let data of this.allDays){
+      if(data.Name.toLowerCase() == 'sunday' && data.selected == true){oneDayWasTrue=true;}
+      if(data.Name.toLowerCase() == 'monday'&& data.selected == true){oneDayWasTrue=true;}
+      if(data.Name.toLowerCase() == 'tuesday'&& data.selected == true){oneDayWasTrue=true;}
+      if(data.Name.toLowerCase() == 'wednesday'&& data.selected == true){oneDayWasTrue=true;}
+      if(data.Name.toLowerCase() == 'thursday'&& data.selected == true){oneDayWasTrue=true;}
+    }
+
     if((this.selectedMedicine != null || this.selectedMedicine != "") && (this.selectedDosageType != null || this.selectedDosageType!= "") &&
-      (this.dosageNumber!=null ||this.dosageNumber!="") && this.selectedTimes){
+      (this.dosageNumber!=null ||this.dosageNumber!="") && this.selectedTimes && (oneDayWasTrue == true ||this.everyDay==true)){
       return false;
     }else {
       return true;
@@ -143,6 +178,7 @@ export class NewMedicalReportMedicinePage {
     if (!this.continues) {
       this.medication.endDate = this.toSelectedDate;
     }else {
+      this.toSelectedDate = null;
       this.medication.endDate = null;
     }
     this.medication.instructions=[];
@@ -170,20 +206,19 @@ export class NewMedicalReportMedicinePage {
       if(day.Name.toLowerCase() == 'wednesday' && day.selected){wednesday = true}
       if(day.Name.toLowerCase() == 'thursday' && day.selected){thursday = true}
     }
-    for(let addTime of this.selectedTimes){
-      let schaduleObject = {
-        'saturday': false,
-        'sunday': sunday,
-        'monday': monday,
-        'tuesday': tuesday,
-        'wednesday': wednesday,
-        'thursday': thursday,
-        'friday': false,
-        'time': addTime.time
-      };
-      this.medication.medicationSchedule.push(schaduleObject);
+    for(let i=0;i<this.selectedTimes.length;i++){
+      this.selectedTimes[i].sunday = sunday;
+      this.selectedTimes[i].monday = monday;
+      this.selectedTimes[i].tuesday = tuesday;
+      this.selectedTimes[i].wednesday = wednesday;
+      this.selectedTimes[i].thursday = thursday;
     }
-    this.viewCtrl.dismiss({medication:this.medication});
+    this.medication.medicationSchedule = this.selectedTimes;
+    if(this.navParams.get('operation') == 'edit'){
+      this.UpdateMedication(this.medication);
+    }else {
+      this.viewCtrl.dismiss({medication: this.medication});
+    }
     // console.log(this.medication);
   }
 
@@ -281,4 +316,48 @@ export class NewMedicalReportMedicinePage {
       });
   }
 
+  UpdateMedication(medication){
+
+    let medicationWithSchedule={
+      "id":this.tempMedicalRecord.oneMedication.id,
+      "status":this.tempMedicalRecord.oneMedication.status,
+      "medicine":this.selectedMedicine,
+      "dosageNumber":this.dosageNumber,
+      "dosageType":this.selectedDosageType,
+      "creationDate":this.tempMedicalRecord.oneMedication.creationDate,
+      "startDate":this.fromSelectedDate,
+      "endDate":this.toSelectedDate,
+      "instructions":medication.instructions,
+      "medicationSchedule":this.selectedTimes
+    };
+    this.load = this.loadCtrl.create({
+      content: "",
+      cssClass: "loadingWithoutBackground"
+    });
+    this.load.present();
+    this.medicalService.updateMedication(this.tempMedicalRecord.id, this.tempMedicalRecord.medicationIndex, medicationWithSchedule).subscribe(
+      response=> {
+      var result = response;
+        this.load.dismiss();
+      this.presentToast("Medication Updated successfully.");
+        this.viewCtrl.dismiss({done: 'edit'});
+    }, reason=> {
+        this.load.dismiss();
+        this.presentToast("Failed updated medication.")
+    });
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'bottom'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
 }

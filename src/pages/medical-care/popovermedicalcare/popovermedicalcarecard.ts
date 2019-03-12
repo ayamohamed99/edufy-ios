@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import {
   AlertController,
-  IonicPage,
   LoadingController,
   NavController,
   NavParams,
@@ -20,12 +20,16 @@ import {AccountService} from "../../../services/account";
 export class PopoverMedicalCareCardPage {
   loading:any;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+  enableEdit = false;
+  enableDelete = false;
 
   constructor(public navCtrl: NavController,public navParams:NavParams,public viewCtrl: ViewController,
               public platform:Platform,public storage:Storage,public alertCtrl:AlertController,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingController, public alrtCtrl:AlertController)
   {
 
+    this.enableEdit = navParams.get('Edit');
+    this.enableDelete = navParams.get('Delete');
     let plat=this.platform.is('core');
 
     if(plat){
@@ -45,22 +49,6 @@ export class PopoverMedicalCareCardPage {
 
 
   deleteNotification() {
-    this.alrtCtrl.create({
-      title: 'Delete',
-      subTitle: 'Are you sure that you want to delete this Medication?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Delete',
-          handler: () => {
-            this.viewCtrl.dismiss({done:'delete'});
-            console.log('startdelete');
-          }
-        }
-      ]
-    }).present();
+    this.viewCtrl.dismiss({done:'delete'});
   }
 }

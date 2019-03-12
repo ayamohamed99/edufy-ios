@@ -62,6 +62,8 @@ import {Ng2ImgMaxModule} from "ng2-img-max";
 import {MedicalCareService} from '../services/medicalcare';
 import {MatNativeDateModule} from "@angular/material";
 import {BackgroundMedicalcareService} from "../services/background-medicalcare";
+import {TemplateFunctionsService} from "../services/templateFunctionsService";
+import {Excel} from "../services/excel";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
@@ -115,7 +117,7 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     FCMService,FirebaseMessaging,
     LocalNotifications,InAppBrowser,
     ChatService,BackgroundNotificationService,
-    ImageCompressorService,MedicalCareService,BackgroundMedicalcareService
+    ImageCompressorService,MedicalCareService,BackgroundMedicalcareService,TemplateFunctionsService,Excel
   ]
 })
 export class AppModule {

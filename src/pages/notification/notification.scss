@@ -372,26 +372,3 @@ page-notification {
   }
 }
 
-
-ion-loading.loadingWithoutBackground {
-  .loading-wrapper {
-    background: rgba(0, 0, 0, 0);
-    -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
-    padding: 0;
-  }
-
-  //ion-backdrop {
-  //  left: 0;
-  //  top: 0;
-  //  position: absolute;
-  //  z-index: 2;
-  //  display: block;
-  //  width: 100%;
-  //  height: 100%;
-  //  background-color: rgba(0, 0, 0, 0);
-  //  opacity: .01;
-  //  -webkit-transform: translateZ(0);
-  //  transform: translateZ(0);
-  //}
-}

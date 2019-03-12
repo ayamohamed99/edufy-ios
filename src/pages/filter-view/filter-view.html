@@ -1,0 +1,75 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{pageName}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+
+  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+    <ng-select [items]="allclasses"
+               bindLabel="classWithGrade"
+               [loading]="classesLoading"
+               [addTag]="true"
+               [placeholder]="'Select Class'"
+               [(ngModel)]="search.object.classes"
+               (ngModelChange)="setStudents()">
+    </ng-select>
+  </div>
+
+
+  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+    <ng-select [items]="showAllStudents"
+               bindLabel="name"
+               [loading]="studentsLoading"
+               [addTag]="true"
+               [placeholder]="'Select Student'"
+               [(ngModel)]="search.object.student">
+    </ng-select>
+  </div>
+
+
+  <div class="spaceBetNgSelect">
+    <ion-item>
+      <ion-label item-start>From Any Date</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="fromAnyDate" (ngModelChange)="defaultDate('from')" ></ion-toggle>
+    </ion-item>
+  </div>
+
+  <mat-form-field *ngIf="!fromAnyDate">
+    <input matInput id="fromInput" [min]="fromMinDate" [max]="fromMaxDate" [matDatepicker]="picker" placeholder="From" [value]="search.object.date.from"
+           (dateChange)="addSelectedDate('From',$event,id)" disabled>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker touchUi="true" #picker [disabled]="fromAnyDate"></mat-datepicker>
+  </mat-form-field>
+
+  <div class="spaceBetNgSelect">
+    <ion-item>
+      <ion-label item-start>To Any Date</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="toAnyDate" (ngModelChange)="defaultDate('to')"></ion-toggle>
+    </ion-item>
+  </div>
+
+
+  <mat-form-field *ngIf="!toAnyDate">
+    <input matInput id="toInput" [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="pickerto" placeholder="To" [value]="search.object.date.to"
+           (dateChange)="addSelectedDate('To',$event)" disabled>
+    <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+    <mat-datepicker touchUi="true" #pickerto [disabled]="toAnyDate"></mat-datepicker>
+  </mat-form-field>
+</ion-content>
+
+<ion-footer>
+  <ion-item>
+    <button class="buttonOfFilter" ion-button (click)="close('done')">
+      {{doneButton}}
+    </button>
+    <button class="buttonOfFilter" ion-button color="light"  (click)="close('cancel')">
+      Cancel
+    </button>
+  </ion-item>
+</ion-footer>

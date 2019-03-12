@@ -172,7 +172,7 @@ page-new-medical-report {
     display: block;
   }
   .dateField{
-    width: 65%;
+    width: 64%;
     display: inline-block;
     margin-right: 10px;
   }
@@ -741,4 +741,9 @@ page-new-medical-report {
   }
   ///////////////////////////////////////End Of Edit All Mat RadioButtons
   ///////////////////////////////////////End Of Organize Radio - CheckBox
+
+
+  button[disabled], [ion-button][disabled] {
+    filter: invert(15%);
+  }
 }

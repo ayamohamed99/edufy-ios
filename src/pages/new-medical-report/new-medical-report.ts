@@ -77,7 +77,7 @@ export class NewMedicalReportPage {
   checkupAnswersNoOfItems: any[] = [];
   checkupQuestionsEditParamTemps: any[] = [];
   loopData;
-  showAllTimes = [{'id': 1, 'time': '00:00'}, {'id': 2, 'time': '00:30'}, {'id': 3, 'time': '01:00'}, {'id': 4, 'time': '01:30'}, {'id': 5, 'time': '02:00'}, {'id': 6, 'time': '02:30'}, {'id': 7, 'time': '03:00'}, {'id': 8, 'time': '03:30'}, {'id': 9, 'time': '04:00'}, {'id': 10, 'time': '04:30'}, {'id': 11, 'time': '05:00'}, {'id': 12, 'time': '05:30'}, {'id': 13, 'time': '06:00'}, {'id': 14, 'time': '06:30'}, {'id': 15, 'time': '07:00'}, {'id': 16, 'time': '07:30'}, {'id': 17, 'time': '08:00'}, {'id': 18, 'time': '08:30'}, {'id': 19, 'time': '09:00'}, {'id': 20, 'time': '09:30'}, {'id': 21, 'time': '10:00'}, {'id': 22, 'time': '10:30'}, {'id': 23, 'time': '11:00'}, {'id': 24, 'time': '11:30'}, {'id': 25, 'time': '12:00'}, {'id': 26, 'time': '12:30'}, {'id': 27, 'time': '13:00'}, {'id': 28, 'time': '13:30'}, {'id': 29, 'time': '14:00'}, {'id': 30, 'time': '14:30'}, {'id': 31, 'time': '15:00'}, {'id': 32, 'time': '15:30'}, {'id': 33, 'time': '16:00'}, {'id': 34, 'time': '16:30'}, {'id': 35, 'time': '17:00'}, {'id': 36, 'time': '17:30'}, {'id': 37, 'time': '18:00'}, {'id': 38, 'time': '18:30'}, {'id': 39, 'time': '19:00'}, {'id': 40, 'time': '19:30'}, {'id': 41, 'time': '20:00'}, {'id': 42, 'time': '20:30'}, {'id': 43, 'time': '21:00'}, {'id': 44, 'time': '21:30'}, {'id': 45, 'time': '22:00'}, {'id': 46, 'time': '22:30'}, {'id': 47, 'time': '23:00'}, {'id': 48, 'time': '23:30'}];
+  showAllTimes = [{'id': '', 'time': '00:00'}, {'id': '', 'time': '00:30'}, {'id': '', 'time': '01:00'}, {'id': '', 'time': '01:30'}, {'id': '', 'time': '02:00'}, {'id': '', 'time': '02:30'}, {'id': '', 'time': '03:00'}, {'id': '', 'time': '03:30'}, {'id': '', 'time': '04:00'}, {'id': '', 'time': '04:30'}, {'id': '', 'time': '05:00'}, {'id': '', 'time': '05:30'}, {'id': '', 'time': '06:00'}, {'id': '', 'time': '06:30'}, {'id': '', 'time': '07:00'}, {'id': '', 'time': '07:30'}, {'id': '', 'time': '08:00'}, {'id': '', 'time': '08:30'}, {'id': '', 'time': '09:00'}, {'id': '', 'time': '09:30'}, {'id': '', 'time': '10:00'}, {'id': '', 'time': '10:30'}, {'id': '', 'time': '11:00'}, {'id': '', 'time': '11:30'}, {'id': '', 'time': '12:00'}, {'id': '', 'time': '12:30'}, {'id': '', 'time': '13:00'}, {'id': '', 'time': '13:30'}, {'id': '', 'time': '14:00'}, {'id': '', 'time': '14:30'}, {'id': '', 'time': '15:00'}, {'id': '', 'time': '15:30'}, {'id': '', 'time': '16:00'}, {'id': '', 'time': '16:30'}, {'id': '', 'time': '17:00'}, {'id': '', 'time': '17:30'}, {'id': '', 'time': '18:00'}, {'id': '', 'time': '18:30'}, {'id': '', 'time': '19:00'}, {'id': '', 'time': '19:30'}, {'id': '', 'time': '20:00'}, {'id': '', 'time': '20:30'}, {'id': '', 'time': '21:00'}, {'id': '', 'time': '21:30'}, {'id': '', 'time': '22:00'}, {'id': '', 'time': '22:30'}, {'id': '', 'time': '23:00'}, {'id': '', 'time': '23:30'}];
   fileTypes = ["jpg", "jpeg", "png", "gif", "ico", "bmp", "webp", "tiff", "pdf", "txt", "xls", "xlsx", "doc", "docx", "ppt", "pptx", "mp4", "flv", "avi", "mov", "wmv", "mp3", "wma"];
   MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index;
   DROPDOWN_MENU_ONE_VIEW_SELECTED_index;
@@ -92,6 +92,9 @@ export class NewMedicalReportPage {
   selectedIncidentTime;
   selectedCheckupTime;
   phoneNumber: string = '';
+  //////////////EDIT VIEW///////////////
+  EditView = false;
+  tempFullMedicalRecord;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private modalCtrl: ModalController,
@@ -106,36 +109,44 @@ export class NewMedicalReportPage {
     if (navParams.get("for")) {
       this.pageName = "New " + navParams.get("for");
       this.addCheckup = false;
-      if (this.pageName == "New Incident") {
+      if(this.operation == "edit"){
+        this.EditView = true;
+        this.pageName = navParams.get("pageName");
+      }
+      if (navParams.get("for") == "Incident") {
         this.newIncident = true;
         this.incidentMinDate = new Date(2016, 0, 1);
         this.incidentMaxDate = new Date();
         this.incidentShowDate = new FormControl(new Date()).value;
-        this.selectedIncidentTime = {'id': 1, 'time': '00:00'};
+        this.selectedIncidentTime = {'id': '', 'time': '00:00'};
         this.incidentSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
         this.incidentAnswer[0] = {
           "incidentAnswersObjectsList": []
         };
-        this.getIncidentTemplate();
+        if(this.operation == "new") {
+          this.getIncidentTemplate();
+        }
       } else {
         this.checkupMinDate = new Date(2016, 0, 1);
         this.checkupMaxDate = new Date();
         this.checkupShowDate = new FormControl(new Date()).value;
-        this.selectedCheckupTime = {'id': 1, 'time': '00:00'};
+        this.selectedCheckupTime = {'id': '', 'time': '00:00'};
         this.checkupSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
         this.checkupAnswer = {
           "checkupAnswersObjectsList": []
         };
-        this.getCheckUpTemplate();
+        if(this.operation == "new") {
+          this.getCheckUpTemplate();
+        }
       }
-    } else {
+    } else if(navParams.get("forAdd") &&navParams.get("operation") == 'new'){
       let date = navParams.get("selectedIncidentDate");
       this.pageName = "Add " + navParams.get("forAdd");
       this.addCheckup = true;
       this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
       this.checkupShowDate = new FormControl(new Date()).value;
-      this.selectedCheckupTime = {'id': 1, 'time': '00:00'};
+      this.selectedCheckupTime = {'id': '', 'time': '00:00'};
       this.checkupSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
       this.checkupAnswer = {
         "checkupAnswersObjectsList": []
@@ -149,6 +160,61 @@ export class NewMedicalReportPage {
       this.getAllClasses();
       this.getAllStudents();
     }
+
+
+    if(this.operation == "edit"){
+      this.EditView = true;
+      this.tempFullMedicalRecord = navParams.get("medicalRecord");
+      this.setSelectedClassFromEdit(this.tempFullMedicalRecord.medicalRecord.student.classes);
+      this.setSelectedStudentFromEdit(this.tempFullMedicalRecord.medicalRecord.student);
+      this.medicalRecord=this.tempFullMedicalRecord.medicalRecord;
+      if (navParams.get("for") == "Incident") {
+        this.newIncident = true;
+        this.incidentTitle = this.tempFullMedicalRecord.medicalRecord.incident.title;
+        if(this.tempFullMedicalRecord.medicalRecord.incident.followUpPhone) {
+          this.phoneNumber = this.tempFullMedicalRecord.medicalRecord.incident.followUpPhone.toString();
+        }
+        let Date_time_Array = this.tempFullMedicalRecord.medicalRecord.incident.incidentDate.split(" ");
+        let DateArray = Date_time_Array[0].split("-");
+        this.incidentSelectedDate =Date_time_Array[0];
+        this.prescription = this.tempFullMedicalRecord.medicalRecord.prescription;
+        this.incidentShowDate =new Date(parseInt(DateArray[2]),parseInt(DateArray[1])-1,parseInt(DateArray[0]));
+        this.selectedIncidentTime = {'id': '', 'time': Date_time_Array[1]};
+        this.incident = this.tempFullMedicalRecord.medicalRecord.incident;
+        this.incident.answers = this.tempFullMedicalRecord.incidentAnswers;
+        if(this.tempFullMedicalRecord.medicalRecord.checkup){
+          this.checkup = this.tempFullMedicalRecord.medicalRecord.checkup;
+        }
+        this.setIncidentTempletFromEdit(this.tempFullMedicalRecord.incidentTemplate);
+      }else{
+        this.checkupTitle = this.tempFullMedicalRecord.medicalRecord.checkup.title;
+        this.prescription = this.tempFullMedicalRecord.medicalRecord.prescription;
+        let Date_time_Array = this.tempFullMedicalRecord.medicalRecord.checkup.checkupDate.split(" ");
+        let DateArray = Date_time_Array[0].split("-");
+        this.checkupSelectedDate =Date_time_Array[0];
+        this.checkupShowDate =new Date(parseInt(DateArray[2]),parseInt(DateArray[1])-1,parseInt(DateArray[0]));
+        this.selectedCheckupTime = {'id': '', 'time': Date_time_Array[1]};
+        this.checkup = this.tempFullMedicalRecord.medicalRecord.checkup;
+        this.checkup.answers = this.tempFullMedicalRecord.checkupAnswers;
+        this.setCheckupTempletFromEdit(this.tempFullMedicalRecord.checkupTemplate);
+      }
+    }
+
+    if(navParams.get("forAdd") && navParams.get("operation") == 'edit') {
+      let date = navParams.get("selectedIncidentDate");
+      this.pageName = "Add " + navParams.get("forAdd");
+      this.addCheckup = true;
+      this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
+      this.checkupMaxDate = new Date();
+      this.checkupShowDate = new FormControl(new Date()).value;
+      this.selectedCheckupTime = {'id': '', 'time': '00:00'};
+      this.checkupSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
+      this.checkupAnswer = {
+        "checkupAnswersObjectsList": []
+      };
+      this.getCheckUpTemplate();
+    }
+
   }
 
   close() {
@@ -180,7 +246,13 @@ export class NewMedicalReportPage {
   }
 
   fabSelected(index, fab: FabContainer) {
-    let dateArray:any[] = this.incidentSelectedDate.split("-");
+    let dateArray:any[];
+    if(this.incidentSelectedDate){
+      dateArray = this.incidentSelectedDate.split("-");
+    }else{
+      dateArray = this.checkupSelectedDate.split("-");
+    }
+
     fab.close();
     let modal;
     if (index == 0) {
@@ -189,7 +261,7 @@ export class NewMedicalReportPage {
       modal = this.modalCtrl.create('NewMedicalReportPage', {
         forAdd: "Checkup",
         Date: this.todayDate,
-        operation: 'new',
+        operation: this.operation,
         selectedIncidentDate:dateArray
       });
     }
@@ -198,7 +270,12 @@ export class NewMedicalReportPage {
         console.log(data);
         if (data) {
           if (data.medication) {
-            this.prescription.medications.push(data.medication);
+            if(this.prescription) {
+              this.prescription.medications.push(data.medication);
+            }else{
+              this.prescription = {'id': null, 'medicalRecords': null, 'medications': []};
+              this.prescription.medications.push(data.medication);
+            }
           } else if (data.checkup) {
             this.checkup = data.checkup;
             this.checkupAnswer = data.checkupAnswers;
@@ -1032,6 +1109,8 @@ export class NewMedicalReportPage {
           value[i] = answersList[i];
         }
         return value;
+      case 'IMAGES_WITH_DESCRIPTION':
+        return JSON.parse(dbAnswer)
     }
   }
 
@@ -1208,6 +1287,167 @@ export class NewMedicalReportPage {
       that.incidentAnswer[0].incidentAnswersObjectsList[qNumber].answer.push(attach);
     };
     reader.readAsDataURL(file);
+  }
+
+
+
+  setSelectedClassFromEdit(data){
+    let item = new Class();
+    item.classId = data.id;
+    item.className = data.name;
+    item.grade.gradeId = data.grade.id;
+    item.grade.gradeName = data.grade.name;
+    item.branch.branchId = data.branch.id;
+    item.branch.branchName = data.branch.name;
+    item.branch.managerId = data.branch.managerId;
+    item.classWithGrade = data.grade.name + " - " + data.name;
+    this.selectedClass = item;
+  }
+
+  setSelectedStudentFromEdit(value){
+    let students = new Student();
+    students.studentClass.classId = value.classes.id;
+    students.studentClass.className = value.classes.name;
+    students.studentClass.grade.gradeId = value.classes.grade.id;
+    students.studentClass.grade.gradeName = value.classes.grade.name;
+    students.studentClass.branch.branchId = value.classes.branch.id;
+    students.studentClass.branch.branchName = value.classes.branch.name;
+    students.studentClass.branch.managerId = value.classes.branch.managerId;
+    students.studentId = value.id;
+    students.studentName = value.name;
+    students.studentAddress = value.address;
+    students.searchByClassGrade = value.classes.grade.name + " - " + value.classes.name;
+    this.selectedStudent = students;
+  }
+  setIncidentTempletFromEdit(val){
+    this.templateLoading = false;
+    this.incidentTemplate = val;
+
+    this.incidentQuestions[0] = this.incidentTemplate.questionsList;
+
+    this.incidentQuestionsFirst = this.incidentTemplate.questionsList;
+
+    for (let i = 0; i < this.incidentQuestionsFirst.length; i++) {
+      this.incidentQuestionsFirst[i].questionNumber = i;
+      this.incidentAnswer[0].incidentAnswersObjectsList[i] = {
+        answer: null
+      };
+      this.incidentAnswersNoOfItems[i] = {
+        noOfItems: null
+      };
+      this.incidentQuestionsFirst[i].editQuestion = false;
+      this.incidentQuestionsFirst[i].isEdited = false;
+    }
+
+    this.incidentQuestions[0] = this.incidentQuestionsFirst;
+
+
+    for (let i = 0; i < this.incidentQuestions[0].length; i++) {
+      this.mappingDefaultAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i]);
+
+      if (this.operation == 'edit' || this.operation == 'view') {
+        this.mappingIncidentAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i].id, this.incident);
+        this.incidentAnswer[0].incidentAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.incidentQuestions[0][i], this.incident.answers[i].answer);
+      }
+      this.incidentQuestionsEditParamTemps[i] = {};
+      this.incidentQuestionsEditParamTemps[i].parameters = [];
+
+      for (let j = 0; j < this.incidentQuestions[0][i].parametersList.length; j++) {
+        let param = {
+          "id": '',
+          "key": '',
+          "value": ''
+        };
+        this.incidentQuestionsEditParamTemps[i].parameters[j] = param;
+        this.incidentQuestionsEditParamTemps[i].parameters[j].key = this.incidentQuestions[0][i].parametersList[j].key;
+      }
+
+    }
+  }
+
+
+  setCheckupTempletFromEdit(val){
+    this.templateLoading = false;
+    this.checkupTemplate = val;
+    if (this.addCheckup) {
+      this.checkupQuestions = [];
+      this.checkupQuestions[0] = this.checkupTemplate.questionsList;
+    } else {
+      this.checkupQuestions = this.checkupTemplate.questionsList;
+    }
+
+    this.checkupQuestionsFirst = this.checkupTemplate.questionsList;
+
+    for (let i = 0; i < this.checkupQuestionsFirst.length; i++) {
+      this.checkupQuestionsFirst[i].questionNumber = i;
+      this.checkupAnswer.checkupAnswersObjectsList[i] = {
+        answer: null
+      };
+      this.checkupAnswersNoOfItems[i] = {
+        noOfItems: null
+      };
+      this.checkupQuestionsFirst[i].editQuestion = false;
+      this.checkupQuestionsFirst[i].isEdited = false;
+    }
+    if (this.addCheckup) {
+      this.checkupQuestions[0] = this.checkupQuestionsFirst;
+    } else {
+      this.checkupQuestions = this.checkupQuestionsFirst;
+    }
+
+    if (this.addCheckup) {
+      for (let i = 0; i < this.checkupQuestions[0].length; i++) {
+
+        this.mappingDefaultAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[0][i]);
+
+        this.checkupQuestionsEditParamTemps[i] = {};
+        this.checkupQuestionsEditParamTemps[i].parameters = [];
+
+        for (let j = 0; j < this.checkupQuestions[0][i].parametersList.length; j++) {
+          let param = {
+            "id": '',
+            "key": '',
+            "value": ''
+          };
+          this.checkupQuestionsEditParamTemps[i].parameters[j] = param;
+          this.checkupQuestionsEditParamTemps[i].parameters[j].key = this.checkupQuestions[0][i].parametersList[j].key;
+        }
+
+      }
+
+    } else {
+      for (let i = 0; i < this.checkupQuestions.length; i++) {
+        this.mappingDefaultAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i]);
+
+        if (this.operation == 'edit' || this.operation == 'view') {
+          this.mappingCheckupAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i].id, this.checkup);
+          this.checkupAnswer.checkupAnswersObjectsList[i].answer =
+            this.getViewQuestionAnswer(this.checkupQuestions[i], this.checkup.answers[i].answer);
+        }
+
+        this.checkupQuestionsEditParamTemps[i] = {};
+        this.checkupQuestionsEditParamTemps[i].parameters = [];
+
+        for (let j = 0; j < this.checkupQuestions[i].parametersList.length; j++) {
+          let param = {
+            "id": '',
+            "key": '',
+            "value": ''
+          };
+          this.checkupQuestionsEditParamTemps[i].parameters[j] = param;
+          this.checkupQuestionsEditParamTemps[i].parameters[j].key = this.checkupQuestions[i].parametersList[j].key;
+        }
+
+      }
+
+    }
+
+
+    if (this.addCheckup) {
+      this.loopData = this.checkupQuestions[0];
+    } else {
+      this.loopData = this.checkupQuestions;
+    }
   }
 
 }

@@ -2,7 +2,15 @@ page-medical-care {
   .contentColor{
     background: #f4f4f4;
   }
-
+  .item-md.item-block .item-inner {
+    padding-right: 8px;
+    border-bottom: 0px;
+  }
+  .removeItemRight{
+    .label-md {
+      margin: 13px 0px 5px 0;
+    }
+  }
 ///////////////////////////////////START SLIDES EDIT
   .scroll-content {
     padding: 0px !important;
@@ -113,6 +121,9 @@ page-medical-care {
     height: 50px;
   }
 
+  .item-md ion-avatar[item-start]{
+    margin: 8px 0px 8px 0px;
+  }
 //////////////////////////////////END CARD WITH FLIP ANIMATION
 
 /////////////////////////////////START FRONT OF THE CARD
@@ -219,8 +230,6 @@ page-medical-care {
     color: #454545;
   }
 
-
-
   .dosagePartWithoutMargin{
     height: 18px;
     width: 100%;
@@ -260,7 +269,6 @@ page-medical-care {
     color: #454545;
   }
 
-
   .dosageTimes{
     font-size: 14px;
     font-weight:bold;
@@ -271,7 +279,6 @@ page-medical-care {
     align-self: center;
     text-align: left;
   }
-
 
   .imgSpaceButton{
     width: 18px;
@@ -483,6 +490,312 @@ page-medical-care {
 
   //////////////////////////////End Of Edit Ion-Fab
 
+  ////////////////////////////////START CARD VIEWS
+
+  .mainDivQuestion{
+    padding-bottom: 20px;
+    padding-top: 10px;
+    margin: 0 15px;
+  }
+
+  .topRightIcon{
+    float: right;
+    width: 20px;
+    height: 20px;
+    position: relative;
+    right: 11px;
+    top: 5px;
+  }
+
+  .turnImgToBlack{
+    -webkit-filter: grayscale(100%) contrast(999%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%) contrast(999%);
+  }
+
+  .turnImgToWhite{
+    -webkit-filter: grayscale(100%) contrast(999%) invert(100%);; /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%) contrast(999%) invert(100%);;
+  }
+
+  .questionCard{
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 0px 0px;
+    box-shadow: 0px 0px 0px;
+    border: 1px solid #5c87f7;
+  }
+
+  .questionTitle{
+    background-color: #5c87f7;
+    text-align: left;
+    .formLabel{
+      background-color: #5c87f7;
+      color: white;
+      padding: 5px;
+    }
+
+    .formLabelTen{
+      background-color: #5c87f7;
+      color: white;
+      padding: 10px;
+      width: calc(100% - 105px);
+      display: inline-block;
+    }
+    .createButton{
+      color: white;
+      float: right;
+      display: inline;
+    }
+    .cancelButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 55px;
+    }
+    .saveButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 42px;
+    }
+  }
+
+  .questionBody{
+    background-color: #ffffff;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    .custom-Field_QOne{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+    }
+
+    .custom-Field_QThree{
+      .mat-form-field-infix {
+        width: fit-content;
+        padding: 0;
+
+        input{
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-bottom: 0 !important;
+          top: 0 !important;
+        }
+      }
+    }
+
+    .custom-Field_QFour{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QSix{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QEight{
+      width: 100%;
+      margin-top: -18px;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    .custom-Field_QNine{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    .custom-Field_QTen{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    .custom-Field_QTwelve{
+      width: 70px;
+      margin-top: 15px;
+      margin-right: 25px;
+    }
+
+    .divElevenCheckbox{
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+    .divElevenButtonIcon{
+      height: 25px;
+      width: 25px;
+      padding: 0;
+      bottom: 5px;
+      float: right;
+    }
+    .divElevenInput{
+      display: inline-block;
+      width: 100%;
+    }
+    .divElevenOfInput{
+      width: calc(100% - 50px);
+      height: 40px;
+      padding: 0;
+    }
+    .divElevenOfInputButton{
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      margin: 0;
+      float: right;
+    }
+    .radioButtonOfDropMenu{
+      .radio{
+        margin-right: 20px;
+        margin-bottom: 10px;
+        .mat-radio-outer-circle {
+          border-width: 1px;
+          border-radius: 50%;
+          border-color: #b4b4b4;
+          -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+      }
+    }
+
+  }
+
+  .LoopContainFitContent{
+    display:inline-block;
+    padding-right: 0;
+    width: fit-content;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .medicienCell{
+    background: #309CCE;
+    border-radius: 15px;
+    height: 28px;
+    width: fit-content;
+    padding-left: 5px;
+    margin-right: 10px;
+  }
+
+  .medicineLable{
+    display: inline-block;
+    vertical-align: top;
+    color: white;
+    font-weight: bold;
+    margin: 0 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+
+  .LoopContainWithFullWidth{
+    display:block;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .medicienCellFullWidth{
+    background: #309CCE;
+    border-radius: 15px;
+    height: 28px;
+    width: 100%;
+    padding-left: 5px;
+    margin-right: 10px;
+  }
+
+  .exportButton{
+    float: right;
+  }
+  ////////////////////////////////END CARD VIEWS
+
+/////////////////////////////////START TABLE EXPORT PDF
+
+  #table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+  }
+
+  #table td, #table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+
+  #table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+  }
+
+/////////////////////////////////END TABLE EXPORT PDF
 }
 
 .md{
@@ -493,3 +806,4 @@ page-medical-care {
     }
   }
 }
+

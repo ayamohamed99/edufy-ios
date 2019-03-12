@@ -2,7 +2,7 @@
 </ion-header>
 <ion-content>
   <ion-list no-lines style="margin: 0">
-        <button ion-item (click)="editNotification()" *ngIf="false">Edit</button>
-        <button ion-item (click)="deleteNotification()" *ngIf="true">Delete</button>
+        <button ion-item (click)="editNotification()" *ngIf="enableEdit">Edit</button>
+        <button ion-item (click)="deleteNotification()" *ngIf="enableDelete">Delete</button>
   </ion-list>
 </ion-content>

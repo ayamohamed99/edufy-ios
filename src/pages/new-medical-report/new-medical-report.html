@@ -26,7 +26,8 @@
                [addTag]="true"
                [placeholder]="'Select Class'"
                [(ngModel)]="selectedClass"
-               (ngModelChange)="setStudents()">
+               (ngModelChange)="setStudents()"
+               [disabled]="EditView">
     </ng-select>
   </div>
 
@@ -38,7 +39,7 @@
                [addTag]="true"
                [placeholder]="'Select Student'"
                [(ngModel)]="selectedStudent"
-               [disabled]="!selectedClass">
+               [disabled]="!selectedClass||EditView">
     </ng-select>
   </div>
 
@@ -50,16 +51,16 @@
   <div class="timeDate">
     <mat-form-field class="dateField" *ngIf="newIncident">
       <input matInput [min]="incidentMinDate" [max]="incidentMaxDate" [matDatepicker]="pickerIncident" placeholder="Select Incident Date" [value]="incidentShowDate"
-             (dateChange)="setSelectedDate('Incident',$event)" disabled>
+             (dateChange)="setSelectedDate('Incident',$event)"  disabled>
       <mat-datepicker-toggle matSuffix [for]="pickerIncident"></mat-datepicker-toggle>
-      <mat-datepicker #pickerIncident disabled="false"></mat-datepicker>
+      <mat-datepicker touchUi="true" #pickerIncident [disabled]="EditView"></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="dateField"  *ngIf="!newIncident">
       <input matInput [min]="checkupMinDate" [max]="checkupMaxDate" [matDatepicker]="pickerCheckup" placeholder="Select Checkup Date" [value]="checkupShowDate"
              (dateChange)="setSelectedDate('Checkup',$event)" disabled>
       <mat-datepicker-toggle matSuffix [for]="pickerCheckup"></mat-datepicker-toggle>
-      <mat-datepicker #pickerCheckup disabled="false"></mat-datepicker>
+      <mat-datepicker touchUi="true" #pickerCheckup [disabled]="EditView"></mat-datepicker>
     </mat-form-field>
 
     <div class="editNgView">
@@ -68,7 +69,8 @@
                bindLabel="time"
                [placeholder]="'Time'"
                [(ngModel)]="selectedIncidentTime"
-               *ngIf="newIncident">
+               *ngIf="newIncident"
+               [disabled]="EditView">
     </ng-select>
 
     <ng-select class="timeField"
@@ -76,13 +78,14 @@
                bindLabel="time"
                [placeholder]="'Time'"
                [(ngModel)]="selectedCheckupTime"
-               *ngIf="!newIncident">
+               *ngIf="!newIncident"
+               [disabled]="EditView">
     </ng-select>
     </div>
   </div>
 
   <mat-form-field *ngIf="newIncident">
-    <input matInput maxlength="15" placeholder="Follow up phone number (Optional)" [(ngModel)]="phoneNumber" *ngIf="!addCheckup">
+    <input matInput minlength="8" maxlength="15" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Follow up phone number (Optional)" [(ngModel)]="phoneNumber" *ngIf="!addCheckup">
     <mat-hint align="end">{{phoneNumber.length}} / 15</mat-hint>
   </mat-form-field>
 
@@ -106,7 +109,7 @@
 
             <div *ngFor="let parameter of prescription?.medications;let i = index" class="LoopContainFitContent" >
               <div class="medicienCell">
-                <div class="cancelCell" (click)="deleteData('Medication',i)">
+                <div class="cancelCell" (click)="deleteData('Medication',i)" *ngIf="prescription.medications?.status == true || prescription.medications?.status == null">
                   <img class="cancelIcon" src="assets/imgs/cancel-button.png">
                 </div>
                 <div class="medicineLable">

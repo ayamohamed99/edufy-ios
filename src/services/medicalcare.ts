@@ -214,7 +214,7 @@ export class MedicalCareService {
   approveMedicalRecord(medicalRecordId) {
     let requestURL = '/approveMedicalRecord.ent?medicalRecordId='+medicalRecordId;
 
-    return this.http.put(this.DomainUrl.Domain + this.commonUrl + requestURL, this.httpOptions);
+    return this.http.put(this.DomainUrl.Domain + this.commonUrl + requestURL, {} ,this.httpOptions);
   }
 
   editMedicationReceiverStatus(medicationIds,userId) {
@@ -228,5 +228,15 @@ export class MedicalCareService {
     let requestURL = '/authentication/requestcheckup.ent/editRequestCheckupReceiverStatus.ent?requestIds='+requestIds+'&userId='+userId;
 
     return this.http.put(this.DomainUrl.Domain + requestURL, this.httpOptions);
+  }
+
+
+  countMedicalRecords(selectedClass, selectedStudent, selectedStatus, date,page,View,startDate,endDate,pageSize) {
+
+    let requestURL = '/authentication/medicalrecord.ent/WebApp.ent?classId=' + selectedClass + '&studentId=' + selectedStudent +'&status='+selectedStatus + '&date='+date+'&page='+page+'&view='+View
+      +'&startDate='+startDate+'&endDate='+endDate+'&pageSize='+pageSize;
+
+    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+
   }
 }
