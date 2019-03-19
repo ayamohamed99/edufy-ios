@@ -343,7 +343,11 @@ export class NewMedicalReportMedicinePage {
         this.viewCtrl.dismiss({done: 'edit'});
     }, reason=> {
         this.load.dismiss();
-        this.presentToast("Failed updated medication.")
+        if(reason == "MEDICATION_ALREADY_ENDED"){
+          this.presentToast("Failed, Medication already ended.");
+        }else {
+          this.presentToast("Failed updated medication.");
+        }
     });
   }
 

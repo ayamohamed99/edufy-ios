@@ -156,7 +156,7 @@ export class MedicalCareService {
 
 
   getInstructions():any {
-    let requestURL = 'authentication/instructions.ent/WebApp.ent';
+    let requestURL = '/authentication/instructions.ent/WebApp.ent';
 
     if(this.getInstructions_FOR_MedicalReport.getValue() != null){
       return this.getInstructions_FOR_MedicalReport;
@@ -200,7 +200,7 @@ export class MedicalCareService {
   }
 
   getIncidentAnswers(incidentId , date) {
-    let requestURL = 'authentication/incident.ent/getIncidentAnswersWeb.ent?incidentId='+incidentId+'&date='+date ;
+    let requestURL = '/authentication/incident.ent/getIncidentAnswersWeb.ent?incidentId='+incidentId+'&date='+date ;
 
     return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
   }

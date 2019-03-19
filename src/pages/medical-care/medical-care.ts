@@ -1033,6 +1033,7 @@ export class MedicalCarePage {
           if(data){
             if(data.done == 'edit') {
               this.justRefresher = true;
+              this.MEDICATIONS_INDEX = 1;
               this.getAllMedicalRecords(view);
             }
           }
@@ -1061,6 +1062,7 @@ export class MedicalCarePage {
               this.medicalRecords.splice(index,1);
                 this.justRefresher=true;
               this.presentToast('Medication deleted successfully');
+                this.MEDICATIONS_INDEX = 1;
               this.getAllMedicalRecords(view);
             }, reason=> {
                 this.load.dismiss();
@@ -1101,6 +1103,11 @@ export class MedicalCarePage {
               students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
               medRecord.medicalRecord.student = students;
               this.justRefresher = true;
+              if(this.INCIDENTS_NAME == view){
+                this.INCIDENTS_INDEX = 1;
+              }else if(this.WAITING_APPROVAL_NAME == view){
+                this.WAITING_APPROVAL_INDEX = 1;
+              }
               this.getAllMedicalRecords(view);
             }
           }
@@ -1133,6 +1140,11 @@ export class MedicalCarePage {
                 }
                 this.justRefresher=true;
               this.presentToast('Incident deleted successfully');
+                if(this.INCIDENTS_NAME == view){
+                  this.INCIDENTS_INDEX = 1;
+                }else if(this.WAITING_APPROVAL_NAME == view){
+                  this.WAITING_APPROVAL_INDEX = 1;
+                }
               this.getAllMedicalRecords(view);
             }, reason=> {
               this.load.dismiss();
@@ -1173,6 +1185,11 @@ export class MedicalCarePage {
               students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
               medRecord.medicalRecord.student = students;
               this.justRefresher = true;
+              if(this.CHECKUPS_NAME == view){
+                this.CHECKUPS_INDEX = 1;
+              }else if(this.WAITING_APPROVAL_NAME == view){
+                this.WAITING_APPROVAL_INDEX = 1;
+              }
               this.getAllMedicalRecords(view);
             }
           }
@@ -1205,6 +1222,11 @@ export class MedicalCarePage {
                 }
                 this.justRefresher=true;
                 this.presentToast('Checkup deleted successfully');
+                if(this.CHECKUPS_NAME == view){
+                  this.CHECKUPS_INDEX = 1;
+                }else if(this.WAITING_APPROVAL_NAME == view){
+                  this.WAITING_APPROVAL_INDEX = 1;
+                }
                 this.getAllMedicalRecords(view);
               }, reason=> {
                 this.load.dismiss();
@@ -1395,21 +1417,39 @@ export class MedicalCarePage {
 
   compareIncidentList(newList,i){
     this.elementDone = i;
-    // let ArrayOfQuestions:any[]=[];
-    // for(let item of newList){
-    //   ArrayOfQuestions.push(item.q);
-    // }
-    // if(i > 0) {
-    //   if (_.isEqual(ArrayOfQuestions,this.oldIncidentQuestionsList)) {
-    //     return false;
-    //   } else {
-    //     this.oldIncidentQuestionsList = JSON.parse(JSON.stringify(ArrayOfQuestions));
-    //     return true;
-    //   }
-    // }else{
-    //   this.oldIncidentQuestionsList = JSON.parse(JSON.stringify(ArrayOfQuestions));
-    //   return true;
-    // }
+  }
+
+  viewThisMedication(medication){
+    let model;
+
+    model = this.popoverCtrl.create('MedicationViewPage', {
+      medication: medication,
+    }, {cssClass: 'contact-popovers'});
+
+    model.onDidDismiss(
+      data => {
+        console.log(data);
+
+      });
+
+    model.present();
+  }
+
+  viewMedicalReport(report,view){
+    let model;
+
+    model = this.popoverCtrl.create('MedicalReportViewPage', {
+      viewName: view,
+      medicalReport:report
+    }, {cssClass: 'contact-popovers'});
+
+    model.onDidDismiss(
+      data => {
+        console.log(data);
+
+      });
+
+    model.present();
   }
 
 }

@@ -135,6 +135,9 @@ ion-popover.contact-popovers{
     border-radius: 10px;
     height: fit-content;
   }
+  .popover-viewport{
+    overflow: auto;
+  }
   ion-backdrop[tappable]{
     height: 100%;
     width: 100%;

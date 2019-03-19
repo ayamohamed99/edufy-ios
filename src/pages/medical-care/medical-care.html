@@ -306,7 +306,7 @@
                         <ion-card-content class="questionBody">
 
                           <div  class="LoopContainWithFullWidth" *ngIf="incident.medicalRecord.checkup.title!=''">
-                            <div class="medicienCellFullWidth">
+                            <div class="medicienCellFullWidth" (click)="viewMedicalReport(incident,'Checkup')">
                               <div class="medicineLable">
                                 {{incident.medicalRecord.checkup.title}}
                               </div>
@@ -321,7 +321,7 @@
 
 
 
-                  <div class="mainDivQuestion" *ngIf="incident.medicalRecord.prescription">
+                  <div class="mainDivQuestion" *ngIf="incident.medicalRecord.prescription?.medications.length > 0">
                     <ion-card class="questionCard">
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
@@ -333,7 +333,7 @@
                         <ion-card-content class="questionBody">
 
                           <div *ngFor="let parameter of incident.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
-                            <div class="medicienCell">
+                            <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
                               </div>
@@ -351,7 +351,7 @@
 
 
                   <div class="buttonActionTime">
-                    <button mode="ios" class="buttonTime" [id]="'timeButton'+k" ion-button block  (click)="confirmTime($event,'timeButton'+k,medicine.timeOfActiveMedication.id,checkIfTaken(medicine.timeOfActiveMedication.medicationsNotifications))">
+                    <button mode="ios" class="buttonTime" ion-button block  (click)="viewMedicalReport(incident,'Incident')">
                       See Full Incident
                     </button>
                   </div>
@@ -467,7 +467,7 @@
                         <ion-card-content class="questionBody">
 
                           <div  class="LoopContainWithFullWidth" *ngIf="checkup.medicalRecord.incident.title!=''">
-                            <div class="medicienCellFullWidth">
+                            <div class="medicienCellFullWidth" (click)="viewMedicalReport(checkup,'Incident')">
                               <div class="medicineLable">
                                 {{checkup.medicalRecord.incident.title}}
                               </div>
@@ -483,7 +483,7 @@
 
 
 
-                  <div class="mainDivQuestion" *ngIf="checkup.medicalRecord.prescription">
+                  <div class="mainDivQuestion" *ngIf="checkup.medicalRecord.prescription?.medications.length > 0">
                     <ion-card class="questionCard">
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
@@ -495,7 +495,7 @@
                         <ion-card-content class="questionBody">
 
                           <div *ngFor="let parameter of checkup.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
-                            <div class="medicienCell">
+                            <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
                               </div>
@@ -513,7 +513,7 @@
 
 
                   <div class="buttonActionTime">
-                    <button mode="ios" class="buttonTime" [id]="'timeButton'+k" ion-button block  (click)="confirmTime($event,'timeButton'+k,medicine.timeOfActiveMedication.id,checkIfTaken(medicine.timeOfActiveMedication.medicationsNotifications))">
+                    <button mode="ios" class="buttonTime" ion-button block  (click)="viewMedicalReport(checkup,'Checkup')">
                       See Full Checkup
                     </button>
                   </div>
@@ -637,7 +637,7 @@
                         <ion-card-content class="questionBody">
 
                           <div  class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.incident.title!=''">
-                            <div class="medicienCellFullWidth">
+                            <div class="medicienCellFullWidth" (click)="viewMedicalReport(approval,'Incident')">
                               <div class="medicineLable">
                                 {{approval.medicalRecord.incident.title}}
                               </div>
@@ -664,7 +664,7 @@
                         <ion-card-content class="questionBody">
 
                           <div  class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.checkup.title!=''">
-                            <div class="medicienCellFullWidth">
+                            <div class="medicienCellFullWidth" (click)="viewMedicalReport(approval,'Checkup')">
                               <div class="medicineLable">
                                 {{approval.medicalRecord.checkup.title}}
                               </div>
@@ -678,7 +678,7 @@
                   </div>
 
 
-                  <div class="mainDivQuestion" *ngIf="approval.medicalRecord.prescription">
+                  <div class="mainDivQuestion" *ngIf="approval.medicalRecord.prescription?.medications.length > 0">
                     <ion-card class="questionCard">
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
@@ -690,7 +690,7 @@
                         <ion-card-content class="questionBody">
 
                           <div *ngFor="let parameter of approval.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
-                            <div class="medicienCell">
+                            <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
                               </div>
