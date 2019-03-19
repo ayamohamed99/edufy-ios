@@ -11,7 +11,7 @@
     </button>
   </ion-buttons>
 </ion-navbar>
-  <ion-toolbar class="toolBarShap" color="primary" *ngIf="!platform.is('ios')">
+  <ion-toolbar class="toolBarShap" color="primary">
     <ion-segment [(ngModel)]="View" color="light">
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)" *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME" (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}</ion-segment-button>
@@ -19,14 +19,14 @@
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="WAITING_APPROVAL_NAME" (click)="tabThatSelectedDo(WAITING_APPROVAL_NAME)" *ngIf="accountServ.getUserRole().medicalRecordCanApprove">{{APPROVING_TAB}}</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-  <ion-toolbar  class="toolBarShap" color="primary" *ngIf="platform.is('ios')">
-    <ion-segment [(ngModel)]="View" color="gray" style="padding-top: 5px;padding-right: 5px;padding-left: 5px" *ngIf="platform.is('ios')">
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)" *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME" (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="CHECKUPS_NAME" (click)="tabThatSelectedDo(CHECKUPS_NAME)" *ngIf="accountServ.getUserRole().viewCheckup">{{CHECKUP_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="WAITING_APPROVAL_NAME" (click)="tabThatSelectedDo(WAITING_APPROVAL_NAME)" *ngIf="accountServ.getUserRole().medicalRecordCanApprove">{{APPROVING_TAB}}</ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
+  <!--<ion-toolbar  class="toolBarShap" color="primary" *ngIf="platform.is('ios')">-->
+    <!--<ion-segment [(ngModel)]="View" color="gray" style="padding-top: 5px;padding-right: 5px;padding-left: 5px" *ngIf="platform.is('ios')">-->
+      <!--<ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)" *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>-->
+      <!--<ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME" (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}</ion-segment-button>-->
+      <!--<ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="CHECKUPS_NAME" (click)="tabThatSelectedDo(CHECKUPS_NAME)" *ngIf="accountServ.getUserRole().viewCheckup">{{CHECKUP_TAB}}</ion-segment-button>-->
+      <!--<ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="WAITING_APPROVAL_NAME" (click)="tabThatSelectedDo(WAITING_APPROVAL_NAME)" *ngIf="accountServ.getUserRole().medicalRecordCanApprove">{{APPROVING_TAB}}</ion-segment-button>-->
+    <!--</ion-segment>-->
+  <!--</ion-toolbar>-->
 </ion-header>
 
 
