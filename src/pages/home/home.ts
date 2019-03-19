@@ -346,11 +346,11 @@ export class HomePage {
                   // that.nav.setRoot(that.chatPage);
                   let student = data.chatThread.student;
                   let Stud = new Student();
-                  Stud.studentId = student.id;
-                  Stud.studentName = student.name;
-                  Stud.studentAddress = student.address;
-                  Stud.studentClass = student.classes;
-                  Stud.studentImageUrl = student.profileImg;
+                  Stud.id = student.id;
+                  Stud.name = student.name;
+                  Stud.address = student.address;
+                  Stud.classes = student.classes;
+                  Stud.profileImg = student.profileImg;
                   Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
                   let modal = that.modalCtrl.create('ChatDialoguePage',
                     {studentData:Stud});

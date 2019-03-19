@@ -132,7 +132,9 @@ export class NewMedicalReportMedicinePage {
       this.everyDay = !oneDayWasTrue;
       this.selectedTimes = this.tempMedicalRecord.oneMedication.medicationSchedule;
       for (let tempT of this.selectedTimes) {
-        tempT.time = tempT.time.slice(0,-3);
+        if(tempT.time.length > 5){
+          tempT.time = tempT.time.slice(0,-3);
+        }
       }
 
       this.selectedInstruction = this.tempMedicalRecord.oneMedication.instructions;
@@ -343,7 +345,7 @@ export class NewMedicalReportMedicinePage {
         this.viewCtrl.dismiss({done: 'edit'});
     }, reason=> {
         this.load.dismiss();
-        if(reason == "MEDICATION_ALREADY_ENDED"){
+        if(reason.error == "MEDICATION_ALREADY_ENDED"){
           this.presentToast("Failed, Medication already ended.");
         }else {
           this.presentToast("Failed updated medication.");

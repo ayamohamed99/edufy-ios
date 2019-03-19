@@ -1,6 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import {
-  AlertController, IonicPage, LoadingController, ModalController, Platform, PopoverController, ToastController
+  AlertController, LoadingController, ModalController, Platform, PopoverController, ToastController
 } from 'ionic-angular';
 import {NotificationNewPage} from "../notification-new/notification-new";
 import {NotificationService} from "../../services/notification";
@@ -390,12 +391,12 @@ export class NotificationPage{
         this.classes = [];
         for (let data of allData) {
           let item = new Class();
-          item.classId = data.id;
-          item.className = data.name;
-          item.grade.gradeId = data.grade.id;
-          item.grade.gradeName = data.grade.name;
-          item.branch.branchId = data.branch.id;
-          item.branch.branchName = data.branch.name;
+          item.id = data.id;
+          item.name = data.name;
+          item.grade.id = data.grade.id;
+          item.grade.name = data.grade.name;
+          item.branch.id = data.branch.id;
+          item.branch.name = data.branch.name;
           item.branch.managerId = data.branch.managerId;
           this.classes.push(item);
         }
@@ -420,16 +421,16 @@ export class NotificationPage{
         for (let value of data){
           let students = new Student();
 
-          students.studentClass.classId = value.classes.id;
-          students.studentClass.className = value.classes.name;
-          students.studentClass.grade.gradeId = value.classes.grade.id;
-          students.studentClass.grade.gradeName = value.classes.grade.name;
-          students.studentClass.branch.branchId = value.classes.branch.id;
-          students.studentClass.branch.branchName = value.classes.branch.name;
-          students.studentClass.branch.managerId = value.classes.branch.managerId;
-          students.studentId = value.id;
-          students.studentName = value.name;
-          students.studentAddress = value.address;
+          students.classes.id = value.classes.id;
+          students.classes.name = value.classes.name;
+          students.classes.grade.id = value.classes.grade.id;
+          students.classes.grade.name = value.classes.grade.name;
+          students.classes.branch.id = value.classes.branch.id;
+          students.classes.branch.name = value.classes.branch.name;
+          students.classes.branch.managerId = value.classes.branch.managerId;
+          students.id = value.id;
+          students.name = value.name;
+          students.address = value.address;
 
           this.studentsName.push(value.name);
           this.studentwithClass.push(students);

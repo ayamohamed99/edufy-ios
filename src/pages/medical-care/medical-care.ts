@@ -535,7 +535,7 @@ export class MedicalCarePage {
 
         medicalRec.accountId=val.medicalRecord.accountId;
         medicalRec.approved=val.medicalRecord.approved;
-        medicalRec.branchId=val.medicalRecord.branchId;
+        medicalRec.id=val.medicalRecord.branchId;
         medicalRec.checkup=val.medicalRecord.checkup;
         medicalRec.createdFrom=val.medicalRecord.createdFrom;
         medicalRec.id=val.medicalRecord.id;
@@ -559,7 +559,7 @@ export class MedicalCarePage {
       let medicalRec = new MedicalRecord();
       medicalRec.accountId=val.medicalRecord.accountId;
       medicalRec.approved=val.medicalRecord.approved;
-      medicalRec.branchId=val.medicalRecord.branchId;
+      medicalRec.id=val.medicalRecord.branchId;
       medicalRec.checkup=val.medicalRecord.checkup;
       medicalRec.createdFrom=val.medicalRecord.createdFrom;
       medicalRec.id=val.medicalRecord.id;
@@ -1090,16 +1090,16 @@ export class MedicalCarePage {
               let data = medRecord.medicalRecord;
               let students = new Student();
 
-              students.studentClass.classId = data.classes.id;
-              students.studentClass.className = data.classes.name;
-              students.studentClass.grade.gradeId = data.classes.grade.id;
-              students.studentClass.grade.gradeName = data.classes.grade.name;
-              students.studentClass.branch.branchId = data.classes.branch.id;
-              students.studentClass.branch.branchName = data.classes.branch.name;
-              students.studentClass.branch.managerId = data.classes.branch.managerId;
-              students.studentId = data.id;
-              students.studentName = data.name;
-              students.studentAddress = data.address;
+              students.classes.id = data.classes.id;
+              students.classes.name = data.classes.name;
+              students.classes.grade.id = data.classes.grade.id;
+              students.classes.grade.name = data.classes.grade.name;
+              students.classes.branch.id = data.classes.branch.id;
+              students.classes.branch.name = data.classes.branch.name;
+              students.classes.branch.managerId = data.classes.branch.managerId;
+              students.id = data.id;
+              students.name = data.name;
+              students.address = data.address;
               students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
               medRecord.medicalRecord.student = students;
               this.justRefresher = true;
@@ -1172,16 +1172,16 @@ export class MedicalCarePage {
               let data = medRecord.medicalRecord;
               let students = new Student();
 
-              students.studentClass.classId = data.classes.id;
-              students.studentClass.className = data.classes.name;
-              students.studentClass.grade.gradeId = data.classes.grade.id;
-              students.studentClass.grade.gradeName = data.classes.grade.name;
-              students.studentClass.branch.branchId = data.classes.branch.id;
-              students.studentClass.branch.branchName = data.classes.branch.name;
-              students.studentClass.branch.managerId = data.classes.branch.managerId;
-              students.studentId = data.id;
-              students.studentName = data.name;
-              students.studentAddress = data.address;
+              students.classes.id = data.classes.id;
+              students.classes.name = data.classes.name;
+              students.classes.grade.id = data.classes.grade.id;
+              students.classes.grade.name = data.classes.grade.name;
+              students.classes.branch.id = data.classes.branch.id;
+              students.classes.branch.name = data.classes.branch.name;
+              students.classes.branch.managerId = data.classes.branch.managerId;
+              students.id = data.id;
+              students.name = data.name;
+              students.address = data.address;
               students.searchByClassGrade = data.classes.grade.name + " - " + data.classes.name;
               medRecord.medicalRecord.student = students;
               this.justRefresher = true;

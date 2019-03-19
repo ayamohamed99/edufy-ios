@@ -34,11 +34,11 @@
       </div>
 
 
-      <mat-expansion-panel hideToggle="true"  #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.classId,i,itm.grade.gradeName+' '+itm.className)" [disabled]="itm.noOfAllStudent <= 0">
+      <mat-expansion-panel hideToggle="true" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.className)" [disabled]="itm.noOfAllStudent <= 0">
         <mat-expansion-panel-header>
           <mat-panel-title col-4>
             <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
-            {{itm.grade.gradeName}} {{itm.className}}
+            {{itm.grade.name}} {{itm.className}}
           </mat-panel-title>
           <mat-panel-description col-4 *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
           <mat-panel-description col-4 *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
@@ -49,7 +49,7 @@
 
         <div *ngIf="showAllButton">
           <ion-row *ngIf="itm.noOfAllStudent > 0">
-            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(itm.classId, isAll, i, -1, studentsList)" style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>
+            <ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(itm.id, isAll, i, -1, studentsList)" style="display:inline-block;padding-left: 15px; padding-top: 12px"></ion-checkbox>
             <ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>
           </ion-row>
         </div>
@@ -67,15 +67,15 @@
 
           <ion-row style="position: relative;">
 
-            <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.studentName,i)"
+            <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.id,stud.classes.id,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.name,i)"
                           class="checkboxInCard"></ion-checkbox>
 
             <ion-avatar class="avaterInCard">
-              <img class="imgInAvatar" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == null">
-              <img class="imgInAvatar" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != null">
+              <img class="imgInAvatar" src="assets/imgs/profile.png" *ngIf="stud.profileImg == null">
+              <img class="imgInAvatar" [src]="stud.profileImg" *ngIf="stud.profileImg != null">
             </ion-avatar>
 
-            <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>
+            <ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.name}}</ion-label>
 
             <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
             <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
@@ -99,7 +99,7 @@
 
     <!--<div *ngIf="showAllButton">-->
       <!--<ion-row *ngIf="studentsList.length > 0">-->
-        <!--<ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].classId, isAll, i, -1, studentsList)"-->
+        <!--<ion-checkbox mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(classesList[0].id, isAll, i, -1, studentsList)"-->
                       <!--style="display:inline-block;padding-left: 15px; padding-top: 9px"></ion-checkbox>-->
         <!--<ion-label style="display:inline-block;-webkit-text-fill-color: #707070;padding-left: 10px">All</ion-label>-->
       <!--</ion-row>-->
@@ -110,15 +110,15 @@
 
       <!--<ion-row>-->
 
-        <!--<ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.studentId,stud.studentClass.classId,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"-->
+        <!--<ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (click)="checkedStudent(stud.id,stud.classes.id,studentsList,j,stud.reportFinalized,stud.reportChecked,0)"-->
                       <!--style="display:inline-block; padding-top: 10px;padding-bottom: 10px;"></ion-checkbox>-->
 
         <!--<ion-avatar style="height: 40px; width: 40px;padding-left: 10px; padding-top: 5px; -moz-border-radius: 20px; display:inline-block">-->
-          <!--<img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.studentImageUrl == ''">-->
-          <!--<img style="border-radius: 100px;" [src]="stud.studentImageUrl" *ngIf="stud.studentImageUrl != ''">-->
+          <!--<img style="border-radius: 100px;" src="assets/imgs/profile.png" *ngIf="stud.profileImg == ''">-->
+          <!--<img style="border-radius: 100px;" [src]="stud.profileImg" *ngIf="stud.profileImg != ''">-->
         <!--</ion-avatar>-->
 
-        <!--<ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.studentName}}</ion-label>-->
+        <!--<ion-label style="display:inline-block;padding-left: 10px; -webkit-text-fill-color: #a4a4a4; width: 100%">{{stud.name}}</ion-label>-->
 
         <!--<label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>-->
         <!--<label style="-webkit-text-fill-color: #38f560; display:inline-block; width: fit-content; padding: 13px 5px" item-end *ngIf="stud.reportApproved">Approved</label>-->

@@ -227,63 +227,63 @@ export class BackgroundMedicalcareService {
     //   console.log(attachmentList);
     // }
 
-    if(this.medicalRecord.student && this.medicalRecord.student.studentClass) {
+    if(this.medicalRecord.student && this.medicalRecord.student.classes) {
 
       let Branch = {
-        'id': this.medicalRecord.student.studentClass.branch.branchId,
-        'name': this.medicalRecord.student.studentClass.branch.branchName,
-        'managerId': this.medicalRecord.student.studentClass.branch.managerId
+        'id': this.medicalRecord.student.classes.branch.id,
+        'name': this.medicalRecord.student.classes.branch.name,
+        'managerId': this.medicalRecord.student.classes.branch.managerId
       };
 
       let Grade = {
         'branchId': Branch.id,
-        'id': this.medicalRecord.student.studentClass.grade.gradeId,
-        'name': this.medicalRecord.student.studentClass.grade.gradeName
+        'id': this.medicalRecord.student.classes.grade.id,
+        'name': this.medicalRecord.student.classes.grade.name
       };
 
       let Class = {
         'branch': Branch,
         'grade': Grade,
-        'id': this.medicalRecord.student.studentClass.classId,
-        'name': this.medicalRecord.student.studentClass.className
+        'id': this.medicalRecord.student.classes.id,
+        'name': this.medicalRecord.student.classes.name
       };
 
 
       let student = {
         'classes': Class,
-        'id': this.medicalRecord.student.studentId,
-        'name': this.medicalRecord.student.studentName,
-        'address': this.medicalRecord.student.studentAddress,
+        'id': this.medicalRecord.student.id,
+        'name': this.medicalRecord.student.name,
+        'address': this.medicalRecord.student.address,
         'branchId': Branch.id
       };
 
       this.medicalRecord.student = student;
-    }else if(this.selectedStudent && this.selectedStudent.studentName){
+    }else if(this.selectedStudent && this.selectedStudent.name){
       let Branch = {
-        'id': this.selectedStudent.studentClass.branch.branchId,
-        'name': this.selectedStudent.studentClass.branch.branchName,
-        'managerId': this.selectedStudent.studentClass.branch.managerId
+        'id': this.selectedStudent.classes.branch.id,
+        'name': this.selectedStudent.classes.branch.name,
+        'managerId': this.selectedStudent.classes.branch.managerId
       };
 
       let Grade = {
         'branchId': Branch.id,
-        'id': this.selectedStudent.studentClass.grade.gradeId,
-        'name': this.selectedStudent.studentClass.grade.gradeName
+        'id': this.selectedStudent.classes.grade.id,
+        'name': this.selectedStudent.classes.grade.name
       };
 
       let Class = {
         'branch': Branch,
         'grade': Grade,
-        'id': this.selectedStudent.studentClass.classId,
-        'name': this.selectedStudent.studentClass.className
+        'id': this.selectedStudent.classes.id,
+        'name': this.selectedStudent.classes.name
       };
 
 
       let student = {
         'classes': Class,
-        'id': this.selectedStudent.studentId,
-        'name': this.selectedStudent.studentName,
-        'address': this.selectedStudent.studentAddress,
+        'id': this.selectedStudent.id,
+        'name': this.selectedStudent.name,
+        'address': this.selectedStudent.address,
         'branchId': Branch.id
       };
 
@@ -411,63 +411,63 @@ export class BackgroundMedicalcareService {
 
         this.medicalRecord.incident=null;
 
-        if(this.medicalRecord.student && this.medicalRecord.student.studentClass) {
+        if(this.medicalRecord.student && this.medicalRecord.student.classes) {
 
           let Branch = {
-            'id': this.medicalRecord.student.studentClass.branch.branchId,
-            'name': this.medicalRecord.student.studentClass.branch.branchName,
-            'managerId': this.medicalRecord.student.studentClass.branch.managerId
+            'id': this.medicalRecord.student.classes.branch.id,
+            'name': this.medicalRecord.student.classes.branch.name,
+            'managerId': this.medicalRecord.student.classes.branch.managerId
           };
 
           let Grade = {
             'branchId': Branch.id,
-            'id': this.medicalRecord.student.studentClass.grade.gradeId,
-            'name': this.medicalRecord.student.studentClass.grade.gradeName
+            'id': this.medicalRecord.student.classes.grade.id,
+            'name': this.medicalRecord.student.classes.grade.name
           };
 
           let Class = {
             'branch': Branch,
             'grade': Grade,
-            'id': this.medicalRecord.student.studentClass.classId,
-            'name': this.medicalRecord.student.studentClass.className
+            'id': this.medicalRecord.student.classes.id,
+            'name': this.medicalRecord.student.classes.name
           };
 
 
           let student = {
             'classes': Class,
-            'id': this.medicalRecord.student.studentId,
-            'name': this.medicalRecord.student.studentName,
-            'address': this.medicalRecord.student.studentAddress,
+            'id': this.medicalRecord.student.id,
+            'name': this.medicalRecord.student.name,
+            'address': this.medicalRecord.student.address,
             'branchId': Branch.id
           };
 
           this.medicalRecord.student = student;
-        }else if(this.selectedStudent && this.selectedStudent.studentName){
+        }else if(this.selectedStudent && this.selectedStudent.name){
           let Branch = {
-            'id': this.selectedStudent.studentClass.branch.branchId,
-            'name': this.selectedStudent.studentClass.branch.branchName,
-            'managerId': this.selectedStudent.studentClass.branch.managerId
+            'id': this.selectedStudent.classes.branch.id,
+            'name': this.selectedStudent.classes.branch.name,
+            'managerId': this.selectedStudent.classes.branch.managerId
           };
 
           let Grade = {
             'branchId': Branch.id,
-            'id': this.selectedStudent.studentClass.grade.gradeId,
-            'name': this.selectedStudent.studentClass.grade.gradeName
+            'id': this.selectedStudent.classes.grade.id,
+            'name': this.selectedStudent.classes.grade.name
           };
 
           let Class = {
             'branch': Branch,
             'grade': Grade,
-            'id': this.selectedStudent.studentClass.classId,
-            'name': this.selectedStudent.studentClass.className
+            'id': this.selectedStudent.classes.id,
+            'name': this.selectedStudent.classes.name
           };
 
 
           let student = {
             'classes': Class,
-            'id': this.selectedStudent.studentId,
-            'name': this.selectedStudent.studentName,
-            'address': this.selectedStudent.studentAddress,
+            'id': this.selectedStudent.id,
+            'name': this.selectedStudent.name,
+            'address': this.selectedStudent.address,
             'branchId': Branch.id
           };
 
@@ -554,32 +554,32 @@ export class BackgroundMedicalcareService {
 
 
 
-        // if(medicalRecordObject.medicalRecord.student.studentClass) {
+        // if(medicalRecordObject.medicalRecord.student.classes) {
           let Branch = {
-            'id': medicalRecordObject.medicalRecord.student.studentClass.branch.branchId,
-            'name': medicalRecordObject.medicalRecord.student.studentClass.branch.branchName,
-            'managerId': medicalRecordObject.medicalRecord.student.studentClass.branch.managerId
+            'id': medicalRecordObject.medicalRecord.student.classes.branch.id,
+            'name': medicalRecordObject.medicalRecord.student.classes.branch.name,
+            'managerId': medicalRecordObject.medicalRecord.student.classes.branch.managerId
           };
 
           let Grade = {
             'branchId': Branch.id,
-            'id': medicalRecordObject.medicalRecord.student.studentClass.grade.gradeId,
-            'name': medicalRecordObject.medicalRecord.student.studentClass.grade.gradeName
+            'id': medicalRecordObject.medicalRecord.student.classes.grade.id,
+            'name': medicalRecordObject.medicalRecord.student.classes.grade.name
           };
 
           let Class = {
             'branch': Branch,
             'grade': Grade,
-            'id': medicalRecordObject.medicalRecord.student.studentClass.classId,
-            'name': medicalRecordObject.medicalRecord.student.studentClass.className
+            'id': medicalRecordObject.medicalRecord.student.classes.id,
+            'name': medicalRecordObject.medicalRecord.student.classes.name
           };
 
 
           let student = {
             'classes': Class,
-            'id': medicalRecordObject.medicalRecord.student.studentId,
-            'name': medicalRecordObject.medicalRecord.student.studentName,
-            'address': medicalRecordObject.medicalRecord.student.studentAddress,
+            'id': medicalRecordObject.medicalRecord.student.id,
+            'name': medicalRecordObject.medicalRecord.student.name,
+            'address': medicalRecordObject.medicalRecord.student.address,
             'branchId': Branch.id
           };
           medicalRecordObject.medicalRecord.student = student;

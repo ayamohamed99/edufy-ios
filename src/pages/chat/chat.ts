@@ -51,13 +51,13 @@ export class ChatPage {
     let data = this.chatServ.NewChats;
     for(let message of data){
       let Stud = new Student();
-      Stud.studentId = message.chatThread.student.id;
-      Stud.studentName = message.chatThread.student.name;
-      Stud.studentAddress = message.chatThread.student.address;
-      Stud.studentClass = message.chatThread.student.classes;
-      Stud.studentImageUrl = message.chatThread.student.profileImg;
+      Stud.id = message.chatThread.student.id;
+      Stud.name = message.chatThread.student.name;
+      Stud.address = message.chatThread.student.address;
+      Stud.classes = message.chatThread.student.classes;
+      Stud.profileImg = message.chatThread.student.profileImg;
       Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
-      if(!this.lastStudents.some( value =>value.studentId == message.chatThread.student.id)){
+      if(!this.lastStudents.some( value =>value.id == message.chatThread.student.id)){
         this.lastStudents.push(Stud);
       }
     }
@@ -78,7 +78,7 @@ export class ChatPage {
     if (val && val.trim() != '') {
       this.allStudents = [];
       for(let j=0; j<this.MAIN_STUDENTS_ARRAY.length; j++){
-        let studentName = this.MAIN_STUDENTS_ARRAY[j].studentName.toLowerCase();
+        let studentName = this.MAIN_STUDENTS_ARRAY[j].name.toLowerCase();
         let studentClassGrade = this.MAIN_STUDENTS_ARRAY[j].searchByClassGrade.toLowerCase();
         let searchValue = val.toLowerCase();
         if(studentName.indexOf(searchValue) > -1
@@ -112,11 +112,11 @@ export class ChatPage {
         let Data:any = value;
         for(let student of Data){
           let Stud = new Student();
-          Stud.studentId = student.id;
-          Stud.studentName = student.name;
-          Stud.studentAddress = student.address;
-          Stud.studentClass = student.classes;
-          Stud.studentImageUrl = student.profileImg;
+          Stud.id = student.id;
+          Stud.name = student.name;
+          Stud.address = student.address;
+          Stud.classes = student.classes;
+          Stud.profileImg = student.profileImg;
           Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
           this.allStudents.push(Stud);
           this.MAIN_STUDENTS_ARRAY.push(Stud);
@@ -162,13 +162,13 @@ export class ChatPage {
   }
 
   viewListsEffect(student,index,From){
-    let findStudent = this.lastStudents.some( value =>value.studentId == student.studentId);
+    let findStudent = this.lastStudents.some( value =>value.id == student.id);
     if(!findStudent && index == -1 && From == 'All'){
       this.lastStudents.splice(0, 0,student);
 
     }else if(findStudent && index == -1 && From == 'All') {
       for(let i=0;i<this.lastStudents.length;i++) {
-        if (student.studentId == this.lastStudents[i].studentId ) {
+        if (student.id == this.lastStudents[i].id ) {
           try {
             this.LastOpenedContainer.nativeElement.scrollLeft = 0;
           } catch (err) {
@@ -188,7 +188,7 @@ export class ChatPage {
     }else if(index == -1 && From == 'server') {
       let found = false;
       for (let i = 0; i < this.lastStudents.length; i++) {
-        if (student.studentId == this.lastStudents[i].studentId) {
+        if (student.id == this.lastStudents[i].id) {
           try {
             this.LastOpenedContainer.nativeElement.scrollLeft = 0;
           } catch (err) {
@@ -216,23 +216,23 @@ export class ChatPage {
   checkDataStudents(){
     for(let message of this.chatServ.NewChats){
       let Stud = new Student();
-      Stud.studentId = message.chatThread.student.id;
-      Stud.studentName = message.chatThread.student.name;
-      Stud.studentAddress = message.chatThread.student.address;
-      Stud.studentClass = message.chatThread.student.classes;
-      Stud.studentImageUrl = message.chatThread.student.profileImg;
+      Stud.id = message.chatThread.student.id;
+      Stud.name = message.chatThread.student.name;
+      Stud.address = message.chatThread.student.address;
+      Stud.classes = message.chatThread.student.classes;
+      Stud.profileImg = message.chatThread.student.profileImg;
       Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
-      if(!this.lastStudents.some( value =>value.studentId == message.chatThread.student.id)){
+      if(!this.lastStudents.some( value =>value.id == message.chatThread.student.id)){
         this.lastStudents.splice(0, 0,Stud);
       }else{
         for(let i=0;i<this.lastStudents.length;i++){
-          if(message.chatThread.student.id == this.lastStudents[i].studentId){
+          if(message.chatThread.student.id == this.lastStudents[i].id){
             this.lastStudents.splice(i, 1);
-            Stud.studentId = message.chatThread.student.id;
-            Stud.studentName = message.chatThread.student.name;
-            Stud.studentAddress = message.chatThread.student.address;
-            Stud.studentClass = message.chatThread.student.classes;
-            Stud.studentImageUrl = message.chatThread.student.profileImg;
+            Stud.id = message.chatThread.student.id;
+            Stud.name = message.chatThread.student.name;
+            Stud.address = message.chatThread.student.address;
+            Stud.classes = message.chatThread.student.classes;
+            Stud.profileImg = message.chatThread.student.profileImg;
             Stud.searchByClassGrade = message.chatThread.student.classes.grade.name+" "+message.chatThread.student.classes.name;
             this.lastStudents.splice(0, 0,Stud);
             try {

@@ -230,7 +230,11 @@ export class NewMedicalReportPage {
       }
     } else {
       if (this.newIncident) {
-        if (this.incidentTitle && this.selectedStudent && this.selectedClass) {
+        let phoneNumberFound = false;
+        if(this.phoneNumber.length < 1 || this.phoneNumber.length > 7){
+          phoneNumberFound = true;
+        }
+        if (this.incidentTitle && this.selectedStudent && this.selectedClass && phoneNumberFound) {
           return false;
         } else {
           return true;
@@ -344,7 +348,7 @@ export class NewMedicalReportPage {
           this.viewCtrl,this.incidentQuestions,this.incidentAnswer,this.checkupQuestions);
         // this.medicalRecord.checkup = this.checkup;
       }
-      // this.medicalRecord.student = {'id': this.selectedStudent.studentId};
+      // this.medicalRecord.student = {'id': this.selectedStudent.id};
       // this.fullMedicalReport.medicalRecord = this.medicalRecord;
       // this.fullMedicalReport.incidentAnswers = ;
       // this.fullMedicalReport.checkupAnswers = ;
@@ -398,12 +402,12 @@ export class NewMedicalReportPage {
         this.allclasses = [];
         for (let data of allData) {
           let item = new Class();
-          item.classId = data.id;
-          item.className = data.name;
-          item.grade.gradeId = data.grade.id;
-          item.grade.gradeName = data.grade.name;
-          item.branch.branchId = data.branch.id;
-          item.branch.branchName = data.branch.name;
+          item.id = data.id;
+          item.name = data.name;
+          item.grade.id = data.grade.id;
+          item.grade.name = data.grade.name;
+          item.branch.id = data.branch.id;
+          item.branch.name = data.branch.name;
           item.branch.managerId = data.branch.managerId;
           item.classWithGrade = data.grade.name + " - " + data.name;
           this.allclasses.push(item);
@@ -427,16 +431,16 @@ export class NewMedicalReportPage {
         for (let value of data) {
           let students = new Student();
 
-          students.studentClass.classId = value.classes.id;
-          students.studentClass.className = value.classes.name;
-          students.studentClass.grade.gradeId = value.classes.grade.id;
-          students.studentClass.grade.gradeName = value.classes.grade.name;
-          students.studentClass.branch.branchId = value.classes.branch.id;
-          students.studentClass.branch.branchName = value.classes.branch.name;
-          students.studentClass.branch.managerId = value.classes.branch.managerId;
-          students.studentId = value.id;
-          students.studentName = value.name;
-          students.studentAddress = value.address;
+          students.classes.id = value.classes.id;
+          students.classes.name = value.classes.name;
+          students.classes.grade.id = value.classes.grade.id;
+          students.classes.grade.name = value.classes.grade.name;
+          students.classes.branch.id = value.classes.branch.id;
+          students.classes.branch.name = value.classes.branch.name;
+          students.classes.branch.managerId = value.classes.branch.managerId;
+          students.id = value.id;
+          students.name = value.name;
+          students.address = value.address;
           students.searchByClassGrade = value.classes.grade.name + " - " + value.classes.name;
 
           this.allStudents.push(students);
@@ -1293,12 +1297,12 @@ export class NewMedicalReportPage {
 
   setSelectedClassFromEdit(data){
     let item = new Class();
-    item.classId = data.id;
-    item.className = data.name;
-    item.grade.gradeId = data.grade.id;
-    item.grade.gradeName = data.grade.name;
-    item.branch.branchId = data.branch.id;
-    item.branch.branchName = data.branch.name;
+    item.id = data.id;
+    item.name = data.name;
+    item.grade.id = data.grade.id;
+    item.grade.name = data.grade.name;
+    item.branch.id = data.branch.id;
+    item.branch.name = data.branch.name;
     item.branch.managerId = data.branch.managerId;
     item.classWithGrade = data.grade.name + " - " + data.name;
     this.selectedClass = item;
@@ -1306,16 +1310,16 @@ export class NewMedicalReportPage {
 
   setSelectedStudentFromEdit(value){
     let students = new Student();
-    students.studentClass.classId = value.classes.id;
-    students.studentClass.className = value.classes.name;
-    students.studentClass.grade.gradeId = value.classes.grade.id;
-    students.studentClass.grade.gradeName = value.classes.grade.name;
-    students.studentClass.branch.branchId = value.classes.branch.id;
-    students.studentClass.branch.branchName = value.classes.branch.name;
-    students.studentClass.branch.managerId = value.classes.branch.managerId;
-    students.studentId = value.id;
-    students.studentName = value.name;
-    students.studentAddress = value.address;
+    students.classes.id = value.classes.id;
+    students.classes.name = value.classes.name;
+    students.classes.grade.id = value.classes.grade.id;
+    students.classes.grade.name = value.classes.grade.name;
+    students.classes.branch.id = value.classes.branch.id;
+    students.classes.branch.name = value.classes.branch.name;
+    students.classes.branch.managerId = value.classes.branch.managerId;
+    students.id = value.id;
+    students.name = value.name;
+    students.address = value.address;
     students.searchByClassGrade = value.classes.grade.name + " - " + value.classes.name;
     this.selectedStudent = students;
   }

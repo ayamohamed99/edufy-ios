@@ -56,6 +56,6 @@ export class StudentsService{
   }
 
   findStudentByID(id,students){
-    return students.find(x => x.studentId === id);
+    return students.find(x => x.id === id);
   }
 }

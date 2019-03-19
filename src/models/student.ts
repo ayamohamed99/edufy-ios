@@ -3,10 +3,10 @@ import {Class} from "./class";
 export class Student{
 
 
-  studentId:number;
-  studentName:string;
-  studentAddress:string;
-  studentClass:Class = new Class();
+  id:number;
+  name:string;
+  address:string;
+  classes:Class = new Class();
   reportChecked:boolean;
   reportApproved:boolean;
   reportFinalized:boolean;
@@ -15,7 +15,7 @@ export class Student{
   reportSeenByStudent: boolean;
   numberOfUnseenComments: number;
   totalNumberOfComments:number;
-  studentImageUrl = '';
+  profileImg = '';
   searchByClassGrade:string;
   constructor() {
   }

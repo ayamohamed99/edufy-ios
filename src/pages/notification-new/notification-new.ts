@@ -104,10 +104,10 @@ export class NotificationNewPage {
     this.allClasses=this.navParams.get('classesList');
     for (let classes of this.allClasses){
       let autoShownClasses = new Autocomplete_shown_array();
-      autoShownClasses.id = classes.classId;
-      autoShownClasses.name = classes.grade.gradeName+" "+classes.className;
+      autoShownClasses.id = classes.id;
+      autoShownClasses.name = classes.grade.name+" "+classes.name;
       autoShownClasses.type = "Class";
-      autoShownClasses.header = classes.branch.branchName;
+      autoShownClasses.header = classes.branch.name;
       this.chooseAllClasses.push(autoShownClasses);
       this.preparedTags.push(autoShownClasses);
     }
@@ -119,11 +119,11 @@ export class NotificationNewPage {
     //++++++++++++++Students+++++++++++++++++++++
     for (let student of this.allStudentsDetails){
       let autoShownStudents = new Autocomplete_shown_array();
-      autoShownStudents.id = student.studentId;
-      autoShownStudents.name = student.studentName;
+      autoShownStudents.id = student.id;
+      autoShownStudents.name = student.name;
       autoShownStudents.type = "Student";
-      autoShownStudents.header = student.studentClass.grade.gradeName+" "+student.studentClass.className;
-      autoShownStudents.studentClassId = student.studentClass.classId;
+      autoShownStudents.header = student.classes.grade.name+" "+student.classes.name;
+      autoShownStudents.studentClassId = student.classes.id;
       this.preparedTags.push(autoShownStudents);
     }
     console.log("see2", this.preparedTags);
@@ -131,7 +131,7 @@ export class NotificationNewPage {
     this.autocompleteArray = {
 
       toString: item => item.name,
-      // searchIn: (item, inputValue) => {return item.studentName.indexOf(inputValue) > -1}
+      // searchIn: (item, inputValue) => {return item.name.indexOf(inputValue) > -1}
       searchIn: ["name"],
       groupByHeader: item => {if(item.header == null){return ""}else{return item.header}}
 

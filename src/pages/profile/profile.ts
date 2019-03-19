@@ -130,10 +130,10 @@ export class ProfilePage {
   // opend = true;
   // openComment(){
   //   if(this.opend) {
-  //     this.commentAppear.nativeElement.className = "slideUp";
+  //     this.commentAppear.nativeElement.name = "slideUp";
   //     this.opend = false;
   //   }else{
-  //     this.commentAppear.nativeElement.className = "slideDown";
+  //     this.commentAppear.nativeElement.name = "slideDown";
   //     this.opend = true;
   //   }
   // }

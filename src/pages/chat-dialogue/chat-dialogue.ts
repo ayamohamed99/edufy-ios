@@ -55,7 +55,7 @@ export class ChatDialoguePage {
 
   getChatHistory(){
     this.loading = true;
-    this.chatServ.getChatMessagesHistory(this.student.studentId,this.student.studentClass.branch.id).subscribe(
+    this.chatServ.getChatMessagesHistory(this.student.id,this.student.classes.branch.id).subscribe(
       val =>{
         this.loading = false;
         console.log(val);
@@ -80,7 +80,7 @@ export class ChatDialoguePage {
           value => {
             if(value){
               let message:any = value;
-              if(message.chatThread.student.id == this.student.studentId) {
+              if(message.chatThread.student.id == this.student.id) {
                 let chat = new ChatDialogue();
                 chat.chatMessageRecieverStatesList = message.chatMessageRecieverStatesList;
                 chat.chatThread = message.chatThread;
@@ -118,7 +118,7 @@ export class ChatDialoguePage {
     this.sendLoading = true;
     let chat = new ChatDialogue();
     chat.chatMessageRecieverStatesList='';
-    chat.chatThread={student:{id:this.student.studentId}};
+    chat.chatThread={student:{id:this.student.id}};
     chat.dateTimeRead='';
     chat.dateTimeRecieved='';
     chat.dateTimeSent = new Date();
@@ -130,7 +130,7 @@ export class ChatDialoguePage {
     chat.user=  {id: this.accountServ.userId, name:this.accountServ.getUserName() };
     this.chatDialogs.push(chat);
     this.scrollDown();
-    this.chatServ.sendChat(this.student.studentId,this.theMessage,this.accountServ.userId,
+    this.chatServ.sendChat(this.student.id,this.theMessage,this.accountServ.userId,
       this.accountServ.getUserName()).subscribe(
         val=>{
           let message:any;
@@ -170,7 +170,7 @@ export class ChatDialoguePage {
 
   reloadSend(data,index){
     document.getElementById('errorIcon'+index).classList.toggle("rotate-scale-up");
-    this.chatServ.sendChat(this.student.studentId,data.message,this.accountServ.userId,
+    this.chatServ.sendChat(this.student.id,data.message,this.accountServ.userId,
       this.accountServ.getUserName()).subscribe(
       val=>{
         let message:any;

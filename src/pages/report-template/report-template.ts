@@ -84,9 +84,9 @@ export class ReportTemplatePage{
     let studentsNames = "";
     for(let i=0;i<selectedListOfStudents.length;i++){
       if(i==(selectedListOfStudents.length -1)){
-        studentsNames += selectedListOfStudents[i].studentName
+        studentsNames += selectedListOfStudents[i].name
       }else {
-        studentsNames += selectedListOfStudents[i].studentName + " & ";
+        studentsNames += selectedListOfStudents[i].name + " & ";
       }
     }
     if(selectedListOfStudents.length > 1) {
@@ -294,7 +294,7 @@ export class ReportTemplatePage{
     this.drQuestion = [];
     this.drQuestion = this.navParams.get('template');
     this.recoveryQuestion = this.navParams.get('template');
-    this.selectedClassId = this.navParams.get('class').classId;
+    this.selectedClassId = this.navParams.get('class').id;
     this.selectedClass = this.navParams.get('class');
     ////PageName
     this.selectedListOfStudents = this.navParams.get('selected');
@@ -306,13 +306,13 @@ export class ReportTemplatePage{
       }
     }else{
       if (this.accountServ.reportId == -1) {
-        this.PageName =  this.selectedListOfStudents[0].studentName +"'s daily report";
+        this.PageName =  this.selectedListOfStudents[0].name +"'s daily report";
       } else {
-        this.PageName =  this.selectedListOfStudents[0].studentName +"'s "+this.accountServ.reportPage;
+        this.PageName =  this.selectedListOfStudents[0].name +"'s "+this.accountServ.reportPage;
       }
     }
     for(let i in this.selectedListOfStudents) {
-      this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].studentId});
+      this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].id});
     }
     /////Date of Page
     this.reportDate = this.navParams.get('reportDate');
@@ -713,13 +713,13 @@ export class ReportTemplatePage{
       noFinalize = this.selectedClass.noOfStudentReportFinalized;
     }
     if(button == 'approve'){
-      this.approveDailyReport(this.selectedClassId, this.selectedClass.className, this.selectedClass.grade.gradeName, this.selectedClass.noOfAllStudent, noFinalize);
+      this.approveDailyReport(this.selectedClassId, this.selectedClass.className, this.selectedClass.grade.name, this.selectedClass.noOfAllStudent, noFinalize);
     }else if(button == 'save'){
       this.saveDailyReport();
     }else if(button == 'update'){
       this.updateDailyReport();
     } else if(button == 'rest'){
-      this.rollbackReport(this.navParams.get('selected')[0].studentId,this.navParams.get('selected')[0].studentName,null,null)
+      this.rollbackReport(this.navParams.get('selected')[0].id,this.navParams.get('selected')[0].name,null,null)
     }
   }
 
@@ -1057,7 +1057,7 @@ export class ReportTemplatePage{
 
             let studentsIdsArray = [];
             for (let student of this.navParams.get('selected')) {
-              studentsIdsArray.push(student.studentId);
+              studentsIdsArray.push(student.id);
             }
 
             this.dailyReportServ.approveReportByStudent(this.selectedReportDate, studentsIdsArray, this.reportId).subscribe(
@@ -1101,7 +1101,7 @@ export class ReportTemplatePage{
             this.load.present();
 
             if(this.navParams.get('selected').length == 1) {
-              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].studentId, this.selectedReportDate,this.reportId).subscribe(
+              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].id, this.selectedReportDate,this.reportId).subscribe(
                 response => {
                   this.load.dismiss();
                   this.viewCtrl.dismiss(
@@ -1592,7 +1592,7 @@ export class ReportTemplatePage{
     //     var answer = currentAnswers[i];
     //     var obj = {
     //       'answer': answer.answer,
-    //       'classId': answer.classId,
+    //       'id': answer.id,
     //       'questionId': answer.questionId,
     //       'studentsList': answer.studentsList
     //     };
@@ -2135,7 +2135,7 @@ export class ReportTemplatePage{
     //     var answer = currentAnswers[i];
     //     var obj = {
     //       'answer': answer.answer,
-    //       'classId': answer.classId,
+    //       'id': answer.id,
     //       'questionId': answer.questionId,
     //       'studentsList': answer.studentsList
     //     };
@@ -2197,14 +2197,14 @@ export class ReportTemplatePage{
         console.log('selectedListOfStudents Numberin list'+this.selectedListOfStudents[0].numberInList);
 
         if (this.accountServ.reportId == -1) {
-          this.PageName =  student_list[this.nextStudentNumb].studentName +"'s daily report";
+          this.PageName =  student_list[this.nextStudentNumb].name +"'s daily report";
         } else {
-          this.PageName =  student_list[this.nextStudentNumb].studentName +"'s "+this.accountServ.reportPage;
+          this.PageName =  student_list[this.nextStudentNumb].name +"'s "+this.accountServ.reportPage;
         }
         this.selectedListOfStudents[0] = student_list[this.nextStudentNumb];
         for(let i in this.selectedListOfStudents) {
           this.selectedListOfStudentsID = [];
-          this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].studentId});
+          this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].id});
         }
 
         this.getStudentsAnswer();
@@ -2223,7 +2223,7 @@ export class ReportTemplatePage{
     this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,this.selectedReportDate,this.reportId).subscribe(
       resp=>{
         loadAnswer.dismiss();
-        this.getMultiSelectedStudents(this.selectedListOfStudentsID[0].id, this.nextStudentNumb, false, this.selectedListOfStudents[0].reportFinalized,this.selectedListOfStudents[0].studentName,this.selectedClassIndex);
+        this.getMultiSelectedStudents(this.selectedListOfStudentsID[0].id, this.nextStudentNumb, false, this.selectedListOfStudents[0].reportFinalized,this.selectedListOfStudents[0].name,this.selectedClassIndex);
       },err =>{
         this.presentToast("Can't get students reports answer");
         loadAnswer.dismiss();
@@ -2283,7 +2283,7 @@ export class ReportTemplatePage{
 
 
   getDailyReportData (studentId, index, checkedSudent, caller, studentName, studentFinalized,selectedClassIndex) {
-    // this.studentName = studentName + '\'s daily report';
+    // this.name = name + '\'s daily report';
     let studentID = studentId;
     if (caller == 'checkBox' && checkedSudent == true) {
       this.classChecked[selectedClassIndex] = {};
@@ -2418,7 +2418,7 @@ export class ReportTemplatePage{
       if (this.selectedMultiStudent.length == 1) {
         for (var j = 0; j < this.selectedClass.studentsList.length; j++) {
           if (this.selectedClass.studentsList[j].id == this.selectedMultiStudentId[0].id) {
-            // this.studentName = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
+            // this.name = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
             break;
           }
         }
@@ -2442,7 +2442,7 @@ export class ReportTemplatePage{
           this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
         }
         // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
-        // this.studentName = "";
+        // this.name = "";
 
       }
     } else {

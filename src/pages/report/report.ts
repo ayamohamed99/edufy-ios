@@ -75,7 +75,7 @@ export class ReportPage {
   studentsSelected = false;
   isNotValid = true;
   selectedMultiStudentId = [];
-  // studentName;
+  // name;
   classChecked = [];
   isSave = true;
   overrideAnswer = false;
@@ -220,7 +220,7 @@ export class ReportPage {
         this.ReportQuestionsList = this.reportQuestions ;
 
         for(let oneClass of this.classesList){
-          if(oneClass.classId == classId){
+          if(oneClass.id == classId){
             oneClass.reportTemplate = this.reportQuestions;
           }
         }
@@ -250,12 +250,12 @@ export class ReportPage {
           for (let data of allData) {
               let item = new Class();
               console.log(value);
-              item.classId = data.id;
-              item.className = data.name;
-              item.grade.gradeId = data.grade.id;
-              item.grade.gradeName = data.grade.name;
-              item.branch.branchId = data.branch.id;
-              item.branch.branchName = data.branch.name;
+              item.id = data.id;
+              item.name = data.name;
+              item.grade.id = data.grade.id;
+              item.grade.name = data.grade.name;
+              item.branch.id = data.branch.id;
+              item.branch.name = data.branch.name;
               item.branch.managerId = data.branch.managerId;
               item.studentsList = data.studentsList;
               item.noOfAllStudent = data.noOfAllStudent;
@@ -339,7 +339,7 @@ export class ReportPage {
     return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.selectedDate,this.reportId).toPromise().then(
       (val) => {
         for(let oneClass of this.classesList){
-          if(oneClass.classId == classId){
+          if(oneClass.id == classId){
             if(oneClass.reportTemplate == null){
               this.getDailyReportForClass(classId,this.load);
             }
@@ -350,13 +350,13 @@ export class ReportPage {
         if(data) {
           for (let i=0; i<data.length;i++) {
             let students = new Student();
-            students.studentClass.classId = data[i].classes.id;
-            students.studentClass.className = data[i].classes.name;
-            students.studentClass.grade.gradeId = data[i].classes.grade.id;
-            students.studentClass.grade.gradeName = data[i].classes.grade.name;
-            students.studentClass.branch.branchId = data[i].classes.branch.id;
-            students.studentClass.branch.branchName = data[i].classes.branch.name;
-            students.studentClass.branch.managerId = data[i].classes.branch.managerId;
+            students.classes.id = data[i].classes.id;
+            students.classes.name = data[i].classes.name;
+            students.classes.grade.id = data[i].classes.grade.id;
+            students.classes.grade.name = data[i].classes.grade.name;
+            students.classes.branch.id = data[i].classes.branch.id;
+            students.classes.branch.name = data[i].classes.branch.name;
+            students.classes.branch.managerId = data[i].classes.branch.managerId;
             if(this.accountServ.reportId == -1) {
               students.numberOfUnseenComments = data[i].numberOfUnseenComments;
             }else{
@@ -368,11 +368,11 @@ export class ReportPage {
             }else{
               students.totalNumberOfComments = data[i].totalNumberOfComments;
             }
-            students.studentId = data[i].id;
-            students.studentName = data[i].name;
-            students.studentAddress = data[i].address;
+            students.id = data[i].id;
+            students.name = data[i].name;
+            students.address = data[i].address;
             students.numberInList = i;
-            students.studentImageUrl = data[i].profileImg;
+            students.profileImg = data[i].profileImg;
             if(this.accountServ.reportId == -1) {
               students.reportApproved = data[i].dailyReportApproved;
               students.reportFinalized = data[i].dailyReportFinalized;
@@ -405,7 +405,7 @@ export class ReportPage {
 
   addToClasses(classId,load){
     for (var i in this.classesList) {
-      if (this.classesList[i].classId == classId) {
+      if (this.classesList[i].id == classId) {
         this.classesList[i].studentsList = this.studentsList;
         break; //Stop this loop, we found it!
       }
@@ -416,10 +416,10 @@ export class ReportPage {
     let promisesArray:any = [];
     for(let j=0;j<1;j++) {
       for (var i in this.classesList) {
-        if ( (this.classesList[i].classId == classId) && (this.classesList[i].studentsList == null) ) {
+        if ( (this.classesList[i].id == classId) && (this.classesList[i].studentsList == null) ) {
           promisesArray.push(this.getAllStudent(classId,name));
           break; //Stop this loop, we found it!
-        }else if ((this.classesList[i].classId == classId) && (this.classesList[i].studentsList != null)){
+        }else if ((this.classesList[i].id == classId) && (this.classesList[i].studentsList != null)){
           this.showAllButton = true;
           this.studentsList = [];
           this.studentsList = this.classesList[i].studentsList;
@@ -573,7 +573,7 @@ export class ReportPage {
     let SelectedClass;
 
     for(let oneClass of this.classesList){
-      if(oneClass.classId == this.selectedClassId){
+      if(oneClass.id == this.selectedClassId){
         this.ReportQuestionsList = oneClass.reportTemplate;
         SelectedClass = oneClass;
       }
@@ -941,7 +941,7 @@ export class ReportPage {
 
 
   getDailyReportData (studentId, index, checkedSudent, caller, studentName, studentFinalized,selectedClassIndex) {
-    // this.studentName = studentName + '\'s daily report';
+    // this.name = name + '\'s daily report';
     let studentID = studentId;
     if (caller == 'checkBox' && checkedSudent == true) {
       this.classChecked[selectedClassIndex] = {};
@@ -1076,7 +1076,7 @@ export class ReportPage {
       if (this.selectedMultiStudent.length == 1) {
         for (var j = 0; j < this.classesList[selectedClassIndex].studentsList.length; j++) {
           if (this.classesList[selectedClassIndex].studentsList[j].id == this.selectedMultiStudentId[0].id) {
-            // this.studentName = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
+            // this.name = this.classesList[selectedClassIndex].studentsList[j].name + '\'s daily report';
             break;
           }
         }
@@ -1100,7 +1100,7 @@ export class ReportPage {
           this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
         }
         // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
-        // this.studentName = "";
+        // this.name = "";
 
       }
     } else {
@@ -1574,7 +1574,7 @@ export class ReportPage {
         var studentsList = this.studentsList;
 
         for (var i = 0; i < studentsList.length; i++) {
-          var studentId = studentsList[i].studentId ;
+          var studentId = studentsList[i].id ;
 
           this.isChecked[i] = {};
           this.isChecked[i].checked = true;
@@ -1582,8 +1582,8 @@ export class ReportPage {
           this.selectedMultiStudentId[i].id = studentId;
           this.selectedMultiStudent[i] = studentId;
 
-          // if(!this.attendanceStudents[studentId]) {
-          //   this.attendanceStudents[studentId] = {isAbsent: false};
+          // if(!this.attendanceStudents[id]) {
+          //   this.attendanceStudents[id] = {isAbsent: false};
           // }
         }
 
@@ -1643,7 +1643,7 @@ export class ReportPage {
 
         for (let i = 0; i < studentsList.length; i++) {
 
-          let studentId = studentsList[i].studentId;
+          let studentId = studentsList[i].id;
 
           this.isChecked[i] = {};
           this.isChecked[i].checked = true;
@@ -1651,8 +1651,8 @@ export class ReportPage {
           this.selectedMultiStudentId[i].id = studentId;
           this.selectedMultiStudent[i] = studentId;
 
-          // if(!this.attendanceStudents[studentId] || $scope.attendanceStudents[studentId].isAbsent ==null || $scope.attendanceStudents[studentId].isAbsent==undefined){
-          //   $scope.attendanceStudents[studentId] = {isAbsent:false};
+          // if(!this.attendanceStudents[id] || $scope.attendanceStudents[id].isAbsent ==null || $scope.attendanceStudents[id].isAbsent==undefined){
+          //   $scope.attendanceStudents[id] = {isAbsent:false};
           // }
 
           if (studentsList[i].reportFinalized && !done) {
@@ -1695,7 +1695,7 @@ export class ReportPage {
               let id = this.dailyReportServ.reportClassQuestionsGroups[intKey][a];
               let studentFound = false;
               for(let s of Object.keys(studentsList)){
-                if(studentsList[s].studentId == id){
+                if(studentsList[s].id == id){
                   studentFound = true;
                   break;
                 }

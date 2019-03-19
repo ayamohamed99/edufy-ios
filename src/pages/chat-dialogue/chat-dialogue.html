@@ -5,7 +5,7 @@
         <ion-icon></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title text-center>{{student.studentName}}</ion-title>
+    <ion-title text-center>{{student.name}}</ion-title>
     <ion-buttons right>
       <button ion-button icon-only (click)="close()">
         <ion-icon name="close"></ion-icon>
@@ -28,8 +28,8 @@
 
     <div class="student-bubble" *ngIf="dialoug.user == null || dialoug.user == '' ">
 
-        <img class="editProfileImageStudent" src="assets/imgs/profile.png" *ngIf="!student.studentImageUrl">
-        <img class="editProfileImageStudent" [src]="student.studentImageUrl" *ngIf="student.studentImageUrl">
+        <img class="editProfileImageStudent" src="assets/imgs/profile.png" *ngIf="!student.profileImg">
+        <img class="editProfileImageStudent" [src]="student.profileImg" *ngIf="student.profileImg">
 
       <div class="studentTalk">
         <h4 class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}</h4>

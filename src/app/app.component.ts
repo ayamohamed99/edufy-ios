@@ -476,11 +476,11 @@ export class MyApp {
           let JData = JSON.parse(data.chatMessage);
           let student = JData.chatThread.student;
           let Stud = new Student();
-          Stud.studentId = student.id;
-          Stud.studentName = student.name;
-          Stud.studentAddress = student.address;
-          Stud.studentClass = student.classes;
-          Stud.studentImageUrl = student.profileImg;
+          Stud.id = student.id;
+          Stud.name = student.name;
+          Stud.address = student.address;
+          Stud.classes = student.classes;
+          Stud.profileImg = student.profileImg;
           Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
           let modal = this.modalCtrl.create('ChatDialoguePage',
             {studentData:Stud});
@@ -534,11 +534,11 @@ export class MyApp {
               let JData = JSON.parse(data.data.chatMessage);
               let student = JData.chatThread.student;
               let Stud = new Student();
-              Stud.studentId = student.id;
-              Stud.studentName = student.name;
-              Stud.studentAddress = student.address;
-              Stud.studentClass = student.classes;
-              Stud.studentImageUrl = student.profileImg;
+              Stud.id = student.id;
+              Stud.name = student.name;
+              Stud.address = student.address;
+              Stud.classes = student.classes;
+              Stud.profileImg = student.profileImg;
               Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
               let modal = this.modalCtrl.create('ChatDialoguePage',
                 {studentData:Stud});
@@ -622,11 +622,11 @@ export class MyApp {
                   // that.nav.setRoot(that.chatPage);
                   let student = data.chatThread.student;
                   let Stud = new Student();
-                  Stud.studentId = student.id;
-                  Stud.studentName = student.name;
-                  Stud.studentAddress = student.address;
-                  Stud.studentClass = student.classes;
-                  Stud.studentImageUrl = student.profileImg;
+                  Stud.id = student.id;
+                  Stud.name = student.name;
+                  Stud.address = student.address;
+                  Stud.classes = student.classes;
+                  Stud.profileImg = student.profileImg;
                   Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
                   let modal = that.modalCtrl.create('ChatDialoguePage',
                     {studentData:Stud});
@@ -670,7 +670,7 @@ export class MyApp {
     let studentsInStorage:any = JSON.parse(val);
     let found = false;
     for (let i = 0; i < studentsInStorage.length; i++) {
-      if (student.studentId == studentsInStorage[i].studentId) {
+      if (student.id == studentsInStorage[i].id) {
         studentsInStorage.splice(i, 1);
         studentsInStorage.splice(0, 0, student);
         found = true;

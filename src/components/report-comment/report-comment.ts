@@ -142,7 +142,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     this.isCommentsSectionExpanded = !this.isCommentsSectionExpanded;
     if (this.isCommentsSectionExpanded) {
       this.isLoadingComments = true;
-      this.commentsProvider.getComments(this.date, this.student.studentId, this.reportId)
+      this.commentsProvider.getComments(this.date, this.student.id, this.reportId)
         .subscribe(comments => {
           this.shouldScrollToBottom = true;
           this.isLoadingComments = false;
@@ -157,7 +157,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
 
   submitNewComment() {
     this.isSendingComment = true;
-    this.commentsProvider.postNewComment(this.date, this.student.studentId,
+    this.commentsProvider.postNewComment(this.date, this.student.id,
       this.newCommentToBeSubmitted.trim(), this.reportId)
       .subscribe(newlySubmittedComment => {
         this.shouldScrollToBottom = true;
@@ -192,7 +192,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     this.shouldScrollToBottom = false;
     if (this.inEditModeComments[comment.id]) {
       this.isEditedCommentsLoading[comment.id] = true;
-      this.commentsProvider.editComment(this.date, this.student.studentId,
+      this.commentsProvider.editComment(this.date, this.student.id,
         comment.comment, comment.id, this.reportId,1)
         .subscribe(() => {
           this.isEditedCommentsLoading[comment.id] = false;

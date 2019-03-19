@@ -1,7 +1,7 @@
 export class Grade{
 
-  gradeId:any;
-  gradeName:string;
+  id:any;
+  name:string;
 
   constructor() {
   }

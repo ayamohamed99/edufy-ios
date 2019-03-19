@@ -1,7 +1,7 @@
 export class Branch{
 
-  branchId:any;
-  branchName:string;
+  id:any;
+  name:string;
   managerId:any;
 
   constructor() {
