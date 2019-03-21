@@ -104,7 +104,14 @@ export class FCMService{
         page:data.page,
         reportName:reportname,
         reportId:reportid,
-        chatMessage:chatMessage
+        chatMessage:chatMessage,
+        medicationName: data.medicationName,
+        dosageType: data.dosageType,
+        dosageNumber: data.dosageNumber,
+        shceduleId:data.shceduleId,
+        medicationTime:data.medicationTime,
+        medicationNextTime:data.medicationNextTime,
+        student:data.student
       }
     });
   }

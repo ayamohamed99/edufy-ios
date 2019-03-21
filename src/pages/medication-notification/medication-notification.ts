@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import {IonicPage, NavController, NavParams, ToastController, ViewController} from 'ionic-angular';
+import {IonicPage} from 'ionic-angular';
+import { NavController, NavParams, ToastController, ViewController, Platform } from 'ionic-angular';
+import {Storage} from "@ionic/storage";
 import {MedicalCareService} from "../../services/medicalcare";
 
 /**
@@ -16,33 +18,38 @@ import {MedicalCareService} from "../../services/medicalcare";
 })
 export class MedicationNotificationPage {
 
-  notificationMedication:any;
+  localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
+  medicationName;
+  dosageNumber;
+  dosageType;
+  student;
+  studentName;
+  className;
+  medicationTime;
+  medicationNextTime;
+  shceduleId;
   constructor(public navCtrl: NavController, public navParams: NavParams, private medicalService:MedicalCareService
-              ,private toastCtrl:ToastController,private  viewCtrl:ViewController) {
+              ,private toastCtrl:ToastController,private  viewCtrl:ViewController,private platform:Platform,private storage:Storage) {
 
-    this.notificationMedication = {
-      "medicationName": "Panadol",
-      "dosageType": "gr",
-      "dosageNumber": 3,
-      "shceduleId":2536,
-      "medicationTime":"02:30",
-      "medicationNextTime":"sunday 05:30",
-      "student": {
-        "id":2563,
-        "name":"Mohammad",
-        "classes":{
-          "id":253,
-          "name":"A",
-          "grades":{
-            "id":3215,
-            "name":"Baby Class"
-          }
-        }
-      }
+    this.medicationName = navParams.get("medicationName");
+    this.dosageNumber = navParams.get("dosageNumber");
+    this.dosageType = navParams.get("dosageType");
+    this.student = navParams.get("student");
+    this.studentName = this.student.name;
+    this.className = this.student.classes.grade.name+' - '+this.student.classes.name;
+    this.medicationTime = navParams.get("medicationTime");
+    this.medicationNextTime = navParams.get("medicationNextTime");
+    this.shceduleId = navParams.get("shceduleId");
+
+
+    if (platform.is('core')) {
+      medicalService.putHeader(localStorage.getItem(this.localStorageToken));
+    } else {
+      storage.get(this.localStorageToken).then(
+        val => {
+          medicalService.putHeader(val);
+        });
     }
-
-
-
 
   }
 

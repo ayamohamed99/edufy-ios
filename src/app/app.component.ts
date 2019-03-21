@@ -42,6 +42,7 @@ export class MyApp {
   reportPage = 'ReportPage';
   chatPage = 'ChatPage';
   medicalcarePage = 'MedicalCarePage';
+  medicationNotificationPage = 'MedicationNotificationPage';
 
   userName:string;
   password:string;
@@ -494,7 +495,7 @@ export class MyApp {
                 });
             });
           modal.present();
-        } else if(data.page === this.medicalcarePage){
+        } else if(data.page === this.medicationNotificationPage){
           this.openMedicalCare(data);
         } else{
           this.nav.setRoot(data.page).then(
@@ -552,7 +553,7 @@ export class MyApp {
                     });
                 });
               modal.present();
-            } else if(data.data.page === this.medicalcarePage){
+            } else if(data.data.page === this.medicationNotificationPage){
               this.openMedicalCare(data.data);
             }else{
               this.nav.setRoot(data.data.page).then(
@@ -690,6 +691,20 @@ export class MyApp {
 
   openMedicalCare(data){
 
+    let modal = this.modalCtrl.create(this.medicationNotificationPage,
+      {
+
+        medicationName: data.medicationName,
+        dosageType: data.dosageType,
+        dosageNumber: data.dosageNumber,
+        shceduleId:parseInt(data.shceduleId),
+        medicationTime:data.medicationTime.slice(0, -3),
+        medicationNextTime:data.medicationNextTime.slice(0,-3),
+        student:JSON.parse(data.student)
+
+      });
+    modal.onDidDismiss(val=>{});
+    modal.present();
   }
 }
 
