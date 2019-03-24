@@ -153,6 +153,38 @@ ion-popover.contact-popovers{
   }
 }
 
+
+ion-popover.contact-popovers-ios{
+  .popover-content {
+    width: 90%;
+    border-radius: 10px;
+    height: fit-content;
+    left: calc(17px + env(safe-area-inset-left)) !important;
+  }
+  .popover-viewport{
+    overflow: auto;
+  }
+  .scroll-content{
+    max-height: 80vh;
+  }
+
+  ion-backdrop[tappable]{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    transition: 0s;
+    opacity: .35 !important;
+    padding-top: 60px;
+    background-color: #000;
+  }
+}
+
+
+
 ion-loading.loadingWithoutBackground {
   .loading-wrapper {
     background: rgba(0, 0, 0, 0);

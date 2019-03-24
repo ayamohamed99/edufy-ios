@@ -11,9 +11,13 @@ declare var window: any;
 
 @Injectable()
 export class Excel {
-
+  path;
   constructor(private file:File,private platform:Platform,private fileOpener: FileOpener,private alrtCtrl:AlertController){
-
+    if (this.platform.is('ios')) {
+      this.path = this.file.documentsDirectory;
+    } else if (this.platform.is('android')) {
+      this.path = this.file.externalRootDirectory+'/Download/';
+    }
   }
 
   tableToExcel(tableId,worksheetName){
@@ -33,30 +37,32 @@ export class Excel {
     // /* save to file */
     if(!this.platform.is('core')){
 
-      let path;
-      if (this.platform.is('ios')) {
-        path = this.file.documentsDirectory;
-      } else if (this.platform.is('android')) {
-        path = this.file.externalRootDirectory+'/Download/';
-      }
       /* write a workbook */
       const wbout: ArrayBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       let blob = new Blob([wbout], {type: 'application/octet-stream'});
-      this.file.writeFile(path, worksheetName, blob, {replace: false});
+      this.file.writeFile(this.path, worksheetName, blob, {replace: true}).then(
+        val=>{
+          this.fileOpener.open(this.path+worksheetName, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            .then(() => {})
+            .catch(e => {
+              let error:string;
+              if(e.message.includes("Activity not found")){
+                error = "There is no app to open this file";
+              }else{
+                error = 'Something went wrong try again later.'+JSON.stringify(e);
+              }
 
-      this.fileOpener.open(path+worksheetName, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        .then(() => {})
-        .catch(e => {
-          let error:string;
-          if(e.message.includes("Activity not found")){
-            error = "There is no app to open this file";
-          }else{
-            error = 'Something went wrong try again later.'+JSON.stringify(e);
-          }
-
+              this.alrtCtrl.create( {
+                title: 'Error',
+                subTitle: error,
+                buttons: ['OK']
+              }).present();
+            });
+        })
+        .catch(err=>{
           this.alrtCtrl.create( {
             title: 'Error',
-            subTitle: error,
+            subTitle: err,
             buttons: ['OK']
           }).present();
         });

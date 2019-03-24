@@ -911,13 +911,13 @@ export class MedicalCarePage {
   openExportIncidentsPage(){
     let model;
 
-    model = this.popoverCtrl.create('FilterViewPage', {
+    model = this.modalCtrl.create('FilterViewPage', {
       theFilter: JSON.stringify(this.search),
       pageName: 'Export Incidents',
       doneButton: 'Export',
       students:this.allStudents,
       classes:this.allclasses
-    }, {cssClass: 'contact-popovers'});
+    });
 
     model.onDidDismiss(
       data => {
@@ -1422,9 +1422,15 @@ export class MedicalCarePage {
   viewThisMedication(medication){
     let model;
 
+    let cssClassName = 'contact-popovers';
+
+    if(this.platform.is('ios')){
+      cssClassName = 'contact-popovers-ios';
+    }
+
     model = this.popoverCtrl.create('MedicationViewPage', {
       medication: medication,
-    }, {cssClass: 'contact-popovers'});
+    }, {cssClass: cssClassName});
 
     model.onDidDismiss(
       data => {
@@ -1438,10 +1444,17 @@ export class MedicalCarePage {
   viewMedicalReport(report,view){
     let model;
 
+
+    let cssClassName = 'contact-popovers';
+
+    if(this.platform.is('ios')){
+      cssClassName = 'contact-popovers-ios';
+    }
+
     model = this.popoverCtrl.create('MedicalReportViewPage', {
       viewName: view,
       medicalReport:report
-    }, {cssClass: 'contact-popovers'});
+    }, {cssClass: cssClassName});
 
     model.onDidDismiss(
       data => {
