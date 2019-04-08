@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
 import {
+  IonicPage
+} from 'ionic-angular';
+import {
   AlertController,
-  IonicPage,
   LoadingController,
   ModalController,
   NavController,
@@ -1486,11 +1488,11 @@ export class ReportPage {
       let question = this.reportQuestions[i];
       if(this.accountServ.reportId == -1) {
         reportAnswerView.dailyReportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }else{
         reportAnswerView.reportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }
     }

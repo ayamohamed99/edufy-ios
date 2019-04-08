@@ -34,11 +34,11 @@
       </div>
 
 
-      <mat-expansion-panel hideToggle="true" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.className)" [disabled]="itm.noOfAllStudent <= 0">
+      <mat-expansion-panel hideToggle="true" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.name)" [disabled]="itm.noOfAllStudent <= 0">
         <mat-expansion-panel-header>
           <mat-panel-title col-4>
             <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
-            {{itm.grade.name}} {{itm.className}}
+            {{itm.grade.name}} {{itm.name}}
           </mat-panel-title>
           <mat-panel-description col-4 *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
           <mat-panel-description col-4 *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
