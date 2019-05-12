@@ -1,7 +1,8 @@
 import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import {
   ActionSheetController,
-  AlertController, IonicPage,
+  AlertController,
   LoadingController,
   NavParams,
   Platform,
@@ -298,17 +299,39 @@ export class NotificationNewPage {
               cssClass:"loadingWithoutBackground"
             });
             this.loading.present();
-            this.compress.compressImage(inputEl.files.item(i)).subscribe(
-              result=>{
-                debugger;
-                file = result;
-                formData.append('file', result,result.name);
-                console.log(JSON.stringify(formData));
-                this.backNotify.arrayFormData.push(result);
-                this.organizeData(inputEl,i,formData,result,fileType,fileName);
-              },error => {
-                console.log('😢 Oh no!', error);
-              });
+            let that = this;
+            await new Promise(function(resolve, reject) {
+              let these = that;
+              that.compress.compressImage(inputEl.files.item(i)).subscribe(
+                result => {
+                  debugger;
+                  file = result;
+                  formData.append('file', result, result.name);
+                  console.log(JSON.stringify(formData));
+                  these.backNotify.arrayFormData.push(result);
+
+                  let reader = new FileReader();
+                  reader.onloadend = function(e){
+                    // you can perform an action with readed data here
+                    console.log(reader.result);
+                    these.loading.dismiss();
+                    let attach = new Postattachment();
+                    attach.name = file.name;
+                    attach.type = "IMAGE";
+                    attach.url = reader.result;
+                    attach.file = file;
+                    these.attachmentArray.push(attach);
+                    resolve(resolve);
+                  };
+                  reader.readAsDataURL(file);
+
+                  // that.organizeData(inputEl, i, formData, result, fileType, fileName,result,result);
+                  }, error => {
+                  console.log('😢 Oh no!', error);
+                  reject(error);
+                });
+              return true
+            });
 
           }else{
             file = inputEl.files.item(i);
