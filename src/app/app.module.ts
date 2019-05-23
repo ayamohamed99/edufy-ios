@@ -1,142 +1,78 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {StatusBar} from '@ionic-native/status-bar';
-import {Network} from '@ionic-native/network';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
 
-import {LoginService} from "../services/login";
-import {HttpClientModule} from "@angular/common/http";
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
-import {IonicStorageModule} from "@ionic/storage";
-import {NotificationPage} from "../pages/notification/notification";
-import {AccountService} from "../services/account";
-import {ProfilePage} from "../pages/profile/profile";
-import {NotificationNewPage} from "../pages/notification-new/notification-new";
-import {RlTagInputModule} from "angular2-tag-input/dist";
-import {NotificationService} from "../services/notification";
-import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
-import {SettingsPage} from "../pages/settings/settings";
-import {NativeStorage} from "@ionic-native/native-storage";
-import {NotificationEditPage} from "../pages/notification/popover_notification/notification-edit/notification-edit";
-import {StudentsService} from "../services/students";
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
-import {File} from '@ionic-native/file';
-import {FileTransfer} from '@ionic-native/file-transfer'
-import {DocumentViewer} from '@ionic-native/document-viewer';
-import {Media} from '@ionic-native/media';
-import {PhotoViewer} from "@ionic-native/photo-viewer";
-import {FileOpener} from "@ionic-native/file-opener";
-import {Transfer} from '@ionic-native/transfer';
-import {LogoutService} from "../services/logout";
+import {HttpClientModule} from '@angular/common/http';
 
-import {BackgroundMode} from '@ionic-native/background-mode';
-import {HTTP} from '@ionic-native/http';
+import {Ng2ImgMaxModule} from 'ng2-img-max';
 
-import {AndroidPermissions} from '@ionic-native/android-permissions';
-import {ClassesService} from "../services/classes";
-import {DailyReportService} from "../services/dailyreport";
+//Angular Materials
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  MatAutocompleteModule,
+  MatDatepickerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule, MatInputModule, MatNativeDateModule,
+  MatSelectModule
+} from '@angular/material';
+import {IonicStorageModule} from '@ionic/storage';
 
-import {DatePicker} from '@ionic-native/date-picker';
-
-import {MatAutocompleteModule, MatExpansionModule, MatFormFieldModule, MatInputModule} from '@angular/material';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatIconModule} from '@angular/material/icon';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSelectModule} from '@angular/material/select'
-import {CheckboxFunctionService} from "../services/checkboxFunctionService";
-import {DatePipe} from "@angular/common";
-import {TransFormDate} from "../services/transFormDate";
-import {ComponentsModule} from "../components/components.module";
-import {ReportCommentProvider} from "../providers/report-comment/report-comment";
-import {FCMService} from "../services/fcm";
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
-import { LocalNotifications } from '@ionic-native/local-notifications';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import {ChatService} from "../services/chat";
-import {BackgroundNotificationService} from "../services/background-notification";
-import {ImageCompressorService} from "../services/image-compress";
-import {Ng2ImgMaxModule} from "ng2-img-max";
-import {MedicalCareService} from '../services/medicalcare';
-import {MatNativeDateModule} from "@angular/material";
-import {BackgroundMedicalcareService} from "../services/background-medicalcare";
-import {TemplateFunctionsService} from "../services/templateFunctionsService";
-import {Excel} from "../services/excel";
+//Plugin
+import {Network} from '@ionic-native/network/ngx';
+import {FirebaseMessaging} from '@ionic-native/firebase-messaging/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
+
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
   imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp),
-    HttpClientModule,
+      BrowserModule,
+    IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
-    RlTagInputModule,
-    mods,Ng2ImgMaxModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
-    ComponentsModule,
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
+    NoopAnimationsModule,
+    HttpClientModule,
+    Ng2ImgMaxModule,
+    mods
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoginService,
-    LogoutService,
-    NotificationService,
-    AccountService,
-    Network,NativeStorage,
-    StudentsService,
-    File,
-    DocumentViewer,
-    FileTransfer,
-    Media,
-    PhotoViewer,
-    FileOpener,
-    Transfer,
-    BackgroundMode,
-    HTTP,
-    AndroidPermissions,
-    ClassesService,
-    DailyReportService,
-    DatePicker,
-    CheckboxFunctionService,
-    CheckboxFunctionService,
-    ReportCommentProvider,
-    [DatePipe],TransFormDate,
-    FCMService,FirebaseMessaging,
-    LocalNotifications,InAppBrowser,
-    ChatService,BackgroundNotificationService,
-    ImageCompressorService,MedicalCareService,BackgroundMedicalcareService,TemplateFunctionsService,Excel
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Network,
+    FirebaseMessaging,
+    LocalNotifications,
+    InAppBrowser
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-constructor(){
-  console.log("still format");
-  const stringPrototype = <any>String.prototype;
-  stringPrototype.format = function() {
-    console.log("formated");
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-        ;
-    });
-  };
+  constructor() {
+    console.log('still format');
+    const stringPrototype = String.prototype as any;
+    stringPrototype.format = function() {
+      console.log('formated');
+      const args = arguments;
+      return this.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+      });
+    };
+  }
 }
-}
-
-
-
-

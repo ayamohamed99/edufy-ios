@@ -1,0 +1,65 @@
+
+  ion-fab[top] {
+    top: 30px;
+  }
+
+  //.login-container {
+  //  display: -webkit-flex;
+  //  -webkit-flex-direction: column;
+  //  height: 100%;
+  //  //background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #ffffff));
+  //  //background: -webkit-linear-gradient(top, #ffffff 0%, #ffffff 100%);
+  //}
+  //
+  //.login-container > .header {
+  //  -webkit-flex: 4;
+  //  //padding-top: 20px;
+  //}
+
+  .list-ios.list-inset ion-item:last-child {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+  }
+  .list-ios.list-inset ion-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+  }
+
+  ion-content {
+    background: #ecf3f3;
+  }
+
+  .colorless{
+    background: transparent;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  @for $i from 1 through 60 {
+    @keyframes particle-animation-#{$i} {
+      100% {
+        transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+      }
+    }
+
+    .particle:nth-child(#{$i}){
+      animation: particle-animation-#{$i} 15s infinite;
+      $size: random(5) + 5 + px;
+      opacity: random(100)/100;
+      height: $size;
+      width: $size;
+      animation-delay: -$i * .2s;
+      transform: translate3d((random(90) * 1vw), (random(90) * 1vh), (random(100) * 1px));
+      background: hsl(random(360), 70%, 50%);
+    }
+  }
+
+
+
+

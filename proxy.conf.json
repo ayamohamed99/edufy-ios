@@ -1,0 +1,14 @@
+{
+  "/oauth/*": {
+    "target": "http://104.198.175.198",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/authentication/*": {
+    "target": "http://104.198.175.198",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}
