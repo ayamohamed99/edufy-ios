@@ -36,10 +36,15 @@ export class MenuPage implements OnInit {
   }
 
   ionViewDidEnter(){
-    this.knowFeatures(this.accountServ.getAccountFeature());
+    this.accountServ.menuFeatures.subscribe(value => {
+      if(value != null) {
+        this.knowFeatures(value);
+      }
+    });
   }
 
   knowFeatures(data:any){
+    this.pages = [];
     let profile = {title: 'Profile', icon: 'person', main:true, url: '/menu/profile', customReport:false};
     this.pages.push(profile);
 

@@ -1,24 +1,24 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AlertController, ModalController, Platform, PopoverController} from '@ionic/angular';
 import {Storage} from "@ionic/storage";
-import {NotificationService} from '../../../services/Notification/notification.service';
-import {LoadingViewService} from '../../../services/LoadingView/loading-view.service';
-import {AccountService} from '../../../services/Account/account.service';
+import {NotificationService} from '../../services/Notification/notification.service';
+import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
+import {AccountService} from '../../services/Account/account.service';
 import {FileOpener} from '@ionic-native/file-opener/ngx';
 import {Network} from '@ionic-native/network/ngx';
-import {ToastViewService} from '../../../services/ToastView/toast-view.service';
-import {ClassesService} from '../../../services/Classes/classes.service';
+import {ToastViewService} from '../../services/ToastView/toast-view.service';
+import {ClassesService} from '../../services/Classes/classes.service';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import {Attachment} from '../../../models/attachment';
-import {Notification} from "../../../models/notification";
-import {StudentsService} from '../../../services/Students/students.service';
+// import { Transfer, TransferObject } from '@ionic-native/transfer';
+import {Attachment} from '../../models/attachment';
+import {Notification} from "../../models/notification";
+import {StudentsService} from '../../services/Students/students.service';
 import {DocumentViewer, DocumentViewerOptions} from '@ionic-native/document-viewer/ngx';
-import {Pendingnotification} from '../../../models/pendingnotification';
-import {Class, Student} from '../../../models';
+import {Pendingnotification} from '../../models/pendingnotification';
+import {Class, Student} from '../../models';
 
 @Component({
   selector: 'app-notification',
@@ -27,7 +27,7 @@ import {Class, Student} from '../../../models';
 })
 export class NotificationPage implements OnInit {
 
-  @ViewChild(Slides) slides: Slides;
+  // @ViewChild(Slides) slides: Slides;
   notifications:Notification[] = [];
   notificationsSent:Notification[] = [];
   notificationsApproved:Notification[] = [];
@@ -63,7 +63,7 @@ export class NotificationPage implements OnInit {
   constructor(private alrtCtrl:AlertController, public platform:Platform, private storage:Storage, private modalCtrl: ModalController,
               private notificationService:NotificationService, private popoverCtrl: PopoverController, private load:LoadingViewService,
               private accService:AccountService, private transfer: FileTransfer, public audio: Media, private fileOpener: FileOpener,
-              private transferF: Transfer, public accountServ:AccountService, private network:Network, private androidPermissions: AndroidPermissions,
+              private transferF: FileTransfer, public accountServ:AccountService, private network:Network, private androidPermissions: AndroidPermissions,
               private toastCtrl:ToastViewService, private classesServ:ClassesService,private studentService:StudentsService, private document: DocumentViewer,
               private file: File) {
 
@@ -617,7 +617,7 @@ export class NotificationPage implements OnInit {
 
     this.platform.ready().then(() => {
 
-      const fileTransfer: TransferObject = this.transferF.create();
+      const fileTransfer: FileTransferObject = this.transferF.create();
 
       const fileLocation = attachmentURL;
 
@@ -735,10 +735,14 @@ export class NotificationPage implements OnInit {
   }
   readFile(file: File){
     let reader = new FileReader();
-    reader.onloadend = function(e){
+    reader.readAsDataURL(file[0]);
+    reader.onload = (_event) => {
       return reader.result;
-    };
-    reader.readAsDataURL(reader.result);
+    }
+    // reader.onloadend = function(e){
+    //   return reader.result;
+    // };
+    // reader.readAsDataURL(reader.result);
   }
 
   getAllDataThenNavigate(){
@@ -766,19 +770,19 @@ export class NotificationPage implements OnInit {
     this.notificationPage = 1;
     console.log("TabName "+this.selectedTab);
     let speed = 500;
-    if(tabName == 'all'){
-      this.slides.slideTo(0, speed);
-    }else if(tabName == 'sent'){
-      this.slides.slideTo(1, speed);
-    }else if(tabName == 'approved'){
-      this.slides.slideTo(2, speed);
-    }else if(tabName == 'archived'){
-      this.slides.slideTo(3, speed);
-    }
+    // if(tabName == 'all'){
+    //   this.slides.slideTo(0, speed);
+    // }else if(tabName == 'sent'){
+    //   this.slides.slideTo(1, speed);
+    // }else if(tabName == 'approved'){
+    //   this.slides.slideTo(2, speed);
+    // }else if(tabName == 'archived'){
+    //   this.slides.slideTo(3, speed);
+    // }
   }
   slideChanged() {
     this.notificationPage = 1;
-    let currentIndex = this.slides.getActiveIndex();
+    let currentIndex = 0;//this.slides.getActiveIndex();
     console.log('Current index is', currentIndex);
     switch (currentIndex){
       case 1:

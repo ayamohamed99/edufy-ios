@@ -19,7 +19,7 @@ const routes: Routes = [
       },
         {
             path: 'notification',
-            loadChildren: '../notification/notification/notification.module#NotificationPageModule'
+            loadChildren: '../notification/notification.module#NotificationPageModule'
         }
     ]
   }

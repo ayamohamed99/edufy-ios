@@ -6,6 +6,7 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/mergeMap';
 import {Custom_reports_data} from '../../models/custom_reports_data';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,8 @@ export class AccountService {
   private _reportPage: string;
   private _reportId: number;
   private _userId: number;
+
+  menuFeatures: BehaviorSubject<object> = new BehaviorSubject(null);
 
   constructor(private http: HttpClient) {
     this.DomainUrl = new Url_domain();
@@ -85,6 +88,8 @@ export class AccountService {
     for (const branch of this.value.branchesList) {
       this._accountBranchesListIds.push(branch.id);
     }
+
+    this.menuFeatures.next(this.value.accountFeatures);
   }
 
 
