@@ -560,7 +560,7 @@ export class AppComponent {
 
   getPathFromPageName(name){
     if(name == 'NotificationPage'){
-      return '/menu/profile'
+      return '/menu/notification'
     }else if(name == 'SettingsPage'){
       return '/menu/profile'
     }else if(name == 'ReportPage'){

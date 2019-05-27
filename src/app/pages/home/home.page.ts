@@ -42,6 +42,13 @@ export class HomePage {
   hereONPage;
   DomainUrl;
 
+  profilePage = 'ProfilePage';
+  notificationPage = 'NotificationPage';
+  settingsPage = 'SettingsPage';
+  reportPage = 'ReportPage';
+  medicalcarePage = 'MedicalCarePage';
+  medicationNotificationPage = 'MedicationNotificationPage';
+
   constructor(private router: Router,private loginServ:LoginService, private storage:Storage, private platform:Platform
       , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
               private network:Network, private notiServ:NotificationService,private fire:FCMService,public chatServ:ChatService
@@ -252,20 +259,20 @@ export class HomePage {
     this.fire.onBackgroundNotification().subscribe(
         data => {
 
-          console.log("Background Notification : \n", JSON.stringify(data));
-          if(data.page === "ReportPage"){
-            this.onLoadReport("ReportPage", data.reportName,data.reportId);
-          }else{
-            // this.navCtrl.setRoot(data.page).then(
-            //     value => {
-            //       console.log(value);
-            //     }).catch(
-            //     err=>{
-            //       if(err.includes("invalid")){
-            //         this.openWeb();
-            //       }
-            //     });
-          }
+            console.log("Background Notification : \n", JSON.stringify(data));
+            if(data.page === this.reportPage){
+                this.onLoadReport(this.reportPage, data.reportName,data.reportId);
+            }else if(data.page === this.chatPage){
+                this.handelChatOnBackground(data);
+            } else if(data.page === this.medicationNotificationPage){
+                this.openMedicalCareNotification(data);
+            } else{
+                if(this.getPathFromPageName(data.data.page) != null){
+                    this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                }else {
+                    this.openWeb();
+                }
+            }
 
         });
 
@@ -286,24 +293,109 @@ export class HomePage {
               data => {
                 debugger;
                 console.log(data);
-                console.log('Foreground');
-                if(data.data.page === "ReportPage"){
-                  this.onLoadReport("ReportPage", data.data.reportName,data.data.reportId);
-                }else{
-                  // this.navCtrl.setRoot(data.data.page).then(
-                  //     value => {
-                  //       console.log(value);
-                  //     }).catch(
-                  //     err=>{
-                  //       if(err.includes("invalid")){
-                  //         this.openWeb();
-                  //       }
-                  //     });
-                }
+                  console.log('Foreground');
+                  if(data.data.page === this.reportPage){
+                      this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
+                  }else if(data.data.page === this.chatPage){
+                      this.handelChatONForeground(data);
+                  } else if(data.data.page === this.medicationNotificationPage){
+                      this.openMedicalCareNotification(data.data);
+                  }else{
+                      if(this.getPathFromPageName(data.data.page) != null){
+                          this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                      }else {
+                          this.openWeb();
+                      }
+                  }
 
               });
         });
   }
+
+    async openMedicalCareNotification(data){
+
+        const modal = await this.modalCtrl.create({
+            component: this.medicationNotificationPage,
+            componentProps: { medicationName: data.medicationName,
+                dosageType: data.dosageType,
+                dosageNumber: data.dosageNumber,
+                shceduleId:parseInt(data.shceduleId),
+                medicationTime:data.medicationTime.slice(0, -3),
+                medicationNextTime:data.medicationNextTime.slice(0,-3),
+                student:JSON.parse(data.student) }
+        });
+
+        modal.dismiss();
+        return await modal.present();
+    }
+
+    handelChatOnBackground(data){
+        let JData = JSON.parse(data.chatMessage);
+        let student = JData.chatThread.student;
+        let Stud = new Student();
+        Stud.id = student.id;
+        Stud.name = student.name;
+        Stud.address = student.address;
+        Stud.classes = student.classes;
+        Stud.profileImg = student.profileImg;
+        Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+        this.presentChatDialogue(Stud, student);
+    }
+
+    handelChatONForeground(data){
+        let JData = JSON.parse(data.data.chatMessage);
+        let student = JData.chatThread.student;
+        let Stud = new Student();
+        Stud.id = student.id;
+        Stud.name = student.name;
+        Stud.address = student.address;
+        Stud.classes = student.classes;
+        Stud.profileImg = student.profileImg;
+        Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
+        this.presentChatDialogue(Stud, student);
+    }
+
+    async presentChatDialogue(Stud,student) {
+        const modal = await this.modalCtrl.create({
+            component: 'ChatDialoguePage',
+            componentProps: {studentData:Stud}
+        });
+
+        modal.dismiss(
+            val=>{
+                this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
+                    val => {
+                        if(val) {
+                            this.updateRecentChatData(val,student);
+                        }
+                    });
+            });
+
+        return await modal.present();
+    }
+
+
+    updateRecentChatData(val,student){
+        let studentsInStorage:any = JSON.parse(val);
+        let found = false;
+        for (let i = 0; i < studentsInStorage.length; i++) {
+            if (student.id == studentsInStorage[i].id) {
+                studentsInStorage.splice(i, 1);
+                studentsInStorage.splice(0, 0, student);
+                found = true;
+            }
+        }
+
+        if(!found){
+            studentsInStorage.splice(0, 0,student);
+        }
+
+        if (this.platform.is('desktop')) {
+            localStorage.setItem('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
+        }else {
+            this.storage.set('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
+        }
+    }
 
   openWeb(){
     this.iab.create("http://104.198.175.198/", "_self");
@@ -404,4 +496,26 @@ export class HomePage {
       }
     };
   }
+
+
+    getPathFromPageName(name){
+        if(name == 'NotificationPage'){
+            return '/menu/notification'
+        }else if(name == 'SettingsPage'){
+            return '/menu/profile'
+        }else if(name == 'ReportPage'){
+            return '/menu/profile'
+        }else if(name == 'ChatPage'){
+            return '/menu/profile'
+        }else if(name == 'MedicalCarePage'){
+            return '/menu/profile'
+        }else if(name == 'MedicationNotificationPage'){
+            return '/menu/profile'
+        }else if(name == 'ProfilePage'){
+            return '/menu/profile'
+        }else{
+            return null;
+        }
+    }
+
 }

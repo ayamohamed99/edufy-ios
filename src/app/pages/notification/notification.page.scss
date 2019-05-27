@@ -1,0 +1,372 @@
+ .contentColor{
+    background: #f4f4f4;
+  }
+
+  .item-md{
+    background-color: #fff0;
+  }
+
+  .item-ios{
+    background-color: #fff0;
+  }
+
+  .item-block {
+    min-height: 0;
+    transition: all 1s ease-in-out !important;
+  }
+
+  .lableInItem{
+    float: left;
+    padding-right: 20px;
+    width: 100%;
+    .label-md {
+      margin: 0 0 2px;
+      font-size: 2.4rem;
+      font-weight: normal;
+    }
+    .label-ios {
+      float: left;
+      width: calc(100% - 20px);
+      margin: 0 0 2px;
+      font-size: 2.4rem;
+      font-weight: normal;
+    }
+  }
+
+  .item-md.item-block .item-inner {
+    height: fit-content;
+    transition: all 1s ease-in-out;
+  }
+
+  .item-ios.item-block .item-inner {
+    height: fit-content;
+    transition: all 1s ease-in-out;
+  }
+
+  .buttonShape{
+    background: #eee0;
+    margin: 10px;
+    padding: 0px;
+  }
+  .contentScroll{
+    background: #f4f4f4;
+    min-height: 100% !important;
+    width: 100%;
+  }
+  .slide-zoom {
+    height: 100%;
+  }
+
+  .buttonInCard{
+    //-webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 0 rgba(0, 0, 0, 0);
+    text-transform: none;
+  }
+
+  .firstView{
+    //height: 100vh;
+  }
+  .secView{
+    //height: fit-content;
+  }
+  .thridView{
+    //height: fit-content;
+  }
+  .forthView{
+    //height: fit-content;
+  }
+  //#488aff
+  //.toolbar-background-md {
+  //  border-color: #ffffff;
+  //  background: #488aff;
+  //}
+  .buttonShape .button {
+    background: #ffffff00;
+  }
+  .imgUrl{
+    height: 200px;
+    //width: 100%;
+    background: #eee0;
+    margin-bottom: 35px;
+  }
+
+  .imgAttach{
+    height: 200px;
+    background: #eee0;
+    margin-bottom: 35px;
+  }
+  ion-img{
+    background: #eee0;
+  }
+
+  .card-md {
+    border-radius: 15px;
+    transition: all 1s ease-in-out;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-lg{
+    border-radius: 15px;
+    transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-xl{
+    border-radius: 15px;
+    transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-sm{
+    border-radius: 15px;
+    transition: 1s all linear;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-xs{
+    border-radius: 15px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  .card-ios {
+    border-radius: 15px;
+    transition: all 1s ease-in-out;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+    h2 {
+      margin-top: 17px;
+    }
+  }
+
+  ion-card{
+    border-radius: 15px;
+    transition: all 1s ease-in-out;
+  }
+  .btn-on {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    min-width: 50px;
+    min-height: 50px;
+    background: #eee0;
+  }
+
+  button{
+    background: #eee0;
+  }
+  .slider {
+    overflow-y: hidden;
+    max-height: 100px; /* approximate max height */
+
+    transition-property: all;
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(1, 1, 0.5, 1);
+  }
+  .slider.closed {
+    max-height: 0;
+  }
+
+  //ion-fab[bottom] {
+  //  bottom: 40px;
+  //}
+
+  //.fab[mini] {
+  //  width: 56px;
+  //  height: 56px;
+  //}
+
+  .popover-md .popover-content {
+    width: 110px;
+  }
+
+  ion-badge{
+    color: red;
+    -webkit-text-fill-color: white;
+  }
+
+
+  .scale-up-center {
+    //width: 100%;
+    position: relative;
+    text-align: -webkit-center;
+    -webkit-animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+    animation: scale-up-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+  }
+
+  /**
+ * ----------------------------------------
+ * animation scale-up-center
+ * ----------------------------------------
+ */
+  @-webkit-keyframes scale-up-center {
+    0% {
+      -webkit-transform: scale(0.5);
+      transform: scale(0.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+  @keyframes scale-up-center {
+    0% {
+      -webkit-transform: scale(0.1);
+      transform: scale(0.1);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+
+
+
+  changeColor {
+    -webkit-animation: color_change 1s infinite alternate;
+    animation: color_change 1s infinite alternate;
+  }
+
+  @-webkit-keyframes color_change {
+    from { background-color: white; }
+    to { background-color: #1DAF4C; }
+  }
+  @keyframes color_change {
+    from { background-color: #ffffff; }
+    to { background-color: #1DAF4C; }
+  }
+
+  .scale-up-center .buttonOnImg {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    padding: 0;
+    margin: 0;
+    height: 100px;
+    width: 100px;
+    z-index: 2;
+    //transform: rotate(20deg);
+    background: #ffffff;
+    border-radius: 50%;
+  }
+
+
+  .closeInDiv{
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 13px;
+    bottom: 11px;
+    font-size: 1.9rem;
+  }
+
+  .editDivView{
+    margin-bottom: 10px;
+    ion-fab[bottom][edge]{
+      bottom: -5px;
+      z-index: 1;
+    }
+  }
+
+
+
+
+  /////For Approve Button
+
+  $green: #1ECD97;
+  $gray: #bbbbbb;
+  //* {
+  //  font-family: 'Roboto', sans-serif;
+  //}
+  .containerApprove {
+    //position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -65px;
+    margin-top: -20px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+  }
+
+  .buttonApprove {
+    outline:none;
+    height: 25px;
+    text-align: center;
+    width: 25px;
+    border-radius:5px;
+    background: #fff;
+    border: 2px solid $green;
+    color:$green;
+    letter-spacing:1px;
+    //text-shadow:0;
+    font:{
+      size:12px;
+      weight:bold;
+    }
+    cursor: pointer;
+    transition: all 0.75s ease;
+    &:hover {
+      //color:white;
+      //background: $green;
+    }
+    &:active {
+      //letter-spacing: 2px;
+    }
+    &:after {
+      //font-family:'FontAwesome';
+      content:"\2713";
+    }
+  }
+  .onclic {
+    width: 25px;
+    height: 25px;
+    border-radius:100%;
+    border-color:$gray;
+    border-width:3px;
+    font-size:12px;
+    border-left-color:$green;
+    animation: rotating 2s 0.25s linear infinite;
+
+    &:after {
+      content:"";
+    }
+    &:hover {
+      color:$green;
+      background: white;
+    }
+  }
+  .validate {
+    font-size:12px;
+    color: white;
+    background: $green;
+    &:after {
+      border-radius:5px;
+      content:"\2713";
+    }
+  }
+
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+
+.md{
+  page-notification {
+    .toolBarShap {
+      padding: 0;
+      min-height: fit-content;
+    }
+  }
+}
+
