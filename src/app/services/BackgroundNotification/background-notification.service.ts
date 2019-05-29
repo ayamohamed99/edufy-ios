@@ -14,6 +14,7 @@ import {Send_student_notification} from '../../models/send_student_notification'
 import {Network} from '@ionic-native/network/ngx';
 import {FCMService} from '../FCM/fcm.service';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {LoadingViewService} from '../LoadingView/loading-view.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,6 @@ export class BackgroundNotificationService {
   arrayToPostAttachment: any[] = [];
   ifOpenWIFIANDNOTGOTOBACKGROUND;
   arrayFormData: any[] = [];
-  loadingCtrl;
   Title;
   Details;
   viewCtrl;
@@ -36,7 +36,7 @@ export class BackgroundNotificationService {
   number = 1;
   constructor(private platform: Platform, private notiServ: NotificationService, private backgroundMode: BackgroundMode,
               private storage: Storage, private alertCtrl: AlertController, public network: Network,
-              private localNotifications: LocalNotifications) {
+              private localNotifications: LocalNotifications,private loadingCtrl:LoadingViewService ) {
 
     if (!this.platform.is('desktop')) {
       this.backgroundMode.enable();
@@ -60,7 +60,6 @@ export class BackgroundNotificationService {
     this.Title = Title;
     this.Details = Details;
     this.arrayFormData = arrayFormData;
-    this.loadingCtrl = loadingCtrl;
 
     const RecieverArray: any[] = [];
 
@@ -114,13 +113,13 @@ export class BackgroundNotificationService {
     } else {
 
       this.uploadFromMobile(RecieverArray, SelectedTags, this.viewCtrl, this.Title,
-          this.Details, this.arrayFormData, this.loadingCtrl);
+          this.Details, this.arrayFormData);
 
     }
   }
 
 
-  uploadFromMobile(RecieverArray, SelectedTags, viewCtrl, title, details, arrayFromData, loadingCtrl) {
+  uploadFromMobile(RecieverArray, SelectedTags, viewCtrl, title, details, arrayFromData) {
     debugger;
 
     if ((this.wifiUpload && !(this.network.type == 'wifi') ) || (this.wifiUpload && this.network.type ==  'none')) {
@@ -137,10 +136,7 @@ export class BackgroundNotificationService {
 
     } else {
 
-      const loading = loadingCtrl.create({
-        content: ''
-      });
-      loading.present();
+      this.loadingCtrl.startNormalLoading('');
       if (this.arrayFormData) {
         const promisesArray = [];
         for (let index = 0; index < this.arrayFormData.length; index++) {
@@ -167,12 +163,12 @@ export class BackgroundNotificationService {
                 PN.receiversList = RecieverArray;
                 sentNotify.push(PN);
                 this.doneNotification();
-                loading.dismiss();
+                this.loadingCtrl.stopLoading();
                 viewCtrl.dismiss({name: 'dismissed&SENT'});
               },
               err => {
                 console.log('POST without wait error', JSON.parse(JSON.stringify(err.error)));
-                loading.dismiss();
+                this.loadingCtrl.stopLoading();
                 this.presentConfirm('Please check the internet and try again');
               }, () => {
                 this.deleteFromStorage(sentNotify);
@@ -193,13 +189,13 @@ export class BackgroundNotificationService {
               PN.tagsList = SelectedTags;
               PN.receiversList = RecieverArray;
               sentNotify.push(PN);
-              loading.dismiss();
+              this.loadingCtrl.stopLoading();
               viewCtrl.dismiss({name: 'dismissed&SENT'});
             },
             err => {
               debugger;
               console.log('POST without wait error', JSON.parse(JSON.stringify(err.error)));
-              loading.dismiss();
+              this.loadingCtrl.stopLoading();
               this.presentConfirm('Please, check the internet then try again');
             }, () => {
               this.deleteFromStorage(sentNotify);
@@ -486,11 +482,7 @@ export class BackgroundNotificationService {
 
 
   uploadFromWeb(RecieverArray, SelectedTags) {
-    const loading = this.loadingCtrl.create({
-      content: ''
-    });
-
-    loading.present();
+    this.loadingCtrl.startNormalLoading('');
     if (this.arrayFormData) {
       const promisesArray = [];
       for (let index = 0; index < this.arrayFormData.length; index++) {
@@ -504,12 +496,12 @@ export class BackgroundNotificationService {
         this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
             data => {
               console.log('Date Is', data);
-              loading.dismiss();
+              this.loadingCtrl.stopLoading();
               this.viewCtrl.dismiss({name: 'dismissed&SENT'});
             },
             err => {
               console.log('POST call in error', err);
-              loading.dismiss();
+              this.loadingCtrl.stopLoading();
               this.presentConfirm(err);
             });
       });
@@ -517,12 +509,12 @@ export class BackgroundNotificationService {
       this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
           data => {
             console.log('Date Is', data);
-            loading.dismiss();
+            this.loadingCtrl.stopLoading();
             this.viewCtrl.dismiss({name: 'dismissed&SENT'});
           },
           err => {
             console.log('POST call in error', err);
-            loading.dismiss();
+            this.loadingCtrl.stopLoading();
             this.presentConfirm('Please, check the internet then try again');
           });
     }

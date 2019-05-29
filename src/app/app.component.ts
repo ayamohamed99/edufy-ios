@@ -131,8 +131,9 @@ export class AppComponent {
       }else {
         this.storage.clear();
       }
-      this.loadCtrl.stopLoading();
-      this.router.navigateByUrl(this.homePath);
+        this.loadCtrl.stopLoading().then( () => {
+            this.router.navigateByUrl(this.homePath);
+        });
     }else{
       this.storage.get(this.loginServ.localStorageToken).then(
           value => {
@@ -143,8 +144,9 @@ export class AppComponent {
             }else {
               this.storage.clear();
             }
-            this.loadCtrl.stopLoading();
-            this.router.navigateByUrl(this.homePath);
+              this.loadCtrl.stopLoading().then( () => {
+                  this.router.navigateByUrl(this.homePath);
+              });
           })
 
     }
@@ -155,22 +157,24 @@ export class AppComponent {
   logoutMethod(){
     this.logout.postlogout(null,null,null).subscribe(
         (data) => {
-          this.loadCtrl.stopLoading();
-          if(this.platform.is('desktop')) {
-            localStorage.clear();
-          }else {
-            this.storage.clear();
-          }
-          this.router.navigateByUrl(this.homePath);
+          this.loadCtrl.stopLoading().then( ()=> {
+              if(this.platform.is('desktop')) {
+                  localStorage.clear();
+              }else {
+                  this.storage.clear();
+              }
+              this.router.navigateByUrl(this.homePath);
+          });
         },
         err => {
-          this.loadCtrl.stopLoading();
-          if(this.platform.is('desktop')) {
-            localStorage.clear();
-          }else {
-            this.storage.clear();
-          }
-          this.router.navigateByUrl(this.homePath);
+            this.loadCtrl.stopLoading().then( ()=> {
+                if(this.platform.is('desktop')) {
+                    localStorage.clear();
+                }else {
+                    this.storage.clear();
+                }
+                this.router.navigateByUrl(this.homePath);
+            });
         },
         () => {
         });
@@ -191,8 +195,9 @@ export class AppComponent {
           this.refreshToken();
         },
         err => {
-          this.loadCtrl.stopLoading();
-          this.router.navigateByUrl(this.homePath);
+          this.loadCtrl.stopLoading().then( () => {
+              this.router.navigateByUrl(this.homePath);
+          });
         },
         () => {
         });
@@ -235,8 +240,9 @@ export class AppComponent {
           this.manageAccount();
         },
         err => {
-          this.loadCtrl.stopLoading();
-          this.router.navigateByUrl(this.homePath);
+          this.loadCtrl.stopLoading().then( ()=> {
+              this.router.navigateByUrl(this.homePath);
+          });
         });
   }
 
@@ -246,8 +252,9 @@ export class AppComponent {
           this.accountInfo();
         },
         err => {
-          this.loadCtrl.stopLoading();
-          this.router.navigateByUrl(this.homePath);
+            this.loadCtrl.stopLoading().then( ()=> {
+                this.router.navigateByUrl(this.homePath);
+            });
         },
         () => {
         });
@@ -265,8 +272,9 @@ export class AppComponent {
           // this.nav.setRoot(this.profilePage);
         },
         err => {
-          this.loadCtrl.stopLoading();
-          this.router.navigateByUrl(this.homePath);
+            this.loadCtrl.stopLoading().then( ()=> {
+                this.router.navigateByUrl(this.homePath);
+            });
         },
         () => {
         });
@@ -277,40 +285,44 @@ export class AppComponent {
   CustomReport(){
     this.accountServ.getCustomReports(this.toKenFull).subscribe(
         (data) => {
-          this.loadCtrl.stopLoading();
-          this.accountServ.setCustomReport(data);
-          this.accountServ.getTags(this.fullToken());
-          // this.navCtrl.setRoot('ProfilePage');
-          this.router.navigateByUrl('/menu/profile');
-          this.startSocket(this.accountServ.userId);
-          this.setupNotification();
+          this.loadCtrl.stopLoading().then( ()=>{
+              this.accountServ.setCustomReport(data);
+              this.accountServ.getTags(this.fullToken());
+              // this.navCtrl.setRoot('ProfilePage');
+              this.router.navigateByUrl('/menu/profile');
+              this.startSocket(this.accountServ.userId);
+              this.setupNotification();
+          });
         },
         err => {
           if(err.error == "FORBIDDEN" ||err.error ==  "NO_REPORTS_FOUNDED_FOR_YOUR_ACCOUNT"){
-            this.loadCtrl.stopLoading();
-            console.log('Has No Custom report(s)');
-            this.accountServ.getTags(this.fullToken());
-            // this.navCtrl.setRoot('ProfilePage');
-            this.router.navigateByUrl('/menu/profile');
-            this.startSocket(this.accountServ.userId);
-            this.setupNotification();
-            if(this.accountServ.getUserRole().viewMedicalRecord) {
-              this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
-            }
+            this.loadCtrl.stopLoading().then( () => {
+                console.log('Has No Custom report(s)');
+                this.accountServ.getTags(this.fullToken());
+                // this.navCtrl.setRoot('ProfilePage');
+                this.router.navigateByUrl('/menu/profile');
+                this.startSocket(this.accountServ.userId);
+                this.setupNotification();
+                if(this.accountServ.getUserRole().viewMedicalRecord) {
+                    this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+                }
+            });
           }else if(!err.error){
-            this.loadCtrl.stopLoading();
-            console.log('Has No Custom report(s)');
-            this.accountServ.getTags(this.fullToken());
-            // this.navCtrl.setRoot('ProfilePage');
-            this.router.navigateByUrl('/menu/profile');
-            this.startSocket(this.accountServ.userId);
-            this.setupNotification();
-            if(this.accountServ.getUserRole().viewMedicalRecord) {
-              this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
-            }
+            this.loadCtrl.stopLoading().then( ()=> {
+                console.log('Has No Custom report(s)');
+                this.accountServ.getTags(this.fullToken());
+                // this.navCtrl.setRoot('ProfilePage');
+                this.router.navigateByUrl('/menu/profile');
+                this.startSocket(this.accountServ.userId);
+                this.setupNotification();
+                if(this.accountServ.getUserRole().viewMedicalRecord) {
+                    this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+                }
+            });
           } else{
-            this.loadCtrl.stopLoading();
-            this.router.navigateByUrl(this.homePath);
+            this.loadCtrl.stopLoading().then( () => {
+                this.router.navigateByUrl(this.homePath);
+            });
           }
         },
         () => {
@@ -397,7 +409,7 @@ export class AppComponent {
       componentProps: {studentData:Stud}
     });
 
-    modal.dismiss(
+    modal.onDidDismiss().then(
         val=>{
           this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
               val => {
@@ -548,7 +560,7 @@ export class AppComponent {
             student:JSON.parse(data.student) }
     });
 
-    modal.dismiss();
+    modal.onDidDismiss();
     return await modal.present();
   }
 

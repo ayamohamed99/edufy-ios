@@ -45,11 +45,17 @@ import {File} from '@ionic-native/file/ngx';
 // import {Storage} from "@ionic/storage";
 import {BackgroundMode} from '@ionic-native/background-mode/ngx';
 import {FCMService} from './services/FCM/fcm.service';
-import {ImageCompressorService} from './services/ImageCompressor/image-compressor.service';
+import {PopoverNotificationCardPageModule} from './pages/popover-notification-card/popover-notification-card.module';
+import {NotificationEditPageModule} from './pages/notification-edit/notification-edit.module';
+import {NotificationViewReceiverPageModule} from './pages/notification-view-receiver/notification-view-receiver.module';
+import {NotificationNewPageModule} from './pages/notification-new/notification-new.module';
+import {FormsModule} from '@angular/forms';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
-
+let popOvers = [PopoverNotificationCardPageModule];
+let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule];
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -62,7 +68,10 @@ let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatI
     NoopAnimationsModule,
     HttpClientModule,
     Ng2ImgMaxModule,
-    mods
+    mods,
+    popOvers,
+    modals,
+    NgSelectModule, FormsModule
   ],
   providers: [
     StatusBar,

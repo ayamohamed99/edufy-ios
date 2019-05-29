@@ -5,13 +5,11 @@ import {DirectivesModule} from '../directives/directives.module';
 import { ReportFilterComponent } from './report-filter/report-filter';
 
 @NgModule({
-	declarations: [ReportCommentComponent,
-    ReportFilterComponent],
+	declarations: [],
   imports: [
     IonicModule,
     DirectivesModule,
   ],
-	exports: [ReportCommentComponent,
-    ReportFilterComponent]
+	exports: []
 })
 export class ComponentsModule {}

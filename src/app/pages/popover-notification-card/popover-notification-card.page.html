@@ -1,0 +1,10 @@
+<ion-header>
+</ion-header>
+<ion-content>
+  <ion-list no-lines style="margin: 0">
+    <ion-item (click)="editNotification()" *ngIf="accountServ.getUserRole().notificationUpdate">Edit</ion-item>
+    <ion-item (click)="deleteNotification()" *ngIf="accountServ.getUserRole().notificationDelete">Delete</ion-item>
+    <ion-item (click)="newNotification()" *ngIf="accountServ.getUserRole().notificationCreate">Edit as new</ion-item>
+    <ion-item (click)="archiveNotification()" *ngIf="accountServ.getUserRole().archiveNotificationCreate">{{Archiving}}</ion-item>
+  </ion-list>
+</ion-content>

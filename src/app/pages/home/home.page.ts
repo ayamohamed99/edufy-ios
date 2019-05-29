@@ -325,7 +325,7 @@ export class HomePage {
                 student:JSON.parse(data.student) }
         });
 
-        modal.dismiss();
+        modal.onDidDismiss();
         return await modal.present();
     }
 
@@ -361,7 +361,7 @@ export class HomePage {
             componentProps: {studentData:Stud}
         });
 
-        modal.dismiss(
+        modal.onDidDismiss().then(
             val=>{
                 this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
                     val => {

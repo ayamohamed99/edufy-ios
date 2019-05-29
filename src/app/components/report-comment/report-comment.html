@@ -22,8 +22,8 @@
                  class="comment-message-actions">
               <button *ngIf="!isEditedCommentsLoading[comment.id]"
                       (click)="inEditModeComments[comment.id]? toggleEditMode(comment) : presentCommentActionSheet(comment,i)"
-                      class="comment-message-actions-button" ion-button icon-only clear small>
-                <ion-icon class="comment-message-actions-icon"
+                      class="comment-message-actions-button" ion-button clear small>
+                <ion-icon slot="icon-only" class="comment-message-actions-icon"
                           [name]="inEditModeComments[comment.id]? 'md-checkbox-outline' : 'md-more'"></ion-icon>
               </button>
               <ion-spinner *ngIf="isEditedCommentsLoading[comment.id]" class="comment-message-actions-loading"

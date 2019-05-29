@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {AlertController, ModalController, Platform, PopoverController} from '@ionic/angular';
+import {AlertController, IonInfiniteScroll, IonSlides, ModalController, Platform, PopoverController} from '@ionic/angular';
 import {Storage} from "@ionic/storage";
 import {NotificationService} from '../../services/Notification/notification.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
@@ -19,6 +19,10 @@ import {StudentsService} from '../../services/Students/students.service';
 import {DocumentViewer, DocumentViewerOptions} from '@ionic-native/document-viewer/ngx';
 import {Pendingnotification} from '../../models/pendingnotification';
 import {Class, Student} from '../../models';
+import {PopoverNotificationCardPage} from '../popover-notification-card/popover-notification-card.page';
+import {NotificationEditPage} from '../notification-edit/notification-edit.page';
+import {NotificationViewReceiverPage} from '../notification-view-receiver/notification-view-receiver.page';
+import {NotificationNewPage} from '../notification-new/notification-new.page';
 
 @Component({
   selector: 'app-notification',
@@ -27,7 +31,17 @@ import {Class, Student} from '../../models';
 })
 export class NotificationPage implements OnInit {
 
-  // @ViewChild(Slides) slides: Slides;
+  @ViewChild('ionSlides') slides: IonSlides;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
+  slideOpts = {
+    initialSlide: 0,
+    speed: 400,
+    zoom: {
+      toggle: false
+    }
+  };
+
   notifications:Notification[] = [];
   notificationsSent:Notification[] = [];
   notificationsApproved:Notification[] = [];
@@ -73,7 +87,6 @@ export class NotificationPage implements OnInit {
     this.selectedTab = "all";
     this.fristOpen = true;
     if (platform.is('desktop')) {
-
       this.tokenKey = localStorage.getItem(this.localStorageToken);
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
@@ -115,15 +128,18 @@ export class NotificationPage implements OnInit {
 
   async presentCardOptionPopover(ev: any,i,notification) {
     const popoverOption = await this.popoverCtrl.create({
-      component: 'PopoverNotificationCardPage',
+      component: PopoverNotificationCardPage,
       componentProps: {notification:notification},
       event: ev,
-      translucent: true
+      translucent: true,
+      cssClass:"PopOverOptionMenu"
     });
 
-    popoverOption.dismiss( data => {
-      if(data == null) {
+    popoverOption.onDidDismiss().then( val => {
+      if(val == null) {
       }else{
+        let data = val.data;
+
         if(data.done === 'deleteSuccess') {
           this.fristOpen = false;
           this.loadNow = true;
@@ -160,12 +176,12 @@ export class NotificationPage implements OnInit {
         }else if (data.done === 'updateSuccess'){
           this.fristOpen = false;
           this.loadNow = true;
-          this.presentEditNorificationModal(notification);
+          this.presentEditNotificationModal(notification);
 
         }else if(data.done === 'newSuccess'){
           this.fristOpen = false;
           this.loadNow = true;
-          this.load.startLoading('',true,'loadingWithoutBackground');
+          this.load.startLoading('',false,'loadingWithoutBackground');
           this.NewNotification = false;
           this.editAsNewAttachmentList = notification.attachmentsList;
           this.getNotificationReciver(notification.notificationId, notification.title, notification.body,notification.recreceiversList,notification.tagsListName, i);
@@ -176,14 +192,14 @@ export class NotificationPage implements OnInit {
     return await popoverOption.present();
   }
 
-  async presentEditNorificationModal(notification) {
+  async presentEditNotificationModal(notification) {
     const eModal = await this.modalCtrl.create({
-      component: 'NotificationEditPage',
+      component: NotificationEditPage,
       componentProps: {notification:notification}
     });
 
-    eModal.dismiss(data => {
-      if(data.name != "dismissed") {
+    eModal.onDidDismiss().then( data => {
+      if(data.data.name != "dismissed") {
         this.notifications.splice(0);
         this.notificationPage = 1;
         this.notificationService.putHeader(this.tokenKey);
@@ -208,8 +224,9 @@ export class NotificationPage implements OnInit {
           this.getAllDataThenNavigate();
         },
         err => {
-          this.load.stopLoading();
-          this.presentAlertWithOk('Error','Please, check the internet and try again');
+          this.load.stopLoading().then( ()=> {
+            this.presentAlertWithOk('Error','Please, check the internet and try again');
+          });
         },
         () => {
         });
@@ -308,16 +325,17 @@ export class NotificationPage implements OnInit {
           this.getSeencount(this.notificationIds);
         },
         err => {
-          this.load.stopLoading();
-          this.presentAlertWithOk('Error','Please, check the internet and try again');
+          this.load.stopLoading().then( ()=> {
+            this.presentAlertWithOk('Error','Please, check the internet and try again');
+          });
         },
         () => {
         });
   }
 
-  doInfinite(){
+  doInfinite(ev){
 
-    return new Promise((resolve) => {
+    // return new Promise((resolve) => {
       // setTimeout(() => {
 
       this.notificationPage += this.notificationPage + 1;
@@ -360,12 +378,14 @@ export class NotificationPage implements OnInit {
               }
             }
             this.getSeencount(this.notificationIds);
-            resolve();
+            // resolve();
+            ev.target.complete();
           },
           err => {
-            resolve();
-            this.load.stopLoading();
-            this.presentAlertWithOk('Error','Please, check the internet and try again')
+            ev.target.complete();
+            this.load.stopLoading().then( ()=> {
+              this.presentAlertWithOk('Error','Please, check the internet and try again');
+            });
           },
           () => {
 
@@ -374,7 +394,11 @@ export class NotificationPage implements OnInit {
 
 
       // }, 20000);
-    })
+    // })
+  }
+
+  toggleInfiniteScroll() {
+    this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
   }
 
   getAllClasses(){
@@ -395,63 +419,65 @@ export class NotificationPage implements OnInit {
           this.getAllStudent();
         },
         err =>{
-
-          this.presentAlertWithOk('Error','Something went wrong, please refresh the page');
-
-          this.load.stopLoading();
+          this.load.stopLoading().then( () => {
+            this.presentAlertWithOk('Error','Something went wrong, please refresh the page');
+          });
         });
   }
 
   getAllStudent(){
     this.studentService.getAllStudents(7,'Notification').subscribe(
         (val)=>{
-          let data:any = val;
-          this.studentwithClass = [];
-          this.studentsName = [];
-          for (let value of data){
-            let students = new Student();
+          this.load.stopLoading().then( ()=> {
+            let data:any = val;
+            this.studentwithClass = [];
+            this.studentsName = [];
+            for (let value of data){
+              let students = new Student();
 
-            students.classes.id = value.classes.id;
-            students.classes.name = value.classes.name;
-            students.classes.grade.id = value.classes.grade.id;
-            students.classes.grade.name = value.classes.grade.name;
-            students.classes.branch.id = value.classes.branch.id;
-            students.classes.branch.name = value.classes.branch.name;
-            students.classes.branch.managerId = value.classes.branch.managerId;
-            students.id = value.id;
-            students.name = value.name;
-            students.address = value.address;
+              students.classes.id = value.classes.id;
+              students.classes.name = value.classes.name;
+              students.classes.grade.id = value.classes.grade.id;
+              students.classes.grade.name = value.classes.grade.name;
+              students.classes.branch.id = value.classes.branch.id;
+              students.classes.branch.name = value.classes.branch.name;
+              students.classes.branch.managerId = value.classes.branch.managerId;
+              students.id = value.id;
+              students.name = value.name;
+              students.address = value.address;
 
-            this.studentsName.push(value.name);
-            this.studentwithClass.push(students);
-          }
+              this.studentsName.push(value.name);
+              this.studentwithClass.push(students);
+            }
 
 
-          if(this.NewNotification){
+            if(this.NewNotification){
 
-            this.presentNewNotificationModal();
+              this.presentNewNotificationModal();
 
-          }else{
+            }else{
 
-            this.presentEditAsNewNotificationModal();
-          }
-          this.load.stopLoading();
+              this.presentEditAsNewNotificationModal();
+            }
+          });
         },
         err=>{
-          this.presentAlertWithOk('Error','Something went wrong, please refresh the page');
-          this.load.stopLoading();
+
+          this.load.stopLoading().then( () => {
+            this.presentAlertWithOk('Error','Something went wrong, please refresh the page');
+          });
         });
   }
 
   async presentNewNotificationModal() {
     const nModal = await this.modalCtrl.create({
-      component: 'NotificationNewPage',
+      component: NotificationNewPage,
       componentProps: {classesList:this.classes,
         studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass}
     });
 
-    nModal.dismiss(data =>{
-      if(data.name =="dismissed&SENT"){
+    nModal.onDidDismiss().then(data =>{
+      if(data.data.name =="dismissed&SENT"){
         this.fristOpen = false;
         this.loadNow = true;
         this.notifications.splice(0);
@@ -460,7 +486,7 @@ export class NotificationPage implements OnInit {
         this.notificationService.putHeader(this.tokenKey);
         this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
 
-      }else if(data.name =="dismissed&NOTSENT"){
+      }else if(data.data.name =="dismissed&NOTSENT"){
         this.fristOpen = false;
         this.loadNow = true;
         let TempNotify:any[]=[];
@@ -480,13 +506,13 @@ export class NotificationPage implements OnInit {
 
   async presentEditAsNewNotificationModal() {
     const enModal = await this.modalCtrl.create({
-      component: 'NotificationNewPage',
+      component: NotificationNewPage,
       componentProps: {id:this.editId,title:this.editTitle, details:this.editDetails,
         classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
         ,recieverList:this.reciversList, tagList:this.editTags, attachmentList:this.editAsNewAttachmentList}
     });
 
-    enModal.dismiss(data => {
+    enModal.onDidDismiss().then(data => {
       this.notifications.splice(0);
       this.notificationPage = 1;
 
@@ -575,33 +601,42 @@ export class NotificationPage implements OnInit {
     const transfer = this.transfer.create();
     transfer.download(attachmentURL,
         path + attachmentName).then(entry => {
-      this.load.stopLoading();this.load.stopLoading();
-      let url = entry.toURL();
-      const options: DocumentViewerOptions = {
-        title: attachmentName
-      };
-      this.fileOpener.open(url, extinstion)
-          .then(() => {})
-          .catch(e => {
-            let error:string;
-            if(e.message.includes("Activity not found")){
-              error = "There is no app to open this file";
-            }else{
-              error = 'Something went wrong try again later.'+JSON.stringify(e);
-            }
 
-            this.presentAlertWithOk('Error',error);
-            this.load.stopLoading();
-          });
+      this.load.stopLoading().then( () => {
+        let url = entry.toURL();
+        const options: DocumentViewerOptions = {
+          title: attachmentName
+        };
+        this.fileOpener.open(url, extinstion)
+            .then(() => {})
+            .catch(e => {
+
+              this.load.stopLoading().then( () => {
+                let error:string;
+                if(e.message.includes("Activity not found")){
+                  error = "There is no app to open this file";
+                }else{
+                  error = 'Something went wrong try again later.'+JSON.stringify(e);
+                }
+
+                this.presentAlertWithOk('Error',error);
+              });
+
+            });
+      });
+
     }).catch(reason => {
-      let error:string = '';
-      if(reason.exception.includes("Permission")){
-        error = "Edufy need permission to access storage";
-      }else{
-        error =reason.exception;
-      }
-      this.presentAlertWithOk('Error',error);
-      this.load.stopLoading();
+
+      this.load.stopLoading().then( () => {
+        let error:string = '';
+        if(reason.exception.includes("Permission")){
+          error = "Edufy need permission to access storage";
+        }else{
+          error =reason.exception;
+        }
+        this.presentAlertWithOk('Error',error);
+      });
+
     });
   }
 
@@ -622,8 +657,10 @@ export class NotificationPage implements OnInit {
       const fileLocation = attachmentURL;
 
       fileTransfer.download(fileLocation, storageDirectory + attachmentName).then((entry) => {
-        this.load.stopLoading()
-        this.presentAlertWithOk(`Download Success`,`${attachmentName} was successfully downloaded.`);
+
+        this.load.stopLoading().then( () => {
+          this.presentAlertWithOk(`Download Success`,`${attachmentName} was successfully downloaded.`);
+        });
 
       }, (error) => {
         this.presentAlertWithOk(`Download Failed!`,`${attachmentName} was not successfully downloaded. Error code: ${error.code}`);
@@ -746,77 +783,84 @@ export class NotificationPage implements OnInit {
   }
 
   getAllDataThenNavigate(){
-    if(this.NewNotification) {
-      this.load.startLoading('',true,'loadingWithoutBackground');
-    }
-    if(this.platform.is('desktop')) {
-      this.tokenKey = localStorage.getItem(this.localStorageToken);
-      this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-      this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getAllClasses();
-    }else {
-      this.storage.get(this.localStorageToken).then(
-          val => {
-            this.tokenKey = val;
-            this.studentService.putHeader(val);
-            this.classesServ.putHeader(val);
-            this.getAllClasses();
-            this.fristOpen = false;
-          });
-    }
+    // if(this.NewNotification) {
+    //   this.load.startLoading('',true,'loadingWithoutBackground');
+    // }
+    this.load.startLoading('',true,'loadingWithoutBackground').then( () =>{
+      if(this.platform.is('desktop')) {
+        this.tokenKey = localStorage.getItem(this.localStorageToken);
+        this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+        this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
+        this.getAllClasses();
+      }else {
+        this.storage.get(this.localStorageToken).then(
+            val => {
+              this.tokenKey = val;
+              this.studentService.putHeader(val);
+              this.classesServ.putHeader(val);
+              this.getAllClasses();
+              this.fristOpen = false;
+            });
+      }
+    });
   }
 
   tabThatSelectedDo(tabName){
     this.notificationPage = 1;
     console.log("TabName "+this.selectedTab);
-    let speed = 500;
-    // if(tabName == 'all'){
-    //   this.slides.slideTo(0, speed);
-    // }else if(tabName == 'sent'){
-    //   this.slides.slideTo(1, speed);
-    // }else if(tabName == 'approved'){
-    //   this.slides.slideTo(2, speed);
-    // }else if(tabName == 'archived'){
-    //   this.slides.slideTo(3, speed);
-    // }
+    let speed = 400;
+    if(tabName == 'all'){
+      this.slides.slideTo(0, speed);
+    }else if(tabName == 'sent'){
+      this.slides.slideTo(1, speed);
+    }else if(tabName == 'approved'){
+      this.slides.slideTo(2, speed);
+    }else if(tabName == 'archived'){
+      this.slides.slideTo(3, speed);
+    }
   }
+
   slideChanged() {
     this.notificationPage = 1;
-    let currentIndex = 0;//this.slides.getActiveIndex();
-    console.log('Current index is', currentIndex);
-    switch (currentIndex){
-      case 1:
-        this.selectedTab = 'sent';
-        this.sent = true;
-        this.approved = null;
-        this.archived = null;
-        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-        break;
+    this.slides.getActiveIndex().then( currentIndex => {
+      console.log('Current index is', currentIndex);
 
-      case 2:
-        this.selectedTab = 'approved';
-        this.sent = null;
-        this.approved = true;
-        this.archived = null;
-        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-        break;
+      switch (currentIndex){
+        case 1:
+          this.selectedTab = 'sent';
+          this.sent = true;
+          this.approved = null;
+          this.archived = null;
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+          break;
 
-      case 3:
-        this.selectedTab = 'archived';
-        this.sent = null;
-        this.approved = null;
-        this.archived = true;
-        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-        break;
+        case 2:
+          this.selectedTab = 'approved';
+          this.sent = null;
+          this.approved = true;
+          this.archived = null;
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+          break;
 
-      default:
-        this.selectedTab = 'all';
-        this.sent = null;
-        this.approved = null;
-        this.archived = null;
-        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-        break;
-    }
+        case 3:
+          this.selectedTab = 'archived';
+          this.sent = null;
+          this.approved = null;
+          this.archived = true;
+          this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+          break;
+
+        default:
+          this.selectedTab = 'all';
+          this.sent = null;
+          this.approved = null;
+          this.archived = null;
+          if(!this.fristOpen) {
+            this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+          }
+          break;
+      }
+    });
   }
 
   approveNotification(index){
@@ -985,41 +1029,45 @@ export class NotificationPage implements OnInit {
   getSeencount(notificationsIds){
     this.notificationService.getSeencount(notificationsIds).subscribe(
         (data) => {
-          console.log("Date Is", data);
-          let AllData:any = [];
-          AllData = data;
-          this.notificationIds = [];
-          for (let id in AllData){
-            if(this.sent){
-              for(let notify of this.notificationsSent){
-                if(notify.notificationId.toString() == id){
-                  notify.seenCount = AllData[id];
+
+          this.load.stopLoading().then( () => {
+            console.log("Date Is", data);
+            let AllData:any = [];
+            AllData = data;
+            this.notificationIds = [];
+            for (let id in AllData){
+              if(this.sent){
+                for(let notify of this.notificationsSent){
+                  if(notify.notificationId.toString() == id){
+                    notify.seenCount = AllData[id];
+                  }
                 }
-              }
-            }else if(this.approved){
-              for(let notify of this.notificationsApproved){
-                if(notify.notificationId.toString() == id){
-                  notify.seenCount = AllData[id];
+              }else if(this.approved){
+                for(let notify of this.notificationsApproved){
+                  if(notify.notificationId.toString() == id){
+                    notify.seenCount = AllData[id];
+                  }
                 }
-              }
-            }else if(this.archived){
-              for(let notify of this.notificationsArchived){
-                if(notify.notificationId.toString() == id){
-                  notify.seenCount = AllData[id];
+              }else if(this.archived){
+                for(let notify of this.notificationsArchived){
+                  if(notify.notificationId.toString() == id){
+                    notify.seenCount = AllData[id];
+                  }
                 }
-              }
-            }else {
-              for(let notify of this.notifications){
-                if(notify.notificationId.toString() == id){
-                  notify.seenCount = AllData[id];
+              }else {
+                for(let notify of this.notifications){
+                  if(notify.notificationId.toString() == id){
+                    notify.seenCount = AllData[id];
+                  }
                 }
               }
             }
-          }
-          this.load.stopLoading()
+          });
+
         },
         err => {
           console.log("POST call in error", err);
+          this.load.stopLoading();
         },
         () => {
           console.log("The POST observable is now completed.");
@@ -1029,8 +1077,8 @@ export class NotificationPage implements OnInit {
 
 
   async openNotificationViewBy(notification){
-    let model = await this.modalCtrl.create( {component:'NotificationViewReceiver', componentProps: {notification:notification}});
-    model.dismiss(data=>{
+    let model = await this.modalCtrl.create( {component:NotificationViewReceiverPage, componentProps: {notification:notification}});
+    model.onDidDismiss().then(data=>{
       this.console.log('Page Dismissed');
     });
     return await model.present();
@@ -1088,13 +1136,16 @@ export class NotificationPage implements OnInit {
             }
           }
           this.getSeencount(this.notificationIds);
-          refresher.complete();
+          refresher.target.complete();
         },
         err => {
-          refresher.complete();
-          this.load.stopLoading()
 
-          this.presentAlertWithOk('Error','Please, check the internet and try again')
+          this.load.stopLoading().then( () => {
+            refresher.target.complete();
+
+            this.presentAlertWithOk('Error','Please, check the internet and try again');
+          });
+
         },
         () => {
 

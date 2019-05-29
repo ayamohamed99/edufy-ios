@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <!--<button style="width: 32px;height: 45px;" ion-button icon-only [disabled]="!activeSend()" (click)="sendNotification()">-->
+      <!--<img src="assets/icon/upload-to-cloud.png">-->
+      <!--</button>-->
+    </ion-buttons>
+
+    <ion-title>Send New Notification</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding style="--background: #F4F4F4">
+
+
+  <!--<rl-tag-input-->
+  <!--[(ngModel)]="sendTo"-->
+  <!--(ngModelChange)="checkArray(selectedTag)"-->
+  <!--[addOnBlur]="false"-->
+  <!--[autocomplete]="true"-->
+  <!--[autocompleteOprations]="autocompleteArray"-->
+  <!--[autocompleteItems]="preparedTags"-->
+  <!--placeholder="To :">-->
+  <!--</rl-tag-input>-->
+
+  <ng-select
+          #ngSelect
+          [items]="preparedTags"
+          [dropdownPosition]="'down'"
+          [multiple]="true"
+          bindLabel="name"
+          groupBy="header"
+          [selectableGroup]="false"
+          [closeOnSelect]="true"
+          placeholder="To :"
+          [(ngModel)]="this.backNotify.sendTo"
+          (close)="onChange(ngSelect)">
+    <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
+      {{item.header | uppercase}}
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      {{item.name}}
+    </ng-template>
+  </ng-select>
+
+
+
+  <ion-card class="cardClass">
+    <ion-slides pager *ngIf="attachmentArray && attachmentArray.length > 0" >
+      <ion-slide *ngFor="let item of attachmentArray; index as i">
+        <div class="container">
+          <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
+          <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' &&
+             item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO'
+             && item.type != 'VIDEO'">
+          <div class="buttonOnImg">
+            <img class="closeInDiv" style="height: 20px;" src="assets/icon/close.png" (click)="deleteAttach(i)"/>
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slides>
+
+
+    <mat-form-field>
+      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="3" *ngIf="attachmentArray.length>0" type="text" text-center id="titleBox" [(ngModel)]="Title" placeholder="Title"></textarea>
+      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="3" *ngIf="attachmentArray.length<=0" type="text" id="titleBox" [(ngModel)]="Title" placeholder="Title"></textarea>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <textarea matInput class="editDescribtion" *ngIf="attachmentArray.length>0" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" text-center type="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></textarea>
+      <textarea matInput class="editDescribtion" *ngIf="attachmentArray.length<=0" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" type="text" spellcheck [(ngModel)]="Details" placeholder="Details" ></textarea>
+    </mat-form-field>
+
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="assets/imgs/profile.png">
+      </ion-avatar>
+      <ion-label style="padding-left: 8px" text-capitalize>{{accountServ.getUserName()}}</ion-label>
+    </ion-item>
+  </ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <ion-item class="fitTheView" *ngIf="accountServ.getUserRole().notificationTagView">
+    <ion-label class="textColor">Select Tag</ion-label>
+    <ion-select [(ngModel)]="backNotify.tags" multiple interface="popover">
+      <ion-select-option *ngFor="let tag of backNotify.tagsArr" >{{tag.name}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div style="height: 16px; background-color: #F4F4F4"></div>
+
+  <ion-button fill="outline" expand="block" class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
+    Choose Files
+    <input type="file" multiple #file id="inputFiles" (change)="filesChange()">
+  </ion-button>
+
+  <div >
+    <ion-label text-center style="color: #f53d3d" *ngIf="showSupportFiles">
+      The following files is only supported <br> (Image,PDF,Word,Excel,Powerpoint,Audio,Video,Text)
+    </ion-label>
+  </div>
+
+  <div style="height: 8px"></div>
+  <ion-row>
+    <ion-col [size]="5">
+      <ion-button fill="outline" expand="block" [disabled]="!activeSend()" (click)="sendNotification()">Send</ion-button>
+    </ion-col>
+    <ion-col [size]="2">
+      <span style="width: 8px"></span>
+    </ion-col>
+    <ion-col [size]="5">
+      <ion-button fill="outline" expand="block" color="danger" (click)="close()">Cancel</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
