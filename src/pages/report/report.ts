@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
-import {
-  IonicPage
-} from 'ionic-angular';
+import {IonicPage} from 'ionic-angular';
 import {
   AlertController,
   LoadingController,
@@ -588,10 +586,10 @@ export class ReportPage {
         reportDate: this.dateView,
         selectedDate:this.selectedDate,
         reportAnswer: this.reportAnswer,
-        reportAnswersNoOfItems: this.reportAnswersNoOfItems,
-        reportQuestionsRecovery: this.reportQuestionsRecovery,
-        reportQuestionsEditParamTemps: this.reportQuestionsEditParamTemps,
-        editQuestionAllowed: this.editQuestionAllowed,
+        reportAnswersNoOfItems: this.reportAnswersNoOfItems,//nouse
+        reportQuestionsRecovery: this.reportQuestionsRecovery, //nouse
+        reportQuestionsEditParamTemps: this.reportQuestionsEditParamTemps,//nouse
+        editQuestionAllowed: this.editQuestionAllowed,//nouse
         class:SelectedClass,
         classIndex:this.selectedClassIndex,
         selectedStudentIndex:selectStudentIndex,

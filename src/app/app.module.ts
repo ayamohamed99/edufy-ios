@@ -52,7 +52,6 @@ import {TransFormDate} from "../services/transFormDate";
 import {ComponentsModule} from "../components/components.module";
 import {ReportCommentProvider} from "../providers/report-comment/report-comment";
 import {FCMService} from "../services/fcm";
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import {ChatService} from "../services/chat";
@@ -64,6 +63,7 @@ import {MatNativeDateModule} from "@angular/material";
 import {BackgroundMedicalcareService} from "../services/background-medicalcare";
 import {TemplateFunctionsService} from "../services/templateFunctionsService";
 import {Excel} from "../services/excel";
+import {FirebaseMessaging} from "@ionic-native/firebase-messaging/ngx";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];

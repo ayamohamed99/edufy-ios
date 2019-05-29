@@ -4,11 +4,12 @@ import {Url_domain} from "../models/url_domain";
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging';
+
 import {AccountService} from "./account";
 import {Platform} from "ionic-angular";
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import {LoginService} from "./login";
+import {FirebaseMessaging} from "@ionic-native/firebase-messaging/ngx";
 
 @Injectable()
 export class FCMService{

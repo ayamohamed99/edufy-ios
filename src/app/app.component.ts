@@ -184,6 +184,17 @@ export class MyApp {
     this.menu.close();
   }
 
+  onLoadReportTemplateWithComments() {
+    this.accountServ.reportId = -1;
+    // this.nav.setRoot("ReportTemplatePage",
+    //   {student:{id:16642,name:"ADAM"},classId:303,reportDate:"29-05-2019",comment:true})
+
+   const model = this.modalCtrl.create('ReportTemplatePage',
+     {student:{id:16642,name:"ADAM"},classId:303,reportDate:"29-05-2019",comment:true});
+    model.present();
+    this.menu.close();
+  }
+
   onSignOut(){
     this.load = this.loading.create({
       content: 'Wait please ...'
@@ -457,10 +468,12 @@ export class MyApp {
       TO_OPEN_PAGE = page+this.accountServ.reportId;
     }
 
-    if(this.oldPage != null) {
+    if(this.oldPage != null && document.getElementById(this.oldPage) ) {
       document.getElementById(this.oldPage).classList.toggle("selected");
     }
-    document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
+    if (document.getElementById(TO_OPEN_PAGE)) {
+      document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
+    }
     this.oldPage = TO_OPEN_PAGE;
   }
 

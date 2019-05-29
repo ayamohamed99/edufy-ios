@@ -16,6 +16,13 @@ page-report-template {
     padding-right: 16px;
   }
 
+  .loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
 
 ///////////////////////////Edit Ion-Fab
   button[ion-fab][mini]{

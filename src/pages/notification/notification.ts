@@ -763,6 +763,7 @@ export class NotificationPage{
      reader.onloadend = function(e){
       return reader.result;
     };
+    // @ts-ignore
     reader.readAsDataURL(reader.result);
   }
 
@@ -968,7 +969,7 @@ export class NotificationPage{
         // });
       }
     } else {
-      var sentNotification = {
+      let sentNotification = {
         "id": approvedNotification.notificationId
       };
       // calling send notification service.
