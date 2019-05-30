@@ -21,6 +21,7 @@ import {MedicalCareService} from "../../services/MedicalCare/medical-care.servic
 import {Router} from '@angular/router';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {__await} from 'tslib';
+import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 
 @Component({
   selector: 'app-home',
@@ -357,7 +358,7 @@ export class HomePage {
 
     async presentChatDialogue(Stud,student) {
         const modal = await this.modalCtrl.create({
-            component: 'ChatDialoguePage',
+            component: ChatDialoguePage,
             componentProps: {studentData:Stud}
         });
 
@@ -506,7 +507,7 @@ export class HomePage {
         }else if(name == 'ReportPage'){
             return '/menu/profile'
         }else if(name == 'ChatPage'){
-            return '/menu/profile'
+            return '/menu/chat'
         }else if(name == 'MedicalCarePage'){
             return '/menu/profile'
         }else if(name == 'MedicationNotificationPage'){

@@ -19,6 +19,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
  import {Student} from './models';
  import {Url_domain} from './models/url_domain';
  import {ChatService} from './services/Chat/chat.service';
+ import {ChatDialoguePage} from './pages/chat-dialogue/chat-dialogue.page';
 
 @Component({
   selector: 'app-root',
@@ -405,7 +406,7 @@ export class AppComponent {
 
   async presentChatDialogue(Stud,student) {
     const modal = await this.modalCtrl.create({
-      component: 'ChatDialoguePage',
+      component: ChatDialoguePage,
       componentProps: {studentData:Stud}
     });
 
@@ -578,7 +579,7 @@ export class AppComponent {
     }else if(name == 'ReportPage'){
       return '/menu/profile'
     }else if(name == 'ChatPage'){
-      return '/menu/profile'
+      return '/menu/chat'
     }else if(name == 'MedicalCarePage'){
       return '/menu/profile'
     }else if(name == 'MedicationNotificationPage'){

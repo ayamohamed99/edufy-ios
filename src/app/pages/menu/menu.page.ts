@@ -61,7 +61,7 @@ export class MenuPage implements OnInit {
     this.knowCustomReport(this.accountServ.getCustomReportsList());
 
     if(this.accountServ.getUserRole().chatView && data.chatActivated){
-      let data = {title: 'Chat', icon: 'ios-chatbubbles', main:true, url: '/menu/profile', customReport:false};
+      let data = {title: 'Chat', icon: 'ios-chatbubbles', main:true, url: '/menu/chat', customReport:false};
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
     }

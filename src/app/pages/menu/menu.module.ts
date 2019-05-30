@@ -20,6 +20,10 @@ const routes: Routes = [
         {
             path: 'notification',
             loadChildren: '../notification/notification.module#NotificationPageModule'
+        },
+        {
+            path: 'chat',
+            loadChildren: '../chat/chat.module#ChatPageModule'
         }
     ]
   }

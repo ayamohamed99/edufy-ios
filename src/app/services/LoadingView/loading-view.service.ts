@@ -28,6 +28,8 @@ export class LoadingViewService {
   }
 
   async stopLoading(){
-    return await this.load.dismiss();
+    if(this.load){
+      await this.load.dismiss();
+    }
   }
 }

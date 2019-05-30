@@ -8,6 +8,7 @@ export class TransFormDateService {
   constructor(private datePipe: DatePipe){}
 
   transformTheDate(date, dateFormate:string) {
-    return this.datePipe.transform(date, dateFormate); //whatever format you need.
+    let dates = this.datePipe.transform(date, dateFormate); //whatever format you need.
+    return dates
   }
 }

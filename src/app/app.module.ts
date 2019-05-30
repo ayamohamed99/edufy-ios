@@ -51,11 +51,13 @@ import {NotificationViewReceiverPageModule} from './pages/notification-view-rece
 import {NotificationNewPageModule} from './pages/notification-new/notification-new.module';
 import {FormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
+import {ChatDialoguePageModule} from './pages/chat-dialogue/chat-dialogue.module';
+import {DatePipe} from '@angular/common';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
 let popOvers = [PopoverNotificationCardPageModule];
-let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule];
+let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule,ChatDialoguePageModule];
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -71,7 +73,8 @@ let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,Noti
     mods,
     popOvers,
     modals,
-    NgSelectModule, FormsModule
+    NgSelectModule,
+    FormsModule
   ],
   providers: [
     StatusBar,
@@ -90,7 +93,8 @@ let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,Noti
     BackgroundMode,
     AndroidPermissions,
     FCMService,FirebaseMessaging,
-    LocalNotifications
+    LocalNotifications,
+    DatePipe
 
 
 

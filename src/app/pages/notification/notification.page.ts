@@ -120,6 +120,7 @@ export class NotificationPage implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   onSelectCard(event:Event, i:any,notification:any){
