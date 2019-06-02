@@ -118,10 +118,10 @@
 
   <div style="height: 16px; background-color: #F4F4F4"></div>
 
-  <button ion-button block outline class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
-    Choose Files
+  <label for="inputFiles" class="btn-default" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
     <input type="file" multiple #file id="inputFiles" (change)="filesChange()">
-  </button>
+    Choose Files
+  </label>
 
   <div >
     <ion-label text-center style="color: #f53d3d" *ngIf="showSupportFiles">

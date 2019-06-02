@@ -155,8 +155,12 @@ export class NotificationNewPage {
     this.storage.get(this.wifiUploadKey).then(
       value => {
         let val = value;
-        if(val.wifi){
-          this.backNotify.wifiUpload = true;
+        if (val) {
+          if (val.wifi) {
+            this.backNotify.wifiUpload = true;
+          } else {
+            this.backNotify.wifiUpload = false;
+          }
         }else{
           this.backNotify.wifiUpload = false;
         }
@@ -278,6 +282,7 @@ export class NotificationNewPage {
   }
   loading;
   async filesChange() {
+    debugger;
     let inputEl: HTMLInputElement = this.inputEl.nativeElement;
     let fileCount: number = inputEl.files.length;
     let faildFilesNamesSize: any[] = [];
