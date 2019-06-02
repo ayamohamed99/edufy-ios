@@ -63,7 +63,7 @@ import {MatNativeDateModule} from "@angular/material";
 import {BackgroundMedicalcareService} from "../services/background-medicalcare";
 import {TemplateFunctionsService} from "../services/templateFunctionsService";
 import {Excel} from "../services/excel";
-import {FirebaseMessaging} from "@ionic-native/firebase-messaging/ngx";
+import {FirebaseMessaging} from "@ionic-native/firebase-messaging";
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];

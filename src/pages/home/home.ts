@@ -262,7 +262,9 @@ export class HomePage {
             debugger;
             console.log(data);
             console.log('Foreground');
-            if(data.data.page === "ReportPage"){
+            if (data.data.isCommentNotification) {
+              this.onLoadReportTemplateWithComments(data.data)
+            } else if(data.data.page === "ReportPage"){
               this.onLoadReport("ReportPage", data.data.reportName,data.data.reportId);
             }else{
               this.navCtrl.setRoot(data.data.page).then(
@@ -289,7 +291,14 @@ export class HomePage {
     this.accountServ.reportId = reportId;
     this.navCtrl.setRoot(page);
   }
+  onLoadReportTemplateWithComments(params) {
+    this.accountServ.reportId = params.reportId;
 
+    const model = this.modalCtrl.create('ReportTemplatePage',
+      {student:{id:params.studentId,name:params.studentName},
+        classId:params.classId,reportDate:params.reportDate,comment:true});
+    model.present();
+  }
 
   startSocket(userId){
     let that = this;

@@ -184,15 +184,22 @@ export class MyApp {
     this.menu.close();
   }
 
-  onLoadReportTemplateWithComments() {
-    this.accountServ.reportId = -1;
-    // this.nav.setRoot("ReportTemplatePage",
-    //   {student:{id:16642,name:"ADAM"},classId:303,reportDate:"29-05-2019",comment:true})
-
+  onLoadReportTemplateWithComments(params?) {
+    this.accountServ.reportId = params.reportId;
+    this.accountServ.reportPage = params.reportName;
    const model = this.modalCtrl.create('ReportTemplatePage',
-     {student:{id:16642,name:"ADAM"},classId:303,reportDate:"29-05-2019",comment:true});
+     {student:{id:params.studentId,name:params.studentName},
+       classId:params.classId,reportDate:params.reportDate,comment:true});
     model.present();
     this.menu.close();
+
+    //  this.accountServ.reportId = 1;
+    //  this.accountServ.reportPage = "Weakly";
+    // const model = this.modalCtrl.create('ReportTemplatePage',
+    //   {student:{id:9020,name:"Lina"},
+    //     classId:36,reportDate:"02-06-2019",comment:true});
+    //  model.present();
+    //  this.menu.close();
   }
 
   onSignOut(){
@@ -484,7 +491,9 @@ export class MyApp {
       data => {
 
         console.log("Background Notification : \n", JSON.stringify(data));
-        if(data.page === this.reportPage){
+        if (data.isCommentNotification) {
+          this.onLoadReportTemplateWithComments(data)
+        } else if(data.page === this.reportPage){
           this.onLoadReport(this.reportPage, data.reportName,data.reportId);
         }else if(data.page === this.chatPage){
           let JData = JSON.parse(data.chatMessage);
@@ -542,7 +551,9 @@ export class MyApp {
           data => {
             debugger;
             console.log('Foreground');
-            if(data.data.page === this.reportPage){
+            if (data.data.isCommentNotification) {
+              this.onLoadReportTemplateWithComments(data.data)
+            } else if(data.data.page === this.reportPage){
               this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
             }else if(data.data.page === this.chatPage){
               let JData = JSON.parse(data.data.chatMessage);

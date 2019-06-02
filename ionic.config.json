@@ -3,15 +3,5 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "ionic-angular",
-  "proxies": [
-    {
-      "path":"/oauth",
-      "proxyUrl": "http://104.198.175.198/oauth"
-    },
-    {
-      "path":"/authentication",
-      "proxyUrl": "http://104.198.175.198/authentication"
-    }
-  ]
+  "type": "ionic-angular"
 }

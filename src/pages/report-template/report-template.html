@@ -1447,7 +1447,9 @@
   </ion-fab>
 
   <report-comment *ngIf="selectedListOfStudents?.length == 1" [date]="selectedReportDate"
-                  [studentId]="selectedListOfStudents[0].id" [reportId]="reportId"></report-comment>
+                  [studentId]="selectedListOfStudents[0].id"
+                  [expanded]="shouldAutoExpandComments"
+                  [reportId]="reportId"></report-comment>
 
 </div>
 

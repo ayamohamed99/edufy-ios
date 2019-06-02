@@ -1176,10 +1176,11 @@ export class ReportPage {
           }
 
         } else {
+          let question = this.reportQuestions[i];
           if(this.accountServ.reportId == -1) {
-            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }else{
-            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }
           // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         }

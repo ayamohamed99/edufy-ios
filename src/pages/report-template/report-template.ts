@@ -272,14 +272,6 @@ export class ReportTemplatePage{
     }
   }
 
-  @ViewChild(ReportCommentComponent) reportComment :ReportCommentComponent;
-
-  ionViewDidEnter(){
-    if (this.shouldAutoExpandComments) {
-      console.log(this.reportComment);
-      this.reportComment.toggleCommentsSection();
-    }
-  }
 
   /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
@@ -1181,6 +1173,9 @@ export class ReportTemplatePage{
               response =>{
                 this.load.dismiss();
                 this.presentToast("Report approved successfully.");
+                if (this.shouldAutoExpandComments) {
+                  this.viewCtrl.dismiss();
+                }
               },err=>{
                 this.console.log(err);
                 this.load.dismiss();
@@ -1224,6 +1219,9 @@ export class ReportTemplatePage{
                   this.viewCtrl.dismiss(
                     {closeView:"Report reset successfully."}
                   )
+                  if (this.shouldAutoExpandComments) {
+                    this.viewCtrl.dismiss();
+                  }
                 }, err => {
                   this.console.log(err);
                   this.load.dismiss();
@@ -1725,7 +1723,9 @@ export class ReportTemplatePage{
         let successMsg;
         successMsg = 'Report saved successfully.';
         this.presentToast(successMsg);
-        if(this.selectedListOfStudentsID.length == 1 && !this.shouldAutoExpandComments){
+        if (this.shouldAutoExpandComments) {
+          this.viewCtrl.dismiss();
+        }else if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
         }else{
@@ -2270,7 +2270,9 @@ export class ReportTemplatePage{
         this.load.dismiss();
         successMsg = 'Report updated successfully.';
         this.presentToast(successMsg);
-        if(this.selectedListOfStudentsID.length == 1 && !this.shouldAutoExpandComments){
+        if (this.shouldAutoExpandComments) {
+          this.viewCtrl.dismiss();
+        }else if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
         }else{
@@ -2644,10 +2646,11 @@ export class ReportTemplatePage{
           }
 
         } else {
+          let question = this.reportQuestions[i];
           if(this.accountServ.reportId == -1) {
-            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }else{
-            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }
           // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         }
@@ -2970,11 +2973,11 @@ export class ReportTemplatePage{
       let question = this.reportQuestions[i];
       if(this.accountServ.reportId == -1) {
         reportAnswerView.dailyReportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }else{
         reportAnswerView.reportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }
     }

@@ -33,7 +33,7 @@
     "@ionic-native/file-opener": "^4.9.1",
     "@ionic-native/file-transfer": "^4.9.1",
     "@ionic-native/firebase": "^4.17.0",
-    "@ionic-native/firebase-messaging": "^5.6.1",
+    "@ionic-native/firebase-messaging": "^4.20.0",
     "@ionic-native/http": "^4.11.0",
     "@ionic-native/in-app-browser": "^4.18.0",
     "@ionic-native/local-notifications": "^4.18.0",
@@ -51,9 +51,9 @@
     "blueimp-canvas-to-blob": "^3.14.0",
     "chart.js": "^2.7.2",
     "com-sarriaroman-photoviewer": "^1.1.18",
-    "cordova": "^8.0.0",
+    "cordova": "~8.1.2",
     "cordova-android": "7.1.4",
-    "cordova-android-support-gradle-release": "^1.4.7",
+    "cordova-android-support-gradle-release": "^1.4.4",
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.5",
     "cordova-plugin-advanced-http": "^1.11.1",
@@ -137,8 +137,8 @@
     },
     "platforms": [
       "browser",
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

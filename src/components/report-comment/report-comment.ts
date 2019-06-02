@@ -76,6 +76,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   @Input() date: string;
   @Input() studentId: number;
   @Input() reportId: number;
+  @Input() expanded: boolean;
 
   public shouldShowComments: boolean = false;
   public canSubmitComment: boolean = false;
@@ -96,6 +97,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   constructor(private commentsProvider: ReportCommentProvider, public accountService: AccountService,
               public actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController,
               public storage:Storage, private platform:Platform) {
+    this.isCommentsSectionExpanded = this.expanded;
     if (this.reportId == undefined || this.reportId == null) {
       this.shouldShowComments = this.accountService.getUserRole().dailyReportCommentView;
       this.canSubmitComment = this.accountService.getUserRole().dailyReportCommentCreate;
@@ -122,6 +124,9 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    if (this.expanded) {
+      this.toggleCommentsSection();
+    }
     this.scrollToBottom();
   }
 

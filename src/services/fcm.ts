@@ -9,7 +9,8 @@ import {AccountService} from "./account";
 import {Platform} from "ionic-angular";
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import {LoginService} from "./login";
-import {FirebaseMessaging} from "@ionic-native/firebase-messaging/ngx";
+import {FirebaseMessaging} from "@ionic-native/firebase-messaging";
+
 
 @Injectable()
 export class FCMService{
