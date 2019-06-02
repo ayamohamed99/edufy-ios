@@ -1,7 +1,7 @@
 export class Postattachment{
   name:string;
   type:string;
-  url:string;
+  url:string | ArrayBuffer;
   uploadDate:string;
   file:any;
   data:any;

@@ -74,8 +74,9 @@ import {Storage} from "@ionic/storage";
 })
 export class ReportCommentComponent implements OnInit, AfterViewChecked {
   @Input() date: string;
-  @Input() student: Student;
+  @Input() studentId: number;
   @Input() reportId: number;
+  @Input() expanded: boolean;
 
   public shouldShowComments: boolean = false;
   public canSubmitComment: boolean = false;
@@ -96,6 +97,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   constructor(private commentsProvider: ReportCommentProvider, public accountService: AccountService,
               public actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController,
               public storage:Storage, private platform:Platform) {
+    this.isCommentsSectionExpanded = this.expanded;
     if (this.reportId == undefined || this.reportId == null) {
       this.shouldShowComments = this.accountService.getUserRole().dailyReportCommentView;
       this.canSubmitComment = this.accountService.getUserRole().dailyReportCommentCreate;
@@ -122,6 +124,9 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
+    if (this.expanded) {
+      this.toggleCommentsSection();
+    }
     this.scrollToBottom();
   }
 
@@ -142,7 +147,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     this.isCommentsSectionExpanded = !this.isCommentsSectionExpanded;
     if (this.isCommentsSectionExpanded) {
       this.isLoadingComments = true;
-      this.commentsProvider.getComments(this.date, this.student.id, this.reportId)
+      this.commentsProvider.getComments(this.date, this.studentId, this.reportId)
         .subscribe(comments => {
           this.shouldScrollToBottom = true;
           this.isLoadingComments = false;
@@ -157,7 +162,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
 
   submitNewComment() {
     this.isSendingComment = true;
-    this.commentsProvider.postNewComment(this.date, this.student.id,
+    this.commentsProvider.postNewComment(this.date, this.studentId,
       this.newCommentToBeSubmitted.trim(), this.reportId)
       .subscribe(newlySubmittedComment => {
         this.shouldScrollToBottom = true;
@@ -192,7 +197,7 @@ export class ReportCommentComponent implements OnInit, AfterViewChecked {
     this.shouldScrollToBottom = false;
     if (this.inEditModeComments[comment.id]) {
       this.isEditedCommentsLoading[comment.id] = true;
-      this.commentsProvider.editComment(this.date, this.student.id,
+      this.commentsProvider.editComment(this.date, this.studentId,
         comment.comment, comment.id, this.reportId,1)
         .subscribe(() => {
           this.isEditedCommentsLoading[comment.id] = false;

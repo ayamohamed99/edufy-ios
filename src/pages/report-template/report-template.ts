@@ -1,15 +1,5 @@
-import {Component} from '@angular/core';
-import {
-  AlertController,
-  FabContainer,
-  IonicPage,
-  LoadingController,
-  NavController,
-  NavParams,
-  Platform,
-  ToastController,
-  ViewController
-} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {AlertController, FabContainer, IonicPage, LoadingController, NavController, NavParams, Platform, ToastController, ViewController} from 'ionic-angular';
 import {AccountService} from "../../services/account";
 import {DomSanitizer} from "@angular/platform-browser";
 import {TemplateShape} from "../../models/template_Shape";
@@ -18,6 +8,9 @@ import {DailyReportService} from "../../services/dailyreport";
 import {CheckboxFunctionService} from "../../services/checkboxFunctionService";
 import {DatePicker} from "@ionic-native/date-picker";
 import {TransFormDate} from "../../services/transFormDate";
+import {tap} from "rxjs/operators";
+import {combineLatest} from "rxjs/observable/combineLatest";
+import {ReportCommentComponent} from "../../components/report-comment/report-comment";
 
 /**
  * Generated class for the ReportTemplatePage page.
@@ -168,18 +161,23 @@ export class ReportTemplatePage{
         return 'update';
       }
     }else{
-      let foundStudentThatFinalized = false;
-      for(let student of this.navParams.get('selected')){
-        if(student.reportFinalized){
-          foundStudentThatFinalized = true;
+      if (this.shouldAutoExpandComments) {
+          return this.reportAnswerForSelectedStudent.length == 0 ? 'save' : "update"
+      } else {
+        let foundStudentThatFinalized = false;
+        for(let student of this.navParams.get('selected')){
+          if(student.reportFinalized){
+            foundStudentThatFinalized = true;
+          }
+        }
+
+        if(foundStudentThatFinalized){
+          return 'update';
+        }else{
+          return 'save';
         }
       }
 
-      if(foundStudentThatFinalized){
-        return 'update';
-      }else{
-        return 'save';
-      }
     }
   }
 
@@ -205,23 +203,20 @@ export class ReportTemplatePage{
 
   showRestButton(){
     let foundFinalizedStudent;
-    for(let i in this.selectedListOfStudents){
-      if(this.selectedListOfStudents[i].reportFinalized){
-        foundFinalizedStudent = true;
+    if (this.shouldAutoExpandComments) {
+      foundFinalizedStudent =  this.reportAnswerForSelectedStudent.length != 0
+    } else {
+      for(let i in this.selectedListOfStudents){
+        if(this.selectedListOfStudents[i].reportFinalized){
+          foundFinalizedStudent = true;
+        }
       }
     }
+
     if(this.accountServ.reportId == -1) {
-      if(this.accountServ.getUserRole().dailyReportReset && foundFinalizedStudent){
-        return true;
-      }else{
-        return false;
-      }
+      return !!(this.accountServ.getUserRole().dailyReportReset && foundFinalizedStudent);
     }else{
-      if(this.accountServ.getUserRole().reportReset && foundFinalizedStudent){
-        return true;
-      }else{
-        return false;
-      }
+      return !!(this.accountServ.getUserRole().reportReset && foundFinalizedStudent);
     }
   }
 
@@ -235,6 +230,9 @@ export class ReportTemplatePage{
     }
 
     if(roleApprove){
+      if (this.shouldAutoExpandComments) {
+        return this.reportAnswerForSelectedStudent.length != 0
+      }
       for(let student of this.selectedListOfStudents){
         if(!student.reportFinalized){
           studentNotFinalized = true;
@@ -275,14 +273,17 @@ export class ReportTemplatePage{
   }
 
 
-
-
-
   /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
               private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController,
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDate) {
+    this.shouldAutoExpandComments = !!this.navParams.get("comment");
+    if (this.shouldAutoExpandComments) {
+      this.loadingReportInBackground = true;
+      this.initTemplateViewWithAutoExpandedComments();
+      return;
+    }
 
     if(this.accountServ.reportId == -1){
       this.reportId = null;
@@ -382,43 +383,158 @@ export class ReportTemplatePage{
       }
     }
 
-    if (platform.is('core')) {
-      this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
-      for(let i=0; i<this.drQuestion.length;i++){
-        let questionTitle;
-        if(this.accountServ.reportId == -1){
-          questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
-        }else{
-          questionTitle = this.drQuestion[i].reportQuestionType.title;
-        }
+    this.initTheHeaders();
 
-        if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
-          this.callDataAndWait();
-          break;
-        }
-      }
-    } else {
-      storage.get(this.localStorageToken).then(
-        val => {
-          this.dailyReportServ.putHeader(val);
-          for(let i=0; i<this.drQuestion.length;i++){
-
-            let questionTitle;
-            if(this.accountServ.reportId == -1){
-              questionTitle = this.drQuestion[i].dailyReportQuestionType.title;
-            }else{
-              questionTitle = this.drQuestion[i].reportQuestionType.title;
-            }
-
-            if(questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || questionTitle == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR'){
-              this.callDataAndWait();
-              break;
-            }
-          }
-        });
-
-    }
     this.checkIfChangesAnswer = false;
+  }
+
+  initTheHeaders() {
+    return new Promise(resolve => {
+      if (this.platform.is('core')) {
+        this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
+        resolve();
+      } else {
+        this.storage.get(this.localStorageToken).then(
+          val => {
+            this.dailyReportServ.putHeader(val);
+            resolve();
+          });
+
+      }
+    });
+
+  }
+
+  loadingReportInBackground = false;
+  shouldAutoExpandComments = false;
+  initTemplateViewWithAutoExpandedComments() {
+    this.initTheHeaders()
+      .then(()=>{
+        if(this.accountServ.reportId == -1){
+          this.reportId = null;
+        }else{
+          this.reportId = this.accountServ.reportId;
+        }
+        this.selectedClassId = this.navParams.get("classId");
+        const date: string = this.navParams.get('reportDate');
+        this.selectedReportDate = date;
+        this.reportDate = date.replace(/-/g, '/');
+        const student = this.navParams.get('student');
+        this.selectedListOfStudents.push(student);
+        if (this.accountServ.reportId == -1) {
+          this.PageName = this.selectedListOfStudents[0].name + "'s daily report";
+        } else {
+          this.PageName = this.selectedListOfStudents[0].name + "'s " + this.accountServ.reportPage;
+        }
+        this.selectedListOfStudentsID.push({id: student.id});
+        const reportTemplate$ = this.dailyReportServ.getDailyReportTemplate("English",
+          this.selectedReportDate, this.selectedClassId,this.reportId);
+        const reportAnswers =   this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,
+          this.selectedReportDate, this.reportId );
+
+        combineLatest(reportTemplate$,reportAnswers)
+          .subscribe(([reportTemplate,reportAsnsers])=>{
+            const template = reportTemplate[0];
+            this.reportQuestions = template.questionsList;
+            this.drQuestion = template.questionsList;
+            if(this.accountServ.reportId == -1) {
+              this.reportAnswer = {
+                "dailyReportAnswersObjectsList": []
+              };
+            }else{
+              this.reportAnswer = {
+                "reportAnswersObjectsList": []
+              };
+            }
+            for (let i = 0; i < this.reportQuestions.length; i++) {
+              if (this.accountServ.reportId == -1) {
+                this.reportAnswer.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+              } else {
+                this.reportAnswer.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+              }
+            }
+            this.reportAnswerForSelectedStudent = [];
+            console.log(this.dailyReportServ.reportClassQuestionsGroups);
+            for (let qId of Object.keys(this.dailyReportServ.reportClassQuestionsGroups)) {
+              console.log(qId);
+              for (let answer of Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId])) {
+                console.log(answer);
+                for (let answerTemp of this.dailyReportServ.reportClassQuestionsGroups[qId][answer]) {
+                  console.log(answerTemp);
+                  if (answerTemp == student.id) {
+                    this.reportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
+                    console.log(this.reportAnswerForSelectedStudent);
+                  }
+                }
+              }
+            }
+            console.log(this.reportAnswerForSelectedStudent.length);
+            if (this.reportAnswerForSelectedStudent.length == 0) {
+              this.isSave = true;
+              this.isNotValid = false;
+            } else {
+              this.studnetsAnswersList = [];
+              this.studnetsAnswersList[student.id] = this.reportAnswerForSelectedStudent;
+              this.isNotValid = false;
+              this.isSave = false;
+              this.reverseAnswerToViewAnswer(this.reportAnswerForSelectedStudent);
+            }
+            this.loadingReportInBackground = false;
+          },err =>  this.loadingReportInBackground = true);
+
+
+        // this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,
+        //   this.selectedReportDate, this.reportId )
+        //   .subscribe(() => {
+        //     this.reportAnswerForSelectedStudent = [];
+        //     console.log(this.dailyReportServ.reportClassQuestionsGroups);
+        //     for (let qId of Object.keys(this.dailyReportServ.reportClassQuestionsGroups)) {
+        //       console.log(qId);
+        //       for (let answer of Object.keys(this.dailyReportServ.reportClassQuestionsGroups[qId])) {
+        //         console.log(answer);
+        //         for (let answerTemp of this.dailyReportServ.reportClassQuestionsGroups[qId][answer]) {
+        //           console.log(answerTemp);
+        //           if (answerTemp == student.id) {
+        //             this.reportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
+        //             console.log(this.reportAnswerForSelectedStudent);
+        //           }
+        //         }
+        //       }
+        //     }
+        //     console.log(this.reportAnswerForSelectedStudent.length);
+        //     if (this.reportAnswerForSelectedStudent.length == 0) {
+        //       this.isSave = true;
+        //       this.isNotValid = false;
+        //       this.resetReportTemplate(null, null);
+        //     } else {
+        //       this.studnetsAnswersList = [];
+        //       this.studnetsAnswersList[student.id] = this.reportAnswerForSelectedStudent;
+        //       this.isNotValid = false;
+        //       this.isSave = false;
+        //       this.reverseAnswerToViewAnswer(this.reportAnswerForSelectedStudent);
+        //     }
+        //
+        //   });
+        // this.dailyReportServ.getDailyReportTemplate("English",
+        //   this.selectedReportDate, this.selectedClassId, this.reportId).subscribe(
+        //   (templates) => {
+        //
+        //     const template = templates[0];
+        //     this.reportQuestions = template.questionsList;
+        //
+        //
+        //     for (let i = 0; i < this.reportQuestions.length; i++) {
+        //       if (this.accountServ.reportId == -1) {
+        //         this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+        //       } else {
+        //         this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+        //       }
+        //
+        //
+        //     }
+        //   }, err => console.log(err));
+      })
+
   }
 
   dataChanges(){
@@ -706,20 +822,14 @@ export class ReportTemplatePage{
   fabSelected(button,fab: FabContainer){
     fab.close();
 
-    let noFinalize = 0;
-    if(this.accountServ.reportId == -1) {
-      noFinalize = this.selectedClass.noOfStudentDailyReportFinalized;
-    }else{
-      noFinalize = this.selectedClass.noOfStudentReportFinalized;
-    }
     if(button == 'approve'){
-      this.approveDailyReport(this.selectedClassId, this.selectedClass.className, this.selectedClass.grade.name, this.selectedClass.noOfAllStudent, noFinalize);
+      this.approveDailyReport();
     }else if(button == 'save'){
       this.saveDailyReport();
     }else if(button == 'update'){
       this.updateDailyReport();
     } else if(button == 'rest'){
-      this.rollbackReport(this.navParams.get('selected')[0].id,this.navParams.get('selected')[0].name,null,null)
+      this.rollbackReport(this.selectedListOfStudents[0].id,this.selectedListOfStudents[0].name,null,null)
     }
   }
 
@@ -775,8 +885,8 @@ export class ReportTemplatePage{
     throw new Error("Unable to copy obj! Its type isn't supported.");
   }
 
-  mappingDefaultAnswers(defaultDailyReportAnswer, question) {
-    return defaultDailyReportAnswer.answer = this.getDefaultValue(question);
+  mappingDefaultAnswers(question) {
+    return {answer : this.getDefaultValue(question)}
   };
 
   getDefaultValue(drQuestion) {
@@ -1033,9 +1143,8 @@ export class ReportTemplatePage{
   }
 
 
-  approveDailyReport(classId, className, classGradeName, noOfAllStudents, noOfFinalized) {
+  approveDailyReport() {
 
-    let noOfUnFinalized = noOfAllStudents - noOfFinalized;
     this.alrtCtrl.create({
       title: 'Approve Report',
       subTitle: 'Do you want to approve the reports for the selected student(s) ?',
@@ -1056,7 +1165,7 @@ export class ReportTemplatePage{
             this.load.present();
 
             let studentsIdsArray = [];
-            for (let student of this.navParams.get('selected')) {
+            for (let student of this.selectedListOfStudents) {
               studentsIdsArray.push(student.id);
             }
 
@@ -1064,6 +1173,9 @@ export class ReportTemplatePage{
               response =>{
                 this.load.dismiss();
                 this.presentToast("Report approved successfully.");
+                if (this.shouldAutoExpandComments) {
+                  this.viewCtrl.dismiss();
+                }
               },err=>{
                 this.console.log(err);
                 this.load.dismiss();
@@ -1100,13 +1212,16 @@ export class ReportTemplatePage{
             });
             this.load.present();
 
-            if(this.navParams.get('selected').length == 1) {
-              this.dailyReportServ.deleteStudnetReport(this.navParams.get('selected')[0].id, this.selectedReportDate,this.reportId).subscribe(
+            if(this.selectedListOfStudents.length == 1) {
+              this.dailyReportServ.deleteStudnetReport(this.selectedListOfStudents[0].id, this.selectedReportDate,this.reportId).subscribe(
                 response => {
                   this.load.dismiss();
                   this.viewCtrl.dismiss(
                     {closeView:"Report reset successfully."}
                   )
+                  if (this.shouldAutoExpandComments) {
+                    this.viewCtrl.dismiss();
+                  }
                 }, err => {
                   this.console.log(err);
                   this.load.dismiss();
@@ -1608,7 +1723,9 @@ export class ReportTemplatePage{
         let successMsg;
         successMsg = 'Report saved successfully.';
         this.presentToast(successMsg);
-        if(this.selectedListOfStudentsID.length == 1){
+        if (this.shouldAutoExpandComments) {
+          this.viewCtrl.dismiss();
+        }else if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
         }else{
@@ -2153,7 +2270,9 @@ export class ReportTemplatePage{
         this.load.dismiss();
         successMsg = 'Report updated successfully.';
         this.presentToast(successMsg);
-        if(this.selectedListOfStudentsID.length == 1){
+        if (this.shouldAutoExpandComments) {
+          this.viewCtrl.dismiss();
+        }else if(this.selectedListOfStudentsID.length == 1){
           ///Get the next student in list if there is one
           this.getNextStudent();
         }else{
@@ -2435,11 +2554,20 @@ export class ReportTemplatePage{
 
   resetReportTemplate(questionsToBeReset, answers) {
     if (!questionsToBeReset) {
+      if(this.accountServ.reportId == -1) {
+        this.reportAnswer = {
+          "dailyReportAnswersObjectsList": []
+        };
+      }else{
+        this.reportAnswer = {
+          "reportAnswersObjectsList": []
+        };
+      }
       for (let i = 0; i < this.reportQuestions.length; i++) {
-        if(this.accountServ.reportId == -1) {
-          this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
-        }else{
-          this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+        if (this.accountServ.reportId == -1) {
+          this.reportAnswer.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+        } else {
+          this.reportAnswer.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
         }
         // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         // this.name = "";
@@ -2518,10 +2646,11 @@ export class ReportTemplatePage{
           }
 
         } else {
+          let question = this.reportQuestions[i];
           if(this.accountServ.reportId == -1) {
-            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }else{
-            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers[i].answer);
+            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }
           // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         }
@@ -2844,11 +2973,11 @@ export class ReportTemplatePage{
       let question = this.reportQuestions[i];
       if(this.accountServ.reportId == -1) {
         reportAnswerView.dailyReportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }else{
         reportAnswerView.reportAnswersObjectsList[i] = {
-          "answer": this.getViewQuestionAnswer(question, reportAnswerDb[i].answer)
+          "answer": this.getViewQuestionAnswer(question, reportAnswerDb.find(dbAnswer => dbAnswer.questionId == question.id).answer)
         };
       }
     }
@@ -2890,5 +3019,101 @@ export class ReportTemplatePage{
       }
     );
   }
+
+
+  fetchReportTemplateAndAnswer() {
+    let student;
+    let studentClass;
+    let template;
+
+  }
+//   return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
+//     tap(response => {
+//   debugger;
+//   this.reportClassQuestionsGroups = response;
+// },err => {
+// }));
+
+
+  // getDailyReportForClass(classId,loadS ){
+  //   this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId,this.reportId).subscribe(
+  //     (val) => {
+  //
+  //       let allData:any;
+  //       allData = val;
+  //       let template = allData[0];
+  //       let reportQuestinsFirst =[];
+  //       reportQuestinsFirst = template.questionsList;
+  //       for (let i = 0; i < reportQuestinsFirst.length; i++) {
+  //         reportQuestinsFirst[i].questionNumber = i;
+  //         if(this.accountServ.reportId == -1) {
+  //           this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+  //             answer: null
+  //           };
+  //         }else{
+  //           this.reportAnswer.reportAnswersObjectsList[i] = {
+  //             answer: null
+  //           };
+  //         }
+  //         this.reportAnswersNoOfItems[i] = {
+  //           noOfItems: null
+  //         };
+  //         reportQuestinsFirst[i].editQuestion = false;
+  //         reportQuestinsFirst[i].isEdited = false;
+  //       }
+  //
+  //       this.reportQuestions = reportQuestinsFirst;
+  //       this.reportQuestionsRecovery = this.getNewInstanceOf(this.reportQuestions);
+  //
+  //       for (let i = 0; i < this.reportQuestions.length; i++){
+  //         if(this.accountServ.reportId == -1) {
+  //           this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+  //         }else{
+  //           this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+  //         }
+  //         this.reportQuestionsEditParamTemps[i] = {};
+  //         this.reportQuestionsEditParamTemps[i].parameters = [];
+  //
+  //         for (let j = 0; j < this.reportQuestions[i].parametersList.length; j++) {
+  //           let param = {
+  //             "id": '',
+  //             "key": '',
+  //             "value": ''
+  //           };
+  //           this.reportQuestionsEditParamTemps[i].parameters[j] = param;
+  //           this.reportQuestionsEditParamTemps[i].parameters[j].key = this.reportQuestions[i].parametersList[j].key;
+  //         }
+  //
+  //         // let temp = this.reportQuestions;
+  //       }
+  //
+  //       if(this.accountServ.reportId == -1) {
+  //         this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+  //       }else{
+  //         this.editQuestionAllowed = this.accountServ.getUserRole().reportEditQuestionCreate;
+  //       }
+  //       // let temp2 = reportQuestinsFirst;
+  //
+  //       this.questionListForRecovary = this.reportQuestions;
+  //       this.ReportQuestionsList = this.reportQuestions ;
+  //
+  //       for(let oneClass of this.classesList){
+  //         if(oneClass.id == classId){
+  //           oneClass.reportTemplate = this.reportQuestions;
+  //         }
+  //       }
+  //       loadS.dismiss();
+  //     },(err)=>{
+  //       this.loadC.dismiss();
+  //       console.log("GetAllTemplates Error : " + err);
+  //       this.NoClasses = true;
+  //       this.alrtCtrl.create({
+  //         title: 'Error',
+  //         subTitle: 'Can\'t load your report shape, please refresh the page.',
+  //         buttons: ['OK']
+  //       }).present();
+  //       loadS.dismiss();
+  //     });
+  // }
 
 }

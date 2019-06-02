@@ -1,0 +1,407 @@
+{
+  "project_info": {
+    "project_number": "289964706793",
+    "firebase_url": "https://entrepreware-education.firebaseio.com",
+    "project_id": "entrepreware-education",
+    "storage_bucket": "entrepreware-education.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:75edda36930f4fa9",
+        "android_client_info": {
+          "package_name": "com.entrepreware"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:d226778611ca6be1",
+        "android_client_info": {
+          "package_name": "com.entrepreware.Edufy_Teachers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-6ga2g45i5cko97fvne1husuv3kmtfjms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.Edufy_Teachers",
+            "certificate_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:a2dce4781ddb1c0f",
+        "android_client_info": {
+          "package_name": "com.entrepreware.daycarenursery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-db4tc781d17n3od2m5bd22tc1o92dn6r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.daycarenursery",
+            "certificate_hash": "1eb26493e2cc4b82e4bc29b55128885a79470761"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:9b88112e05bc0be0",
+        "android_client_info": {
+          "package_name": "com.entrepreware.educationue.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-enimi3pol5ccgv65q5a43seo6aveq4cm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.educationue.debug",
+            "certificate_hash": "c4ab61a76f149b269d176b79e9d1f90eb0717707"
+          }
+        },
+        {
+          "client_id": "289964706793-8u9n0mk5h9glii347vnmauda0gqt04mp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.educationue.debug",
+            "certificate_hash": "1eb26493e2cc4b82e4bc29b55128885a79470761"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:9ae6a96cb81b44ed",
+        "android_client_info": {
+          "package_name": "com.entrepreware.edufy_teachers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-135ikvtvmmbn2ee35d3b0rf2h9kc0fj8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.edufy_teachers",
+            "certificate_hash": "d238bf2907b48894c13bdf3330cb5f758ccbf367"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:228d7374a2f5ab73",
+        "android_client_info": {
+          "package_name": "com.entrepreware.edufydriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-05l8ue99477bqsnmrqviajrse7m290f6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.edufydriver",
+            "certificate_hash": "e69aba6ca71f70cc4a7fbec189b02f39e5d0ba11"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:e4b1ee7e8f81f727",
+        "android_client_info": {
+          "package_name": "com.entrepreware.entrepreware.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-hf0h45jt4lae3v8f3e24ur7sh56am3h5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.entrepreware.debug",
+            "certificate_hash": "1eb26493e2cc4b82e4bc29b55128885a79470761"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:75791612fcd35fe2",
+        "android_client_info": {
+          "package_name": "com.entrepreware.entreprewareDev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-tuf63g4srb3rv0qd3kfr1cfu1uu6sdlp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.entreprewareDev",
+            "certificate_hash": "1eb26493e2cc4b82e4bc29b55128885a79470761"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289964706793:android:d5bbda703fc2a56f",
+        "android_client_info": {
+          "package_name": "com.entrepreware.entreprewareLocalhost.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289964706793-ja75c38uua551smq8a4hndr706lj0djs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.entrepreware.entreprewareLocalhost.debug",
+            "certificate_hash": "1eb26493e2cc4b82e4bc29b55128885a79470761"
+          }
+        },
+        {
+          "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0nmaxMrv5D2fMtEmHLaebbzelX7QrPoM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289964706793-0plvhla5uvdln8t06opdnnkk0v4l4jrp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "289964706793-6t8f0p1oqpi0vegmqafse4f2nli64fcl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.entrepreware.EdufyTeachers"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

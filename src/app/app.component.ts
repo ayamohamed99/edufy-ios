@@ -184,6 +184,24 @@ export class MyApp {
     this.menu.close();
   }
 
+  onLoadReportTemplateWithComments(params?) {
+    this.accountServ.reportId = params.reportId;
+    this.accountServ.reportPage = params.reportName;
+   const model = this.modalCtrl.create('ReportTemplatePage',
+     {student:{id:params.studentId,name:params.studentName},
+       classId:params.classId,reportDate:params.reportDate,comment:true});
+    model.present();
+    this.menu.close();
+
+    //  this.accountServ.reportId = 1;
+    //  this.accountServ.reportPage = "Weakly";
+    // const model = this.modalCtrl.create('ReportTemplatePage',
+    //   {student:{id:9020,name:"Lina"},
+    //     classId:36,reportDate:"02-06-2019",comment:true});
+    //  model.present();
+    //  this.menu.close();
+  }
+
   onSignOut(){
     this.load = this.loading.create({
       content: 'Wait please ...'
@@ -457,10 +475,12 @@ export class MyApp {
       TO_OPEN_PAGE = page+this.accountServ.reportId;
     }
 
-    if(this.oldPage != null) {
+    if(this.oldPage != null && document.getElementById(this.oldPage) ) {
       document.getElementById(this.oldPage).classList.toggle("selected");
     }
-    document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
+    if (document.getElementById(TO_OPEN_PAGE)) {
+      document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
+    }
     this.oldPage = TO_OPEN_PAGE;
   }
 
@@ -471,7 +491,9 @@ export class MyApp {
       data => {
 
         console.log("Background Notification : \n", JSON.stringify(data));
-        if(data.page === this.reportPage){
+        if (data.isCommentNotification) {
+          this.onLoadReportTemplateWithComments(data)
+        } else if(data.page === this.reportPage){
           this.onLoadReport(this.reportPage, data.reportName,data.reportId);
         }else if(data.page === this.chatPage){
           let JData = JSON.parse(data.chatMessage);
@@ -529,7 +551,9 @@ export class MyApp {
           data => {
             debugger;
             console.log('Foreground');
-            if(data.data.page === this.reportPage){
+            if (data.data.isCommentNotification) {
+              this.onLoadReportTemplateWithComments(data.data)
+            } else if(data.data.page === this.reportPage){
               this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
             }else if(data.data.page === this.chatPage){
               let JData = JSON.parse(data.data.chatMessage);
