@@ -4,10 +4,10 @@ export class Url_domain{
   // static Domain = "http://104.155.139.135:8080";
 
   //production from mobile
- static Domain = "https://104.198.175.198";
+ static Domain = "http://104.198.175.198";
 
   //local from mobile
-  // static Domain = "http://192.168.1.90:8080";
+   //static Domain = "http://192.168.1.90:8080";
 
   //for Proxy
   //  static Domain = "";

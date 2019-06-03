@@ -11,6 +11,7 @@ import {TransFormDate} from "../../services/transFormDate";
 import {tap} from "rxjs/operators";
 import {combineLatest} from "rxjs/observable/combineLatest";
 import {ReportCommentComponent} from "../../components/report-comment/report-comment";
+import {ReportCommentProvider} from "../../providers/report-comment/report-comment";
 
 /**
  * Generated class for the ReportTemplatePage page.
@@ -276,7 +277,7 @@ export class ReportTemplatePage{
   /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
   constructor(public navCtrl: NavController, public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingController,
-              private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController,
+              private toastCtrl: ToastController, private viewCtrl:ViewController,public alrtCtrl: AlertController, private reportCommentProvider:ReportCommentProvider,
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDate) {
     this.shouldAutoExpandComments = !!this.navParams.get("comment");
     if (this.shouldAutoExpandComments) {
@@ -390,13 +391,16 @@ export class ReportTemplatePage{
 
   initTheHeaders() {
     return new Promise(resolve => {
+      debugger;
       if (this.platform.is('core')) {
         this.dailyReportServ.putHeader(localStorage.getItem(this.localStorageToken));
+        this.reportCommentProvider.putHeader(localStorage.getItem(this.localStorageToken));
         resolve();
       } else {
         this.storage.get(this.localStorageToken).then(
           val => {
             this.dailyReportServ.putHeader(val);
+            this.reportCommentProvider.putHeader(val);
             resolve();
           });
 

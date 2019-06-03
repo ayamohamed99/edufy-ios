@@ -228,7 +228,9 @@ export class HomePage {
       data => {
 
         console.log("Background Notification : \n", JSON.stringify(data));
-        if(data.page === "ReportPage"){
+        if (data.isCommentNotification) {
+          this.onLoadReportTemplateWithComments(data)
+        }else if(data.page === "ReportPage"){
           this.onLoadReport("ReportPage", data.reportName,data.reportId);
         }else{
           this.navCtrl.setRoot(data.page).then(
@@ -293,7 +295,7 @@ export class HomePage {
   }
   onLoadReportTemplateWithComments(params) {
     this.accountServ.reportId = params.reportId;
-
+    this.accountServ.reportPage = params.reportName;
     const model = this.modalCtrl.create('ReportTemplatePage',
       {student:{id:params.studentId,name:params.studentName},
         classId:params.classId,reportDate:params.reportDate,comment:true});
