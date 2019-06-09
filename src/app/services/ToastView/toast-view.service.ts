@@ -25,4 +25,8 @@ export class ToastViewService {
     return await this.toast.present();
   }
 
+  async toastDismiss(){
+    return await this.toast.dismiss();
+  }
+
 }

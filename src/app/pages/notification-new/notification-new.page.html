@@ -52,7 +52,7 @@
 
 
   <ion-card class="cardClass">
-    <ion-slides pager *ngIf="attachmentArray && attachmentArray.length > 0" >
+    <ion-slides #newNotificationSlides pager="true" *ngIf="attachmentArray && attachmentArray.length > 0" >
       <ion-slide *ngFor="let item of attachmentArray; index as i">
         <div class="container">
           <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
@@ -107,17 +107,22 @@
 
   <ion-item class="fitTheView" *ngIf="accountServ.getUserRole().notificationTagView">
     <ion-label class="textColor">Select Tag</ion-label>
-    <ion-select [(ngModel)]="backNotify.tags" multiple interface="popover">
+    <ion-select [selectedText]="backNotify.tags" multiple interface="popover">
       <ion-select-option *ngFor="let tag of backNotify.tagsArr" >{{tag.name}}</ion-select-option>
     </ion-select>
   </ion-item>
 
   <div style="height: 16px; background-color: #F4F4F4"></div>
 
-  <ion-button fill="outline" expand="block" class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
-    Choose Files
+<!--  <ion-button fill="outline" expand="block" class="fileContainer" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">-->
+<!--    Choose Files-->
+<!--    <input type="file" multiple #file id="inputFiles" (change)="filesChange()">-->
+<!--  </ion-button>-->
+
+  <label for="inputFiles" class="btn-default" *ngIf="accountServ.getUserRole().notificationAttachmentUpload">
     <input type="file" multiple #file id="inputFiles" (change)="filesChange()">
-  </ion-button>
+    Choose Files
+  </label>
 
   <div >
     <ion-label text-center style="color: #f53d3d" *ngIf="showSupportFiles">

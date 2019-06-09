@@ -53,11 +53,16 @@ import {FormsModule} from '@angular/forms';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ChatDialoguePageModule} from './pages/chat-dialogue/chat-dialogue.module';
 import {DatePipe} from '@angular/common';
+import {MedicalCareCardOptionPageModule} from './pages/medical-care-card-option/medical-care-card-option.module';
+import {MedicalReportViewPageModule} from './pages/medical-report-view/medical-report-view.module';
+import {MedicalCareMedicationViewPageModule} from './pages/medical-care-medication-view/medical-care-medication-view.module';
+import {MedicalCareNewMedicalReportPageModule} from './pages/medical-care-new-medical-report/medical-care-new-medical-report.module';
+import {MedicalCareNewMedicalReportMedicinePageModule} from './pages/medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.module';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
 let popOvers = [PopoverNotificationCardPageModule];
-let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule,ChatDialoguePageModule];
+let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule,ChatDialoguePageModule,MedicalCareCardOptionPageModule,MedicalReportViewPageModule,MedicalCareMedicationViewPageModule,MedicalCareNewMedicalReportPageModule,MedicalCareNewMedicalReportMedicinePageModule];
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Autocomplete_shown_array} from '../../models/autocomplete_shown_array';
 import {Class} from '../../models';
 import {NgSelectConfig} from '@ng-select/ng-select';
-import {ActionSheetController, AlertController, ModalController, NavParams, Platform} from '@ionic/angular';
+import {ActionSheetController, AlertController, IonSlides, ModalController, NavParams, Platform} from '@ionic/angular';
 import {NotificationService} from '../../services/Notification/notification.service';
 import {Network} from '@ionic-native/network/ngx';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
@@ -20,6 +20,7 @@ import {Storage} from "@ionic/storage";
 })
 export class NotificationNewPage implements OnInit {
 
+  @ViewChild('newNotificationSlides') slides: IonSlides;
   @ViewChild('file') inputEl: ElementRef;
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   wifiUploadKey = 'WIFI_UPLOAD';
@@ -486,6 +487,7 @@ export class NotificationNewPage implements OnInit {
             this.attachmentArray.splice(attachIndex, 1);
             this.backNotify.arrayFormData.splice(attachIndex,1);
             this.backNotify.arrayToPostAttachment.splice(attachIndex,1);
+            this.slides.update();
           }
         }
       ]

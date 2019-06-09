@@ -162,7 +162,7 @@ export class ChatPage implements OnInit {
       componentProps: {studentData:student}
     });
 
-    modal.dismiss(data=>{
+    modal.onDidDismiss().then(data=>{
       this.viewListsEffect(student,index,From);
       this.checkDataStudents();
     });

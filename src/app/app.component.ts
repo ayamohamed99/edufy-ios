@@ -339,7 +339,9 @@ export class AppComponent {
         data => {
 
           console.log("Background Notification : \n", JSON.stringify(data));
-          if(data.page === this.reportPage){
+            if (data.isCommentNotification) {
+                this.onLoadReportTemplateWithComments(data)
+            } else if(data.page === this.reportPage){
             this.onLoadReport(this.reportPage, data.reportName,data.reportId);
           }else if(data.page === this.chatPage){
             this.handelChatOnBackground(data);
@@ -372,7 +374,9 @@ export class AppComponent {
               data => {
                 debugger;
                 console.log('Foreground');
-                if(data.data.page === this.reportPage){
+                  if (data.data.isCommentNotification) {
+                      this.onLoadReportTemplateWithComments(data.data)
+                  }else if(data.data.page === this.reportPage){
                   this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
                 }else if(data.data.page === this.chatPage){
                   this.handelChatONForeground(data);
@@ -439,7 +443,8 @@ export class AppComponent {
 
 
   openWeb(){
-    this.iab.create("http://104.198.175.198/", "_self");
+      //_self in app //_system in phone browser
+    this.iab.create("http://104.198.175.198/", "_system");
   }
 
   startSocket(userId){
@@ -570,6 +575,25 @@ export class AppComponent {
     this.accountServ.reportId = reportId;
     this.router.navigateByUrl(this.getPathFromPageName(this.reportPage));
   }
+
+   async onLoadReportTemplateWithComments(params?) {
+        this.accountServ.reportId = params.reportId;
+        this.accountServ.reportPage = params.reportName;
+        const model = await this.modalCtrl.create({
+            component: 'ReportTemplatePage',
+            componentProps: {student:{id:params.studentId,name:params.studentName},
+                classId:params.classId,reportDate:params.reportDate,comment:true}
+        });
+
+        return await model.present();
+        //  this.accountServ.reportId = 1;
+        //  this.accountServ.reportPage = "Weakly";
+        // const model = this.modalCtrl.create('ReportTemplatePage',
+        //   {student:{id:9020,name:"Lina"},
+        //     classId:36,reportDate:"02-06-2019",comment:true});
+        //  model.present();
+        //  this.menu.close();
+    }
 
   getPathFromPageName(name){
     if(name == 'NotificationPage'){

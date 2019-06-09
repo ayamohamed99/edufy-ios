@@ -1,0 +1,801 @@
+.contentColor{
+  background: #f4f4f4;
+}
+
+
+
+///////////////////////////Edit Ion-Fab
+/deep/ .turnImgToBlack{
+  -webkit-filter: grayscale(100%) contrast(999%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%) contrast(999%);
+}
+/deep/ .turnImgToWhite{
+  -webkit-filter: grayscale(100%) contrast(999%) invert(100%);; /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%) contrast(999%) invert(100%);;
+}
+
+/deep/ .imageInBigFab{
+  width:30px;
+  height: 30px;
+}
+
+/deep/ .imageInSmallFab{
+  width:25px;
+  height: 25px;
+}
+
+
+/deep/ .fab[mini] {
+  margin: 8px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+}
+
+/deep/ .fab {
+  contain: layout;
+  background-color: #0A73A4;
+}
+
+/deep/ ion-fab[bottom] {
+  bottom: 10px;
+}
+
+/deep/ button[ion-fab][mini]{
+  padding: 8px;
+}
+
+/deep/ ion-fab-list[side=top] {
+  top: auto;
+  bottom: 10px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: reverse;
+  -webkit-flex-direction: column-reverse;
+  -ms-flex-direction: column-reverse;
+  flex-direction: column-reverse;
+
+  /deep/ img {
+    max-width: 100%;
+    border: 0;
+    width: 20px;
+    height: 20px;
+  }
+  /deep/ button[ion-fab] {
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: visible;
+    position: relative;
+    //box-shadow: 5px 5px 5px grey;
+    -webkit-box-shadow: 1px 1px 1px grey;
+    box-shadow: 1px 1px 1px grey;
+
+    /deep/ ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: -2px;
+      right: 40px;
+      color: #000000;
+      background-color: white;
+      line-height: 16px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+    }
+  }
+}
+
+/deep/ ion-fab-list[side=left] {
+  margin: 0px 70px;
+  img {
+    max-width: 100%;
+    border: 0;
+    width: 25px;
+    height: 25px;
+  }
+  button[ion-fab] {
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    overflow: visible;
+    position: relative;
+    //box-shadow: 5px 5px 5px grey;
+    -webkit-box-shadow: 1px 1px 1px grey;
+    box-shadow: 1px 1px 1px grey;
+
+    ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: -2px;
+      right: 38px;
+      color: #000000;
+      background-color: white;
+      line-height: 16px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+    }
+  }
+}
+
+//////////////////////////////End Of Edit Ion-Fab
+.btn-default input[type=file] {
+  //cursor: inherit;
+  //display: inline-block;
+  //font-size: 999px;
+  //filter: alpha(opacity=0);
+  //height: 2.8em;
+  //font-size: 1.6rem;
+  //opacity: 0;
+  //position: absolute;
+  //right: 0;
+  //text-align: right;
+  //top: 0;
+  //left: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: none;
+}
+
+.btn-default {
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #5C87F7;
+  color: #5C87F7;
+  background-color: transparent;
+  height: 2.3em !important;
+  font-size: 1.2rem;
+  width: 100% !important;
+  line-height: 2.3em;
+  display: block;
+  margin-bottom: 15px;
+}
+
+//////////////////////////////Start Of Edit Ion-Item && NgSelect
+
+/deep/ .ng-select .ng-select-container {
+  border: 0px;
+}
+
+/deep/ .ng-select .ng-clear-wrapper{
+  display: none;
+}
+
+/deep/ .ion-text-wrap, [text-wrap] {
+  white-space: nowrap !important;
+}
+
+/deep/ .mat-form-field {
+  //margin-top: 15px;
+  //margin-bottom: 15px;
+  //padding: 5px 10px;
+  //padding-bottom: 0;
+  //width: 100%;
+  //background: white;
+  //border-radius: 4px;
+
+
+  margin-bottom: 0;
+  padding: 5px 0px;
+  padding-bottom: 0;
+  width: 100%;
+  background: white;
+  border-radius: 4px;
+
+}
+
+/deep/ .mat-form-field-wrapper {
+  padding-bottom: 2px;
+}
+
+/deep/ .mat-form-field-underline {
+  bottom: -0.04em;
+  //width: 106%;
+  //left: -9px;
+}
+
+/deep/ .mat-input-element:disabled {
+  color: black;
+}
+
+/deep/ .spaceBetNgSelect{
+  margin-bottom: 15px;
+}
+
+/deep/ .timeDate{
+  display: block;
+}
+/deep/ .dateField{
+  width: 64%;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+/deep/ .timeField{
+  vertical-align: middle;
+  line-height: 1.125;
+}
+
+/deep/ .editNgView{
+  width: 30%;
+  background: white;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 15px;
+  padding: 5px 0;
+  padding-bottom: 0;
+  height: 46.06px;
+  vertical-align: middle;
+  min-width: 89px;
+}
+/deep/ .mat-checkbox-layout {
+  white-space: unset;
+}
+
+//////////////////////////////End Of Edit Ion-Item && NgSelect
+
+
+/////////////////////////////Report Question
+/deep/ .fileContainer {
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+}
+
+/deep/ .fileContainer [type=file] {
+  cursor: inherit;
+  display: block;
+  font-size: 999px;
+  filter: alpha(opacity=0);
+  min-height: 100%;
+  min-width: 100%;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  top: 0;
+}
+
+/deep/ .container {
+  width: 100%;
+  min-height: 210px;
+  position: relative;
+  text-align: -webkit-center;
+}
+/deep/ .container img {
+  height: 210px;
+}
+
+/deep/ .container .closeInDiv{
+  -webkit-filter: invert(0.8);
+  filter: invert(0.8);
+  width: 20px;
+  left: 20px;
+  bottom: 20px;
+  position: absolute;
+}
+
+/deep/ .imgUrl{
+  height: 200px;
+  //width: 100%;
+  background: #eee0;
+  margin-bottom: 35px;
+}
+
+/deep/ .imgAttach{
+  height: 200px;
+  background: #eee0;
+  margin-bottom: 35px;
+}
+
+/deep/ .container .buttonOnImg {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  padding: 0;
+  margin: 0;
+  height: 100px;
+  width: 100px;
+  //transform: rotate(20deg);
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/deep/ .mainDiv{
+  padding-bottom: 20px;
+  margin-right: 0;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/deep/ .mainDivQuestion{
+  padding-bottom: 20px;
+}
+
+/deep/ .topRightIcon{
+  float: right;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  right: 11px;
+  top: 6px;
+}
+
+.medicienCell{
+  background: #309CCE;
+  border-radius: 15px;
+  height: 28px;
+  width: fit-content;
+  margin-right: 10px;
+}
+
+.medicienCellFullWidth{
+  background: #309CCE;
+  border-radius: 15px;
+  height: 28px;
+  width: 100%;
+  margin-right: 10px;
+}
+
+.cancelCell{
+  background: #0A73A4;
+  border: 1px solid #0A73A4;
+  box-sizing: border-box;
+  border-radius: 100px;
+  width: 28px;
+  height: 28px;
+  display: inline-block;
+}
+
+/deep/ .cancelIcon{
+  width: 15px !important;
+  height: 15px !important;
+  margin-left: 5px;
+  margin-top: 5px;
+}
+/deep/ .medicineLable{
+  display: inline-block;
+  vertical-align: top;
+  color: white;
+  font-weight: bold;
+  margin: 0 10px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+/deep/ .ErrorIcon{
+  float: right;
+  /* font-size: 1.8em; */
+  width: 25px;
+  height: 25px;
+  position: relative;
+  margin-bottom: -12px;
+  right: -11px;
+  top: 1px;
+  //-webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/deep/ .questionCard{
+  border-radius: 10px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  -webkit-box-shadow: 0px 0px 0px ;
+  box-shadow: 0px 0px 0px;
+}
+/deep/ .questionCardElse{
+  border-radius: 10px;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  width: 100%;
+  -webkit-box-shadow: 0px 0px 0px;
+  box-shadow: 0px 0px 0px;
+}
+
+/deep/ .questionTitle{
+  background-color: #5c87f7;
+  /deep/ .formLabel{
+    background-color: #5c87f7;
+    color: white;
+    padding: 10px;
+  }
+
+  /deep/ .formLabelTen{
+    background-color: #5c87f7;
+    color: white;
+    padding: 10px;
+    width: calc(100% - 105px);
+    display: inline-block;
+  }
+  /deep/ .createButton{
+    color: white;
+    float: right;
+    display: inline;
+  }
+  /deep/ .cancelButton{
+    color: white;
+    float: right;
+    display: inline;
+    width: 55px;
+  }
+  /deep/ .saveButton{
+    color: white;
+    float: right;
+    display: inline;
+    width: 42px;
+  }
+}
+
+.questionBodyMULTI_SHORT_TEXT_ONE_VIEW_SELECTED{
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-top: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  .divRadioButton{
+    margin-right: 31px;
+  }
+}
+
+.questionBodyLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-top: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 10px;
+  margin-bottom: -1px;
+}
+
+/deep/ .questionBody{
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+
+  /deep/ .custom-Field_QOne{
+    width: 100%;
+  }
+
+  /deep/ .custom-Field_QOne .custom-textArea{
+    margin-bottom: 0;
+  }
+  /deep/ .custom-Field_QOne .mat-form-field-wrapper {
+    margin-bottom: -17px;
+  }
+
+  /deep/ .custom-Field_QThree{
+    /deep/ .mat-form-field-infix {
+      width: fit-content;
+      padding: 0;
+
+      /deep/ input{
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-bottom: 0 !important;
+        top: 0 !important;
+      }
+    }
+  }
+
+  /deep/ .custom-Field_QFour{
+    width: 100%;
+    /deep/ .custom-textArea{
+      margin-bottom: 0;
+    }
+    /deep/ .mat-form-field-wrapper {
+      margin-bottom: -17px;
+    }
+    /deep/ textarea.mat-autosize {
+      font-size: initial;
+    }
+    /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+      font-size: larger;
+    }
+  }
+
+  /deep/ .custom-Field_QSix{
+    width: 100%;
+    /deep/ .custom-textArea{
+      margin-bottom: 0;
+    }
+    /deep/ .mat-form-field-wrapper {
+      margin-bottom: -17px;
+    }
+    /deep/ textarea.mat-autosize {
+      font-size: initial;
+    }
+    /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+      font-size: larger;
+    }
+  }
+
+  /deep/ .custom-Field_QEight{
+    width: 100%;
+    margin-top: -18px;
+    /deep/ .custom-textArea{
+      margin-bottom: 0;
+    }
+    /deep/ .mat-form-field-wrapper {
+      margin-bottom: -17px;
+    }
+    /deep/ textarea.mat-autosize {
+      font-size: initial;
+    }
+    /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+      font-size: larger;
+    }
+  }
+
+  /deep/ .custom-Field_QNine{
+    width: 100%;
+    /deep/ .custom-textArea{
+      margin-bottom: 0;
+    }
+    /deep/ textarea.mat-autosize {
+      font-size: initial;
+    }
+    /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+      font-size: larger;
+    }
+    /deep/ .mat-form-field-flex {
+      margin-top: 10px;
+    }
+  }
+
+  /deep/ .custom-Field_QTen{
+    width: 100%;
+    /deep/ .custom-textArea{
+      margin-bottom: 0;
+    }
+    /deep/ textarea.mat-autosize {
+      font-size: initial;
+    }
+    /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+      font-size: larger;
+    }
+    /deep/ .mat-form-field-flex {
+      margin-top: 10px;
+    }
+  }
+
+  /deep/ .custom-Field_QTwelve{
+    width: 70px;
+    margin-top: 15px;
+    margin-right: 25px;
+  }
+
+  /deep/ .divElevenCheckbox{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  /deep/ .divElevenButtonIcon{
+    height: 25px;
+    width: 25px;
+    padding: 0;
+    bottom: 5px;
+    float: right;
+  }
+  /deep/ .divElevenInput{
+    display: inline-block;
+    width: 100%;
+  }
+  /deep/ .divElevenOfInput{
+    width: calc(100% - 50px);
+    height: 40px;
+    padding: 0;
+  }
+  /deep/ .divElevenOfInputButton{
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    float: right;
+  }
+  /deep/ .radioButtonOfDropMenu{
+    /deep/ .radio{
+      margin-right: 20px;
+      margin-bottom: 10px;
+      /deep/ .mat-radio-outer-circle {
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: #b4b4b4;
+        -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+        box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      }
+
+    }
+  }
+
+}
+
+/////////////////////////////End of Report Question
+
+
+//////////////////////////////////////Organize Radio - CheckBox
+/deep/ .LoopManyCheckWithEdit{
+  display:inline-block;
+  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+/deep/ .LopContain{
+  display:inline-block;
+  padding-right: 0;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/deep/ .LoopContainWithoutWidth{
+  display:inline-block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+/deep/ .LoopContainWithFullWidth{
+  display:block;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+
+/deep/ .LoopContainFitContent{
+  display:inline-block;
+  padding-right: 0;
+  width: fit-content;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/deep/ .select-md .select-placeholder {
+  color: #222;
+}
+
+/deep/ .select-ios .select-placeholder {
+  color: #222;
+}
+
+/deep/ .imgOfRadio{
+  width: 40px;
+  height: 40px;
+  display: inline;
+}
+
+/deep/ .dateTopCenterBoldGray{
+  padding: 4px;
+  margin: 0;
+  color: #488aff;
+  font-size: 18px;
+}
+
+/////////////////////////////////////////Edit All Mat Checkboxes
+/deep/ .checkbox{
+  /deep/ .mat-checkbox-frame {
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #b4b4b4;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  /deep/ .mat-checkbox-background {
+    border-radius: 5px;
+  }
+
+}
+
+/deep/ .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: #a0a0a0;
+}
+
+/deep/ .mat-checkbox-input.cdk-visually-hidden.cdk-focused.cdk-program-focused{
+  color: #A0A0A0;
+}
+/deep/ .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  background-color: rgba(160, 160, 160,.26);
+}
+/deep/ .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  background-color: rgba(160, 160, 160,.26);
+}
+/////////////////////////////////////////End Of Edit All Mat Checkboxes
+
+
+/////////////////////////////////////////Edit All Mat RadioButtons
+/deep/ .radio{
+
+  /deep/ .mat-radio-outer-circle {
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: #b4b4b4;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+}
+
+/deep/ .radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
+  display: block;
+  padding-top: 10px;
+  margin-bottom: 10px;
+  /deep/ .mat-radio-outer-circle {
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: #b4b4b4;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/deep/ .radioNine{
+  margin-right: 20px;
+  margin-bottom: 10px;
+  /deep/ .mat-radio-outer-circle {
+    border-width: 1px;
+    border-radius: 50%;
+    border-color: #b4b4b4;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+}
+
+/deep/ .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #a0a0a0;
+  -webkit-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+}
+/deep/ .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #a0a0a0;
+  -webkit-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+}
+/deep/ .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #a0a0a0;
+}
+/deep/ .mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #a0a0a0;
+}
+/deep/ .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: rgba(160, 160, 160,.26);
+}
+/deep/ .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: rgba(160, 160, 160,.26);
+}
+/deep/ .mat-ripple-element {
+  background-color: rgba(0,0,0,.1);
+}
+///////////////////////////////////////End Of Edit All Mat RadioButtons
+///////////////////////////////////////End Of Organize Radio - CheckBox
+
+
+button[disabled], [ion-button][disabled] {
+  filter: invert(15%);
+}
