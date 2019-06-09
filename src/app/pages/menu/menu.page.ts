@@ -66,12 +66,12 @@ export class MenuPage implements OnInit {
       this.pages.push(data);
     }
     if(this.accountServ.getUserRole().viewMedicalCare && data.medicalCareActivated && this.accountServ.getUserRole().viewMedicalRecord){
-      let data = {title: 'Medical Care', icon: 'heart', main:true, url: '/menu/profile', customReport:false};
+      let data = {title: 'Medical Care', icon: 'heart', main:true, url: '/menu/medical-care', customReport:false};
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
     }
 
-    let Setting = {title: 'Settings', icon: 'cog', main:false, url: '/home'};
+    let Setting = {title: 'Settings', icon: 'cog', main:false, url: '/menu/settings'};
     this.pages.push(Setting);
 
     let LogOut = {title: 'LogOut', icon: 'log-out', main:false, url: '/home'};

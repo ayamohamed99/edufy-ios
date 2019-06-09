@@ -24,6 +24,14 @@ const routes: Routes = [
         {
             path: 'chat',
             loadChildren: '../chat/chat.module#ChatPageModule'
+        },
+        {
+            path: 'medical-care',
+            loadChildren: '../medical-care/medical-care.module#MedicalCarePageModule'
+        },
+        {
+            path: 'settings',
+            loadChildren: '../settings/settings.module#SettingsPageModule'
         }
     ]
   }
