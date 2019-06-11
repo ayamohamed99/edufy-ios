@@ -1,3 +1,5 @@
+/deep/ app-chat{
+
 /////////////////////////////Loading
 .loadingChat{
   position: absolute;
@@ -35,7 +37,7 @@
 
 ///////////////////////////NavBar Changes
 
-.searchbar-input-container {
+  /deep/ .searchbar-input-container {
   border-radius: 7px;
   //background-color: rgb(255, 255, 255);
 }
@@ -86,7 +88,7 @@
   display: block;
   width: 100%;
   text-align: center;
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #000;
   white-space: nowrap;
@@ -117,15 +119,15 @@
   animation: rubber-animation 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
-.list-ios > .item-block:first-child {
+/deep/ .list-ios > .item-block:first-child {
   border-top: 0;
 }
 
-.list-ios {
+  /deep/ .list-ios {
   margin: 3px 0 32px;
 }
 
-.list-ios > .item-block:last-child {
+  /deep/ .list-ios > .item-block:last-child {
   border-bottom: 0;
 }
 
@@ -179,15 +181,15 @@
 //  margin-left: 46px;
 //}
 
-.label-md {
+  /deep/ .label-md {
   margin: 13px 0 0 0;
 }
 
-.label-ios {
+  /deep/ .label-ios {
   margin: 13px 0 0 0;
 }
 
-.item-ios{
+  /deep/ .item-ios{
   background-color: #F8F8F8;
   padding-left: 8px;
   h2 {
@@ -197,7 +199,7 @@
   }
 }
 
-.item-md{
+  /deep/ .item-md{
   background-color: #F8F8F8;
   padding-left: 8px;
   h2 {
@@ -207,7 +209,7 @@
   }
 }
 
-.list-ios .item-block .item-inner {
+  /deep/ .list-ios .item-block .item-inner {
   border-bottom: 0;
   padding-right: 0;
   padding-bottom: 0;
@@ -314,3 +316,4 @@
   }
 }
 /////////////End Of Animations
+}

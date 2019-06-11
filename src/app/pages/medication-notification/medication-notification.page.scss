@@ -1,6 +1,7 @@
-
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/deep/ app-medication-notification{
   .contentColor{
-    background: #5C87F7;
+    --background: #5C87F7;
   }
 
   .containerDIV{
@@ -79,8 +80,9 @@
     height: 60px;
     width: 130px;
     margin-left: 0;
-    margin-right: -3px;
-    border-radius: 15px 0px 0px 15px;
+    margin-right: 0;
+    --border-radius: 15px 0px 0px 15px;
+    --color: white;
   }
 
   .rightButtonClass{
@@ -89,7 +91,9 @@
     border-width: 1px;
     height: 60px;
     width: 130px;
-    margin-left: -3px;
+    margin-left: 0;
     margin-right: 0;
-    border-radius: 0px 15px 15px 0px;
+    --border-radius: 0px 15px 15px 0px;
+    --color:white;
   }
+}

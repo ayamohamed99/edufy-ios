@@ -67,7 +67,7 @@ export class ProfilePage implements OnInit {
 
 
 
-  constructor(private platform:Platform,accountServ:AccountService
+  constructor(private platform:Platform,private accountServ:AccountService
       ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();

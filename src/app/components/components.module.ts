@@ -1,15 +1,18 @@
 import {NgModule} from '@angular/core';
-import {ReportCommentComponent} from './report-comment/report-comment';
 import {IonicModule} from '@ionic/angular';
 import {DirectivesModule} from '../directives/directives.module';
-import { ReportFilterComponent } from './report-filter/report-filter';
+import {ReportCommentComponent} from './report-comment/report-comment.component';
+import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
-	declarations: [],
-  imports: [
-    IonicModule,
-    DirectivesModule,
-  ],
-	exports: []
+	declarations: [ReportCommentComponent],
+    imports: [
+        IonicModule,
+        DirectivesModule,
+        FormsModule,
+        CommonModule,
+    ],
+	exports: [ReportCommentComponent]
 })
 export class ComponentsModule {}

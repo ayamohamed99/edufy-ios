@@ -7,7 +7,7 @@ export class Student {
   name: string;
   address: string;
   classes: Class = new Class();
-  reportChecked: boolean;
+  reportChecked: boolean = false;
   reportApproved: boolean;
   reportFinalized: boolean;
   numberInList: number;

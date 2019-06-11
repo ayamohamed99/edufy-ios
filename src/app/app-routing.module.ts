@@ -5,7 +5,9 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
   { path: 'menu', loadChildren: './pages/menu/menu.module#MenuPageModule' },
-  { path: 'medication-notification', loadChildren: './pages/medication-notification/medication-notification.module#MedicationNotificationPageModule' },
+  // { path: 'report-template', loadChildren: './pages/report-template/report-template.module#ReportTemplatePageModule' },
+  // { path: 'report', loadChildren: './pages/report/report.module#ReportPageModule' },
+  // { path: 'medication-notification', loadChildren: './pages/medication-notification/medication-notification.module#MedicationNotificationPageModule' },
 ];
 
 @NgModule({

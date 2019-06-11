@@ -1,3 +1,5 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/deep/ app-medical-care-medication-view {
 /deep/.mainDivQuestion{
   padding-bottom: 20px;
   margin: 0 -16px;
@@ -288,4 +290,5 @@
   --padding-start: 32px;
   --padding-end: 32px;
   --padding-bottom: 0;
+}
 }

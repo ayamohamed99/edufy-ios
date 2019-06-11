@@ -12,7 +12,7 @@
 
         <ion-menu-toggle auto-hide="false" *ngFor="let p of pages" class="navMenuClass">
           <div *ngIf="p.main && !p.customReport">
-              <ion-item [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath.startsWith(p.url)">
+              <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)" [class.active-item]="selectedPath.startsWith(p.url)">
                   <ion-icon [name]="p.icon" slot="start"></ion-icon>
                   {{ p.title }}
               </ion-item>
@@ -27,7 +27,7 @@
                 </button>
 
                 <div class="contont">
-                    <ion-item *ngFor="let itm of customReportList; let i = index"  (click)="onLoadReport(itm.url, itm.title, itm.id)" [id]="'ReportPage'+itm.id" [class.active-item]="selectedPath.startsWith(itm.url)">
+                    <ion-item *ngFor="let itm of customReportList; let i = index"  [routerLink]="['/menu/report',itm.title]" routerDirection="root" (click)="onLoadReport(itm.url, itm.title, itm.id)" [id]="'ReportPage'+itm.id" [class.active-item]="getUrlPartTwo(selectedPath).startsWith(itm.url+'/'+itm.title)">
                         <ion-icon name="document" small></ion-icon>
                         {{ itm.title }}
                     </ion-item>

@@ -1,4 +1,4 @@
-report-comment {
+/deep/ app-report-comment {
   left: 0;
   position: fixed;
   .slide-up-comments-container {
@@ -214,7 +214,8 @@ report-comment {
     top: 28%;
   }
   .comments-loading-spinner {
-    position: absolute;
+    //position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

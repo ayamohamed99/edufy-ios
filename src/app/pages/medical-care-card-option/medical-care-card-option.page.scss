@@ -1,3 +1,5 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/deep/ app-medical-care-card-option {
 ion-popover {
   width: 110px;
   height: fit-content;
@@ -48,4 +50,5 @@ ion-list{
   width: 150px;
   border-radius:10px;
   height: fit-content;
+}
 }

@@ -1,6 +1,6 @@
  import { Component } from '@angular/core';
 
-import {AlertController, ModalController, Platform} from '@ionic/angular';
+import {AlertController, ModalController, NavController, Platform} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
  import {LoginService} from './services/Login/login.service';
@@ -20,6 +20,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
  import {Url_domain} from './models/url_domain';
  import {ChatService} from './services/Chat/chat.service';
  import {ChatDialoguePage} from './pages/chat-dialogue/chat-dialogue.page';
+ import {MedicationNotificationPage} from './pages/medication-notification/medication-notification.page';
 
 @Component({
   selector: 'app-root',
@@ -66,7 +67,8 @@ export class AppComponent {
     private fire:FCMService,
     private chatServ:ChatService,
     private modalCtrl:ModalController,
-    private alertCtrl:AlertController
+    private alertCtrl:AlertController,
+    private navCtrl:NavController
   ) {
     this.initializeApp();
   }
@@ -87,7 +89,7 @@ export class AppComponent {
       if((this.userName && this.userName != '') && (this.password && this.password != '')){
         this.startLogIn();
       }else {
-        this.router.navigateByUrl(this.homePath);
+          this.navCtrl.navigateRoot(this.homePath);
       }
     }else{
       this.storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err) => {
@@ -99,7 +101,7 @@ export class AppComponent {
             if((this.userName && this.userName != '') && (this.password && this.password != '')){
               this.startLogIn();
             }else {
-              this.router.navigateByUrl(this.homePath);
+                this.navCtrl.navigateRoot(this.homePath);
             }
 
           });
@@ -133,7 +135,7 @@ export class AppComponent {
         this.storage.clear();
       }
         this.loadCtrl.stopLoading().then( () => {
-            this.router.navigateByUrl(this.homePath);
+            this.navCtrl.navigateRoot(this.homePath);
         });
     }else{
       this.storage.get(this.loginServ.localStorageToken).then(
@@ -146,7 +148,7 @@ export class AppComponent {
               this.storage.clear();
             }
               this.loadCtrl.stopLoading().then( () => {
-                  this.router.navigateByUrl(this.homePath);
+                  this.navCtrl.navigateRoot(this.homePath);
               });
           })
 
@@ -164,7 +166,7 @@ export class AppComponent {
               }else {
                   this.storage.clear();
               }
-              this.router.navigateByUrl(this.homePath);
+              this.navCtrl.navigateRoot(this.homePath);
           });
         },
         err => {
@@ -174,7 +176,7 @@ export class AppComponent {
                 }else {
                     this.storage.clear();
                 }
-                this.router.navigateByUrl(this.homePath);
+                this.navCtrl.navigateRoot(this.homePath);
             });
         },
         () => {
@@ -197,7 +199,7 @@ export class AppComponent {
         },
         err => {
           this.loadCtrl.stopLoading().then( () => {
-              this.router.navigateByUrl(this.homePath);
+              this.navCtrl.navigateRoot(this.homePath);
           });
         },
         () => {
@@ -242,7 +244,7 @@ export class AppComponent {
         },
         err => {
           this.loadCtrl.stopLoading().then( ()=> {
-              this.router.navigateByUrl(this.homePath);
+              this.navCtrl.navigateRoot(this.homePath);
           });
         });
   }
@@ -254,7 +256,7 @@ export class AppComponent {
         },
         err => {
             this.loadCtrl.stopLoading().then( ()=> {
-                this.router.navigateByUrl(this.homePath);
+                this.navCtrl.navigateRoot(this.homePath);
             });
         },
         () => {
@@ -274,7 +276,7 @@ export class AppComponent {
         },
         err => {
             this.loadCtrl.stopLoading().then( ()=> {
-                this.router.navigateByUrl(this.homePath);
+                this.navCtrl.navigateRoot(this.homePath);
             });
         },
         () => {
@@ -290,7 +292,7 @@ export class AppComponent {
               this.accountServ.setCustomReport(data);
               this.accountServ.getTags(this.fullToken());
               // this.navCtrl.setRoot('ProfilePage');
-              this.router.navigateByUrl('/menu/profile');
+              this.navCtrl.navigateRoot('/menu/profile');
               this.startSocket(this.accountServ.userId);
               this.setupNotification();
           });
@@ -301,7 +303,7 @@ export class AppComponent {
                 console.log('Has No Custom report(s)');
                 this.accountServ.getTags(this.fullToken());
                 // this.navCtrl.setRoot('ProfilePage');
-                this.router.navigateByUrl('/menu/profile');
+                this.navCtrl.navigateRoot('/menu/profile');
                 this.startSocket(this.accountServ.userId);
                 this.setupNotification();
                 if(this.accountServ.getUserRole().viewMedicalRecord) {
@@ -313,7 +315,7 @@ export class AppComponent {
                 console.log('Has No Custom report(s)');
                 this.accountServ.getTags(this.fullToken());
                 // this.navCtrl.setRoot('ProfilePage');
-                this.router.navigateByUrl('/menu/profile');
+                this.navCtrl.navigateRoot('/menu/profile');
                 this.startSocket(this.accountServ.userId);
                 this.setupNotification();
                 if(this.accountServ.getUserRole().viewMedicalRecord) {
@@ -322,7 +324,7 @@ export class AppComponent {
             });
           } else{
             this.loadCtrl.stopLoading().then( () => {
-                this.router.navigateByUrl(this.homePath);
+                this.navCtrl.navigateRoot(this.homePath);
             });
           }
         },
@@ -349,7 +351,7 @@ export class AppComponent {
             this.openMedicalCareNotification(data);
           } else{
             if(this.getPathFromPageName(data.data.page) != null){
-              this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
             }else {
               this.openWeb();
             }
@@ -384,7 +386,7 @@ export class AppComponent {
                   this.openMedicalCareNotification(data.data);
                 }else{
                   if(this.getPathFromPageName(data.data.page) != null){
-                    this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                      this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
                   }else {
                     this.openWeb();
                   }
@@ -491,7 +493,6 @@ export class AppComponent {
 
   handelOnMassage(data,message){
     this.router.events.subscribe((event: RouterEvent) =>{
-
       if(event.url.startsWith(this.getPathFromPageName(this.chatPage))){
         this.chatServ.newMessageSubject$.next(JSON.parse(message.data));
       }else {
@@ -512,6 +513,7 @@ export class AppComponent {
                 text: 'See now',
                 handler: () => {
                   // this.nav.setRoot(this.chatPage);
+                    this.navCtrl.navigateRoot(this.getPathFromPageName(this.chatPage));
                   let student = data.chatThread.student;
                   let Stud = new Student();
                   Stud.id = student.id;
@@ -556,7 +558,7 @@ export class AppComponent {
   async openMedicalCareNotification(data){
 
     const modal = await this.modalCtrl.create({
-        component: this.medicationNotificationPage,
+        component: MedicationNotificationPage,
         componentProps: { medicationName: data.medicationName,
             dosageType: data.dosageType,
             dosageNumber: data.dosageNumber,
@@ -573,7 +575,7 @@ export class AppComponent {
   onLoadReport(page:any, pageName:any, reportId:any){
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
-    this.router.navigateByUrl(this.getPathFromPageName(this.reportPage));
+      this.navCtrl.navigateRoot(this.getPathFromPageName(this.reportPage));
   }
 
    async onLoadReportTemplateWithComments(params?) {

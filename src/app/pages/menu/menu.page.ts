@@ -33,6 +33,11 @@ export class MenuPage implements OnInit {
 
   }
 
+  getUrlPartTwo(part){
+    let data = decodeURI(part);
+    return data;
+  }
+
   ionViewDidEnter(){
     this.accountServ.menuFeatures.subscribe(value => {
       if(value != null) {
@@ -53,7 +58,7 @@ export class MenuPage implements OnInit {
     }
 
     if(this.accountServ.getUserRole().dailyReportView && data.dailyReportActivated){
-      let data = {title: 'Daily Report', icon: 'document', main:true, url: '/menu/profile', customReport:false};
+      let data = {title: 'Daily Report', icon: 'document', main:true, url: '/menu/daily-report', customReport:false};
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
     }
@@ -87,7 +92,7 @@ export class MenuPage implements OnInit {
       let CR = {title: 'Reports', icon: 'ios-copy', main:true, url: '', customReport:true};
       this.pages.push(CR);
       data.forEach( val =>{
-        let oneCR = {title: val.name, icon: 'document', main:true, url: '/menu/profile', id: val.id};
+        let oneCR = {title: val.name, icon: 'document', main:true, url: '/menu/report', id: val.id};
         this.customReportList.push(oneCR);
       });
       this.setCollaps()
@@ -96,7 +101,8 @@ export class MenuPage implements OnInit {
 
 
   onLoadReport(page:any, pageName:any, reportId:any) {
-
+    this.accountServ.reportPage = pageName;
+    this.accountServ.reportId = reportId;
   }
 
 

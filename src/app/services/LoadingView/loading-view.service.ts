@@ -32,4 +32,8 @@ export class LoadingViewService {
       await this.load.dismiss();
     }
   }
+
+  async updateContent(msg){
+    this.load.message = msg;
+  }
 }

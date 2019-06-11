@@ -1,9 +1,9 @@
 import {Component, ElementRef, Renderer, Renderer2, ViewChild} from '@angular/core';
 import {
-  AlertController,
-  LoadingController,
-  ModalController,
-  Platform
+    AlertController,
+    LoadingController,
+    ModalController, NavController,
+    Platform
 } from '@ionic/angular';
 import {NgForm} from "@angular/forms";
 import {LoginService} from "../../services/Login/login.service";
@@ -22,6 +22,7 @@ import {Router} from '@angular/router';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {__await} from 'tslib';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
+import {MedicationNotificationPage} from '../medication-notification/medication-notification.page';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,7 @@ export class HomePage {
   medicalcarePage = 'MedicalCarePage';
   medicationNotificationPage = 'MedicationNotificationPage';
 
-  constructor(private router: Router,private loginServ:LoginService, private storage:Storage, private platform:Platform
+  constructor(private router: Router,private navCtrl:NavController,private loginServ:LoginService, private storage:Storage, private platform:Platform
       , private loading:LoadingController,private alertCtrl: AlertController, private accountServ:AccountService,
               private network:Network, private notiServ:NotificationService,private fire:FCMService,public chatServ:ChatService
       ,private el:ElementRef,private rend:Renderer , private  rend2 : Renderer2,public iab:InAppBrowser,
@@ -204,7 +205,7 @@ export class HomePage {
           this.accountServ.setCustomReport(data);
           this.accountServ.getTags(this.fullToken());
           // this.navCtrl.setRoot('ProfilePage');
-            this.router.navigateByUrl('/menu/profile');
+            this.navCtrl.navigateRoot('/menu/profile');
           this.startSocket(this.accountServ.userId);
           this.setupNotification();
         },
@@ -214,7 +215,7 @@ export class HomePage {
             console.log('Has No Custom report(s)');
             this.accountServ.getTags(this.fullToken());
             // this.navCtrl.setRoot('ProfilePage');
-              this.router.navigateByUrl('/menu/profile');
+              this.navCtrl.navigateRoot('/menu/profile');
             this.startSocket(this.accountServ.userId);
             this.setupNotification();
             if(this.accountServ.getUserRole().viewMedicalRecord) {
@@ -225,7 +226,7 @@ export class HomePage {
             console.log('Has No Custom report(s)');
             this.accountServ.getTags(this.fullToken());
             // this.navCtrl.setRoot('ProfilePage');
-              this.router.navigateByUrl('/menu/profile');
+              this.navCtrl.navigateRoot('/menu/profile');
             this.startSocket(this.accountServ.userId);
             this.setupNotification();
             if(this.accountServ.getUserRole().viewMedicalRecord) {
@@ -271,7 +272,7 @@ export class HomePage {
                 this.openMedicalCareNotification(data);
             } else{
                 if(this.getPathFromPageName(data.data.page) != null){
-                    this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                    this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
                 }else {
                     this.openWeb();
                 }
@@ -307,7 +308,7 @@ export class HomePage {
                       this.openMedicalCareNotification(data.data);
                   }else{
                       if(this.getPathFromPageName(data.data.page) != null){
-                          this.router.navigateByUrl(this.getPathFromPageName(data.data.page));
+                          this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
                       }else {
                           this.openWeb();
                       }
@@ -320,7 +321,7 @@ export class HomePage {
     async openMedicalCareNotification(data){
 
         const modal = await this.modalCtrl.create({
-            component: this.medicationNotificationPage,
+            component: MedicationNotificationPage,
             componentProps: { medicationName: data.medicationName,
                 dosageType: data.dosageType,
                 dosageNumber: data.dosageNumber,
@@ -532,9 +533,9 @@ export class HomePage {
         }else if(name == 'ChatPage'){
             return '/menu/chat'
         }else if(name == 'MedicalCarePage'){
-            return '/menu/profile'
+            return '/menu/medical-care'
         }else if(name == 'MedicationNotificationPage'){
-            return '/menu/profile'
+            return 'medication-notification'
         }else if(name == 'ProfilePage'){
             return '/menu/profile'
         }else{

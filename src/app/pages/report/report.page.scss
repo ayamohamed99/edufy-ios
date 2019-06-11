@@ -1,0 +1,272 @@
+/deep/ app-report {
+
+  /deep/ .contentColor{
+    --background: #F4F4F4;
+  }
+
+  /deep/ .mainDiv{
+    margin-top: 10px;
+  }
+
+  //////////////////////////////////////Students Card
+  .divStudent{
+    height: 70px;
+  }
+
+  .studentCard{
+    height: 50px;
+    padding: 5px;
+    width: calc(100% - 15px);
+    //display:inline-block;
+    border-radius: 15px;
+    background: white;
+    //margin-bottom: 15px;
+  }
+
+  /deep/ .allCheckBox{
+    display: inline-block;
+    -webkit-text-fill-color: #707070;
+    margin-bottom: 10px;
+    width: 19px;
+    height: 19px;
+    margin-right: 5px;
+    ion-label{
+      display:inline-block;
+      -webkit-text-fill-color: #707070;
+      padding-left: 10px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+  }
+
+  /deep/ .mat-checkbox-inner-container {
+    border-radius: 50%;
+    position: relative;
+    width: 21px;
+    height: 21px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #c8c7cc;
+    background-color: #fff;
+  }
+  /deep/ .checkboxInCard {
+    //display:inline-block;
+    //padding-top: 6px;
+    //padding-bottom: 10px;
+    display: inline-block;
+    margin-top: 10px;
+    width: 19px;
+    height: 19px;
+  }
+  /deep/ .checkbox-ios .checkbox-icon {
+    margin-top: 2.5px;
+    -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  /deep/ .checkbox-ios .checkbox-checked {
+    -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  /deep/ .avaterInCard{
+    height: 40px;
+    width: 40px;
+    padding-left: 10px;
+    padding-top: 5px;
+    -moz-border-radius: 20px;
+    display:inline-block;
+  }
+  /deep/ .imgInAvatar{
+    border-radius: 100px;
+    height: 30px;
+    width: 30px;
+  }
+
+  /deep/ .card-md {
+    margin-top: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+
+  /deep/ .card-ios {
+    margin-top: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  /deep/ ion-card {
+    display: flow-root;
+    overflow: inherit;
+    --background: white;
+    z-index: 0;
+  }
+  ////////////////////////////////End Of Students Card
+
+  ////////////////////////////////Students State
+  /deep/ .circleGreen {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  /deep/ .circleGreen:before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    background-color: #468847;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  /deep/ .circleRed {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  /deep/ .circleRed:before {
+    content: '';
+    height: 15px;
+    width: 15px;
+    background-color: #b94a48;
+    border-radius: 50%;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  ////////////////////////End Of Students State
+
+
+  ////////////////////////Arrows In Mat Expansion
+  /deep/ .fa-arrow-down{
+    padding-right: 5px;
+    padding-left: 0;
+    -webkit-transform: rotate(0deg);
+    transition: transform 0.2s linear;
+  }
+
+
+  /deep/ .fa-arrow-down.open{
+    padding-left: 5px;
+    padding-right: 0;
+    padding-top: 8px;
+    -webkit-transform: rotate(180deg);
+    transition: transform 0.2s linear;
+  }
+
+  ////////////////////////////End Of Arrows In Mat Expansion
+
+
+  ////////////////////////////////////////////Mat Expansion Classes
+
+  /deep/ .mat-expansion-panel-body {
+    padding: 8px 8px 8px 8px;
+    background-color: #F4F4F4;
+    border-radius: 10px;
+    transition: all;
+  }
+  /deep/ .mat-expansion-panel-header {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 8px 10px;
+    display: block;
+    max-height: 70px !important;
+
+    min-height: 48px !important;
+    height: fit-content !important;
+  }
+  /deep/ .mat-expansion-panel {
+    border-radius: 10px !important;
+    transition: all !important;
+    margin-bottom: 20px !important;
+    width: 100%;
+  }
+
+  /deep/ .mat-expansion-panel:not([class*=mat-elevation-z]) {
+    margin-bottom: 20px;
+    box-shadow: 0 0 0 0;
+  }
+  /deep/ .mat-accordion .mat-expansion-panel-spacing{
+    padding-bottom: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  /deep/ .mat-accordion .mat-expansion-panel-spacing:last-child {
+    margin-bottom: 20px;
+  }
+
+  /////////////////////////////////////////////////////////////////////// End Of Mat Expansion
+
+  /////////////////////////////////////////////Seen And UnSeen
+  .unseen-comments-count-active {
+    top: -7px;
+    right: -5px;
+    height: 22px;
+    position: relative;
+    padding: 2px 7px;
+    color: white;
+    background: #468847;
+    float: right;
+    display: inline-block;
+    z-index: 1;
+    border-radius: 100px;
+    margin-bottom: -20px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .unseen-comments-count-inactive {
+    top: -7px;
+    right: -5px;
+    margin-bottom: -20px;
+    height: 22px;
+    position: relative;
+    padding: 2px 7px;
+    color: white;
+    background: #346597;
+    float: right;
+    display: inline-block;
+    z-index: 1;
+    border-radius: 100px;
+    box-shadow: 0 0 0 0;
+  }
+
+  .comments-count-active-inactive {
+    top: -15px;
+    right: -12px;
+    margin-bottom: -20px;
+    height: 22px;
+    position: relative;
+    padding: 0;
+    float: right;
+    display: block;
+    z-index: 1;
+    border-radius: 100px;
+    box-shadow: 0 0 0 0;
+    overflow: auto;
+
+    .comments-count-inactive{
+      height: 22px;
+      position: relative;
+      padding: 3px 7px;
+      display: inline-block;
+      z-index: 1;
+      color: white;
+      background: #346597;
+    }
+
+    .comments-count-active{
+      height: 22px;
+      position: relative;
+      padding: 3px 7px;
+      float: right;
+      display: inline-block;
+      z-index: 1;
+      color: white;
+      background: #468847;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  /////////////////////////////////////////////End Of Seen And UnSeen
+
+}
+
+
+
+

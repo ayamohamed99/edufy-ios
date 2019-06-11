@@ -22,6 +22,14 @@ const routes: Routes = [
             loadChildren: '../notification/notification.module#NotificationPageModule'
         },
         {
+            path: 'daily-report',
+            loadChildren: '../report/report.module#ReportPageModule'
+        },
+        {
+            path: 'report/:reportname',
+            loadChildren: '../report/report.module#ReportPageModule'
+        },
+        {
             path: 'chat',
             loadChildren: '../chat/chat.module#ChatPageModule'
         },

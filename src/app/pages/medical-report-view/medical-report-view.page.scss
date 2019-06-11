@@ -1,3 +1,7 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+/deep/ app-medical-report-view {
+
 /deep/ .turnImgToBlack{
   -webkit-filter: grayscale(100%) contrast(999%); /* Safari 6.0 - 9.0 */
   filter: grayscale(100%) contrast(999%);
@@ -844,4 +848,5 @@
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
 }

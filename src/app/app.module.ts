@@ -58,11 +58,14 @@ import {MedicalReportViewPageModule} from './pages/medical-report-view/medical-r
 import {MedicalCareMedicationViewPageModule} from './pages/medical-care-medication-view/medical-care-medication-view.module';
 import {MedicalCareNewMedicalReportPageModule} from './pages/medical-care-new-medical-report/medical-care-new-medical-report.module';
 import {MedicalCareNewMedicalReportMedicinePageModule} from './pages/medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.module';
+import {MedicationNotificationPageModule} from './pages/medication-notification/medication-notification.module';
+import {DatePicker} from '@ionic-native/date-picker/ngx';
+import {ReportTemplatePageModule} from './pages/report-template/report-template.module';
 
 
 let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
 let popOvers = [PopoverNotificationCardPageModule];
-let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule,ChatDialoguePageModule,MedicalCareCardOptionPageModule,MedicalReportViewPageModule,MedicalCareMedicationViewPageModule,MedicalCareNewMedicalReportPageModule,MedicalCareNewMedicalReportMedicinePageModule];
+let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,NotificationNewPageModule,ChatDialoguePageModule,MedicalCareCardOptionPageModule,MedicalReportViewPageModule,MedicalCareMedicationViewPageModule,MedicalCareNewMedicalReportPageModule,MedicalCareNewMedicalReportMedicinePageModule, MedicationNotificationPageModule, ReportTemplatePageModule];
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -99,10 +102,8 @@ let modals = [NotificationEditPageModule,NotificationViewReceiverPageModule,Noti
     AndroidPermissions,
     FCMService,FirebaseMessaging,
     LocalNotifications,
-    DatePipe
-
-
-
+    DatePipe,
+    DatePicker
   ],
   bootstrap: [AppComponent]
 })

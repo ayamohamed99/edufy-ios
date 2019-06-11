@@ -22,18 +22,28 @@ export class MedicationNotificationPage implements OnInit {
   medicationNextTime;
   shceduleId;
 
-  constructor(public navParams: NavParams, private medicalService:MedicalCareService
+  constructor( private medicalService:MedicalCareService
       ,private toastCtrl:ToastViewService,private  modalCtrl:ModalController,private platform:Platform,private storage:Storage)
   {
-    this.medicationName = navParams.get("medicationName");
-    this.dosageNumber = navParams.get("dosageNumber");
-    this.dosageType = navParams.get("dosageType");
-    this.student = navParams.get("student");
-    this.studentName = this.student.name;
-    this.className = this.student.classes.grade.name+' - '+this.student.classes.name;
-    this.medicationTime = navParams.get("medicationTime");
-    this.medicationNextTime = navParams.get("medicationNextTime");
-    this.shceduleId = navParams.get("shceduleId");
+    // this.medicationName = navParams.get("medicationName");
+    // this.dosageNumber = navParams.get("dosageNumber");
+    // this.dosageType = navParams.get("dosageType");
+    // this.student = navParams.get("student");
+    // this.studentName = this.student.name;
+    // this.className = this.student.classes.grade.name+' - '+this.student.classes.name;
+    // this.medicationTime = navParams.get("medicationTime");
+    // this.medicationNextTime = navParams.get("medicationNextTime");
+    // this.shceduleId = navParams.get("shceduleId");
+
+    this.medicationName = "medicationName";
+    this.dosageNumber = "dosageNumber";
+    this.dosageType = "dosageType";
+    this.student = "student";
+    this.studentName = "student name";
+    this.className = "student classes";
+    this.medicationTime = "medicationTime";
+    this.medicationNextTime = "medicationNextTime";
+    this.shceduleId = "shceduleId";
 
 
     if (platform.is('desktop')) {

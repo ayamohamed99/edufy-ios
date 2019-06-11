@@ -1,5 +1,7 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
+/deep/ app-notification-new {
+
 ion-img{
   background: #eee0;
 }
@@ -258,4 +260,6 @@ ion-slides {
   left: 20px;
   bottom: 20px;
   position: absolute;
+}
+
 }
