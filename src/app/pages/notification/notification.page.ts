@@ -12,7 +12,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file/ngx';
 import { Media, MediaObject } from '@ionic-native/media/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-// import { Transfer, TransferObject } from '@ionic-native/transfer';
 import {Attachment} from '../../models/attachment';
 import {Notification} from "../../models/notification";
 import {StudentsService} from '../../services/Students/students.service';

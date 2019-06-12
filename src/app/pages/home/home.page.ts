@@ -79,7 +79,7 @@ export class HomePage {
   }
 
   login(form:NgForm){
-    this.userName = form.value.username;
+    this.userName = form.value.userName;
     this.password = form.value.password;
     this.startLogIn();
   }

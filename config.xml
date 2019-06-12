@@ -24,6 +24,7 @@
     <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
+    <allow-navigation href="http://104.198.175.198/*" />
     <feature name="CDVWKWebViewEngine">
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
@@ -99,4 +100,13 @@
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <allow-navigation href="http://192.168.43.78:8100" />
+    <allow-navigation href="http://192.168.43.123:8100" />
+    <allow-navigation href="http://192.168.43.123:8101" />
+    <allow-navigation href="http://192.168.1.9:8100" />
+    <allow-navigation href="http://192.168.1.5:8100" />
+    <allow-navigation href="http://192.168.1.5:8101" />
+    <allow-navigation href="http://192.168.42.157:8100" />
+    <allow-navigation href="http://192.168.1.6:8100" />
+    <allow-navigation href="http://192.168.1.15:8100" />
 </widget>

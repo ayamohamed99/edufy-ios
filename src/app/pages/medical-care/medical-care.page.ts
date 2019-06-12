@@ -118,7 +118,7 @@ export class MedicalCarePage implements OnInit {
   constructor(public popoverCtrl:PopoverController,public platform:Platform,
               public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDateService,private toastCtrl:ToastViewService,
               private modalCtrl:ModalController,private classServ:ClassesService,private studentServ:StudentsService, private  alrtCtrl:AlertController,
-              private  loadCtrl:LoadingViewService,private accountServ:AccountService,private templetService:TemplateFunctionsService,private excal:ExcelService)
+              private  loadCtrl:LoadingViewService,public accountServ:AccountService,private templetService:TemplateFunctionsService,private excal:ExcelService)
   {
 
     console.log(this.search);

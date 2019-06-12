@@ -1,3 +1,4 @@
+import { DOMAIN_URL } from 'src/environments/environment';
 
 export class Url_domain {
   // DEV from mobile
@@ -10,7 +11,8 @@ export class Url_domain {
   // static Domain = 'http://192.168.1.10:9090';
 
   // for Proxy
-  static Domain = '';
+  // static Domain = '';
+  static Domain = DOMAIN_URL;
   Domain = Url_domain.Domain;
 
   // run with proxy
