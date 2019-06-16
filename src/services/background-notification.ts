@@ -1,10 +1,9 @@
 import {Injectable} from "@angular/core";
 import 'rxjs/add/operator/map';
-import {Url_domain} from "../models/url_domain";
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/mergeMap';
-import {HttpClient} from "@angular/common/http";
-import {AlertController, Platform} from "ionic-angular";
+import {AlertController} from "ionic-angular";
+import {Platform} from "ionic-angular";
 import {NotificationService} from "./notification";
 import {Pendingnotification} from "../models/pendingnotification";
 import {BackgroundMode} from "@ionic-native/background-mode";
@@ -12,8 +11,10 @@ import {Storage} from "@ionic/storage";
 import {Postattachment} from "../models/postattachment";
 import {Send_student_notification} from "../models/send_student_notification";
 import {Network} from "@ionic-native/network";
-import {FCMService} from "./fcm";
 import {LocalNotifications} from "@ionic-native/local-notifications";
+import {ImageCompressorService} from "./image-compress";
+import {tap} from "rxjs/operators";
+import {combineLatest} from "rxjs/observable/combineLatest";
 
 @Injectable()
 export class BackgroundNotificationService{
@@ -34,7 +35,7 @@ export class BackgroundNotificationService{
   number:number = 1;
   constructor(private platform:Platform, private notiServ:NotificationService,private backgroundMode:BackgroundMode,
               private storage:Storage,private alertCtrl:AlertController,public network:Network,
-              private localNotifications: LocalNotifications)
+              private localNotifications: LocalNotifications,private compress:ImageCompressorService)
   {
 
     if(!this.platform.is('core')) {
@@ -52,70 +53,161 @@ export class BackgroundNotificationService{
   }
 
 
-  toSendNotification(viewCtrl,Title, Details,arrayFormData,loadingCtrl){
+  compressTheImage(file){
+
+    let formData = new FormData();
+    let fileType = this.getFileType(file.name);
+    if(fileType == "IMAGE") {
+      return this.compress.compressImage(file).pipe(tap(
+        result => {
+          debugger;
+          let data;
+
+          if(result instanceof Blob){
+            data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
+          }else{
+            data = result;
+          }
+
+          formData.append('file', data, data.name);
+          console.log(JSON.stringify(formData));
+          this.arrayFormData.push(data);
+
+          // let reader = new FileReader();
+          // reader.onloadend = function(e){
+          //   // you can perform an action with readed data here
+          //   console.log(reader.result);
+          //   these.loading.dismiss();
+          //   let attach = new Postattachment();
+          //   attach.name = file.name;
+          //   attach.type = "IMAGE";
+          //   attach.url = reader.result;
+          //   attach.file = file;
+          //   these.attachmentArray.push(attach);
+          //   resolve(resolve);
+          // };
+          // reader.readAsDataURL(file);
+
+          // that.organizeData(inputEl, i, formData, result, fileType, fileName,result,result);
+          // return result;
+        }, error => {
+          console.log('😢 Oh no!', error);
+          // return error;
+        }));
+    }else{
+      formData.append('file', file);
+      return this.arrayFormData.push(formData);
+    }
+  }
+
+
+  base64ToFile(base64Data, tempfilename, contentType) {
+    contentType = contentType || '';
+    var sliceSize = 1024;
+    var byteCharacters = atob(base64Data);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
+
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      var begin = sliceIndex * sliceSize;
+      var end = Math.min(begin + sliceSize, bytesLength);
+
+      var bytes = new Array(end - begin);
+      for (var offset = begin, i = 0 ; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    var file = new File(byteArrays, tempfilename, { type: contentType });
+    return file;
+  }
+
+  toSendNotification(viewCtrl,Title, Details,arrayFiles,loadingCtrl){
     debugger;
 
     this.viewCtrl= viewCtrl;
     this.Title=Title;
     this.Details=Details;
-    this.arrayFormData=arrayFormData;
+    // this.arrayFormData=arrayFiles;
+    let files:any[] = arrayFiles;
     this.loadingCtrl=loadingCtrl;
 
     let RecieverArray:any[] = [];
 
-    if(this.sendTo && this.sendTo.some(x => x.id === -1))
-    {
-      for(let temp of this.sendTo){
-        for(let sub of temp.dataList){
+    let promisesArray = [];
+    for (let index = 0; index <files.length; index++) {
+      // let form: FormData = this.arrayFormData[index];
+      // let form = new FormData();
+      promisesArray.push(this.compressTheImage(files[index]));
+    }
+
+
+
+    // Promise.all(promisesArray).then( data=> {
+
+    combineLatest(promisesArray).subscribe(
+
+      data=> {
+
+      if(this.sendTo && this.sendTo.some(x => x.id === -1))
+      {
+        for(let temp of this.sendTo){
+          for(let sub of temp.dataList){
+            let ssn = new Send_student_notification();
+            ssn.id = sub.id;
+            if(sub.type == "STUDENT") {
+              ssn.type = "Student";
+            }else if(sub.type == "CLASS") {
+              ssn.type = "Class";
+            }else{
+              ssn.type = sub.type;
+            }
+            ssn.name = sub.name;
+            RecieverArray.push(ssn);
+          }
+        }
+      }else{
+        for(let temp of this.sendTo){
           let ssn = new Send_student_notification();
-          ssn.id = sub.id;
-          if(sub.type == "STUDENT") {
+          ssn.id = temp.id;
+          if(temp.type == "STUDENT") {
             ssn.type = "Student";
-          }else if(sub.type == "CLASS") {
+          }else if(temp.type == "CLASS") {
             ssn.type = "Class";
           }else{
-            ssn.type = sub.type;
+            ssn.type = temp.type;
           }
-          ssn.name = sub.name;
+          ssn.name = temp.name;
           RecieverArray.push(ssn);
         }
       }
-    }else{
-      for(let temp of this.sendTo){
-        let ssn = new Send_student_notification();
-        ssn.id = temp.id;
-        if(temp.type == "STUDENT") {
-          ssn.type = "Student";
-        }else if(temp.type == "CLASS") {
-          ssn.type = "Class";
-        }else{
-          ssn.type = temp.type;
+
+      let SelectedTags:any[]=[];
+      if(this.tags) {
+        for (let tag of this.tags) {
+          for (let tagArr of this.tagsArr)
+            if (tagArr.name === tag) {
+              SelectedTags.push(tagArr);
+            }
         }
-        ssn.name = temp.name;
-        RecieverArray.push(ssn);
       }
-    }
 
-    let SelectedTags:any[]=[];
-    if(this.tags) {
-      for (let tag of this.tags) {
-        for (let tagArr of this.tagsArr)
-          if (tagArr.name === tag) {
-            SelectedTags.push(tagArr);
-          }
+      if (this.platform.is('core')){
+
+        this.uploadFromWeb(RecieverArray,SelectedTags);
+
+      }else{
+
+        this.uploadFromMobile(RecieverArray,SelectedTags,this.viewCtrl,this.Title,
+          this.Details,this.arrayFormData,this.loadingCtrl);
+
       }
-    }
 
-    if (this.platform.is('core')){
-
-      this.uploadFromWeb(RecieverArray,SelectedTags);
-
-    }else{
-
-      this.uploadFromMobile(RecieverArray,SelectedTags,this.viewCtrl,this.Title,
-        this.Details,this.arrayFormData,this.loadingCtrl);
-
-    }
+    },
+        e=>{
+      console.log("Promises Error: "+e);
+    });
   }
 
 

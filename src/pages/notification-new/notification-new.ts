@@ -46,6 +46,7 @@ export class NotificationNewPage {
 
   attachmentButtonName:string = "Add New Attachment";
   attachmentArray:any[] = [];
+  attachmentFiles:any[] = [];
   chooseAllClasses:any[] = [];
   fileTypes=["jpg","jpeg","png","gif","ico","bmp","webp","tiff","pdf","txt","xls","xlsx","doc","docx","ppt","pptx","mp4","flv",
   "avi","mov","wmv","mp3","wma"];
@@ -176,7 +177,7 @@ export class NotificationNewPage {
   }
 
   sendNotification() {
-    this.backNotify.toSendNotification(this.viewCtrl,this.Title, this.Details,this.backNotify.arrayFormData,this.loadingCtrl);
+    this.backNotify.toSendNotification(this.viewCtrl,this.Title, this.Details,this.attachmentFiles,this.loadingCtrl);
   }
 
   close(){
@@ -299,42 +300,41 @@ export class NotificationNewPage {
           let file: File=inputEl.files.item(i);
           let fileType = this.getFileType(inputEl.files.item(i).name);
           if (fileType == "IMAGE") {
-            this.loading = this.loadingCtrl.create({
-              content: '',
-              cssClass:"loadingWithoutBackground"
-            });
-            this.loading.present();
+            // this.loading = this.loadingCtrl.create({
+            //   content: '',
+            //   cssClass:"loadingWithoutBackground"
+            // });
+            // this.loading.present();
             let that = this;
             await new Promise(function(resolve, reject) {
-              let these = that;
-              that.compress.compressImage(inputEl.files.item(i)).subscribe(
-                result => {
-                  debugger;
-                  file = result;
-                  formData.append('file', result, result.name);
-                  console.log(JSON.stringify(formData));
-                  these.backNotify.arrayFormData.push(result);
-
+              // that.compress.compressImage(inputEl.files.item(i)).subscribe(
+              //   result => {
+              //     debugger;
+              //     file = result;
+              //     formData.append('file', result, result.name);
+              //     console.log(JSON.stringify(formData));
+                that.attachmentFiles.push(file);
+                  let thats = that;
                   let reader = new FileReader();
                   reader.onloadend = function(e){
                     // you can perform an action with readed data here
                     console.log(reader.result);
-                    these.loading.dismiss();
+                    // these.loading.dismiss();
                     let attach = new Postattachment();
                     attach.name = file.name;
                     attach.type = "IMAGE";
                     attach.url = reader.result;
                     attach.file = file;
-                    these.attachmentArray.push(attach);
+                    thats.attachmentArray.push(attach);
                     resolve(resolve);
                   };
                   reader.readAsDataURL(file);
 
-                  // that.organizeData(inputEl, i, formData, result, fileType, fileName,result,result);
-                  }, error => {
-                  console.log('😢 Oh no!', error);
-                  reject(error);
-                });
+                    // // that.organizeData(inputEl, i, formData, result, fileType, fileName,result,result);
+                   //   }, error => {
+                  //   console.log('😢 Oh no!', error);
+                 //   reject(error);
+                // });
               return true
             });
 
@@ -342,7 +342,7 @@ export class NotificationNewPage {
             file = inputEl.files.item(i);
             formData.append('file', file);
             console.log(JSON.stringify(formData));
-            this.backNotify.arrayFormData.push(file);
+            this.attachmentFiles.push(file);
             this.organizeData(inputEl,i,formData,inputEl.files.item(i),fileType,fileName);
           }
 
@@ -498,7 +498,7 @@ export class NotificationNewPage {
           role: 'destructive',
           handler: () => {
             this.attachmentArray.splice(attachIndex, 1);
-            this.backNotify.arrayFormData.splice(attachIndex,1);
+            this.attachmentFiles.splice(attachIndex,1);
             this.backNotify.arrayToPostAttachment.splice(attachIndex,1);
           }
         }
