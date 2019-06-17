@@ -1,0 +1,32 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" class="container border-remove">
+    <ion-buttons slot="start">
+      <ion-menu-button class="icon-color"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="container">
+
+    <div style="margin-top: 20px;">
+        <div style="margin-left: calc(50% - 109px); width: 218px; background: #E4E4E4; border-radius: 100px;">
+            <ion-segment mode="ios" class="segmentRaduis" color="#55A9FF" style="max-width: 218px; height: 40px; color: black; transition: all" (ionChange)="segmentChanged($event)">
+                <ion-segment-button mode="ios" class="segmentRaduis" value="today">
+                    <ion-label>TODAY</ion-label>
+                </ion-segment-button>
+                <ion-segment-button mode="ios" class="segmentRaduis" value="weekly">
+                    <ion-label>WEEKLY</ion-label>
+                </ion-segment-button>
+                <ion-segment-button mode="ios" class="segmentRaduis" value="monthly">
+                    <ion-label>MONTHLY</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+    </div>
+
+
+
+    
+
+</ion-content>

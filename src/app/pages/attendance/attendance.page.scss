@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/deep/ app-attendance{
+  .container{
+    --background: #F4F4F4;
+  }
+
+  /deep/ .border-remove {
+    --border-width: 0 !important;
+  }
+
+  /deep/ .icon-color{
+    --color: black !important;
+  }
+
+  /deep/ .segmentRaduis {
+    border-radius: 100px;
+    border-color: rgba(255, 255, 255, 0);
+  }
+
+  /deep/ .sc-ion-segment-ios-h.ion-color.sc-ion-segment-ios-s > .segment-button-checked, .sc-ion-segment-ios-h.ion-color.sc-ion-segment-ios-s > .segment-button-checked.activated {
+    background: #55A9FF;
+    color: white;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.25);
+  }
+
+
+}

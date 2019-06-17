@@ -4,10 +4,10 @@ export const environment = {
 
 
 // DEV from mobile
-  // export const DOMAIN_URL = 'http://104.155.139.135:8080'
+  // export const DOMAIN_URL = 'http://104.155.139.135:8080';
 
   // production from mobile
-  export const DOMAIN_URL = "http://104.198.175.198"
+  export const DOMAIN_URL = "http://104.198.175.198";
 
   // local from mobile
-  // export const DOMAIN_URL = 'http://192.168.1.10:9090'
+  // export const DOMAIN_URL = 'http://192.168.1.105:8080';

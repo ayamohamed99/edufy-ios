@@ -1,61 +1,117 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title text-center>{{name}}'s Profile</ion-title>
+<!--<ion-header>-->
+<!--  <ion-toolbar style="background: rgba(255,255,255,0)">-->
+<!--    <ion-buttons slot="start">-->
+<!--      <ion-menu-button></ion-menu-button>-->
+<!--    </ion-buttons>-->
+<!--    <ion-title text-center>{{name}}'s Profile</ion-title>-->
 <!--    <ion-buttons right>-->
 <!--      <ion-button icon-only [disabled]="true">-->
 <!--        <ion-icon></ion-icon>-->
 <!--      </ion-button>-->
 <!--    </ion-buttons>-->
-  </ion-toolbar>
-</ion-header>
+<!--  </ion-toolbar>-->
+<!--</ion-header>-->
 
-<ion-content has-header="true">
+<ion-content has-header="true" class="contentBackground">
 
+  <div style="width: 100%; padding: 6px;position: absolute" class="contentBackground">
+    <ion-buttons slot="start">
+      <ion-menu-button color="light"></ion-menu-button>
+    </ion-buttons>
+  </div>
   <!--<ion-buttons left style="position: absolute; background-color: #eee0">-->
   <!--<button ion-button icon-only  menuToggle style="background-color: #eee0">-->
   <!--<ion-icon color="primary" name="menu"></ion-icon>-->
   <!--</button>-->
   <!--</ion-buttons>-->
 
-  <div class="container">
-    <div class="fb-profile">
-      <img align="left" class="fb-image-lg" src="assets/imgs/soon.png" alt="Profile image example"/>
-      <img align="left" class="fb-image-profile thumbnail" src="assets/imgs/profile.png" alt="Profile image example"/>
-      <div class="fb-profile-text">
-        <h1 style="margin-left: 240px;" *ngIf="onCore()">{{name}}</h1>
-        <h1 *ngIf="onMobile()">{{name}}</h1>
+<!--  <div class="container">-->
+<!--    <div class="fb-profile">-->
+<!--      <img align="left" class="fb-image-lg" src="assets/imgs/soon.png" alt="Profile image example"/>-->
+<!--      <img align="left" class="fb-image-profile thumbnail" src="assets/imgs/profile.png" alt="Profile image example"/>-->
+<!--      <div class="fb-profile-text">-->
+<!--        <h1 style="margin-left: 240px;" *ngIf="onCore()">{{name}}</h1>-->
+<!--        <h1 *ngIf="onMobile()">{{name}}</h1>-->
 
-        <ion-list inset no-lines>
+<!--        <ion-list inset no-lines>-->
 
-          <ion-item margin-left="20px"> <ion-icon name="person" margin-right="5px"></ion-icon>
-            {{userName}}
-          </ion-item>
+<!--          <ion-item margin-left="20px"> <ion-icon name="person" margin-right="5px"></ion-icon>-->
+<!--            {{userName}}-->
+<!--          </ion-item>-->
 
-          <ion-item margin-left="20px"> <ion-icon name="call" margin-right="5px"></ion-icon>
-            {{userPhone}}
-          </ion-item>
+<!--          <ion-item margin-left="20px"> <ion-icon name="call" margin-right="5px"></ion-icon>-->
+<!--            {{userPhone}}-->
+<!--          </ion-item>-->
 
-          <ion-item margin-left="20px"> <ion-icon name="mail" margin-right="5px"></ion-icon>
-            {{userMail}}
-          </ion-item>
+<!--          <ion-item margin-left="20px"> <ion-icon name="mail" margin-right="5px"></ion-icon>-->
+<!--            {{userMail}}-->
+<!--          </ion-item>-->
 
-          <ion-item margin-left="20px"> <ion-icon name="locate" margin-right="5px"></ion-icon>
-            {{userAddress}}
-          </ion-item>
+<!--          <ion-item margin-left="20px"> <ion-icon name="locate" margin-right="5px"></ion-icon>-->
+<!--            {{userAddress}}-->
+<!--          </ion-item>-->
 
-        </ion-list>
+<!--        </ion-list>-->
 
-        <div style="height: 1px; background-color: lightgray; margin-left: 80px; margin-right: 80px; margin-top: 40px"></div>
+<!--        <div style="height: 1px; background-color: lightgray; margin-left: 80px; margin-right: 80px; margin-top: 40px"></div>-->
 
-      </div>
-    </div>
-  </div>
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <!--<button (click)="openNav()">Open</button>-->
 
   <!--<report-filter></report-filter>-->
+
+
+
+  <div class="wrapper">
+
+
+    <div class="profile-card js-profile-card">
+      <div class="profile-card__img">
+        <img src="assets/imgs/profile.png" alt="profile card">
+      </div>
+
+      <div class="profile-card__cnt js-profile-cnt">
+        <div class="profile-card__name">{{name}}</div>
+        <div class="profile-card__txt">{{userName}}</div>
+        <div class="profile-card-loc">
+<!--        <span class="profile-card-loc__icon">-->
+<!--          <svg class="icon"><use xlink:href="#icon-location"></use></svg>-->
+<!--        </span>-->
+
+          <ion-list inset no-lines style="width: 100%">
+
+            <ion-item style="color: gray;font-weight: 100;">
+              <img src="assets/icon/call-answer.png" style="margin-right: 10px"/>
+              {{userPhone}}
+            </ion-item>
+
+            <ion-item style="color: gray;font-weight: 100;">
+              <img src="assets/icon/mail.png" style="margin-right: 10px"/>
+              {{userMail}}
+            </ion-item>
+
+            <ion-item style="color: gray;font-weight: 100;">
+              <img src="assets/icon/placeholder.png" style="margin-right: 10px"/>
+              {{userAddress}}
+            </ion-item>
+
+          </ion-list>
+        </div>
+
+        <div style="background: #E9E1E1;height: 1.0px;width: 100%;margin-bottom: 20px;"></div>
+
+        <ion-button expand="full">
+          {{attendanceButton}}
+        </ion-button>
+
+      </div>
+
+
+    </div>
+
+  </div>
 
 </ion-content>

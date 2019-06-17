@@ -32,6 +32,7 @@ export class ProfilePage implements OnInit {
   uploadedImage: File;
   imagePreview:any[]=[];
 
+  attendanceButton = 'Check Attendance';
 
 
 

@@ -38,6 +38,10 @@ const routes: Routes = [
             loadChildren: '../medical-care/medical-care.module#MedicalCarePageModule'
         },
         {
+            path: 'attendance',
+            loadChildren: '../attendance/attendance.module#AttendancePageModule'
+        },
+        {
             path: 'settings',
             loadChildren: '../settings/settings.module#SettingsPageModule'
         }

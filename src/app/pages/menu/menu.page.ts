@@ -76,6 +76,12 @@ export class MenuPage implements OnInit {
       this.pages.push(data);
     }
 
+    if(this.accountServ.getUserRole().dailyReportView && data.dailyReportActivated){
+      let data = {title: 'Attendance', icon: 'md-checkmark-circle-outline', main:true, url: '/menu/attendance', customReport:false};
+      // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
+      this.pages.push(data);
+    }
+
     let Setting = {title: 'Settings', icon: 'cog', main:false, url: '/menu/settings'};
     this.pages.push(Setting);
 
