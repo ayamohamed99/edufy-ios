@@ -42,11 +42,17 @@
               <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
               {{itm.grade.name}} {{itm.name}}
             </mat-panel-title>
-            <mat-panel-description col-4 *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
-            <mat-panel-description col-4 *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
-            <mat-panel-description col-4 style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>
-            <mat-panel-description col-4 style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>
-            <mat-panel-description col-4 style="-webkit-text-fill-color: #AE2534;" *ngIf="!itm.allStudentFinalized && !itm.allStudentApproved && itm.noOfAllStudent != 0">Pending</mat-panel-description>
+            <mat-panel-description col-3 *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
+            <mat-panel-description col-3 *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #AE2534;" *ngIf="!itm.allStudentFinalized && !itm.allStudentApproved && itm.noOfAllStudent != 0">Pending</mat-panel-description>
+            <mat-panel-description col-3 *ngIf="showApproveButton()">
+              <div item-end class="containerApprove">
+                <button [id]="'buttonReportApprove'+i"  style="padding-left: 5px;"  class="buttonApprove" [ngClass]="itm.allStudentApproved || itm.noOfAllStudent == 0?'validate':''" (click)="approveClass($event,i,itm.id, itm.name, itm.grade.name, itm.noOfAllStudent)"></button>
+              </div>
+
+            </mat-panel-description>
           </mat-expansion-panel-header>
 
           <div *ngIf="showAllButton">
