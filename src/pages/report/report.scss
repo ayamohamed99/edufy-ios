@@ -241,6 +241,92 @@ page-report {
 
   /////////////////////////////////////////////End Of Seen And UnSeen
 
+
+  .mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+    margin-right: 0px;
+  }
+
+  $green: #1ECD97;
+  $gray: #bbbbbb;
+  .containerApprove {
+    //position: absolute;
+    top:50%;
+    left:50%;
+    //margin-left: -65px;
+    //margin-top: -20px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+  }
+
+  .buttonApprove {
+    outline:none;
+    height: 25px;
+    text-align: center;
+    width: 25px;
+    border-radius:5px;
+    background: #fff0;
+    border: 2px solid $green;
+    color:$green;
+    letter-spacing:1px;
+    //text-shadow:0;
+    font:{
+      size:12px;
+      weight:bold;
+    }
+    cursor: pointer;
+    transition: all 0.75s ease;
+    &:hover {
+      //color:white;
+      //background: $green;
+    }
+    &:active {
+      //letter-spacing: 2px;
+    }
+    &:after {
+      //font-family:'FontAwesome';
+      content:"\2713";
+    }
+  }
+
+
+  .onclic {
+    width: 25px;
+    height: 25px;
+    border-radius:100%;
+    border-color:$gray;
+    border-width:3px;
+    font-size:12px;
+    border-left-color:$green;
+    animation: rotating 2s 0.25s linear infinite;
+
+    &:after {
+      content:"";
+    }
+    &:hover {
+      color:$green;
+      background: white;
+    }
+  }
+  .validate {
+    font-size:12px;
+    color: white;
+    background: $green;
+    &:after {
+      border-radius:5px;
+      content:"\2713";
+    }
+  }
+
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
 }
 
 

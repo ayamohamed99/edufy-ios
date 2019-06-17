@@ -91,7 +91,112 @@ export class ReportPage {
     }
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private dailyReportServ:DailyReportService, public accountServ: AccountService,
+  approveClass(ev,index,classId, className, classGradeName, noOfAllStudents){
+
+    let noOfFinalized;
+    if(this.reportId == null || this.reportId == -1){
+      noOfFinalized = this.classesList[index].noOfStudentReportFinalized;
+    }else{
+      noOfFinalized = this.classesList[index].noOfStudentDailyReportFinalized;
+    }
+
+    ev.stopPropagation();
+    let elButton = document.getElementById("buttonReportApprove"+index);
+
+
+    // setInterval(() => {
+    //   elButton.classList.remove("onclic");
+    //   elButton.classList.add("validate");
+    // },3000);
+
+
+
+    var noOfUnFinalized = noOfAllStudents - noOfFinalized;
+
+    this.alrtCtrl.create({
+      title: 'Approve Daily Report',
+      subTitle: 'Do you want to approve '+classGradeName+' '+className+' while '+noOfUnFinalized+' student report(s) pending ?',
+      buttons: [{
+        text: 'No',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      },
+        {
+          text: 'Yes',
+          handler: () => {
+            elButton.classList.add("onclic");
+
+            var searchDate = this.selectedDate;
+            /*
+             * console .info("approveDailyReport classId: " + classId);
+             */
+
+            this.dailyReportServ.approveReport(searchDate, classId, this.reportId).subscribe(
+              (response) => {
+
+              this.classesServ.getClassList('DAILY_REPORT', 4, searchDate, null, null,this.reportId).subscribe(
+                (response) => {
+
+                var approvedClasses = response;
+                for (var i = 0; i < this.classesList.length; i++) {
+                  for (var j = 0; j < approvedClasses.length; j++) {
+                    if (approvedClasses[j].id == this.classesList[i].id) {
+                      this.classesList[i].noOfStudentDailyReportApproved = approvedClasses[j].noOfStudentDailyReportApproved;
+                    }
+
+                  }
+
+                }
+
+              }, (reason) => {
+
+              });
+
+              this.studentsServ.getAllStudentsForReport(8, classId, searchDate, this.reportId).subscribe(
+                (response) => {
+
+                this.classesList[index].studentsList = response;
+                // this.classStudents = this.classesList[this.selectedClassIndex].studentsList;
+
+
+                for (var k = 0; k < this.classesList.length; k++)
+                  if (this.classesList[k].id == classId) {
+                    this.classesList[k].studentsList = response;
+                  }
+
+              });
+                elButton.classList.remove("onclic");
+                elButton.classList.add("validate");
+                this.presentToast('Report Approved Successfully');
+
+            }, (reason) => {
+                elButton.classList.remove("onclic");
+                elButton.classList.remove("validate");
+              this.presentToast('Failed to approve the report');
+            });
+
+
+          }
+        }]
+    }).present();
+
+  }
+
+
+  showApproveButton(){
+    let roleApprove;
+    if(this.accountServ.reportId == -1 || this.accountServ.reportId == null) {
+      roleApprove = this.accountServ.getUserRole().dailyReportApprove;
+    }else{
+      roleApprove = this.accountServ.getUserRole().reportApprove;
+    }
+    return roleApprove;
+  }
+
+
+  constructor(public navCtrl: NavController, public navParams: NavParams,public dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
               public loadCtrl: LoadingController, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
               private toastCtrl:ToastController, private modalCtrl:ModalController,private reportComment:ReportCommentProvider,public transformDate:TransFormDate) {
