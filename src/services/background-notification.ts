@@ -33,6 +33,7 @@ export class BackgroundNotificationService{
   tags:any[] = [];
   tagsArr:any[] = [];
   number:number = 1;
+  loading;
   constructor(private platform:Platform, private notiServ:NotificationService,private backgroundMode:BackgroundMode,
               private storage:Storage,private alertCtrl:AlertController,public network:Network,
               private localNotifications: LocalNotifications,private compress:ImageCompressorService)
@@ -63,11 +64,12 @@ export class BackgroundNotificationService{
           debugger;
           let data;
 
-          if(result instanceof Blob){
-            data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
-          }else{
+          // if(result instanceof Blob){
+          //   // data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
+          //   data = this.blobToFile(result,file.name);
+          // }else{
             data = result;
-          }
+          // }
 
           formData.append('file', data, data.name);
           console.log(JSON.stringify(formData));
@@ -95,11 +97,20 @@ export class BackgroundNotificationService{
           // return error;
         }));
     }else{
-      formData.append('file', file);
-      return this.arrayFormData.push(formData);
+      // formData.append('file', file);
+      return this.arrayFormData.push(file);
     }
   }
 
+  public blobToFile = (theBlob: Blob, fileName:string): File => {
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+
+    //Cast to a File() type
+    return <File>theBlob;
+  }
 
   base64ToFile(base64Data, tempfilename, contentType) {
     contentType = contentType || '';
@@ -132,9 +143,12 @@ export class BackgroundNotificationService{
     // this.arrayFormData=arrayFiles;
     let files:any[] = arrayFiles;
     this.loadingCtrl=loadingCtrl;
-
+    this.startLocalNotification();
     let RecieverArray:any[] = [];
-
+    this.loading = loadingCtrl.create({
+      content: ""
+    });
+    this.loading.present();
     let promisesArray = [];
     for (let index = 0; index <files.length; index++) {
       // let form: FormData = this.arrayFormData[index];
@@ -215,6 +229,7 @@ export class BackgroundNotificationService{
     debugger;
 
     if((this.wifiUpload && !(this.network.type == 'wifi') )|| (this.wifiUpload && this.network.type ==  "none")){
+      this.errNotification();
       alert('You have been activated upload by \"WiFi only\"');
       viewCtrl.dismiss({name: 'dismissed&SENT'});
       this.saveTheNewNotificationFrist(RecieverArray,SelectedTags,title,details,arrayFromData);
@@ -228,10 +243,10 @@ export class BackgroundNotificationService{
 
     }else {
 
-      let loading = loadingCtrl.create({
-        content: ""
-      });
-      loading.present();
+      // let loading = loadingCtrl.create({
+      //   content: ""
+      // });
+      // loading.present();
       if(this.arrayFormData) {
         let promisesArray = [];
         for (let index = 0; index <this.arrayFormData.length; index++) {
@@ -258,12 +273,13 @@ export class BackgroundNotificationService{
               PN.receiversList = RecieverArray;
               sentNotify.push(PN);
               this.doneNotification();
-              loading.dismiss();
+              this.loading.dismiss();
               viewCtrl.dismiss({name: 'dismissed&SENT'});
             },
             err => {
               console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
-              loading.dismiss();
+              this.loading.dismiss();
+              this.errNotification();
               this.presentConfirm("Please check the internet and try again");
             },()=>{
               this.deleteFromStorage(sentNotify);
@@ -284,13 +300,13 @@ export class BackgroundNotificationService{
             PN.tagsList = SelectedTags;
             PN.receiversList = RecieverArray;
             sentNotify.push(PN);
-            loading.dismiss();
+            this.loading.dismiss();
             viewCtrl.dismiss({name: 'dismissed&SENT'});
           },
           err => {
             debugger;
             console.log("POST without wait error", JSON.parse(JSON.stringify(err.error)));
-            loading.dismiss();
+            this.loading.dismiss();
             this.presentConfirm("Please, check the internet then try again");
           }, () => {
             this.deleteFromStorage(sentNotify);
@@ -409,7 +425,6 @@ export class BackgroundNotificationService{
 
 
   uploadAttach(formData){
-    this.startLocalNotification();
     let errorAppear:boolean;
     debugger;
     return this.notiServ.postAttachment(formData).toPromise().then(
@@ -646,6 +661,23 @@ export class BackgroundNotificationService{
       id: 1361993,
       title: 'Sending Notification',
       text:'Notification has been successfully sent',
+      priority:2,
+      sticky:false,
+      foreground:true
+    });
+    this.number = 1;
+    this.pendingNotification=[];
+    this.arrayToPostAttachment =[];
+    this.arrayFormData = [];
+    this.sendTo = [];
+  }
+
+  errNotification(){
+    this.localNotifications.clear(2481993);
+    this.localNotifications.schedule({
+      id: 1361993,
+      title: 'Sending Notification',
+      text:'Failed to sent the notification',
       priority:2,
       sticky:false,
       foreground:true

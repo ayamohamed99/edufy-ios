@@ -93,11 +93,15 @@ export class ReportPage {
 
   approveClass(ev,index,classId, className, classGradeName, noOfAllStudents){
 
-    let noOfFinalized;
-    if(this.reportId == null || this.reportId == -1){
+    let noOfFinalized = 0;
+    if(this.reportId){
+      if(this.classesList[index].noOfStudentReportFinalized){
       noOfFinalized = this.classesList[index].noOfStudentReportFinalized;
+      }else{noOfFinalized = 0}
     }else{
+      if(this.classesList[index].noOfStudentDailyReportFinalized){
       noOfFinalized = this.classesList[index].noOfStudentDailyReportFinalized;
+      }else{noOfFinalized = 0}
     }
 
     ev.stopPropagation();

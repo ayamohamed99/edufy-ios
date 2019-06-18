@@ -4,15 +4,18 @@ export class Url_domain{
   // static Domain = "http://104.155.139.135:8080";
 
   //production from mobile
- // static Domain = "http://104.198.175.198";
+ static Domain = "http://104.198.175.198";
 
   //local from mobile
    //static Domain = "http://192.168.1.90:8080";
 
   //for Proxy
-   static Domain = "";
+  //  static Domain = "";
   Domain = Url_domain.Domain;
-
+// <allow-intent href="http://*/*" />
+//     <allow-intent href="http://*" />
+//     <allow-intent href="https://*/*" />
+//     <allow-intent href="https://*" />
 
   //      proxy
   // "proxies": [
@@ -34,6 +37,6 @@ export class Url_domain{
   // keytool -genkey -v -keystore edufy_teachers.jks -keyalg RSA -keysize 2048 -validity 10000 -alias edufy_teachers
   // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks app-release-unsigned.apk edufy_teachers
   //PASSWORD : @Entrepreware123
-  //zipalign -v 4 app-release-unsigned.apk 1.0.12-edufy_teachers.apk
+  //zipalign -v 4 app-release-unsigned.apk 1.1.5-edufy_teachers.apk
   //apksigner verify 1.0.12-edufy_teachers.apk
 }
