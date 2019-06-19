@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AttendancePage implements OnInit {
 
+  TODAY_TAB = 'today';
+  WEEKLY_TAB = 'weekly';
+  MONTHLY_TAB = 'monthly';
 
+  selectedTab;
+  onePerson:boolean = true;
 
-  constructor() { }
+  absent = true;
+  constructor()
+  {
+    if(!this.onePerson){
+      this.selectedTab = this.TODAY_TAB;
+    }else{
+      this.selectedTab = this.WEEKLY_TAB;
+    }
+
+  }
 
   ngOnInit() {
 
@@ -18,5 +32,19 @@ export class AttendancePage implements OnInit {
   segmentChanged(ev){
 
   }
+
+  activeCheckInOneTeacherButton(){
+    return true
+  }
+
+  activeCheckInTeachersButton(){
+    return true
+  }
+
+  checkInNow(){
+    console.log('checked in successfully')
+  }
+
+
 
 }

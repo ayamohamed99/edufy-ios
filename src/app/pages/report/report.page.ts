@@ -86,11 +86,15 @@ export class ReportPage implements OnInit {
 
   async approveClass(ev,index,classId, className, classGradeName, noOfAllStudents){
 
-    let noOfFinalized;
-    if(this.reportId == null || this.reportId == -1){
-      noOfFinalized = this.classesList[index].noOfStudentReportFinalized;
+    let noOfFinalized = 0;
+    if(this.reportId){
+      if(this.classesList[index].noOfStudentReportFinalized){
+        noOfFinalized = this.classesList[index].noOfStudentReportFinalized;
+      }else{noOfFinalized = 0}
     }else{
-      noOfFinalized = this.classesList[index].noOfStudentDailyReportFinalized;
+      if(this.classesList[index].noOfStudentDailyReportFinalized){
+        noOfFinalized = this.classesList[index].noOfStudentDailyReportFinalized;
+      }else{noOfFinalized = 0}
     }
 
     ev.stopPropagation();

@@ -66,11 +66,11 @@ export class BackgroundNotificationService {
             debugger;
             let data;
 
-            if(result instanceof Blob){
-              data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
-            }else{
+            // if(result instanceof Blob){
+            //   data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
+            // }else{
               data = result;
-            }
+            // }
 
             formData.append('file', data, data.name);
             console.log(JSON.stringify(formData));
@@ -98,8 +98,8 @@ export class BackgroundNotificationService {
             // return error;
           }));
     }else{
-      formData.append('file', file);
-      return this.arrayFormData.push(formData);
+      // formData.append('file', file);
+      return this.arrayFormData.push(file);
     }
   }
 
@@ -137,7 +137,8 @@ export class BackgroundNotificationService {
     let files:any[] = arrayFiles;
 
     let RecieverArray:any[] = [];
-
+    this.startLocalNotification();
+      this.loadingCtrl.startNormalLoading('');
     let promisesArray = [];
     for (let index = 0; index <files.length; index++) {
       // let form: FormData = this.arrayFormData[index];
@@ -216,7 +217,9 @@ export class BackgroundNotificationService {
     debugger;
 
     if ((this.wifiUpload && !(this.network.type == 'wifi') ) || (this.wifiUpload && this.network.type ==  'none')) {
-      alert('You have been activated upload by \"WiFi only\"');
+        this.errNotification();
+        alert('You have been activated upload by \"WiFi only\"');
+      this.loadingCtrl.stopLoading();
       viewCtrl.dismiss({name: 'dismissed&SENT'});
       this.saveTheNewNotificationFrist(RecieverArray, SelectedTags, title, details, arrayFromData);
       this.backgroundMode.on('activate').subscribe((s) => {
@@ -229,7 +232,7 @@ export class BackgroundNotificationService {
 
     } else {
 
-      this.loadingCtrl.startNormalLoading('');
+      // this.loadingCtrl.startNormalLoading('');
       if (this.arrayFormData) {
         const promisesArray = [];
         for (let index = 0; index < this.arrayFormData.length; index++) {
@@ -260,6 +263,7 @@ export class BackgroundNotificationService {
                 viewCtrl.dismiss({name: 'dismissed&SENT'});
               },
               err => {
+                  this.errNotification();
                 console.log('POST without wait error', JSON.parse(JSON.stringify(err.error)));
                 this.loadingCtrl.stopLoading();
                 this.presentConfirm('Please check the internet and try again');
@@ -407,7 +411,7 @@ export class BackgroundNotificationService {
 
 
   uploadAttach(formData) {
-    this.startLocalNotification();
+    // this.startLocalNotification();
     let errorAppear: boolean;
     debugger;
     return this.notiServ.postAttachment(formData).toPromise().then(
@@ -656,6 +660,22 @@ export class BackgroundNotificationService {
     this.sendTo = [];
   }
 
+    errNotification(){
+        this.localNotifications.clear(2481993);
+        this.localNotifications.schedule({
+            id: 1361993,
+            title: 'Sending Notification',
+            text:'Failed to sent the notification',
+            priority:2,
+            sticky:false,
+            foreground:true
+        });
+        this.number = 1;
+        this.pendingNotification=[];
+        this.arrayToPostAttachment =[];
+        this.arrayFormData = [];
+        this.sendTo = [];
+    }
 
 
   getFileType(fileName) {

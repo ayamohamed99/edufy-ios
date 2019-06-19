@@ -39,7 +39,7 @@ const routes: Routes = [
         },
         {
             path: 'attendance',
-            loadChildren: '../attendance/attendance.module#AttendancePageModule'
+            loadChildren: '../attendance-tabs/attendance-tabs.module#AttendanceTabsPageModule'
         },
         {
             path: 'settings',

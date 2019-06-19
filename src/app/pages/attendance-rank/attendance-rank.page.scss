@@ -1,6 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+/deep/ app-attendance-rank{
 
-/deep/ app-attendance{
   .container{
     --background: #F4F4F4;
   }
@@ -23,6 +22,77 @@
     color: white;
     box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.25);
   }
+
+  .rankOneDiv{
+    display: inline-block;
+    padding-right: 10px;
+    width: 110px;
+  }
+
+  .rankTwoDiv{
+    display: inline-block;
+    padding-right: 10px;
+    width: 106px;
+  }
+
+  .rankThreeDiv{
+    display: inline-block;
+    padding-right: 10px;
+    width: 93px;
+  }
+
+  .rankLastDiv {
+    padding-right: 0;
+  }
+
+
+  .firstPlaceImg{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+
+  .secoundPlaceImg{
+    width:80px;
+    height: 80px;
+    border-radius: 80px;
+    display: inline-block;
+  }
+
+  .thridPlaceImg{
+    width:70px;
+    height: 70px;
+    border-radius: 70px;
+    display: inline-block;
+  }
+
+  .rankNumDiv{
+    background: #086C9B;
+    width: 22px;
+    height: 22px;
+    color: white;
+    border-radius: 20px;
+    position: absolute;
+    padding-top: 2.4px;
+    border-color: #F4F4F4;
+  }
+
+  .firstNameDiv{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lastNameDiv{
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
+
 
   .itemEdit{
     --background: #f4f4f4;
@@ -72,7 +142,7 @@
 
   .fristName{
     display: inline-block;
-    width: calc(100% - 66px);
+    width: 100%;
     color: white;
   }
 
@@ -89,7 +159,7 @@
 
   .lastName{
     display: inline-block;
-    width: calc(100% - 66px);
+    width: 100%;
     color: white;
   }
 
