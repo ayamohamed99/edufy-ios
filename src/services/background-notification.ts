@@ -56,14 +56,16 @@ export class BackgroundNotificationService{
 
   compressTheImage(file){
 
-    let formData = new FormData();
-    let fileType = this.getFileType(file.name);
-    if(fileType == "IMAGE") {
+    // let formData = new FormData();
+    // let fileType = this.getFileType(file.name);
+    // let pos = file.name.lastIndexOf('.');
+    // let extension = file.name.substring(pos + 1);
+    // if(fileType == "IMAGE" && extension != "gif") {
       return this.compress.compressImage(file).pipe(tap(
         result => {
           debugger;
           let data;
-
+          let formData = new FormData();
           // if(result instanceof Blob){
           //   // data = new File([result], file.name, {type: result.type, lastModified: Date.now()});
           //   data = this.blobToFile(result,file.name);
@@ -96,10 +98,10 @@ export class BackgroundNotificationService{
           console.log('😢 Oh no!', error);
           // return error;
         }));
-    }else{
-      // formData.append('file', file);
-      return this.arrayFormData.push(file);
-    }
+    // }else{
+    //   // formData.append('file', file);
+    //   return this.arrayFormData.push(file);
+    // }
   }
 
   public blobToFile = (theBlob: Blob, fileName:string): File => {
@@ -153,7 +155,17 @@ export class BackgroundNotificationService{
     for (let index = 0; index <files.length; index++) {
       // let form: FormData = this.arrayFormData[index];
       // let form = new FormData();
-      promisesArray.push(this.compressTheImage(files[index]));
+      let formData = new FormData();
+      let file = files[index];
+      let fileType = this.getFileType(file.name);
+      let pos = file.name.lastIndexOf('.');
+      let extension = file.name.substring(pos + 1);
+      if(fileType == "IMAGE" && extension != "gif") {
+        promisesArray.push(this.compressTheImage(files[index]));
+      }else{
+        // formData.append('file', file);
+        this.arrayFormData.push(file);
+      }
     }
 
 
