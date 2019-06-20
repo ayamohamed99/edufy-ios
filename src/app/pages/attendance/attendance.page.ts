@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AccountService} from '../../services/Account/account.service';
 
 @Component({
   selector: 'app-attendance',
@@ -12,12 +13,12 @@ export class AttendancePage implements OnInit {
   MONTHLY_TAB = 'monthly';
 
   selectedTab;
-  onePerson:boolean = true;
+  // onePerson:boolean = true;
 
   absent = true;
-  constructor()
+  constructor(public accountServ:AccountService)
   {
-    if(!this.onePerson){
+    if(this.accountServ.getUserRole().attendanceAllTeachersAppear){
       this.selectedTab = this.TODAY_TAB;
     }else{
       this.selectedTab = this.WEEKLY_TAB;

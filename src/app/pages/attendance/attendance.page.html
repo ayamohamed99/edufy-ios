@@ -12,7 +12,7 @@
     <div style="margin-top: 20px;margin-bottom: 15px;">
         <div style="margin-left: calc(50% - 109px); width: 218px; background: #E4E4E4; border-radius: 100px;">
             <ion-segment mode="ios" [(ngModel)]="selectedTab" class="segmentRaduis" color="#55A9FF" style="max-width: 218px; height: 40px; color: black; transition: all" (ionChange)="segmentChanged($event)">
-                <ion-segment-button mode="ios" class="segmentRaduis" [value]="TODAY_TAB" *ngIf="!onePerson">
+                <ion-segment-button mode="ios" class="segmentRaduis" [value]="TODAY_TAB" *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear">
                     <ion-label>TODAY</ion-label>
                 </ion-segment-button>
                 <ion-segment-button mode="ios" class="segmentRaduis" [value]="WEEKLY_TAB">
@@ -33,7 +33,7 @@
                                    <!--ONE TEACHER WEEKLY TAB-->
 
 
-        <div *ngIf="onePerson && selectedTab == WEEKLY_TAB">
+        <div *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
             <ion-list style="background: #faebd700;">
                 <ion-item class="itemEdit" (click)="checkInNow()">
                     <div class="dateOneDiv">
@@ -63,7 +63,7 @@
 
                                   <!--ONE TEACHER MONTHLY TAB-->
 
-        <div *ngIf="onePerson && selectedTab == MONTHLY_TAB">
+        <div *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == MONTHLY_TAB">
 
             <ion-list style="background: #faebd700;">
                 <ion-item class="itemEdit" (click)="checkInNow()">
@@ -102,7 +102,7 @@
 
                                       <!--ONE TEACHER TODAY TAB-->
 
-        <div *ngIf="!onePerson && selectedTab == TODAY_TAB">
+        <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == TODAY_TAB">
             <ion-list style="background: #faebd700;">
                 <ion-item class="itemEdit" (click)="checkInNow()">
                     <div class="infoOneDiv">
@@ -128,7 +128,7 @@
 
                                        <!--ONE TEACHER WEEKLY TAB-->
 
-        <div *ngIf="!onePerson && selectedTab == WEEKLY_TAB">
+        <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
 
 
 
@@ -137,7 +137,7 @@
 
                                        <!--ONE TEACHER MONTHLY TAB-->
 
-        <div *ngIf="!onePerson && selectedTab == MONTHLY_TAB">
+        <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == MONTHLY_TAB">
 
 
 

@@ -5,6 +5,8 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/add/observable/fromPromise';
 // import 'rxjs/add/operator/mergeMap';
 import {Platform} from '@ionic/angular';
+import {HTTP} from '@ionic-native/http/ngx';
+import {from} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +21,27 @@ export class LoginService {
   DomainUrl: Url_domain = new Url_domain;
 
 
-  constructor(private http: HttpClient, private platform: Platform) {
+  constructor(private http: HttpClient,private httpN: HTTP, private platform: Platform) {
   }
 
   postlogin(username: string, password: string) {
-    return this.http.post(this.DomainUrl.Domain + '/oauth/token?grant_type=password&client_id=my-trusted-client&password='
-        + password + '&username=' + username, null);
+      if(this.platform.is('cordova')){
+          return from(this.httpN.post(this.DomainUrl.Domain + '/oauth/token?grant_type=password&client_id=my-trusted-client&password='
+              + password + '&username=' + username, {},{}));
+      }else {
+          return this.http.post(this.DomainUrl.Domain + '/oauth/token?grant_type=password&client_id=my-trusted-client&password='
+              + password + '&username=' + username, null);
+      }
   }
 
   authenticateUserByRefreshToken(refreshToken: string) {
-    return this.http.get(this.DomainUrl.Domain + '/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
-        + refreshToken);
+      if(this.platform.is('cordova')) {
+          return from(this.httpN.get(this.DomainUrl.Domain + '/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
+              + refreshToken,{},{}));
+      }else{
+          return this.http.get(this.DomainUrl.Domain + '/oauth/token?grant_type=refresh_token&client_id=my-trusted-client&refresh_token='
+              + refreshToken);
+      }
   }
 
 
@@ -43,7 +55,12 @@ export class LoginService {
         // 'content-type':'application/json',
         Authorization : subHeader
       })};
-    return this.http.get(this.DomainUrl.Domain + '/authentication/manage.ent?access-token=' + accessToken, httpOptions);
+
+      if(this.platform.is('cordova')) {
+          return from(this.httpN.get(this.DomainUrl.Domain + '/authentication/manage.ent?access-token=' + accessToken,{}, httpOptions));
+      }else {
+          return this.http.get(this.DomainUrl.Domain + '/authentication/manage.ent?access-token=' + accessToken, httpOptions);
+      }
   }
 
 }

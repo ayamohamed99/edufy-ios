@@ -9,6 +9,8 @@ import {NotificationService} from "../../services/Notification/notification.serv
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {DomSanitizer} from "@angular/platform-browser";
 
+// declare var WifiInfo;
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -296,6 +298,19 @@ export class ProfilePage implements OnInit {
   //   },50);
   // }
 
+    checkInOut(){
+        // WifiInfo.getWifiInfo(
+        //     wifiInfo => {
+        //         console.log("wifiInfo");
+        //         console.log(wifiInfo);
+        //     },
+        //     wifiError => {
+        //         console.log("wifiError");
+        //         console.log(wifiError);
+        //     });
 
+
+
+    }
 
 }
