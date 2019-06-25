@@ -31,3 +31,7 @@ export class Url_domain {
   // zipalign -v 4 app-release-unsigned.apk 1.0.12-edufy_teachers.apk
   // apksigner verify 1.0.12-edufy_teachers.apk
 }
+/*
+ionic cordova prepare android
+ionic cordova run android --live-reload
+ */
