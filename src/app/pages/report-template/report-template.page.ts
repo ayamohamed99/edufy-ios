@@ -620,9 +620,15 @@ export class ReportTemplatePage implements OnInit {
   }
 
   getDropDownListIfFound(questionKey){
+    // @ts-ignore
     return this.dailyReportServ.getDropDownPremeter(questionKey,this.reportId).toPromise().then(
         val=>{
-          this.selectionData.set(questionKey,val);
+          this.loadCtrl.stopLoading();
+          // if(this.platform.is('cordova')){
+          //   this.selectionData.set(questionKey,JSON.parse(val.data));
+          // }else{
+            this.selectionData.set(questionKey,val);
+          // }
         }
     ).catch(
         eer=>{
@@ -798,11 +804,15 @@ export class ReportTemplatePage implements OnInit {
         let questionParameters = this.drQuestion[i].parametersList;
         let questionNumber = this.drQuestion[i].questionNumber;
         this.dailyReportServ.saveDailyReportTemplateQuestionParameters(questionId, questionParameters, i,this.reportId).subscribe(
+           // @ts-ignore
             response => {
               this.loadCtrl.stopLoading();
               this.presentToast("Question edited successfully.");
               let data ;
               data = response;
+              // if(this.platform.is('cordova')){
+              //   data = JSON.parse(response.data);
+              // }
               console.log('Saving done!');
               this.drQuestion[data.questionNumber].isEdited = false;
               console.log('Template Saved!!');
@@ -1176,6 +1186,7 @@ export class ReportTemplatePage implements OnInit {
             }
 
             this.dailyReportServ.approveReportByStudent(this.selectedReportDate, studentsIdsArray, this.reportId).subscribe(
+                // @ts-ignore
                 response =>{
                   this.loadCtrl.stopLoading();
                   this.presentToast("Report approved successfully.");
@@ -1224,6 +1235,7 @@ export class ReportTemplatePage implements OnInit {
 
             if(this.selectedListOfStudents.length == 1) {
               this.dailyReportServ.deleteStudnetReport(this.selectedListOfStudents[0].id, this.selectedReportDate,this.reportId).subscribe(
+                  // @ts-ignore
                   response => {
                     this.loadCtrl.stopLoading();
                     this.dismissModal({closeView:"Report reset successfully."});
@@ -1708,6 +1720,7 @@ export class ReportTemplatePage implements OnInit {
     // }
 
     this.dailyReportServ.saveReport(newReport, searchDate, this.reportId).subscribe(
+        // @ts-ignore
         (response) => {
           this.loadCtrl.stopLoading();
           let successMsg;
@@ -2246,6 +2259,7 @@ export class ReportTemplatePage implements OnInit {
     // }
 
     this.dailyReportServ.updateReport(newReport, searchDate, this.reportId).subscribe(
+        // @ts-ignore
         (response)=> {
           let successMsg;
           this.loadCtrl.stopLoading();
@@ -2318,7 +2332,8 @@ export class ReportTemplatePage implements OnInit {
     this.loadCtrl.startNormalLoading('loading next student answers ...');
 
     this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,this.selectedReportDate,this.reportId).subscribe(
-        resp=>{
+        // @ts-ignore
+        resp => {
           this.loadCtrl.stopLoading();
           this.getMultiSelectedStudents(this.selectedListOfStudentsID[0].id, this.nextStudentNumb, false, this.selectedListOfStudents[0].reportFinalized,this.selectedListOfStudents[0].name,this.selectedClassIndex);
         },err =>{

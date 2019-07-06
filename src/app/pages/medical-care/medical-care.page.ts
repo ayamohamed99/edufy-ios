@@ -181,8 +181,9 @@ export class MedicalCarePage implements OnInit {
       this.toastCtrl.presentTimerToast("This medicine is already taken");
     }else {
       this.medicalService.sendTakeMedication(shceduleId).subscribe(
-          value => {
-            console.log(value);
+          // @ts-ignore
+          val => {
+            console.log(val);
             let data = document.getElementById(selectedButton);
             data.classList.toggle("confirmTime");
           }, err => {
@@ -452,6 +453,7 @@ export class MedicalCarePage implements OnInit {
 
     this.medicalService.getMedicalRecords(this.selectedClasses,this.selectedStudent, this.selectedStatus, this.date,this.page,this.View,
         this.startDate,this.endDate,this.pageSize).subscribe(
+        // @ts-ignore
         value =>{
           this.oldSearch =  JSON.parse(JSON.stringify(this.search));
           if(this.refresherIsStart) {
@@ -485,6 +487,9 @@ export class MedicalCarePage implements OnInit {
             }
           }
           let Data:any = value;
+          // if(this.platform.is('cordova')){
+          //   Data = JSON.parse(value.data);
+          // }
           if(this.View == this.MEDICATIONS_NAME){
             this.getAllMedications(Data);
           }else{
@@ -855,6 +860,9 @@ export class MedicalCarePage implements OnInit {
         val=>{
           // console.log(val);
           let Data = val;
+          // if(this.platform.is('cordova')){
+          //   Data = JSON.parse(val.data);
+          // }
           this.MEDICATION_TAB = Data.medicationsTapName;
           this.INCIDENT_TAB = Data.incidentTapName;
           this.CHECKUP_TAB = Data.checkupTapName;
@@ -965,6 +973,9 @@ export class MedicalCarePage implements OnInit {
     this.classServ.getClassList("Medical Care", 2, null, null, null, null).subscribe(
         classVal => {
           let allData: any = classVal;
+          // if(this.platform.is('cordova')){
+          //   allData = JSON.parse(classVal.data);
+          // }
           this.allclasses = allData;
         }, classErr => {
           this.presentAlertError('Something went wrong, please refresh the page');
@@ -975,6 +986,11 @@ export class MedicalCarePage implements OnInit {
     this.studentServ.getAllStudents(7, "Medical Care").subscribe(
         studentVal => {
           let data: any = studentVal;
+
+          // if(this.platform.is('cordova')){
+          //   data = JSON.parse(studentVal.data);
+          // }
+
           this.allStudents = data;
         }, studentErr => {
           this.presentAlertError('Something went wrong, please refresh the page');
@@ -1005,6 +1021,7 @@ export class MedicalCarePage implements OnInit {
 
           this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
           this.medicalService.approveMedicalRecord(medicalRecordId).subscribe(
+              // @ts-ignore
               response => {
                 this.loadCtrl.stopLoading();
                 this.toastCtrl.presentTimerToast("Success to approve medical record");
@@ -1064,7 +1081,8 @@ export class MedicalCarePage implements OnInit {
 
             this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
             this.medicalService.deleteMedication(medRecord.id,medRecord.oneMedication.id).subscribe(
-                response=> {
+                // @ts-ignore
+                response => {
                   this.loadCtrl.stopLoading();
                   let result = response;
                   this.medicalRecords.splice(index,1);
@@ -1136,6 +1154,7 @@ export class MedicalCarePage implements OnInit {
 
             this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
             this.medicalService.deleteIncident(medRecord.medicalRecord.id).subscribe(
+                // @ts-ignore
                 response=> {
                   this.loadCtrl.stopLoading();
                   let result = response;
@@ -1217,7 +1236,8 @@ export class MedicalCarePage implements OnInit {
             this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
             this.load.present();
             this.medicalService.deleteCheckup(medRecord.medicalRecord.id).subscribe(
-                response=> {
+                // @ts-ignore
+                response => {
                   this.loadCtrl.stopLoading();
                   let result = response;
                   if(view == this.CHECKUPS_NAME){
@@ -1250,6 +1270,7 @@ export class MedicalCarePage implements OnInit {
   getMedicalReportCount(selectedClass,selectedStudent,selectedStatus,date,page,view,startdate,enddate,pagesize){
     this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
     this.medicalService.countMedicalRecords(selectedClass,selectedStudent,selectedStatus,date,0,view,startdate,enddate,pagesize).subscribe(
+        // @ts-ignore
         response=> {
 
           console.log(response);
@@ -1258,8 +1279,14 @@ export class MedicalCarePage implements OnInit {
           let gettingData = false;
           let medicalRecordsNum = response ;
           this.recordsNumber = response;
+          // if(this.platform.is('cordova')){
+          //   medicalRecordsNum = JSON.parse(response.data);
+          //   this.recordsNumber = JSON.parse(response.data);
+          // }
+
           this.medicalService.getMedicalRecords(selectedClass , selectedStudent,-1,null ,1,"incidents",startdate,enddate,this.recordsNumber)
               .subscribe(
+                  // @ts-ignore
                   response => {
 
                     this.medicalRecordObject = response;
@@ -1267,6 +1294,10 @@ export class MedicalCarePage implements OnInit {
                     this.medicalRecordsForIncident = [];
 
                     this.result = response;
+                    // if(this.platform.is('cordova')){
+                    //   this.medicalRecordObject = JSON.parse(response.data);
+                    //   this.result = JSON.parse(response.data);
+                    // }
 
                     // @ts-ignore
                     for (let i = 0; i < this.medicalRecordObject.length; i++) {

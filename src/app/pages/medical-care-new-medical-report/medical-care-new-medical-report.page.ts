@@ -10,7 +10,7 @@ import {AccountService} from '../../services/Account/account.service';
 import {StudentsService} from '../../services/Students/students.service';
 import {ClassesService} from '../../services/Classes/classes.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
-import {AlertController, IonFab, IonSlides, ModalController, NavParams} from '@ionic/angular';
+import {AlertController, IonFab, IonSlides, ModalController, NavParams, Platform} from '@ionic/angular';
 import {MedicalCareService} from '../../services/MedicalCare/medical-care.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {FormControl} from '@angular/forms';
@@ -90,7 +90,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
               private classServ: ClassesService, private studentServ: StudentsService, private transDate: TransFormDateService,
               private accountServ: AccountService, private checkboxFunctionService: CheckboxFunctionService,
               public network: Network,private compress:ImageCompressorService,private toastCtrl:ToastViewService,
-              private bkgInc:BackgroundMedicalcareService)
+              private bkgInc:BackgroundMedicalcareService, private platform:Platform)
   {
     this.config.notFoundText = 'No match found';
 
@@ -406,6 +406,11 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
     this.classServ.getClassList("Medical Care", 2, null, null, null, null).subscribe(
         classVal => {
           let allData: any = classVal;
+
+          // if(this.platform.is('cordova')){
+          //   allData = JSON.parse(classVal.data);
+          // }
+
           this.allclasses = [];
           for (let data of allData) {
             let item = new Class();
@@ -435,6 +440,11 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
     this.studentServ.getAllStudents(7, "Medical Care").subscribe(
         studentVal => {
           let data: any = studentVal;
+
+          // if(this.platform.is('cordova')){
+          //   data = JSON.parse(studentVal.data);
+          // }
+
           this.allStudents = [];
           for (let value of data) {
             let students = new Student();
@@ -472,6 +482,9 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
         val => {
           this.templateLoading = false;
           this.incidentTemplate = val;
+          // if(this.platform.is('cordova')){
+          //   this.incidentTemplate = JSON.parse(val.data);
+          // }
 
           this.incidentQuestions[0] = this.incidentTemplate.questionsList;
 
@@ -534,6 +547,9 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
         val => {
           this.templateLoading = false;
           this.checkupTemplate = val;
+          // if(this.platform.is('cordova')){
+          //   this.checkupTemplate = JSON.parse(val.data);
+          // }
           if (this.addCheckup) {
             this.checkupQuestions = [];
             this.checkupQuestions[0] = this.checkupTemplate.questionsList;

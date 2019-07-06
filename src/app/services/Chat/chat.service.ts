@@ -5,7 +5,8 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/add/observable/fromPromise';
 // import 'rxjs/add/operator/mergeMap';
 import {Platform} from '@ionic/angular';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, from, Observable} from 'rxjs';
+import {HTTP} from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class ChatService {
   NewChats: any[] = [];
   newMessageSubject$: BehaviorSubject<object> = new BehaviorSubject(null);
 
-  constructor(private http: HttpClient, private platform: Platform) {
+  constructor(private http: HttpClient, private httpN: HTTP,private platform: Platform) {
     this.DomainUrl = new Url_domain;
   }
 
@@ -50,13 +51,21 @@ export class ChatService {
       user: sender
     };
 
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.post(this.DomainUrl.Domain + this.commonUrl + '?operationId=1',
+    //       message, {'content-type': 'application/json', 'Authorization': this.val}));
+    // }else{
+      return this.http.post(this.DomainUrl.Domain + this.commonUrl + '?operationId=1', message, this.httpOptions);
+    // }
 
-    return this.http.post(this.DomainUrl.Domain + this.commonUrl + '?operationId=1',
-        message, this.httpOptions);
   }
 
   getNewMessages() {
-    return this.http.get(this.DomainUrl.Domain + 'authentication/chat.ent?operationId=1', this.httpOptions);
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + 'authentication/chat.ent?operationId=1',{},{'content-type': 'application/json', 'Authorization': this.val}));
+    // }else{
+      return this.http.get(this.DomainUrl.Domain + 'authentication/chat.ent?operationId=1', this.httpOptions);
+    // }
   }
 
   getChatMessagesHistory(studentId, branchId) {
@@ -69,6 +78,11 @@ export class ChatService {
     if (branchId != null) {
       requestURL += '&branchId=' + branchId;
     }
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + requestURL, {} ,{'content-type': 'application/json', 'Authorization': this.val}));
+    // }else{
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // }
   }
 }

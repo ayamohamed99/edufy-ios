@@ -5,6 +5,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/mergeMap';
 import {Platform} from '@ionic/angular';
+import {HTTP} from '@ionic-native/http/ngx';
+import {from} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +19,10 @@ export class LogoutService {
   accessToken: string;
   DomainUrl: Url_domain;
   httpOptions: any;
+  val:any;
   headers: any;
 
-  constructor(private http: HttpClient, private platform: Platform) {
+  constructor(private http: HttpClient, private httpN:HTTP, private platform: Platform) {
     this.DomainUrl = new Url_domain;
   }
 
@@ -30,11 +33,18 @@ export class LogoutService {
         Authorization: value
       })
     };
+    this.val = value;
   }
 
   postlogout(subscriptionId: any, refreshToken: any, accessToken: any) {
-    return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent/logout.ent?subscriptionId=' + subscriptionId
-        + '&refreshToken=' + refreshToken + '&accessToken=' + accessToken, null, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.post(this.DomainUrl.Domain + '/authentication/authenticator.ent/logout.ent?subscriptionId=' + subscriptionId
+    //       + '&refreshToken=' + refreshToken + '&accessToken=' + accessToken, {}, {'content-type': 'application/json', 'Authorization': this.val}));
+    // }else{
+      return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent/logout.ent?subscriptionId=' + subscriptionId
+          + '&refreshToken=' + refreshToken + '&accessToken=' + accessToken, null, this.httpOptions);
+    // }
   }
 
 }

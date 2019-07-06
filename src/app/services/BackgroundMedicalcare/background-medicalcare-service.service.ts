@@ -52,7 +52,7 @@ export class BackgroundMedicalcareService {
   viewCtrl;
   // LoadView;
   constructor(private accountServ: AccountService, private  medicalService: MedicalCareService, private toastCtrl: ToastController,
-              private checkboxFunctionService: CheckboxFunctionService, private localNotifications: LocalNotifications,
+              private checkboxFunctionService: CheckboxFunctionService, private localNotifications: LocalNotifications,private platform:Platform,
               private notiServ: NotificationService, private alrtCtrl: AlertController, private loadCtrl: LoadingViewService) {
 
   }
@@ -335,6 +335,7 @@ export class BackgroundMedicalcareService {
 
 
         this.medicalService.updateMedicalRecord(medicalRecordObject, 'incident').subscribe(
+            // @ts-ignore
             response => {
               // this.allFilesResponse = [];
               const result = response;
@@ -354,6 +355,7 @@ export class BackgroundMedicalcareService {
         // $scope.addnewIncidentButton = "Sending....";
 
         this.medicalService.postMedicalRecord(medicalRecordObject).subscribe(
+            // @ts-ignore
             response => {
               // $rootScope.allFilesResponse = [];
               const result = response;
@@ -509,9 +511,10 @@ export class BackgroundMedicalcareService {
 
         // $scope.addnewCheckupButton = "Sending....";
         this.medicalService.postMedicalRecord(medicalRecordObject).subscribe(
-            response => {
+            // @ts-ignore
+            respon => {
               this.loadCtrl.stopLoading();
-              const result = response;
+              const result = respon;
               if (!this.accountServ.getUserRole().medicalRecordCanApprove &&  !this.accountServ.getUserRole().medicalRecordApproved) {
                 this.presentToast('Checkup is waiting Approval.');
               } else {
@@ -593,6 +596,7 @@ export class BackgroundMedicalcareService {
         // $scope.addnewCheckupButton = "Updating....";
 
         this.medicalService.updateMedicalRecord(medicalRecordObject, 'checkup').subscribe(
+            // @ts-ignore
             response => {
               this.loadCtrl.stopLoading();
               const result = response;
@@ -1350,8 +1354,11 @@ export class BackgroundMedicalcareService {
     return this.notiServ.postAttachment(formData).toPromise().then(
         s => {
           console.log('Success post => ' + JSON.stringify(s));
-          const allData: any = s;
-
+          let allData: any = s;
+          // if(this.platform.is('cordova')){
+          //   // @ts-ignore
+          //   allData = JSON.parse(s.data);
+          // }
           const attach = {
             name: allData.name,
             type: allData.type,

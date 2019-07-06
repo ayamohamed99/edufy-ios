@@ -3,7 +3,7 @@ import {NgSelectConfig} from '@ng-select/ng-select';
 import {Medication} from '../../models/medication';
 import {MedicalRecord} from '../../models/medical-record';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
-import {AlertController, LoadingController, ModalController, NavParams} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController, NavParams, Platform} from '@ionic/angular';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {MedicalCareService} from '../../services/MedicalCare/medical-care.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
@@ -52,7 +52,8 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
 
 
   constructor(private config: NgSelectConfig,public navParams: NavParams, private medicalService:MedicalCareService,private loadCtrl:LoadingViewService,
-              private alrtCtrl:AlertController,private transDate:TransFormDateService,private modalCtrl:ModalController,private toastCtrl:ToastViewService) {
+              private alrtCtrl:AlertController,private transDate:TransFormDateService,private modalCtrl:ModalController,private toastCtrl:ToastViewService,
+              private platform:Platform) {
     this.config.notFoundText = 'No match found';
 
     this.medication = new Medication();
@@ -275,6 +276,9 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.medicalService.getMedicines().subscribe(
         val=>{
           this.allMedicines = val;
+          // if(this.platform.is('cordova')){
+          //   this.allMedicines = JSON.parse(val.data);
+          // }
           this.medicineLoading = false;
         },err=>{
           this.medicineLoading = false;
@@ -286,6 +290,9 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.medicalService.getDosageTypes().subscribe(
         val=>{
           this.allDosageTypes = val;
+          // if(this.platform.is('cordova')){
+          //   this.allDosageTypes = JSON.parse(val.data);
+          // }
           this.dosageLoading = false;
         },err=>{
           this.dosageLoading = false;
@@ -297,6 +304,9 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.medicalService.getInstructions().subscribe(
         val=>{
           this.allInstructions = val;
+          // if(this.platform.is('cordova')){
+          //   this.allInstructions = JSON.parse(val.data);
+          // }
           this.instructionLoading = false;
         },err=>{
           this.instructionLoading = false;
@@ -331,6 +341,7 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     };
     this.loadCtrl.startLoading('',false,'loadingWithoutBackground');
     this.medicalService.updateMedication(this.tempMedicalRecord.id, this.tempMedicalRecord.medicationIndex, medicationWithSchedule).subscribe(
+       // @ts-ignore
         response=> {
           var result = response;
           this.loadCtrl.stopLoading();

@@ -43,6 +43,7 @@ export class NotificationEditPage implements OnInit {
   updateNotify(form:NgForm){
     this.load.startNormalLoading('Update this Notification...');
     this.notiServ.updateNotification(this.notificationID,form.value.notifyTitle,form.value.notifyDetails).subscribe(
+        // @ts-ignore
         (data) => {
           this.DismissClick({done:'updateSuccess'});
           this.load.stopLoading();

@@ -145,7 +145,13 @@ export class ReportCommentComponent implements OnInit {
     if (this.isCommentsSectionExpanded) {
       this.isLoadingComments = true;
       this.commentsProvider.getComments(this.date, this.studentId, this.reportId)
-          .subscribe(comments => {
+          .subscribe(val => {
+
+            let comments = val;
+            // if(this.platform.is('cordova')){
+            //   // @ts-ignore
+            //   comments = JSON.parse(val.data);
+            // }
             this.shouldScrollToBottom = true;
             this.isLoadingComments = false;
             comments.forEach(value => value.animationStatus = 'loaded');
@@ -161,7 +167,13 @@ export class ReportCommentComponent implements OnInit {
     this.isSendingComment = true;
     this.commentsProvider.postNewComment(this.date, this.studentId,
         this.newCommentToBeSubmitted.trim(), this.reportId)
-        .subscribe(newlySubmittedComment => {
+        .subscribe(data => {
+          let newlySubmittedComment = data;
+
+          // if(this.platform.is('cordova')){
+          //   newlySubmittedComment = JSON.parse(data.data);
+          // }
+
           this.shouldScrollToBottom = true;
           this.newCommentToBeSubmitted = "";
           this.isSendingComment = false;
@@ -255,6 +267,10 @@ export class ReportCommentComponent implements OnInit {
         null, comment.id, null , 2)
         .subscribe(response => {
           let res:any = response;
+          // if(this.platform.is('cordova')){
+          //   //@ts-ignore
+          //   res = response.data;
+          // }
           this.isEditedCommentsLoading[comment.id] = false;
           this.inEditModeComments[comment.id] = false;
           let elItem = document.getElementById("itemView"+index);

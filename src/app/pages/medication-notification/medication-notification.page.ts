@@ -83,6 +83,7 @@ export class MedicationNotificationPage implements OnInit {
 
   confimTime(shceduleId){
     this.medicalService.sendTakeMedication(shceduleId).subscribe(
+        // @ts-ignore
         value => {
           console.log(value);
           this.presentToast("This medicine is taken",true);

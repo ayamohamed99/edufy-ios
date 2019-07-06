@@ -86,8 +86,12 @@ export class NotificationViewReceiverPage implements OnInit {
   getReceivers(){
     this.load.startNormalLoading('');
     this.notificationServ.getRecieverList(this.notification.notificationId).subscribe(
+        // @ts-ignore
         response =>{
           let Data = response;
+          // if(this.platform.is('cordova')){
+          //   Data = JSON.parse(response.data);
+          // }
           for(let item in Data){
             this.classReceverList = {'class':'',studentlist:[]};
             this.classReceverList.class = item;

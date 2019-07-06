@@ -4,6 +4,9 @@ import {map} from 'rxjs/operators';
 import {AccountService} from '../Account/account.service';
 import {ReportComment} from '../../models/reportComment';
 import {Url_domain} from '../../models/url_domain';
+import {HTTP} from '@ionic-native/http/ngx';
+import {Platform} from '@ionic/angular';
+import {from} from 'rxjs';
 
 
 const GET_DAILY_REPORT_COMMENTS_URL = Url_domain.Domain + '/authentication/comments.ent?operationId=3&date={0}&studentId={1}';
@@ -21,8 +24,8 @@ const DELETE_CUSTOM_REPORT_COMMENTS_URL = Url_domain.Domain + '/authentication/r
 export class ReportCommentService {
 
   private httpHeader;
-
-  constructor(public http: HttpClient, private accountService: AccountService) {
+  val;
+  constructor(public http: HttpClient, public httpN:HTTP, private platform:Platform,private accountService: AccountService) {
 
   }
 
@@ -36,12 +39,26 @@ export class ReportCommentService {
       url = GET_CUSTOM_REPORT_COMMENTS_URL.format(date, studentId, reportId);
     }
 
-    return this.http.get<ReportComment[]>(url, {headers: this.httpHeader})
-        .pipe(map(commentsResponse => {
-          return commentsResponse.filter(comment =>
-              (comment.approved || (!comment.approved && this.accountService.getUserRole().dailyReportCommentApprove)
-                  || (!comment.approved && this.accountService.userId == comment.senderObject.id)));
-        }));
+    // if(this.platform.is('cordova')){
+    //   // @ts-ignore
+    //   return from(this.httpN.get<ReportComment[]>(url, {}, {'Authorization': this.val}))
+    //       .pipe(map(data => {
+    //         // @ts-ignore
+    //         let commentsResponse:[ReportComment] = JSON.parse(data.data);
+    //
+    //         return commentsResponse.filter(comment =>
+    //             (comment.approved || (!comment.approved && this.accountService.getUserRole().dailyReportCommentApprove)
+    //                 || (!comment.approved && this.accountService.userId == comment.senderObject.id)));
+    //       }));
+    // }else{
+      return this.http.get<ReportComment[]>(url, {headers: this.httpHeader})
+          .pipe(map(commentsResponse => {
+            return commentsResponse.filter(comment =>
+                (comment.approved || (!comment.approved && this.accountService.getUserRole().dailyReportCommentApprove)
+                    || (!comment.approved && this.accountService.userId == comment.senderObject.id)));
+          }));
+    // }
+
   }
 
   postNewComment(date: string, studentId: number, commentText: string, reportId?: number) {
@@ -70,15 +87,32 @@ export class ReportCommentService {
       };
     }
 
-    return this.http.post<ReportComment>(url, newCommentSubmission, {headers: this.httpHeader})
-        .pipe(map(newCommentResponse => {
-          newCommentResponse.senderObject = {
-            id: newCommentResponse.senderId,
-            type: newCommentResponse.senderType,
-            name: this.accountService.getUserName()
-          };
-          return newCommentResponse;
-        }));
+    // if(this.platform.is('cordova')){
+    //   // @ts-ignore
+    //   return from(this.httpN.post<ReportComment>(url, newCommentSubmission, {'Authorization': this.val}))
+    //       .pipe(map(data => {
+    //         // @ts-ignore
+    //         let newCommentResponse = data.data;
+    //         newCommentResponse.senderObject = {
+    //           id: newCommentResponse.senderId,
+    //           type: newCommentResponse.senderType,
+    //           name: this.accountService.getUserName()
+    //         };
+    //         return newCommentResponse;
+    //       }));
+    // }else{
+      return this.http.post<ReportComment>(url, newCommentSubmission, {headers: this.httpHeader})
+          .pipe(map(newCommentResponse => {
+            newCommentResponse.senderObject = {
+              id: newCommentResponse.senderId,
+              type: newCommentResponse.senderType,
+              name: this.accountService.getUserName()
+            };
+            return newCommentResponse;
+          }));
+    // }
+
+
   }
 
   deleteComment(commentId: number, reportId?: number) {
@@ -90,7 +124,12 @@ export class ReportCommentService {
       // @ts-ignore
       url = DELETE_CUSTOM_REPORT_COMMENTS_URL.format(commentId);
     }
-    return this.http.delete(url, {headers: this.httpHeader});
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.delete(url, {}, {'Authorization': this.val}));
+    // }else{
+      return this.http.delete(url, {headers: this.httpHeader});
+    // }
   }
 
   editComment(date, studentId, commentText, commentId, reportId , operationId) {
@@ -121,11 +160,17 @@ export class ReportCommentService {
         studentId,
       };
     }
-    return this.http.put(url, editedCommentRequest, {headers: this.httpHeader});
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.put(url, editedCommentRequest, {'Authorization': this.val}));
+    // }else{
+      return this.http.put(url, editedCommentRequest, {headers: this.httpHeader});
+    // }
   }
 
   putHeader(value) {
     this.httpHeader = new HttpHeaders({Authorization: value});
+    this.val = value;
   }
 
 

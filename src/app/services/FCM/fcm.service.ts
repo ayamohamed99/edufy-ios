@@ -9,6 +9,8 @@ import {Platform} from '@ionic/angular';
 import {LoginService} from '../Login/login.service';
 import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
 import {FirebaseMessaging} from '@ionic-native/firebase-messaging/ngx';
+import {HTTP} from '@ionic-native/http/ngx';
+import {from} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,7 @@ export class FCMService {
   Token;
 
 
-  constructor(private http: HttpClient, private accountServ: AccountService, private fcm: FirebaseMessaging,
+  constructor(private http: HttpClient, private httpN: HTTP, private accountServ: AccountService, private fcm: FirebaseMessaging,
               private localNotifications: LocalNotifications, private platform: Platform, private loginServ: LoginService) {
     this.DomainUrl = new Url_domain();
   }
@@ -62,13 +64,28 @@ export class FCMService {
       gcmRegKey: this.Token
     };
 
-    this.http.post(this.DomainUrl.Domain + '/authentication/regedufyfcmtoken.ent', body, httpOptions).subscribe(
-        (val) => {
-          console.log(val);
-        }, (err) => {
-          console.log(err);
-          this.sendTokenToServer();
-        });
+
+
+    // if(this.platform.is('cordova')){
+    //   from(this.httpN.post(this.DomainUrl.Domain + '/authentication/regedufyfcmtoken.ent', body, {'Authorization' : this.loginServ.accessToken})).subscribe(
+    //       (val) => {
+    //         console.log(val);
+    //       }, (err) => {
+    //         console.log(err);
+    //         this.sendTokenToServer();
+    //       });
+    // }else{
+      this.http.post(this.DomainUrl.Domain + '/authentication/regedufyfcmtoken.ent', body, httpOptions).subscribe(
+          (val) => {
+            console.log(val);
+          }, (err) => {
+            console.log(err);
+            this.sendTokenToServer();
+          });
+    // }
+
+
+
   }
 
   onBackgroundNotification() {

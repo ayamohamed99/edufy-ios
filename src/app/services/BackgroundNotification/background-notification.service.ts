@@ -249,6 +249,7 @@ export class BackgroundNotificationService {
         Promise.all(promisesArray).then( data => {
           const sentNotify: any[] = [];
           this.notiServ.postNotification(title, details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+              // @ts-ignore
               (data) => {
                 console.log('POST without wait Date Is', JSON.stringify(data));
                 const PN = new Pendingnotification();
@@ -276,6 +277,7 @@ export class BackgroundNotificationService {
       } else {
         const sentNotify: any[] = [];
         this.notiServ.postNotification(title, details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+            // @ts-ignore
             (data) => {
               debugger;
               console.log('POST without wait Date Is', JSON.stringify(data));
@@ -417,7 +419,11 @@ export class BackgroundNotificationService {
     return this.notiServ.postAttachment(formData).toPromise().then(
         s => {
           console.log('Success post => ' + JSON.stringify(s));
-          const allData: any = s;
+            let allData: any = s;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     allData = JSON.parse(s.data);
+            // }
 
           const attach = new Postattachment();
           attach.name = allData.name;
@@ -454,6 +460,7 @@ export class BackgroundNotificationService {
   async SendNotificationBackground(title, details, postAttachment, RecieverArray, SelectedTags) {
     const sentNotify: any[] = [];
     await this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
+        // @ts-ignore
         (data) => {
           console.log('network POST wait to call Date Is', JSON.stringify(data));
           const PN = new Pendingnotification();
@@ -591,6 +598,7 @@ export class BackgroundNotificationService {
       Promise.all(promisesArray).then(data => {
         // this.talks.push({name: this.name, topics: this.topics});
         this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+            // @ts-ignore
             data => {
               console.log('Date Is', data);
               this.loadingCtrl.stopLoading();
@@ -604,6 +612,7 @@ export class BackgroundNotificationService {
       });
     } else {
       this.notiServ.postNotification(this.Title, this.Details, this.arrayToPostAttachment, RecieverArray, SelectedTags).subscribe(
+          // @ts-ignore
           data => {
             console.log('Date Is', data);
             this.loadingCtrl.stopLoading();

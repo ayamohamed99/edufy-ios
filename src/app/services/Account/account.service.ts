@@ -6,7 +6,9 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/mergeMap';
 import {Custom_reports_data} from '../../models/custom_reports_data';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, from} from 'rxjs';
+import {HTTP} from '@ionic-native/http/ngx';
+import {Platform} from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +40,7 @@ export class AccountService {
 
   menuFeatures: BehaviorSubject<object> = new BehaviorSubject(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private httpN:HTTP, private platform:Platform) {
     this.DomainUrl = new Url_domain();
   }
 
@@ -51,7 +53,11 @@ export class AccountService {
         // 'content-type':'application/json',
         Authorization : subHeader
       })};
-    return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', null, httpOptions);
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', {}, {'Authorization' : subHeader}));
+    // }else {
+      return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', null);
+    // }
   }
 
 
@@ -63,9 +69,11 @@ export class AccountService {
         // 'content-type':'application/json',
         Authorization : subHeader
       })};
-
-    return this.http.get(this.DomainUrl.Domain + '/authentication/report.ent/accountReports.ent', httpOptions);
-
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + '/authentication/report.ent/accountReports.ent', {}, {'Authorization' : subHeader}));
+    // }else{
+      return this.http.get(this.DomainUrl.Domain + '/authentication/report.ent/accountReports.ent');
+    // }
   }
 
   setDate(data: any) {
@@ -115,12 +123,22 @@ export class AccountService {
         Authorization : subHeader
       })};
 
-    this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds, httpOptions).subscribe(value => {
-      this.Arry = value;
-      for (const tag of this.Arry) {
-        this._tagArry.push(tag);
-      }
-    });
+    // if(this.platform.is('cordova')){
+    //   from(this.httpN.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds, {},{'Authorization' : subHeader})).subscribe(value => {
+    //     this.Arry = value;
+    //     for (const tag of this.Arry) {
+    //       this._tagArry.push(tag);
+    //     }
+    //   });
+    // }else {
+
+      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds).subscribe(value => {
+        this.Arry = value;
+        for (const tag of this.Arry) {
+          this._tagArry.push(tag);
+        }
+      });
+    // }
   }
 
   getAccountFeature() {

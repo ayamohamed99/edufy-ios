@@ -68,6 +68,7 @@ export class PopoverNotificationCardPage implements OnInit {
           handler: () => {
             this.load.startNormalLoading('Delete this Notification...');
             this.notiServ.deleteNotification(this.notificationID.toString()).subscribe(
+                // @ts-ignore
                 (data) => {
                   this.load.stopLoading();
                   this.DismissClick({done:'deleteSuccess'});
@@ -128,6 +129,7 @@ export class PopoverNotificationCardPage implements OnInit {
 
                 /* messageService.operationMessage(messageService.messageSubject.archivingTitle,messageService.messageSubject.archivingingOperationMessage); */
                 this.notificationService.editNotification(sentNotification, 4).subscribe(
+                    // @ts-ignore
                     (response) => {
                       approvedNotification.archived = false;
                       this.DismissClick({done:'restored',archived:false,tostmsg:'Notification restored successfully.'});
@@ -153,6 +155,7 @@ export class PopoverNotificationCardPage implements OnInit {
         };
         // calling update service.
         this.notificationService.editNotification(sentNotification, 3).subscribe(
+            // @ts-ignore
             (response) => {
               this.DismissClick({done:'archive',archived:true,tostmsg:'Notification archived successfully.'});
               // this.notificationPage = 1;

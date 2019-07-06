@@ -1,8 +1,7 @@
 {
-  "name": "Edufy Teachers",
+  "name": "Edufy_Ionic",
   "integrations": {
-    "cordova": {},
-    "capacitor": {}
+    "cordova": {}
   },
   "type": "angular"
 }

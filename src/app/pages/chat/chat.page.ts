@@ -110,6 +110,9 @@ export class ChatPage implements OnInit {
           this.loading = false;
           console.log(value);
           let Data:any = value;
+          // if(this.platform.is('cordova')){
+          //   Data = JSON.parse(value.data);
+          // }
           for(let student of Data){
             let Stud = new Student();
             Stud.id = student.id;
@@ -256,10 +259,13 @@ export class ChatPage implements OnInit {
 
   getNewChat(){
     this.chatServ.getNewMessages().subscribe(
+        // @ts-ignore
         val => {
           let values:any = [];
           values = val;
-
+          // if(this.platform.is('cordova')){
+          //   values = JSON.parse(val.data);
+          // }
           if(values.length > 0) {
             for (let data of values) {
               let stu: any = this.studentServ.findStudentByID(data.senderId,this.MAIN_STUDENTS_ARRAY);

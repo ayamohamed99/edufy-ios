@@ -9,7 +9,7 @@ import {NotificationService} from "../../services/Notification/notification.serv
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {DomSanitizer} from "@angular/platform-browser";
 
-// declare var WifiInfo;
+declare var wifiinformation: any;
 
 @Component({
   selector: 'app-profile',
@@ -209,6 +209,7 @@ export class ProfilePage implements OnInit {
   SendNotificationBackground(title, details, postAttachment, RecieverArray, SelectedTags){
     let sentNotify:any[]=[];
     this.notiServ.postNotification(title, details, postAttachment, RecieverArray, SelectedTags).subscribe(
+        // @ts-ignore
         (data) => {
           let PN = new Pendingnotification();
           PN.title = title;
@@ -260,6 +261,7 @@ export class ProfilePage implements OnInit {
           if(allData.data != null){
             allData = JSON.parse(allData.data);
           }
+
           let attach = new Postattachment();
           attach.name = allData.name;
           attach.type = allData.type;
@@ -299,18 +301,44 @@ export class ProfilePage implements OnInit {
   // }
 
     checkInOut(){
-        // WifiInfo.getWifiInfo(
-        //     wifiInfo => {
-        //         console.log("wifiInfo");
-        //         console.log(wifiInfo);
-        //     },
-        //     wifiError => {
-        //         console.log("wifiError");
-        //         console.log(wifiError);
-        //     });
-
-
-
+        this.getWifiIPAddress()
     }
+
+    getWifiIPAddress() {
+        wifiinformation.getWifiInfo(success => {
+            alert('Success: ' + JSON.stringify(success));
+
+        }, (err) => console.error(err));
+    }
+
+    async getActiveDevices() {
+        // get all active devices
+        wifiinformation.getActiveDevices(success => {
+            alert('Success: ' + JSON.stringify(success));
+
+        }, (err) => {
+            console.error(err);
+        });
+    }
+
+    getDHCPInfo() {
+        wifiinformation.getDHCPInfo(success => {
+            alert('Success: ' + JSON.stringify(success));
+
+        }, (err) => console.error(err));
+    }
+
+    getSampleInfo() {
+        wifiinformation.getSampleInfo(wifi => {
+            alert(
+                'SSID: ' + wifi.ssid +
+                '\nMAC: ' + wifi.mac +
+                '\nIP: ' + wifi.ip +
+                '\nGateway: ' + wifi.gateway
+            );
+
+        }, (err) => console.error(err));
+    }
+
 
 }

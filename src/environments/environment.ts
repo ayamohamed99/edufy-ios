@@ -5,7 +5,9 @@
 export const environment = {
   production: false
 };
-export const DOMAIN_URL = '';
+
+export const DOMAIN_URL = 'http://192.168.1.90:8080';
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

@@ -6,6 +6,8 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/add/operator/mergeMap';
 import {Platform} from '@ionic/angular';
 import {tap} from 'rxjs/operators';
+import {from} from 'rxjs';
+import {HTTP} from '@ionic-native/http/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +17,10 @@ export class DailyReportService {
   httpOptions: any;
   headers: any;
   DomainUrl: Url_domain = new Url_domain;
+  val:any;
   reportClassQuestionsGroups;
 
-  constructor(public http: HttpClient, private platform: Platform) {
+  constructor(public http: HttpClient, private httpN:HTTP,private platform: Platform) {
   }
 
   putHeader(value) {
@@ -30,6 +33,7 @@ export class DailyReportService {
         Authorization: value
       })
     };
+    this.val = value
   }
 
   getDailyReportTemplate(language, date, classId, reportId) {
@@ -46,8 +50,11 @@ export class DailyReportService {
       requestURL = '/authentication/report.ent/reportTemplate.ent?language=' + language + '&date=' + date + '&classId=' + classId + '&reportId=' + reportId;
     }
 
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
-
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + requestURL, {}, {'Authorization': this.val}));
+    // }else {
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // }
   }
 
 
@@ -60,7 +67,11 @@ export class DailyReportService {
       requestURL = '/authentication/reportparameter.ent/getparameter.ent?key=' + key + '&reportId=' + reportId;
     }
 
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + requestURL, {},{'Authorization': this.val}));
+    // }else {
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // }
   }
 
 
@@ -71,7 +82,12 @@ export class DailyReportService {
     } else {
       requestURL = '/authentication/report.ent/reportEditQuestionParameters.ent?questionId=' + questionId + '&reportId=' + reportId;
     }
-    return this.http.post(this.DomainUrl.Domain + requestURL, parameterWrapper, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.post(this.DomainUrl.Domain + requestURL, parameterWrapper, {'Authorization': this.val}));
+    // }else{
+      return this.http.post(this.DomainUrl.Domain + requestURL, parameterWrapper, this.httpOptions);
+    // }
   }
 
   getStudentReportAnswers(classId, date, reportId) {
@@ -82,11 +98,20 @@ export class DailyReportService {
       requestURL = '/authentication/report.ent/getClassGroups.ent?classId=' + classId + '&date=' + date + '&reportId=' + reportId;
     }
 
-    return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
-        tap(response => {
-          this.reportClassQuestionsGroups = response;
-        }, err => {
-        }));
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.get(this.DomainUrl.Domain + requestURL, {},{'Authorization': this.val})).pipe(
+    //       tap(response => {
+    //         this.reportClassQuestionsGroups = JSON.parse(response.data);
+    //       }, err => {
+    //       }));
+    // }else{
+      return this.http.get(this.DomainUrl.Domain + requestURL, this.httpOptions).pipe(
+          tap(response => {
+            this.reportClassQuestionsGroups = response;
+          }, err => {
+          }));
+    // }
+
   }
 
   approveReport(date, classId, reportId) {
@@ -96,7 +121,13 @@ export class DailyReportService {
     } else {
       requestURL = '/authentication/report.ent/approveReport.ent?date=' + date + '&classId=' + classId + '&reportId=' + reportId;
     }
-    return this.http.put(this.DomainUrl.Domain + requestURL, null, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.put(this.DomainUrl.Domain + requestURL, {}, {'Authorization': this.val}));
+    // }else{
+      return this.http.put(this.DomainUrl.Domain + requestURL, null, this.httpOptions);
+    // }
+
   }
 
   deleteStudnetReport(studentId, date, reportId) {
@@ -107,7 +138,12 @@ export class DailyReportService {
       requestURL = '/authentication/report.ent?studentId=' + studentId + '&date=' + date + '&reportId=' + reportId;
     }
 
-    return this.http.delete(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.delete(this.DomainUrl.Domain + requestURL, {},{'Authorization': this.val}));
+    // }else{
+      return this.http.delete(this.DomainUrl.Domain + requestURL, this.httpOptions);
+    // }
+
   }
 
   saveReport(answerObject, date, reportId) {
@@ -117,7 +153,12 @@ export class DailyReportService {
     } else {
       requestURL = '/authentication/report.ent?date=' + date + '&reportId=' + reportId;
     }
-    return this.http.post(this.DomainUrl.Domain + requestURL, answerObject, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.post(this.DomainUrl.Domain + requestURL, answerObject, {'Authorization': this.val}));
+    // }else{
+      return this.http.post(this.DomainUrl.Domain + requestURL, answerObject, this.httpOptions);
+    // }
   }
 
   updateReport(answerObject, date, reportId) {
@@ -128,7 +169,12 @@ export class DailyReportService {
       requestURL = '/authentication/report.ent?date=' + date;
     }
     console.log(answerObject);
-    return this.http.put(this.DomainUrl.Domain + requestURL, answerObject, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.put(this.DomainUrl.Domain + requestURL, answerObject, {'Authorization': this.val}));
+    // }else{
+      return this.http.put(this.DomainUrl.Domain + requestURL, answerObject, this.httpOptions);
+    // }
   }
 
 
@@ -139,6 +185,11 @@ export class DailyReportService {
     } else {
       requestURL = '/authentication/report.ent/approveStudentReport.ent?date=' + date + '&studentIds=' + studentIds + '&reportId=' + reportId;
     }
-    return this.http.put(this.DomainUrl.Domain + requestURL, null, this.httpOptions);
+
+    // if(this.platform.is('cordova')){
+    //   return from(this.httpN.put(this.DomainUrl.Domain + requestURL, {}, {'Authorization': this.val}));
+    // }else{
+      return this.http.put(this.DomainUrl.Domain + requestURL, null, this.httpOptions);
+    // }
   }
 }

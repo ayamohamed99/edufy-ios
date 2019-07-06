@@ -50,11 +50,15 @@ export class ChatDialoguePage implements OnInit {
   getChatHistory(){
     this.loading = true;
     this.chatServ.getChatMessagesHistory(this.student.id,this.student.classes.branch.id).subscribe(
+        // @ts-ignore
         val =>{
           this.loading = false;
           console.log(val);
           let data:any;
           data = val;
+          // if(this.platform.is('cordova')){
+          //     data = JSON.parse(val.data);
+          // }
           for(let message of data){
             let chat = new ChatDialogue();
             chat.chatMessageRecieverStatesList=message.chatMessageRecieverStatesList;
@@ -122,9 +126,13 @@ export class ChatDialoguePage implements OnInit {
     this.scrollDown();
     this.chatServ.sendChat(this.student.id,this.theMessage,this.accountServ.userId,
         this.accountServ.getUserName()).subscribe(
+        // @ts-ignore
         val=>{
           let message:any;
           message = val;
+          // if(this.platform.is('cordova')){
+          //     message = JSON.parse(val.data)
+          // }
           chat.chatMessageRecieverStatesList=message.chatMessageRecieverStatesList;
           chat.chatThread=message.chatThread;
           chat.dateTimeRead=message.dateTimeRead;
@@ -158,9 +166,13 @@ export class ChatDialoguePage implements OnInit {
     document.getElementById('errorIcon'+index).classList.toggle("rotate-scale-up");
     this.chatServ.sendChat(this.student.id,data.message,this.accountServ.userId,
         this.accountServ.getUserName()).subscribe(
+        // @ts-ignore
         val=>{
           let message:any;
           message = val;
+          // if(this.platform.is('cordova')){
+          //     message = JSON.parse(val.data)
+          // }
           this.chatDialogs[index].chatMessageRecieverStatesList=message.chatMessageRecieverStatesList;
           this.chatDialogs[index].chatThread=message.chatThread;
           this.chatDialogs[index].dateTimeRead=message.dateTimeRead;

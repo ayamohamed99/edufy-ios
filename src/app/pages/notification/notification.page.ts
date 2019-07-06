@@ -214,8 +214,12 @@ export class NotificationPage implements OnInit {
   reciversList;
   getNotificationReciver(id:number, title:string, details:string,reciversList:any,tagsList:any, i:any){
     this.notificationService.getNotificationReceivers(id).subscribe(
+        // @ts-ignore
         (data) => {
           this.reciversList = data;
+          // if(this.platform.is('cordova')){
+          //   this.reciversList = data.data
+          // }
           // this.loading.dismiss();
           this.editId = id;
           this.editTitle = title;
@@ -273,9 +277,13 @@ export class NotificationPage implements OnInit {
 
   getNotification(pageNumber:number,userId:number,classId:number,approved,archived,sent,tagId:number){
     this.notificationService.getNotification(pageNumber,userId,classId,approved,archived,sent,tagId).subscribe(
+        // @ts-ignore
         (data) => {
           this.getData = false;
           let allData:any = data;
+          // if(this.platform.is('cordova')){
+          //   allData = data.data
+          // }
           for (let value of allData){
             let notify = new Notification;
             for(let item of value.attachmentsList){
@@ -340,9 +348,13 @@ export class NotificationPage implements OnInit {
 
       this.notificationPage += this.notificationPage + 1;
       this.notificationService.getNotification(this.notificationPage,0,0,this.approved,this.archived,this.sent,0).subscribe(
+          // @ts-ignore
           (data) => {
             this.getData = false;
             let allData:any = data;
+            // if(this.platform.is('cordova')){
+            //   allData = data.data
+            // }
             for (let value of allData){
               let notify = new Notification;
               for(let item of value.attachmentsList){
@@ -404,6 +416,9 @@ export class NotificationPage implements OnInit {
   getAllClasses(){
     this.classesServ.getClassList("NOTIFICATION",2,null,null,null,null).subscribe((value) => {
           let allData: any = value;
+          // if (this.platform.is('cordova')){
+          //   allData = JSON.parse(value.data);
+          // }
           this.classes = [];
           for (let data of allData) {
             let item = new Class();
@@ -430,6 +445,9 @@ export class NotificationPage implements OnInit {
         (val)=>{
           this.load.stopLoading().then( ()=> {
             let data:any = val;
+            // if(this.platform.is('cordova')){
+            //   data = JSON.parse(val.data);
+            // }
             this.studentwithClass = [];
             this.studentsName = [];
             for (let value of data){
@@ -902,6 +920,7 @@ export class NotificationPage implements OnInit {
         };
         // calling send notification service.
         this.notificationService.editNotification(sentNotification, 2).subscribe(
+            //@ts-ignore
             (response) => {
               // this.loading.dismiss();
               // removeProcessingMessage();
@@ -947,6 +966,7 @@ export class NotificationPage implements OnInit {
         };
         // calling send notification service.
         this.notificationService.editNotification(sentNotification, 2).subscribe(
+            // @ts-ignore
             (response) => {
               // approvedNotification.approved = true;
               // this.loading.dismiss();
@@ -992,6 +1012,7 @@ export class NotificationPage implements OnInit {
       };
       // calling send notification service.
       this.notificationService.editNotification(sentNotification, 2).subscribe(
+          // @ts-ignore
           (response) => {
             // approvedNotification.approved = true;
             // this.loading.dismiss();
@@ -1028,12 +1049,16 @@ export class NotificationPage implements OnInit {
 
   getSeencount(notificationsIds){
     this.notificationService.getSeencount(notificationsIds).subscribe(
+        // @ts-ignore
         (data) => {
 
           this.load.stopLoading().then( () => {
             console.log("Date Is", data);
             let AllData:any = [];
             AllData = data;
+            // if(this.platform.is('cordova')){
+            //   AllData = data.data
+            // }
             this.notificationIds = [];
             for (let id in AllData){
               if(this.sent){
@@ -1089,6 +1114,7 @@ export class NotificationPage implements OnInit {
   doRefresh(refresher) {
     this.notificationPage = 1;
     this.notificationService.getNotification(this.notificationPage,0,0,this.approved,this.archived,this.sent,0).subscribe(
+        // @ts-ignore
         (data) => {
           if(this.sent){
             this.notificationsSent = [];
@@ -1101,6 +1127,9 @@ export class NotificationPage implements OnInit {
           }
           this.getData = false;
           let allData:any = data;
+          // if(this.platform.is('cordova')){
+          //   allData = data.data
+          // }
           for (let value of allData){
             let notify = new Notification;
             for(let item of value.attachmentsList){

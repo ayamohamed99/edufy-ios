@@ -131,12 +131,17 @@ export class ReportPage implements OnInit {
              */
 
             this.dailyReportServ.approveReport(searchDate, classId, this.reportId).subscribe(
+                // @ts-ignore
                 (response) => {
 
                   this.classesServ.getClassList('DAILY_REPORT', 4, searchDate, null, null,this.reportId).subscribe(
                       (response) => {
 
                         var approvedClasses = response;
+                        // if(this.platform.is('cordova')){
+                          // approvedClasses = JSON.parse(response.data);
+                        // }
+
                         for (var i = 0; i < this.classesList.length; i++) {
                           for (var j = 0; j < approvedClasses.length; j++) {
                             if (approvedClasses[j].id == this.classesList[i].id) {
@@ -151,9 +156,14 @@ export class ReportPage implements OnInit {
 
                       });
 
+                  // @ts-ignore
                   this.studentsServ.getAllStudentsForReport(8, classId, searchDate, this.reportId).subscribe(
-                      (response) => {
+                      (data) => {
 
+                        let response = data;
+                        // if(this.platform.is('cordova')){
+                        //   response = JSON.parse(data.data);
+                        // }
                         this.classesList[index].studentsList = response;
                         // this.classStudents = this.classesList[this.selectedClassIndex].studentsList;
 
@@ -272,10 +282,15 @@ export class ReportPage implements OnInit {
 
   getDailyReportForClass(classId){
     this.dailyReportServ.getDailyReportTemplate("English",this.selectedDate,classId,this.reportId).subscribe(
+        // @ts-ignore
         (val) => {
 
           let allData:any;
           allData = val;
+          // if(this.platform.is('cordova')){
+          //   // @ts-ignore
+          //   allData = JSON.parse(val.data);
+          // }
           let template = allData[0];
           let reportQuestinsFirst =[];
           reportQuestinsFirst = template.questionsList;
@@ -352,6 +367,11 @@ export class ReportPage implements OnInit {
     this.loadCtrl.startNormalLoading('Loading classes ...');
     this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
           let allData: any = value;
+
+          // if(this.platform.is('cordova')){
+          //   allData = JSON.parse(value.data);
+          // }
+
           console.log(allData);
           if(allData) {
             for (let data of allData) {
@@ -435,8 +455,13 @@ export class ReportPage implements OnInit {
     this.studentsList = [];
     // this.load.setContent("Just a few more...");
     this.loadCtrl.updateContent("Just a few more...");
+    // @ts-ignore
     return this.studentsServ.getAllStudentsForReport(this.studentOpId, classId,this.selectedDate,this.reportId).toPromise().then(
-        (val) => {
+        (dataVal) => {
+          let val = dataVal;
+          // if(this.platform.is('cordova')){
+          //   val = JSON.parse(dataVal.data);
+          // }
           for(let oneClass of this.classesList){
             if(oneClass.id == classId){
               if(oneClass.reportTemplate == null){
@@ -612,6 +637,7 @@ export class ReportPage implements OnInit {
     this.loadCtrl.startNormalLoading(this.massageChange);
 
     this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,this.selectedDate,this.reportId).subscribe(
+        // @ts-ignore
         resp=>{
           // this.load.dismiss();
           this.waitStudents(classId,index,name);

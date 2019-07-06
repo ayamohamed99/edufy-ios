@@ -92,6 +92,10 @@ export class HomePage {
           this.loginServ.postlogin(this.userName,this.password).subscribe(
               (data) => {
                   this.values = data;
+                  // if(this.platform.is('cordova')){
+                  //     // @ts-ignore
+                  //     this.values = JSON.parse(data.data);
+                  // }
                   this.accessToken = this.values.refreshToken.value;
                   this.refreToken();
               },
@@ -119,6 +123,10 @@ export class HomePage {
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
         (data) => {
           this.values = data;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     this.values = JSON.parse(data.data);
+            // }
           this.token = this.values.value;
           this.toKenFull = this.fullToken();
 
@@ -178,8 +186,13 @@ export class HomePage {
 
   accountInfo(){
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
-        (data) => {
+        (val) => {
           // this.load.stopLoading();
+            let data = val;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     data = JSON.parse(val.data);
+            // }
           this.accountServ.setDate(data);
           // this.accountServ.getTags(this.fullToken());
           // this.navCtrl.setRoot(ProfilePage);
@@ -202,7 +215,13 @@ export class HomePage {
     this.accountServ.getCustomReports(this.toKenFull).subscribe(
         (data) => {
             this.load.stopLoading();
-          this.accountServ.setCustomReport(data);
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     this.accountServ.setCustomReport(JSON.parse(data.data));
+            // }else{
+                this.accountServ.setCustomReport(data);
+            // }
+
           this.accountServ.getTags(this.fullToken());
           // this.navCtrl.setRoot('ProfilePage');
             this.navCtrl.navigateRoot('/menu/profile');

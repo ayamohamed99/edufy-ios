@@ -5,7 +5,7 @@ import {Url_domain} from '../../models/url_domain';
 // import 'rxjs/observable/fromPromise';
 // import 'rxjs/add/operator/mergeMap';
 import {Platform} from '@ionic/angular';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, from} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 @Injectable({
@@ -16,6 +16,7 @@ export class ClassesService {
   httpOptions: any;
   headers: any;
   DomainUrl: Url_domain = new Url_domain;
+  val:any;
   getClassListWithID_2_AND_NOT_REPORTS: BehaviorSubject<object> = new BehaviorSubject(null);
   constructor(public http: HttpClient, private platform: Platform) {}
 
@@ -29,6 +30,7 @@ export class ClassesService {
         Authorization: value
       })
     };
+    this.val = value;
   }
 
 
@@ -51,14 +53,32 @@ export class ClassesService {
     if (opId == 2 && this.getClassListWithID_2_AND_NOT_REPORTS.getValue() != null) {
       return this.getClassListWithID_2_AND_NOT_REPORTS;
     } else {
-      return this.http.get(URL, this.httpOptions).pipe(
-          tap(response => {
-            if (opId == 2) {
-              this.getClassListWithID_2_AND_NOT_REPORTS.next(response);
-            }
-          }, err => {
 
-          }));
+      // if(this.platform.is('cordova')){
+      //
+      //   return from(this.http.get(URL, this.httpOptions)).pipe(
+      //       tap(response => {
+      //         if (opId == 2) {
+      //           // @ts-ignore
+      //           this.getClassListWithID_2_AND_NOT_REPORTS.next(JSON.parse(response.data));
+      //         }
+      //       }, err => {
+      //
+      //       }));
+      //
+      // }else{
+
+        return this.http.get(URL, this.httpOptions).pipe(
+            tap(response => {
+              if (opId == 2) {
+                this.getClassListWithID_2_AND_NOT_REPORTS.next(response);
+              }
+            }, err => {
+
+            }));
+
+      // }
+
     }
   }
 }
