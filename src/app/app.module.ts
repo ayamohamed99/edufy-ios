@@ -53,7 +53,7 @@ import {TokenInterceptorService} from './services/token-interceptor.service';
 
 const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule];
 const popOvers = [PopoverNotificationCardPageModule];
-const modals = [NotificationEditPageModule, NotificationViewReceiverPageModule, NotificationNewPageModule, ChatDialoguePageModule, MedicalCareCardOptionPageModule, MedicalReportViewPageModule, MedicalCareMedicationViewPageModule, MedicalCareNewMedicalReportPageModule, MedicalCareNewMedicalReportMedicinePageModule, MedicationNotificationPageModule, ReportTemplatePageModule];
+const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
 
 @NgModule({
   declarations: [AppComponent],

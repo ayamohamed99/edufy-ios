@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { NotificationPage } from './notification.page';
 import {MatFormFieldModule, MatInputModule} from '@angular/material';
+import {NotificationEditPageModule} from '../notification-edit/notification-edit.module';
+import {NotificationViewReceiverPageModule} from '../notification-view-receiver/notification-view-receiver.module';
+import {NotificationNewPageModule} from '../notification-new/notification-new.module';
 
 const routes: Routes = [
   {
@@ -22,7 +25,10 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    NotificationEditPageModule,
+    NotificationViewReceiverPageModule,
+    NotificationNewPageModule
   ],
   declarations: [NotificationPage]
 })

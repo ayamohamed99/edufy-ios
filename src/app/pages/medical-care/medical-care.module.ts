@@ -6,6 +6,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MedicalCarePage } from './medical-care.page';
+import {MedicalCareCardOptionPageModule} from '../medical-care-card-option/medical-care-card-option.module';
+import {MedicalReportViewPageModule} from '../medical-report-view/medical-report-view.module';
+import {MedicalCareMedicationViewPageModule} from '../medical-care-medication-view/medical-care-medication-view.module';
+import {MedicalCareNewMedicalReportPageModule} from '../medical-care-new-medical-report/medical-care-new-medical-report.module';
+import {MedicalCareNewMedicalReportMedicinePageModule} from '../medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.module';
 
 const routes: Routes = [
   {
@@ -19,7 +24,12 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MedicalCareCardOptionPageModule,
+    MedicalReportViewPageModule,
+    MedicalCareMedicationViewPageModule,
+    MedicalCareNewMedicalReportPageModule,
+    MedicalCareNewMedicalReportMedicinePageModule
   ],
   declarations: [MedicalCarePage]
 })
