@@ -305,8 +305,13 @@ export class ProfilePage implements OnInit {
     }
 
     getWifiIPAddress() {
-        wifiinformation.getWifiInfo(success => {
-            alert('Success: ' + JSON.stringify(success));
+        wifiinformation.getSampleInfo(wifi => {
+            alert(
+                'SSID: ' + wifi.ssid +
+                '\nMAC: ' + wifi.mac +
+                '\nIP: ' + wifi.ip +
+                '\nGateway: ' + wifi.gateway
+            );
 
         }, (err) => console.error(err));
     }

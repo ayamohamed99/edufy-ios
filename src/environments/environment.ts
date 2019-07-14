@@ -6,7 +6,7 @@ export const environment = {
   production: false
 };
 
-export const DOMAIN_URL = 'http://192.168.1.90:8080';
+export const DOMAIN_URL = 'http://192.168.1.19:8080';
 
 /*
  * For easier debugging in development mode, you can import the following file

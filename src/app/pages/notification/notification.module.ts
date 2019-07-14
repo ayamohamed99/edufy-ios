@@ -10,6 +10,7 @@ import {MatFormFieldModule, MatInputModule} from '@angular/material';
 import {NotificationEditPageModule} from '../notification-edit/notification-edit.module';
 import {NotificationViewReceiverPageModule} from '../notification-view-receiver/notification-view-receiver.module';
 import {NotificationNewPageModule} from '../notification-new/notification-new.module';
+import {PopoverNotificationCardPageModule} from '../popover-notification-card/popover-notification-card.module';
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
     MatInputModule,
     NotificationEditPageModule,
     NotificationViewReceiverPageModule,
-    NotificationNewPageModule
+    NotificationNewPageModule,
+    PopoverNotificationCardPageModule
   ],
   declarations: [NotificationPage]
 })

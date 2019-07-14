@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import {IonicModule, IonicRouteStrategy, NavParams} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -52,7 +52,6 @@ import {IonicStorageModule} from '@ionic/storage';
 import {TokenInterceptorService} from './services/token-interceptor.service';
 
 const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule];
-const popOvers = [PopoverNotificationCardPageModule];
 const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
 
 @NgModule({
@@ -68,7 +67,6 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
     HttpClientModule,
     Ng2ImgMaxModule,
     mods,
-    popOvers,
     modals,
     NgSelectModule,
     FormsModule
@@ -78,7 +76,6 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
-
     Network,
     FirebaseMessaging,
     LocalNotifications,
@@ -97,4 +94,19 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('still format');
+    const stringPrototype = String.prototype as any;
+    stringPrototype.format = function() {
+      console.log('formated');
+      const args = arguments;
+      return this.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+      });
+    };
+  }
+}
