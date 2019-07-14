@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {AlertController, NavParams, Platform, PopoverController} from '@ionic/angular';
+import {Component, Input, OnInit} from '@angular/core';
+import {AlertController, Platform, PopoverController} from '@ionic/angular';
 import {AccountService} from '../../services/Account/account.service';
 import {NotificationService} from '../../services/Notification/notification.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {Storage} from "@ionic/storage";
+// @ts-ignore
+import Any = jasmine.Any;
 
 @Component({
   selector: 'app-popover-notification-card',
@@ -16,10 +18,12 @@ export class PopoverNotificationCardPage implements OnInit {
   notificationID:number;
   notificationTitle:string;
   notificationDetails:string;
-  notification;
+  notifications;
   Archiving:string;
 
-  constructor(public navParams:NavParams,public popOver:PopoverController,
+  @Input() notification: any;
+
+  constructor(public popOver:PopoverController,
               public platform:Platform,public storage:Storage,public alertCtrl:AlertController,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingViewService,
               public notificationService:NotificationService) {
@@ -35,11 +39,11 @@ export class PopoverNotificationCardPage implements OnInit {
 
   ngOnInit() {
 
-    this.notification = this.navParams.get('notification');
-    this.notificationID = this.notification.notificationId;
-    this.notificationTitle = this.notification.title;
-    this.notificationDetails = this.notification.body;
-    if(this.notification.archived){
+    this.notifications = this.notification;
+    this.notificationID = this.notifications.notificationId;
+    this.notificationTitle = this.notifications.title;
+    this.notificationDetails = this.notifications.body;
+    if(this.notifications.archived){
       this.Archiving = "Restore";
     }else{
       this.Archiving = "Archive";
@@ -103,7 +107,7 @@ export class PopoverNotificationCardPage implements OnInit {
 
   async archiveNotification() {
     let index;
-    let approvedNotification = this.notification;
+    let approvedNotification = this.notifications;
     // get select notification to
     if (approvedNotification.approved == true) {
       // archive it

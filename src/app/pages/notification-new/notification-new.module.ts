@@ -9,21 +9,14 @@ import { NotificationNewPage } from './notification-new.page';
 import {MatFormFieldModule, MatInputModule} from '@angular/material';
 import {NgSelectModule} from '@ng-select/ng-select';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: NotificationNewPage
-  }
-];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
     NgSelectModule, FormsModule,MatFormFieldModule,MatInputModule
   ],
-  declarations: [NotificationNewPage]
+  declarations: [NotificationNewPage],
+  entryComponents: [NotificationNewPage]
 })
 export class NotificationNewPageModule {}

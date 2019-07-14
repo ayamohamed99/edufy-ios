@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {ModalController, NavParams, Platform} from '@ionic/angular';
 import {ChatService} from '../../services/Chat/chat.service';
 import {AccountService} from '../../services/Account/account.service';
@@ -22,12 +22,12 @@ export class ChatDialoguePage implements OnInit {
   sendLoading=false;
   resendLoading=false;
 
-
-  constructor(public navParams: NavParams, public modalCtrl:ModalController,
+  @Input() studentData:any;
+  constructor(public modalCtrl:ModalController,
               public platform:Platform,public storage:Storage,public chatServ:ChatService,
               public accountServ:AccountService, public getDate:TransFormDateService, public tost:ToastViewService)
   {
-    this.student = this.navParams.get('studentData');
+    this.student = this.studentData;
     if (platform.is('desktop')) {
       chatServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
       this.getChatHistory();

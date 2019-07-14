@@ -9,11 +9,11 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
-  MatAutocompleteModule,
+  MatAutocompleteModule, MatCheckboxModule,
   MatDatepickerModule,
   MatExpansionModule,
   MatFormFieldModule,
-  MatIconModule, MatInputModule, MatNativeDateModule,
+  MatIconModule, MatInputModule, MatNativeDateModule, MatRadioModule,
   MatSelectModule
 } from '@angular/material';
 import {ReportTemplatePageModule} from './pages/report-template/report-template.module';
@@ -51,7 +51,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import {IonicStorageModule} from '@ionic/storage';
 import {TokenInterceptorService} from './services/token-interceptor.service';
 
-const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule];
+const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule,MatFormFieldModule,MatInputModule,MatCheckboxModule,MatRadioModule];
 const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
 
 @NgModule({
@@ -69,7 +69,7 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
     mods,
     modals,
     NgSelectModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [
     StatusBar,

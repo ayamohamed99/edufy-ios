@@ -28,7 +28,6 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
     NgSelectModule,
     FormsModule,
     MatFormFieldModule,
@@ -36,6 +35,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,MatInputModule,MatCheckboxModule,MatRadioModule
   ],
-  declarations: [MedicalCareMedicationViewPage]
+  declarations: [MedicalCareMedicationViewPage],
+  entryComponents: [MedicalCareMedicationViewPage]
 })
 export class MedicalCareMedicationViewPageModule {}

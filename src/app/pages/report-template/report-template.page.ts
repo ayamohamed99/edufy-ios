@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {CheckboxFunctionService} from '../../services/CheckboxFunction/checkbox-function.service';
-import {AlertController, IonFab, ModalController, NavParams, Platform} from '@ionic/angular';
+import {AlertController, IonFab, ModalController, Platform} from '@ionic/angular';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import {AccountService} from '../../services/Account/account.service';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -25,17 +25,17 @@ export class ReportTemplatePage implements OnInit {
   console = console;
   localStorageToken: string = 'LOCAL_STORAGE_TOKEN';
   PageName;
-  reportDate;
+  reportDates;
   reportId;
   reportTemplate;
   drQuestion = [];
   enableOtherNote = [];
-  reportAnswer;
+  reportAnswers;
   reportDefultAnswer;
-  reportAnswersNoOfItems;
-  reportQuestionsRecovery;
-  reportQuestionsEditParamTemps;
-  editQuestionAllowed;
+  reportAnswersNoOfItem;
+  reportQuestionsRecoverys;
+  reportQuestionsEditParamTemp;
+  editQuestionAlloweds;
   helperTextSSTOVS = false;
   switchToHelperSSTOVS = 0;
   templateViewObjects = [];
@@ -64,10 +64,27 @@ export class ReportTemplatePage implements OnInit {
   checkIfChangesAnswer = false;
   showBackDrop = false;
 
+  @Input() comment:any;
+  @Input() template:any;
+  @Input() class:any;
+  @Input() selected:any;
+  @Input() theClassIsSelected:any;
+  @Input() reportDate:any;
+  @Input() classIndex:any;
+  @Input() selectedDate:any;
+  @Input() reportAnswer:any;
+  @Input() reportAnswersNoOfItems:any;
+  @Input() reportQuestionsRecovery:any;
+  @Input() reportQuestionsEditParamTemps:any;
+  @Input() editQuestionAllowed:any;
+  @Input() reportConflict:any;
+  @Input() classId:any;
+  @Input() student:any;
+
   ///////////////////// HERE ORGANIZE THE VIEW//////////////////////
   showNames(){
     let selectedListOfStudents = [];
-    selectedListOfStudents = this.navParams.get('selected');
+    selectedListOfStudents = this.selected;
     let studentsNames = "";
     for(let i=0;i<selectedListOfStudents.length;i++){
       if(i==(selectedListOfStudents.length -1)){
@@ -141,7 +158,7 @@ export class ReportTemplatePage implements OnInit {
   }
   showSaveOrUpdate(){
 
-    if(this.navParams.get('theClassIsSelected')){
+    if(this.theClassIsSelected){
 
       let noOfStudentFinalized;
       if(this.accountServ.reportId == -1){
@@ -160,7 +177,7 @@ export class ReportTemplatePage implements OnInit {
         return this.reportAnswerForSelectedStudent.length == 0 ? 'save' : "update"
       } else {
         let foundStudentThatFinalized = false;
-        for(let student of this.navParams.get('selected')){
+        for(let student of this.selected){
           if(student.reportFinalized){
             foundStudentThatFinalized = true;
           }
@@ -268,13 +285,13 @@ export class ReportTemplatePage implements OnInit {
   }
 
 /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
-  constructor(public navParams: NavParams,public accountServ:AccountService, public sanitizer:DomSanitizer,
+  constructor(public accountServ:AccountService, public sanitizer:DomSanitizer,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingViewService,
               private toastCtrl: ToastViewService, private modalCtrl:ModalController,public alrtCtrl: AlertController, private reportCommentProvider:ReportCommentService,
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDateService)
   {
 
-    this.shouldAutoExpandComments = !!this.navParams.get("comment");
+    this.shouldAutoExpandComments = !!this.comment;
     if (this.shouldAutoExpandComments) {
       this.loadingReportInBackground = true;
       this.initTemplateViewWithAutoExpandedComments();
@@ -289,12 +306,12 @@ export class ReportTemplatePage implements OnInit {
     //this is your html write the directive here
     this.reportTemplate ="";
     this.drQuestion = [];
-    this.drQuestion = this.navParams.get('template');
-    this.recoveryQuestion = this.navParams.get('template');
-    this.selectedClassId = this.navParams.get('class').id;
-    this.selectedClass = this.navParams.get('class');
+    this.drQuestion = this.template;
+    this.recoveryQuestion = this.template;
+    this.selectedClassId = this.class.id;
+    this.selectedClass = this.class;
     ////PageName
-    this.selectedListOfStudents = this.navParams.get('selected');
+    this.selectedListOfStudents = this.selected;
     if(this.selectedListOfStudents.length > 1){
       if (this.accountServ.reportId == -1) {
         this.PageName = this.selectedListOfStudents.length + " daily reports are selected";
@@ -312,19 +329,19 @@ export class ReportTemplatePage implements OnInit {
       this.selectedListOfStudentsID.push({id: this.selectedListOfStudents[i].id});
     }
     /////Date of Page
-    this.reportDate = this.navParams.get('reportDate');
-    this.selectedClassIndex = this.navParams.get('classIndex');
-    this.selectedReportDate = this.navParams.get('selectedDate');
+    this.reportDates = this.reportDate;
+    this.selectedClassIndex = this.classIndex;
+    this.selectedReportDate = this.selectedDate;
 
-    this.reportDefultAnswer = this.navParams.get('reportAnswer');
-    this.reportAnswer = this.reportDefultAnswer;
-    console.log(this.reportAnswer);
-    this.reportAnswersNoOfItems = this.navParams.get('reportAnswersNoOfItems');
-    this.reportQuestionsRecovery = this.navParams.get('reportQuestionsRecovery');
-    this.reportQuestionsEditParamTemps = this.navParams.get('reportQuestionsEditParamTemps');
-    this.editQuestionAllowed = this.navParams.get('editQuestionAllowed');
+    this.reportDefultAnswer = this.reportAnswer;
+    this.reportAnswers = this.reportDefultAnswer;
+    console.log(this.reportAnswers);
+    this.reportAnswersNoOfItem = this.reportAnswersNoOfItems;
+    this.reportQuestionsRecoverys = this.reportQuestionsRecovery;
+    this.reportQuestionsEditParamTemp = this.reportQuestionsEditParamTemps;
+    this.editQuestionAlloweds = this.editQuestionAllowed;
     if(this.selectedListOfStudents.length > 1) {
-      this.conflict = this.navParams.get('reportConflict');
+      this.conflict = this.reportConflict;
     }
 
     let editDropOrNot = true;
@@ -418,18 +435,18 @@ export class ReportTemplatePage implements OnInit {
           }else{
             this.reportId = this.accountServ.reportId;
           }
-          this.selectedClassId = this.navParams.get("classId");
-          const date: string = this.navParams.get('reportDate');
+          this.selectedClassId = this.classId;
+          const date: string = this.reportDate;
           this.selectedReportDate = date;
-          this.reportDate = date.replace(/-/g, '/');
-          const student = this.navParams.get('student');
-          this.selectedListOfStudents.push(student);
+          this.reportDates = date.replace(/-/g, '/');
+          const oneStudent = this.student;
+          this.selectedListOfStudents.push(oneStudent);
           if (this.accountServ.reportId == -1) {
             this.PageName = this.selectedListOfStudents[0].name + "'s daily report";
           } else {
             this.PageName = this.selectedListOfStudents[0].name + "'s " + this.accountServ.reportPage;
           }
-          this.selectedListOfStudentsID.push({id: student.id});
+          this.selectedListOfStudentsID.push({id: oneStudent.id});
           const reportTemplate$ = this.dailyReportServ.getDailyReportTemplate("English",
               this.selectedReportDate, this.selectedClassId,this.reportId);
           const reportAnswers =   this.dailyReportServ.getStudentReportAnswers(this.selectedClassId,
@@ -441,19 +458,19 @@ export class ReportTemplatePage implements OnInit {
                 this.reportQuestions = template.questionsList;
                 this.drQuestion = template.questionsList;
                 if(this.accountServ.reportId == -1) {
-                  this.reportAnswer = {
+                  this.reportAnswers = {
                     "dailyReportAnswersObjectsList": []
                   };
                 }else{
-                  this.reportAnswer = {
+                  this.reportAnswers = {
                     "reportAnswersObjectsList": []
                   };
                 }
                 for (let i = 0; i < this.reportQuestions.length; i++) {
                   if (this.accountServ.reportId == -1) {
-                    this.reportAnswer.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+                    this.reportAnswers.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
                   } else {
-                    this.reportAnswer.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+                    this.reportAnswers.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
                   }
                 }
                 this.reportAnswerForSelectedStudent = [];
@@ -464,7 +481,7 @@ export class ReportTemplatePage implements OnInit {
                     console.log(answer);
                     for (let answerTemp of this.dailyReportServ.reportClassQuestionsGroups[qId][answer]) {
                       console.log(answerTemp);
-                      if (answerTemp == student.id) {
+                      if (answerTemp == oneStudent.id) {
                         this.reportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
                         console.log(this.reportAnswerForSelectedStudent);
                       }
@@ -477,7 +494,7 @@ export class ReportTemplatePage implements OnInit {
                   this.isNotValid = false;
                 } else {
                   this.studnetsAnswersList = [];
-                  this.studnetsAnswersList[student.id] = this.reportAnswerForSelectedStudent;
+                  this.studnetsAnswersList[oneStudent.id] = this.reportAnswerForSelectedStudent;
                   this.isNotValid = false;
                   this.isSave = false;
                   this.reverseAnswerToViewAnswer(this.reportAnswerForSelectedStudent);
@@ -497,7 +514,7 @@ export class ReportTemplatePage implements OnInit {
           //         console.log(answer);
           //         for (let answerTemp of this.dailyReportServ.reportClassQuestionsGroups[qId][answer]) {
           //           console.log(answerTemp);
-          //           if (answerTemp == student.id) {
+          //           if (answerTemp == oneStudent.id) {
           //             this.reportAnswerForSelectedStudent.push({"questionId": qId, "answer": answer});
           //             console.log(this.reportAnswerForSelectedStudent);
           //           }
@@ -511,7 +528,7 @@ export class ReportTemplatePage implements OnInit {
           //       this.resetReportTemplate(null, null);
           //     } else {
           //       this.studnetsAnswersList = [];
-          //       this.studnetsAnswersList[student.id] = this.reportAnswerForSelectedStudent;
+          //       this.studnetsAnswersList[oneStudent.id] = this.reportAnswerForSelectedStudent;
           //       this.isNotValid = false;
           //       this.isSave = false;
           //       this.reverseAnswerToViewAnswer(this.reportAnswerForSelectedStudent);
@@ -528,9 +545,9 @@ export class ReportTemplatePage implements OnInit {
           //
           //     for (let i = 0; i < this.reportQuestions.length; i++) {
           //       if (this.accountServ.reportId == -1) {
-          //         this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+          //         this.mappingDefaultAnswers(this.reportAnswers.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
           //       } else {
-          //         this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+          //         this.mappingDefaultAnswers(this.reportAnswers.reportAnswersObjectsList[i], this.reportQuestions[i]);
           //       }
           //
           //
@@ -663,7 +680,7 @@ export class ReportTemplatePage implements OnInit {
 
   addParameterForQuestion (questionNumber) {
 
-    // console.log($scope.reportQuestionsEditParamTemps);
+    // console.log($scope.reportQuestionsEditParamTemp);
 
     let numberOfParams = this.drQuestion[questionNumber].parametersList.length;
     let id = 0;
@@ -697,17 +714,17 @@ export class ReportTemplatePage implements OnInit {
     switch (questionTitle) {
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER':
       case 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER':
-        let value = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value;
+        let value = this.reportQuestionsEditParamTemp[questionNumber].parameters[0].value;
         if (value === '' || value.replace(" ", "") === '' || value === "" || value.replace(" ", "") === "") {
           return;
         }
         this.drQuestion[questionNumber].parametersList[numberOfParams] = {};
         this.drQuestion[questionNumber].parametersList[numberOfParams].id = id;
-        this.drQuestion[questionNumber].parametersList[numberOfParams].value = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value;
-        this.drQuestion[questionNumber].parametersList[numberOfParams].key = this.reportQuestionsEditParamTemps[questionNumber].parameters[0].key;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].value = this.reportQuestionsEditParamTemp[questionNumber].parameters[0].value;
+        this.drQuestion[questionNumber].parametersList[numberOfParams].key = this.reportQuestionsEditParamTemp[questionNumber].parameters[0].key;
 
         // clear variables
-        this.reportQuestionsEditParamTemps[questionNumber].parameters[0].value = '';
+        this.reportQuestionsEditParamTemp[questionNumber].parameters[0].value = '';
 
         console.log('LONG_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER  parameter added!');
         console.log(this.drQuestion[questionNumber].parametersList);
@@ -724,7 +741,7 @@ export class ReportTemplatePage implements OnInit {
       this.enableOtherNote[questionN] = false;
     } else {
       this.enableOtherNote[questionN] = true;
-      this.reportAnswer.dailyReportAnswersObjectsList[questionN].answer[1] = "";
+      this.reportAnswers.dailyReportAnswersObjectsList[questionN].answer[1] = "";
     }
 
   }
@@ -759,13 +776,13 @@ export class ReportTemplatePage implements OnInit {
 
       // take a copy of current editing question
       // for recovery if cancel
-      this.reportQuestionsRecovery[questionNumber] = this.getNewInstanceOf(this.drQuestion[questionNumber]);
+      this.reportQuestionsRecoverys[questionNumber] = this.getNewInstanceOf(this.drQuestion[questionNumber]);
 
       // start edit question -questionNumber-
       this.isUserEditing = true;
       this.drQuestion[questionNumber].editQuestion = true;
       for (let i = 0; i < this.drQuestion.length; i++) {
-        this.reportQuestionsEditParamTemps[i].parameters = [];
+        this.reportQuestionsEditParamTemp[i].parameters = [];
 
         for (let j = 0; j < this.drQuestion[i].parametersList.length; j++) {
           var param = {
@@ -773,16 +790,16 @@ export class ReportTemplatePage implements OnInit {
             "key": '',
             "value": ''
           };
-          this.reportQuestionsEditParamTemps[i].parameters[j] = param;
-          this.reportQuestionsEditParamTemps[i].parameters[j].key = this.drQuestion[i].parametersList[j].key;
+          this.reportQuestionsEditParamTemp[i].parameters[j] = param;
+          this.reportQuestionsEditParamTemp[i].parameters[j].key = this.drQuestion[i].parametersList[j].key;
         }
 
       }
 
       console.log('start Edit! ');
       console.log(this.drQuestion);
-      // console.log($scope.reportQuestionsEditParamTemps);
-      // console.log(reportQuestionsRecovery);
+      // console.log($scope.reportQuestionsEditParamTemp);
+      // console.log(reportQuestionsRecoverys);
     }
   }
 
@@ -852,7 +869,7 @@ export class ReportTemplatePage implements OnInit {
   }
 
   cancelEditigQuestion(qNumber){
-    this.drQuestion[qNumber] = this.getNewInstanceOf(this.reportQuestionsRecovery[qNumber]);
+    this.drQuestion[qNumber] = this.getNewInstanceOf(this.reportQuestionsRecoverys[qNumber]);
     var tmp = false;
     for (var i = 0; i < this.drQuestion.length; i++) {
       if ((typeof this.drQuestion[i].editQuestion !== "undefined") && this.drQuestion[i].editQuestion) {
@@ -1758,9 +1775,9 @@ export class ReportTemplatePage implements OnInit {
 
   getViewAnswers(questionNumber) {
     if(this.accountServ.reportId == -1) {
-      return this.reportAnswer.dailyReportAnswersObjectsList[questionNumber].answer;
+      return this.reportAnswers.dailyReportAnswersObjectsList[questionNumber].answer;
     }else{
-      return this.reportAnswer.reportAnswersObjectsList[questionNumber].answer;
+      return this.reportAnswers.reportAnswersObjectsList[questionNumber].answer;
     }
   }
 
@@ -2365,7 +2382,7 @@ export class ReportTemplatePage implements OnInit {
     this.listOfFinalized = [];
     this.classChecked = [];
     this.studnetsAnswersList = [];
-    this.reportQuestions = this.navParams.get('template');
+    this.reportQuestions = this.template;
 
     let idx = this.selectedMultiStudent.indexOf(StudentId);
     if (idx > -1) {
@@ -2536,26 +2553,26 @@ export class ReportTemplatePage implements OnInit {
 
     console.log(this.reportAnswerForSelectedStudent);
     console.log(this.selectedMultiStudentId);
-    console.log(this.reportAnswer);
+    console.log(this.reportAnswers);
     console.log(this.isChecked);
   }
 
   resetReportTemplate(questionsToBeReset, answers) {
     if (!questionsToBeReset) {
       if(this.accountServ.reportId == -1) {
-        this.reportAnswer = {
+        this.reportAnswers = {
           "dailyReportAnswersObjectsList": []
         };
       }else{
-        this.reportAnswer = {
+        this.reportAnswers = {
           "reportAnswersObjectsList": []
         };
       }
       for (let i = 0; i < this.reportQuestions.length; i++) {
         if (this.accountServ.reportId == -1) {
-          this.reportAnswer.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+          this.reportAnswers.dailyReportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
         } else {
-          this.reportAnswer.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
+          this.reportAnswers.reportAnswersObjectsList[i] = this.mappingDefaultAnswers(this.reportQuestions[i]);
         }
         // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         // this.name = "";
@@ -2568,7 +2585,7 @@ export class ReportTemplatePage implements OnInit {
           // $('#' + $scope.reportQuestions[i].id).removeClass("ng-hide");
 
           // mappingDefaultAnswers(
-          // $scope.reportAnswer.dailyReportAnswersObjectsList[i],
+          // $scope.reportAnswers.dailyReportAnswersObjectsList[i],
           // $scope.reportQuestions[i]);
           let questionTitle;
           if(this.accountServ.reportId == -1){
@@ -2582,22 +2599,22 @@ export class ReportTemplatePage implements OnInit {
             case "TEXT_QUESTION":
             case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER":
               if(this.accountServ.reportId == -1) {
-                this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                this.reportAnswers.dailyReportAnswersObjectsList[i] = {
                   "answer": ""
                 };
               }else{
-                this.reportAnswer.reportAnswersObjectsList[i] = {
+                this.reportAnswers.reportAnswersObjectsList[i] = {
                   "answer": ""
                 };
               }
               break;
             case "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION":
               if(this.accountServ.reportId == -1) {
-                this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                this.reportAnswers.dailyReportAnswersObjectsList[i] = {
                   "answer": ["", ""]
                 };
               }else{
-                this.reportAnswer.reportAnswersObjectsList[i] = {
+                this.reportAnswers.reportAnswersObjectsList[i] = {
                   "answer": ["", ""]
                 };
               }
@@ -2620,11 +2637,11 @@ export class ReportTemplatePage implements OnInit {
                   emptyAnswer.push("");
                 }
                 if(this.accountServ.reportId == -1){
-                  this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+                  this.reportAnswers.dailyReportAnswersObjectsList[i] = {
                     "answer": emptyAnswer
                   }
                 }else{
-                  this.reportAnswer.reportAnswersObjectsList[i] = {
+                  this.reportAnswers.reportAnswersObjectsList[i] = {
                     "answer": emptyAnswer
                   }
                 }
@@ -2636,9 +2653,9 @@ export class ReportTemplatePage implements OnInit {
         } else {
           let question = this.reportQuestions[i];
           if(this.accountServ.reportId == -1) {
-            this.reportAnswer.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
+            this.reportAnswers.dailyReportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }else{
-            this.reportAnswer.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
+            this.reportAnswers.reportAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.reportQuestions[i], answers.find(dbAnswer => dbAnswer.questionId == question.id).answer);
           }
           // $('#' + $scope.reportQuestions[i].id).addClass("ng-hide");
         }
@@ -2970,7 +2987,7 @@ export class ReportTemplatePage implements OnInit {
       }
     }
 
-    this.reportAnswer = reportAnswerView;
+    this.reportAnswers = reportAnswerView;
 
   }
 
@@ -2998,7 +3015,7 @@ export class ReportTemplatePage implements OnInit {
           console.log('Got date: ', this.tranformDate.transformTheDate(date,'dd-MM-yyyy'));
           this.presentToast(this.tranformDate.transformTheDate(date,'dd-MM-yyyy'));
           this.selectedReportDate = this.tranformDate.transformTheDate(date,'dd-MM-yyyy');
-          this.reportDate = this.tranformDate.transformTheDate(date,'dd/MM/yyyy');
+          this.reportDates = this.tranformDate.transformTheDate(date,'dd/MM/yyyy');
           this.getStudentsAnswer();
         },
         err =>{
@@ -3034,15 +3051,15 @@ export class ReportTemplatePage implements OnInit {
   //       for (let i = 0; i < reportQuestinsFirst.length; i++) {
   //         reportQuestinsFirst[i].questionNumber = i;
   //         if(this.accountServ.reportId == -1) {
-  //           this.reportAnswer.dailyReportAnswersObjectsList[i] = {
+  //           this.reportAnswers.dailyReportAnswersObjectsList[i] = {
   //             answer: null
   //           };
   //         }else{
-  //           this.reportAnswer.reportAnswersObjectsList[i] = {
+  //           this.reportAnswers.reportAnswersObjectsList[i] = {
   //             answer: null
   //           };
   //         }
-  //         this.reportAnswersNoOfItems[i] = {
+  //         this.reportAnswersNoOfItem[i] = {
   //           noOfItems: null
   //         };
   //         reportQuestinsFirst[i].editQuestion = false;
@@ -3050,16 +3067,16 @@ export class ReportTemplatePage implements OnInit {
   //       }
   //
   //       this.reportQuestions = reportQuestinsFirst;
-  //       this.reportQuestionsRecovery = this.getNewInstanceOf(this.reportQuestions);
+  //       this.reportQuestionsRecoverys = this.getNewInstanceOf(this.reportQuestions);
   //
   //       for (let i = 0; i < this.reportQuestions.length; i++){
   //         if(this.accountServ.reportId == -1) {
-  //           this.mappingDefaultAnswers(this.reportAnswer.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
+  //           this.mappingDefaultAnswers(this.reportAnswers.dailyReportAnswersObjectsList[i], this.reportQuestions[i]);
   //         }else{
-  //           this.mappingDefaultAnswers(this.reportAnswer.reportAnswersObjectsList[i], this.reportQuestions[i]);
+  //           this.mappingDefaultAnswers(this.reportAnswers.reportAnswersObjectsList[i], this.reportQuestions[i]);
   //         }
-  //         this.reportQuestionsEditParamTemps[i] = {};
-  //         this.reportQuestionsEditParamTemps[i].parameters = [];
+  //         this.reportQuestionsEditParamTemp[i] = {};
+  //         this.reportQuestionsEditParamTemp[i].parameters = [];
   //
   //         for (let j = 0; j < this.reportQuestions[i].parametersList.length; j++) {
   //           let param = {
@@ -3067,17 +3084,17 @@ export class ReportTemplatePage implements OnInit {
   //             "key": '',
   //             "value": ''
   //           };
-  //           this.reportQuestionsEditParamTemps[i].parameters[j] = param;
-  //           this.reportQuestionsEditParamTemps[i].parameters[j].key = this.reportQuestions[i].parametersList[j].key;
+  //           this.reportQuestionsEditParamTemp[i].parameters[j] = param;
+  //           this.reportQuestionsEditParamTemp[i].parameters[j].key = this.reportQuestions[i].parametersList[j].key;
   //         }
   //
   //         // let temp = this.reportQuestions;
   //       }
   //
   //       if(this.accountServ.reportId == -1) {
-  //         this.editQuestionAllowed = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
+  //         this.editQuestionAlloweds = this.accountServ.getUserRole().dailyReportEditQuestionCreate;
   //       }else{
-  //         this.editQuestionAllowed = this.accountServ.getUserRole().reportEditQuestionCreate;
+  //         this.editQuestionAlloweds = this.accountServ.getUserRole().reportEditQuestionCreate;
   //       }
   //       // let temp2 = reportQuestinsFirst;
   //

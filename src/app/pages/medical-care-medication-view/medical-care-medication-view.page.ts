@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {ModalController, NavParams} from '@ionic/angular';
 
@@ -9,17 +9,18 @@ import {ModalController, NavParams} from '@ionic/angular';
 })
 export class MedicalCareMedicationViewPage implements OnInit {
 
-  medication;
+  // medication;
   dosageWord = "";
   daysOfDosage = [];
   timesWords;
 
-  constructor(private config: NgSelectConfig,public navParams: NavParams,private modalCtrl: ModalController)
+  @Input() medication:any;
+  constructor(private config: NgSelectConfig,private modalCtrl: ModalController)
   {
     this.config.notFoundText = 'No match found';
 
 
-    this.medication = navParams.get('medication');
+    // this.medication = navParams.get('medication');
     if(this.medication.dosageNumber > 1){
       this.dosageWord = "Dosages"
     }else{

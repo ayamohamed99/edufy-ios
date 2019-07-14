@@ -9,22 +9,16 @@ import { NotificationViewReceiverPage } from './notification-view-receiver.page'
 import {MatExpansionModule} from '@angular/material';
 import {ComponentsModule} from '../../components/components.module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: NotificationViewReceiverPage
-  }
-];
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
     ComponentsModule,
     MatExpansionModule
   ],
-  declarations: [NotificationViewReceiverPage]
+  declarations: [NotificationViewReceiverPage],
+  entryComponents: [NotificationViewReceiverPage]
 })
 export class NotificationViewReceiverPageModule {}

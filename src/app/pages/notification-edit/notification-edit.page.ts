@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormControl, NgForm} from '@angular/forms';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {NotificationService} from '../../services/Notification/notification.service';
-import {AlertController, ModalController, NavParams, Platform} from '@ionic/angular';
+import {AlertController, ModalController, Platform} from '@ionic/angular';
 
 @Component({
   selector: 'app-notification-edit',
@@ -20,12 +20,13 @@ export class NotificationEditPage implements OnInit {
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
 
-  constructor(public navParams: NavParams,public modalCtrl:ModalController,
+  @Input() notification:any;
+  constructor(public modalCtrl:ModalController,
               public load:LoadingViewService, public alrtCtrl:AlertController, public notiServ:NotificationService,
               private platform:Platform) {}
 
   ngOnInit() {
-    this.TheNotification=this.navParams.get('notification');
+    this.TheNotification=this.notification;
     this.notificationID=this.TheNotification.notificationId;
     this.notificationTitle =this.TheNotification.title;
     this.notificationDetails=this.TheNotification.body;

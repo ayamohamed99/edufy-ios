@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {Medication} from '../../models/medication';
 import {MedicalRecord} from '../../models/medical-record';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
-import {AlertController, LoadingController, ModalController, NavParams, Platform} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController, Platform} from '@ionic/angular';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {MedicalCareService} from '../../services/MedicalCare/medical-care.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
@@ -17,7 +17,7 @@ import {FormControl} from '@angular/forms';
 export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
 
 
-  pageName = "Add Medication";
+  pageNames = "Add Medication";
   EditView = false;
   dosageTypeObject = {'id': null, 'type': "", 'medication':null, 'url': null};
   medicationObject = {'id': null, 'name': "", 'details': "", 'autoComplete': false, 'medication': null};
@@ -50,8 +50,12 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
   /////////////////////EDIT VIEW
   tempMedicalRecord:MedicalRecord;
 
+  @Input() Date:any;
+  @Input() operation:any;
+  @Input() pageName:any;
+  @Input() medicalRecord:any;
 
-  constructor(private config: NgSelectConfig,public navParams: NavParams, private medicalService:MedicalCareService,private loadCtrl:LoadingViewService,
+  constructor(private config: NgSelectConfig, private medicalService:MedicalCareService,private loadCtrl:LoadingViewService,
               private alrtCtrl:AlertController,private transDate:TransFormDateService,private modalCtrl:ModalController,private toastCtrl:ToastViewService,
               private platform:Platform) {
     this.config.notFoundText = 'No match found';
@@ -71,14 +75,14 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.getInstructionsList();
 
     let todayDate;
-    if(navParams.get('Date')) {
-      todayDate = navParams.get('Date');
+    if(this.Date) {
+      todayDate = this.Date;
     }
     this.fromMinDate = new Date();
     this.toMinDate = new Date();
     this.fromShowDate = new FormControl(new Date()).value;
     this.toShowDate = new FormControl(new Date()).value;
-    if(navParams.get('Date')) {
+    if(this.Date) {
       let getYear = parseInt(todayDate.split("-")[2]);
       this.fromMaxDate = new Date(getYear + 10, 11, 31);
       this.toMaxDate = new Date(getYear + 10, 11, 31);
@@ -86,11 +90,11 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.fromSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
     this.toSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
 
-    if(this.navParams.get('operation') == 'edit'){
-      this.pageName = this.navParams.get('pageName');
+    if(this.operation == 'edit'){
+      this.pageNames = this.pageName;
       this.EditView = true;
       let nullEndDateState = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
-      this.tempMedicalRecord = this.navParams.get('medicalRecord');
+      this.tempMedicalRecord = this.medicalRecord;
       this.selectedMedicine = this.tempMedicalRecord.oneMedication.medicine;
       this.dosageNumber = this.tempMedicalRecord.oneMedication.dosageNumber;
       this.selectedDosageType = this.tempMedicalRecord.oneMedication.dosageType;
@@ -215,7 +219,7 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
       this.selectedTimes[i].thursday = thursday;
     }
     this.medication.medicationSchedule = this.selectedTimes;
-    if(this.navParams.get('operation') == 'edit'){
+    if(this.operation == 'edit'){
       this.UpdateMedication(this.medication);
     }else {
       this.modalCtrl.dismiss({medication: this.medication});

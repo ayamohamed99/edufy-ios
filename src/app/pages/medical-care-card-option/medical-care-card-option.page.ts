@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AlertController, NavParams, Platform, PopoverController} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {AccountService} from '../../services/Account/account.service';
@@ -17,12 +17,16 @@ export class MedicalCareCardOptionPage implements OnInit {
   enableEdit = false;
   enableDelete = false;
 
-  constructor(public navParams:NavParams,public popCtrl: PopoverController,
+  // Data passed in by componentProps
+  @Input() Edit: boolean;
+  @Input() Delete: boolean;
+
+  constructor(public popCtrl: PopoverController,
               public platform:Platform,public storage:Storage,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingViewService, public alrtCtrl:AlertController)
   {
-    this.enableEdit = navParams.get('Edit');
-    this.enableDelete = navParams.get('Delete');
+    this.enableEdit = this.Edit;
+    this.enableDelete = this.Delete;
     let plat=this.platform.is('desktop');
 
     if(plat){

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {Autocomplete_shown_array} from '../../models/autocomplete_shown_array';
 import {Class} from '../../models';
 import {NgSelectConfig} from '@ng-select/ng-select';
@@ -46,7 +46,16 @@ export class NotificationNewPage implements OnInit {
   pendingNotification:any[]=[];
   reciverListFound = 0;
 
-  constructor(private config: NgSelectConfig,public navParams: NavParams,public modalCtrl: ModalController,public notiServ:NotificationService,
+  @Input() title:any;
+  @Input() details:any;
+  @Input() studetsNameList:any;
+  @Input() studentsdetailsList:any;
+  @Input() recieverList:any;
+  @Input() tagList:any;
+  @Input() attachmentList:any;
+  @Input() classesList:any;
+
+  constructor(private config: NgSelectConfig,public modalCtrl: ModalController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastViewService, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingViewService,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private compress:ImageCompressorService,
@@ -59,13 +68,13 @@ export class NotificationNewPage implements OnInit {
     this.placeHolder = "To :";
     this.showSupportFiles = false;
     this.backNotify.tagsArr = accServ.tagArry;
-    this.Title =this.navParams.get('title');
-    this.Details=this.navParams.get('details');
+    this.Title =this.title;
+    this.Details=this.details;
     this.backNotify.sendTo.splice(0);this.preparedTags.splice(0);
-    this.allStudentNames=this.navParams.get('studetsNameList');
-    this.allStudentsDetails=this.navParams.get('studentsdetailsList');
-    let reciverArray = this.navParams.get('recieverList');
-    this.backNotify.tags = this.navParams.get('tagList');
+    this.allStudentNames=this.studetsNameList;
+    this.allStudentsDetails=this.studentsdetailsList;
+    let reciverArray = this.recieverList;
+    this.backNotify.tags = this.tagList;
     if(reciverArray) {
       this.reciverListFound = reciverArray.length;
       for (let temp of reciverArray) {
@@ -76,7 +85,7 @@ export class NotificationNewPage implements OnInit {
         this.backNotify.sendTo.push(autoShownReciever);
       }
       if(this.accountServ.getUserRole().notificationAttachmentUpload) {
-        for (let temp of this.navParams.get('attachmentList')) {
+        for (let temp of this.attachmentList) {
           let attach = new Postattachment();
           attach.name = temp.name;
           attach.type = temp.type;
@@ -95,7 +104,7 @@ export class NotificationNewPage implements OnInit {
     autoShownAllClasses.dataList=this.chooseAllClasses;
 
     //+++++++++Classes+++++++++
-    this.allClasses=this.navParams.get('classesList');
+    this.allClasses=this.classesList;
     for (let classes of this.allClasses){
       let autoShownClasses = new Autocomplete_shown_array();
       autoShownClasses.id = classes.id;

@@ -19,8 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
   ],
-  declarations: [MedicalCareCardOptionPage]
+  declarations: [MedicalCareCardOptionPage],
+  entryComponents: [MedicalCareCardOptionPage]
 })
 export class MedicalCareCardOptionPageModule {}

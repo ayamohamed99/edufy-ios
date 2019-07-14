@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {ReportCommentService} from '../../services/ReportComment/report-comment.service';
-import {AlertController, ModalController, NavController, NavParams, Platform} from '@ionic/angular';
+import {AlertController, ModalController, NavController, Platform} from '@ionic/angular';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {ClassesService} from '../../services/Classes/classes.service';

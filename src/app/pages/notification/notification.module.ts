@@ -11,12 +11,17 @@ import {NotificationEditPageModule} from '../notification-edit/notification-edit
 import {NotificationViewReceiverPageModule} from '../notification-view-receiver/notification-view-receiver.module';
 import {NotificationNewPageModule} from '../notification-new/notification-new.module';
 import {PopoverNotificationCardPageModule} from '../popover-notification-card/popover-notification-card.module';
+import {NotificationEditPage} from '../notification-edit/notification-edit.page';
+import {NotificationViewReceiverPage} from '../notification-view-receiver/notification-view-receiver.page';
+import {NotificationNewPage} from '../notification-new/notification-new.page';
+import {PopoverNotificationCardPage} from '../popover-notification-card/popover-notification-card.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: NotificationPage
+    component: NotificationPage,
   }
+
 ];
 
 @NgModule({

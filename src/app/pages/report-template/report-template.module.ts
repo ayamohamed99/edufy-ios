@@ -9,21 +9,14 @@ import { ReportTemplatePage } from './report-template.page';
 import {MatCheckboxModule, MatFormFieldModule, MatInputModule, MatRadioModule} from '@angular/material';
 import {ComponentsModule} from '../../components/components.module';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: ReportTemplatePage
-  }
-];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
     ComponentsModule,MatFormFieldModule,MatInputModule,MatCheckboxModule,MatRadioModule
   ],
-  declarations: [ReportTemplatePage]
+  declarations: [ReportTemplatePage],
+  entryComponents: [ReportTemplatePage]
 })
 export class ReportTemplatePageModule {}

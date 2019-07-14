@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {MedicalRecord} from '../../models/medical-record';
 import {BackgroundMedicalcareService} from '../../services/BackgroundMedicalcare/background-medicalcare-service.service';
@@ -29,8 +29,8 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
 
   @ViewChild('ionImgSlides') slides: IonSlides;
   todayDate;
-  pageName;
-  operation;
+  pageNames;
+  operations;
   addCheckup: boolean = false;
   newIncident: boolean = false;
   allStudents: any;
@@ -45,7 +45,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
   checkupMaxDate;
   incidentShowDate;
   checkupShowDate;
-  medicalRecord: MedicalRecord = new MedicalRecord();
+  medicalRecords: MedicalRecord = new MedicalRecord();
   prescription = {'id': null, 'medicalRecords': null, 'medications': []};
   fullMedicalReport: any;
   incident;
@@ -85,7 +85,14 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
   EditView = false;
   tempFullMedicalRecord;
 
-  constructor(private config: NgSelectConfig, public navParams: NavParams, private modalCtrl: ModalController,
+  @Input() operation:any;
+  @Input() for:any;
+  @Input() pageName:any;
+  @Input() forAdd:any;
+  @Input() selectedIncidentDate:any;
+  @Input() medicalRecord:any;
+
+  constructor(private config: NgSelectConfig, private modalCtrl: ModalController,
               private medicalService: MedicalCareService, private alrtCtrl: AlertController, private loadCtrl: LoadingViewService,
               private classServ: ClassesService, private studentServ: StudentsService, private transDate: TransFormDateService,
               private accountServ: AccountService, private checkboxFunctionService: CheckboxFunctionService,
@@ -97,16 +104,16 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
 
 
     this.todayDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
-    this.operation = navParams.get("operation");
+    this.operations = this.operation;
     this.templateLoading = true;
-    if (navParams.get("for")) {
-      this.pageName = "New " + navParams.get("for");
+    if (this.for) {
+      this.pageNames = "New " + this.for;
       this.addCheckup = false;
-      if(this.operation == "edit"){
+      if(this.operations == "edit"){
         this.EditView = true;
-        this.pageName = navParams.get("pageName");
+        this.pageNames = this.pageName;
       }
-      if (navParams.get("for") == "Incident") {
+      if (this.for == "Incident") {
         this.newIncident = true;
         this.incidentMinDate = new Date(2016, 0, 1);
         this.incidentMaxDate = new Date();
@@ -116,7 +123,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
         this.incidentAnswer[0] = {
           "incidentAnswersObjectsList": []
         };
-        if(this.operation == "new") {
+        if(this.operations == "new") {
           this.getIncidentTemplate();
         }
       } else {
@@ -128,13 +135,13 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
         this.checkupAnswer = {
           "checkupAnswersObjectsList": []
         };
-        if(this.operation == "new") {
+        if(this.operations == "new") {
           this.getCheckUpTemplate();
         }
       }
-    } else if(navParams.get("forAdd") &&navParams.get("operation") == 'new'){
-      let date = navParams.get("selectedIncidentDate");
-      this.pageName = "Add " + navParams.get("forAdd");
+    } else if(this.forAdd &&this.operation == 'new'){
+      let date = this.selectedIncidentDate;
+      this.pageNames = "Add " + this.forAdd;
       this.addCheckup = true;
       this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
@@ -155,13 +162,13 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
     }
 
 
-    if(this.operation == "edit"){
+    if(this.operations == "edit"){
       this.EditView = true;
-      this.tempFullMedicalRecord = navParams.get("medicalRecord");
+      this.tempFullMedicalRecord = this.medicalRecord;
       this.setSelectedClassFromEdit(this.tempFullMedicalRecord.medicalRecord.student.classes);
       this.setSelectedStudentFromEdit(this.tempFullMedicalRecord.medicalRecord.student);
-      this.medicalRecord=this.tempFullMedicalRecord.medicalRecord;
-      if (navParams.get("for") == "Incident") {
+      this.medicalRecords=this.tempFullMedicalRecord.medicalRecord;
+      if (this.for == "Incident") {
         this.newIncident = true;
         this.incidentTitle = this.tempFullMedicalRecord.medicalRecord.incident.title;
         if(this.tempFullMedicalRecord.medicalRecord.incident.followUpPhone) {
@@ -193,9 +200,9 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
       }
     }
 
-    if(navParams.get("forAdd") && navParams.get("operation") == 'edit') {
-      let date = navParams.get("selectedIncidentDate");
-      this.pageName = "Add " + navParams.get("forAdd");
+    if(this.forAdd && this.operation == 'edit') {
+      let date = this.selectedIncidentDate;
+      this.pageNames = "Add " + this.forAdd;
       this.addCheckup = true;
       this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
@@ -269,7 +276,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
       componentProps: {
         forAdd: "Checkup",
         Date: this.todayDate,
-        operation: this.operation,
+        operation: this.operations,
         selectedIncidentDate:dateArray
       }
     });
@@ -344,19 +351,19 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
         this.incident.incidentTemplate = this.incidentTemplate.id;
         this.incident.title = this.incidentTitle;
         this.bkgInc.addIncident(this.checkup,this.checkupAnswer,this.incident,this.incidentSelectedDate,this.selectedIncidentTime,
-            this.operation,this.checkupTemplate,this.incidentTemplate,this.prescription,this.medicalRecord,this.selectedStudent,
+            this.operations,this.checkupTemplate,this.incidentTemplate,this.prescription,this.medicalRecords,this.selectedStudent,
             this.modalCtrl,this.incidentQuestions,this.incidentAnswer,this.checkupQuestions);
       } else {
         this.checkup.title = this.checkupTitle;
         this.checkup.checkupDate = this.checkupSelectedDate + " " + this.selectedCheckupTime.time;
         this.checkup.checkupTemplate = this.checkupTemplate.id;
         this.bkgInc.addCheckup(this.checkup,this.checkupAnswer,this.incident,this.incidentSelectedDate,this.selectedIncidentTime,
-            this.operation,this.checkupTemplate,this.incidentTemplate,this.prescription,this.medicalRecord,this.selectedStudent,
+            this.operations,this.checkupTemplate,this.incidentTemplate,this.prescription,this.medicalRecords,this.selectedStudent,
             this.modalCtrl,this.incidentQuestions,this.incidentAnswer,this.checkupQuestions);
-        // this.medicalRecord.checkup = this.checkup;
+        // this.medicalRecords.checkup = this.checkup;
       }
-      // this.medicalRecord.student = {'id': this.selectedStudent.id};
-      // this.fullMedicalReport.medicalRecord = this.medicalRecord;
+      // this.medicalRecords.student = {'id': this.selectedStudent.id};
+      // this.fullMedicalReport.medicalRecord = this.medicalRecords;
       // this.fullMedicalReport.incidentAnswers = ;
       // this.fullMedicalReport.checkupAnswers = ;
       // this.viewCtrl.dismiss();
@@ -508,7 +515,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
           for (let i = 0; i < this.incidentQuestions[0].length; i++) {
             this.mappingDefaultAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i]);
 
-            if (this.operation == 'edit' || this.operation == 'view') {
+            if (this.operations == 'edit' || this.operations == 'view') {
               this.mappingIncidentAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i].id, this.incident);
               this.incidentAnswer[0].incidentAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.incidentQuestions[0][i], this.incident.answers[i].answer);
             }
@@ -600,7 +607,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
             for (let i = 0; i < this.checkupQuestions.length; i++) {
               this.mappingDefaultAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i]);
 
-              if (this.operation == 'edit' || this.operation == 'view') {
+              if (this.operations == 'edit' || this.operations == 'view') {
                 this.mappingCheckupAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i].id, this.checkup);
                 this.checkupAnswer.checkupAnswersObjectsList[i].answer =
                     this.getViewQuestionAnswer(this.checkupQuestions[i], this.checkup.answers[i].answer);
@@ -1376,7 +1383,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
     for (let i = 0; i < this.incidentQuestions[0].length; i++) {
       this.mappingDefaultAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i]);
 
-      if (this.operation == 'edit' || this.operation == 'view') {
+      if (this.operations == 'edit' || this.operations == 'view') {
         this.mappingIncidentAnswers(this.incidentAnswer[0].incidentAnswersObjectsList[i], this.incidentQuestions[0][i].id, this.incident);
         this.incidentAnswer[0].incidentAnswersObjectsList[i].answer = this.getViewQuestionAnswer(this.incidentQuestions[0][i], this.incident.answers[i].answer);
       }
@@ -1450,7 +1457,7 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
       for (let i = 0; i < this.checkupQuestions.length; i++) {
         this.mappingDefaultAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i]);
 
-        if (this.operation == 'edit' || this.operation == 'view') {
+        if (this.operations == 'edit' || this.operations == 'view') {
           this.mappingCheckupAnswers(this.checkupAnswer.checkupAnswersObjectsList[i], this.checkupQuestions[i].id, this.checkup);
           this.checkupAnswer.checkupAnswersObjectsList[i].answer =
               this.getViewQuestionAnswer(this.checkupQuestions[i], this.checkup.answers[i].answer);

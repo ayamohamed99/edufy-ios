@@ -7,20 +7,13 @@ import { IonicModule } from '@ionic/angular';
 
 import { PopoverNotificationCardPage } from './popover-notification-card.page';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: PopoverNotificationCardPage
-  }
-];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
   ],
-  declarations: [PopoverNotificationCardPage]
+  declarations: [PopoverNotificationCardPage],
+  entryComponents: [PopoverNotificationCardPage]
 })
 export class PopoverNotificationCardPageModule {}

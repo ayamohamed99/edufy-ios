@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {ModalController, NavParams} from '@ionic/angular';
 
@@ -9,7 +9,7 @@ import {ModalController, NavParams} from '@ionic/angular';
 })
 export class MedicalReportViewPage implements OnInit {
 
-  viewName;
+  viewNames;
   fullMedicalReport;
   incidentfound = false;
   reportTitle;
@@ -33,15 +33,18 @@ export class MedicalReportViewPage implements OnInit {
   checkupQuestionsEditParamTemps:any[]=[];
   loopData;
 
-  constructor(private config: NgSelectConfig,public navParams: NavParams, private modalCtrl: ModalController) {
+  @Input() viewName:any;
+  @Input() medicalReport:any;
+
+  constructor(private config: NgSelectConfig, private modalCtrl: ModalController) {
     this.config.notFoundText = 'No match found';
 
-    this.viewName ="View " + navParams.get('viewName');
-    this.fullMedicalReport = navParams.get('medicalReport');
-    if(navParams.get('viewName') == "Incident"){
+    this.viewNames ="View " + this.viewName;
+    this.fullMedicalReport = this.medicalReport;
+    if(this.viewName == "Incident"){
       this.incidentfound = true;
     }
-    this.reportTitle = navParams.get('viewName')+" Title";
+    this.reportTitle = this.viewName+" Title";
 
     this.incidentAnswer[0] = {
       "incidentAnswersObjectsList": []
@@ -55,7 +58,7 @@ export class MedicalReportViewPage implements OnInit {
 
 
 
-    if (navParams.get('viewName') == "Incident") {
+    if (this.viewName == "Incident") {
       this.incident = this.fullMedicalReport.medicalRecord.incident;
       this.incident.answers = this.fullMedicalReport.incidentAnswers;
       this.setIncidentTempletFromEdit(this.fullMedicalReport.incidentTemplate);

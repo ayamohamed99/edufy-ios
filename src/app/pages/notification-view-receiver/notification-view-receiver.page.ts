@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FileOpener} from '@ionic-native/file-opener/ngx';
-import {ModalController, NavParams, Platform} from '@ionic/angular';
+import {ModalController, Platform} from '@ionic/angular';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 import {NotificationService} from '../../services/Notification/notification.service';
 import {AccountService} from '../../services/Account/account.service';
@@ -8,6 +8,8 @@ import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import { File } from '@ionic-native/file/ngx';
 import { Chart } from 'chart.js';
 import * as jsPDF from 'jspdf';
+// @ts-ignore
+import Any = jasmine.Any;
 
 @Component({
   selector: 'app-notification-view-receiver',
@@ -21,7 +23,7 @@ export class NotificationViewReceiverPage implements OnInit {
 
   norecievers = "";
   receivers;
-  notification;
+  notifications;
   receiverListStudents = [];
   originalReceiverListStudents = [];
   branchesNumber = 0;
@@ -31,12 +33,12 @@ export class NotificationViewReceiverPage implements OnInit {
   UnseenNumOfReceivers;
   BASE64_MARKER = ';base64,';
 
-
-  constructor(public navParams:NavParams,public modalCtrl:ModalController,
+  @Input() notification: any;
+  constructor(public modalCtrl:ModalController,
               private accountServ:AccountService,private notificationServ:NotificationService,public load:LoadingViewService,
               public toastCtrl:ToastViewService,private platform:Platform,private file:File,private fileOpener: FileOpener) {
-    this.notification = this.navParams.get('notification');
-    this.receivers = this.navParams.get('notification').receiversList;
+    this.notifications = this.notification;
+    this.receivers = this.notification.receiversList;
     this.branchesNumber = this.accountServ.accountBranchesList.length;
     this.getReceivers();
 
@@ -85,7 +87,7 @@ export class NotificationViewReceiverPage implements OnInit {
   tempRList =[];
   getReceivers(){
     this.load.startNormalLoading('');
-    this.notificationServ.getRecieverList(this.notification.notificationId).subscribe(
+    this.notificationServ.getRecieverList(this.notifications.notificationId).subscribe(
         // @ts-ignore
         response =>{
           let Data = response;
@@ -179,7 +181,7 @@ export class NotificationViewReceiverPage implements OnInit {
     let doc = new jsPDF("portrait", "pt", "a4");
     doc.rect(20, 20, a4paperWidth - 40, a4paperHeight - 40, 'S');
     doc.setFontSize(16);
-    let title = this.notification.title;
+    let title = this.notifications.title;
     let textWidth = this.getTextWidth(doc, title);
     let textOffset = (a4paperWidth - textWidth) / 2;
     doc.text(textOffset, y, title);
