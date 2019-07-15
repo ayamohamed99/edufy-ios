@@ -1,21 +1,21 @@
 /deep/ app-popover-notification-card{
 
-ion-popover {
+  /deep/ ion-popover {
   width: 110px;
   height: fit-content;
 }
 
-.popover-content{
+  /deep/ .popover-content{
   width: 110px;
   height: fit-content;
 }
 
-.popover-md .popover-content{
+  /deep/ .popover-md .popover-content{
   width: 110px;
   height: fit-content;
 }
 
-ion-list{
+  /deep/ ion-list{
   width: 150px;
   //height: 120px;
   height: fit-content;

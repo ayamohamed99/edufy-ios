@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Platform} from '@ionic/angular';
+import {AlertController, LoadingController, Platform} from '@ionic/angular';
 import {AccountService} from "../../services/Account/account.service";
 import {Postattachment} from "../../models/postattachment";
 import {Pendingnotification} from "../../models/pendingnotification";
@@ -8,6 +8,10 @@ import {Network} from "@ionic-native/network/ngx";
 import {NotificationService} from "../../services/Notification/notification.service";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {DomSanitizer} from "@angular/platform-browser";
+import {AttendanceTeachersService} from '../../services/AttendanceTeachers/attendance-teachers.service';
+import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
+import {DatePipe} from '@angular/common';
+import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
 
 declare var wifiinformation: any;
 
@@ -15,6 +19,7 @@ declare var wifiinformation: any;
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
+    providers:[DatePipe],
 })
 export class ProfilePage implements OnInit {
 
@@ -29,49 +34,23 @@ export class ProfilePage implements OnInit {
   arrayToPostAttachment:any[]=[];
   wifiUploadKey = 'WIFI_UPLOAD';
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
-
+  localStorageAttendanceShift:string = 'LOCAL_STORAGE_USER_SHIFT';
+  WIFI_CODE = 1;
+  QRCODE_CODE = 2;
 
   uploadedImage: File;
   imagePreview:any[]=[];
 
-  attendanceButton = 'Check Attendance';
+  attendanceButton = '';
+  wifi:any;
+  attendData:[any];
+  userShiftData;
+  connectedToSameWiFi = false;
 
 
-
-  // async onImageChange(event) {
-  //   let images = event.target.files;
-  //
-  //   for(let image of images) {
-  //     await this.optimizeImages(image);
-  //   }
-  // }
-  //
-  // async optimizeImages(image){
-  //   await this.ng2ImgMax.resizeImage(image, 1024, 1024).subscribe(
-  //     async result => {
-  //       this.uploadedImage = new File([result], result.name);
-  //       console.log(result.name);
-  //       await this.getImagePreview(this.uploadedImage);
-  //     },
-  //     error => {
-  //       console.log('😢 Oh no!', error);
-  //     }
-  //   );
-  // }
-  //
-  // async getImagePreview(file: File) {
-  //   const reader: FileReader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = async () => {
-  //      this.imagePreview.push(reader.result);
-  //   };
-  // }
-
-
-
-
-  constructor(private platform:Platform,private accountServ:AccountService
-      ,private storage:Storage, private network:Network, private notiServ:NotificationService) {
+  constructor(private platform:Platform,private accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
+      ,private storage:Storage, private network:Network, private notiServ:NotificationService, private attend:AttendanceTeachersService, public transDate:TransFormDateService,
+    public datepipe: DatePipe) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -93,6 +72,25 @@ export class ProfilePage implements OnInit {
       this.userAddress = "No Address";
     }
 
+    network.onchange().subscribe(
+        value => {
+            let val = value;
+
+        }
+    );
+      if(network.type == 'wifi'){
+          wifiinformation.getSampleInfo(wifi => {
+              // alert(
+              //     'SSID: ' + wifi.ssid +
+              //     '\nMAC: ' + wifi.mac +
+              //     '\nIP: ' + wifi.ip +
+              //     '\nGateway: ' + wifi.gateway
+              // );
+
+              this.wifi = wifi;
+
+          }, (err) => console.error(err));
+      }
     if (platform.is('desktop')) {
 
       notiServ.putHeader(localStorage.getItem(this.localStorageToken));
@@ -104,10 +102,147 @@ export class ProfilePage implements OnInit {
             this.getNotificationINStorage();
           });
     }
+
+      if (platform.is('desktop')) {
+          attend.putHeader(localStorage.getItem(this.localStorageToken));
+          this.getAttendData();
+      } else {
+          storage.get(this.localStorageToken).then(
+              val => {
+                  attend.putHeader(val);
+                  this.getAttendData();
+              });
+      }
+
+
+
   }
 
   ngOnInit() {
   }
+
+
+  getAttendData(){
+      this.load.startLoading('',false,'loadingWithoutBackground');
+      this.attend.getBranchAttendMeathodsData(this.accountServ.userBranchId,1).subscribe(
+          next => {
+              this.load.stopLoading();
+              let data = next;
+              // @ts-ignore
+              this.attendData = data;
+
+              this.attendData.forEach(val => {
+                  let data = JSON.parse(val.methodData);
+                  if(val.methods.id == this.WIFI_CODE && (data.mac == this.wifi.mac)){
+                      this.connectedToSameWiFi = true;
+                  }
+              });
+
+              if(this.attendData.length > 0){
+                  this.attendanceButton = "Check In";
+              }else if(this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint){
+                  this.attendanceButton = "Add this wifi";
+              }
+          },err => {
+              this.load.stopLoading();
+          }
+      )
+  }
+
+  checkInOut(){
+      if(this.accountServ.getUserRole().controlWifiPoint && this.attendanceButton == "Add this wifi") {
+          this.getWifiIPAddress();
+      }else if((this.accountServ.getUserRole().checkInAttendance || this.accountServ.getUserRole().checkOutAttendance) && this.attendanceButton != "Add this wifi"){
+          this.attendData.forEach(val => {
+              let data = JSON.parse(val.methodData);
+              if(val.methods.id == this.WIFI_CODE && (data.mac == this.wifi.mac)){
+                  this.connectedToSameWiFi = true;
+              }
+          });
+          if(this.network.type != 'wifi'){
+              this.presentAlert('Alert','You need to connect to wifi');
+          }else if(!this.connectedToSameWiFi){
+              this.presentAlert('Alert','You need to connect to one of saved wifi');
+          } else {
+              let date = this.transDate.transformTheDate(new Date(), "yyyy-MM-dd HH:mm");
+              this.load.startLoading('', false, 'loadingWithoutBackground');
+              this.attend.checkInAttendance(date, this.accountServ.userId).subscribe(
+                  value => {
+                      let val = value;
+                      this.load.stopLoading();
+                      this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
+                  }, error1 => {
+                      this.load.stopLoading().then(value => {
+                          this.presentAlert('Alert', error1.error);
+                      });
+                  }
+              );
+          }
+      }
+  }
+
+  getWifiIPAddress() {
+      wifiinformation.getSampleInfo(wifi => {
+          // alert(
+          //     'SSID: ' + wifi.ssid +
+          //     '\nMAC: ' + wifi.mac +
+          //     '\nIP: ' + wifi.ip +
+          //     '\nGateway: ' + wifi.gateway
+          // );
+
+          this.wifi = wifi;
+
+          this.attend.addMethodData(this.accountServ.userBranchId, 1,JSON.stringify(wifi)).subscribe(
+              value => {
+                  alert(wifi.ssid+' saved as login wifi');
+                  this.attendanceButton = "Check In";
+              },error1 => {
+                  alert('Couldn\'t save '+wifi.ssid+'as login WiFi');
+              }
+          )
+
+          }, (err) => console.error(err));
+  }
+
+
+    async presentAlert(head,msg) {
+        const alert = await this.alertController.create({
+            header: head,
+            message: msg,
+            buttons: ['OK']
+        });
+
+        await alert.present();
+    }
+
+    // async getActiveDevices() {
+    //     // get all active devices
+    //     wifiinformation.getActiveDevices(success => {
+    //         alert('Success: ' + JSON.stringify(success));
+    //
+    //     }, (err) => {
+    //         console.error(err);
+    //     });
+    // }
+    //
+    // getDHCPInfo() {
+    //     wifiinformation.getDHCPInfo(success => {
+    //         alert('Success: ' + JSON.stringify(success));
+    //
+    //     }, (err) => console.error(err));
+    // }
+    //
+    // getSampleInfo() {
+    //     wifiinformation.getSampleInfo(wifi => {
+    //         alert(
+    //             'SSID: ' + wifi.ssid +
+    //             '\nMAC: ' + wifi.mac +
+    //             '\nIP: ' + wifi.ip +
+    //             '\nGateway: ' + wifi.gateway
+    //         );
+    //
+    //     }, (err) => console.error(err));
+    // }
 
   onCore(){
     if(this.platform.is('desktop')){
@@ -299,51 +434,6 @@ export class ProfilePage implements OnInit {
   //     clearInterval(intervaldata);
   //   },50);
   // }
-
-    checkInOut(){
-        this.getWifiIPAddress()
-    }
-
-    getWifiIPAddress() {
-        wifiinformation.getSampleInfo(wifi => {
-            alert(
-                'SSID: ' + wifi.ssid +
-                '\nMAC: ' + wifi.mac +
-                '\nIP: ' + wifi.ip +
-                '\nGateway: ' + wifi.gateway
-            );
-
-        }, (err) => console.error(err));
-    }
-
-    async getActiveDevices() {
-        // get all active devices
-        wifiinformation.getActiveDevices(success => {
-            alert('Success: ' + JSON.stringify(success));
-
-        }, (err) => {
-            console.error(err);
-        });
-    }
-
-    getDHCPInfo() {
-        wifiinformation.getDHCPInfo(success => {
-            alert('Success: ' + JSON.stringify(success));
-
-        }, (err) => console.error(err));
-    }
-
-    getSampleInfo() {
-        wifiinformation.getSampleInfo(wifi => {
-            alert(
-                'SSID: ' + wifi.ssid +
-                '\nMAC: ' + wifi.mac +
-                '\nIP: ' + wifi.ip +
-                '\nGateway: ' + wifi.gateway
-            );
-
-        }, (err) => console.error(err));
-    }
 
 
 }

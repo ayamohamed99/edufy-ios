@@ -103,9 +103,11 @@
 
         <div style="background: #E9E1E1;height: 1.0px;width: 100%;margin-bottom: 20px;"></div>
 
-        <ion-button expand="full" (click)="checkInOut()">
+        <ion-button expand="full" (click)="checkInOut()" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">
           {{attendanceButton}}
         </ion-button>
+
+          <label *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">Connected To: {{wifi.ssid}}</label>
 
       </div>
 

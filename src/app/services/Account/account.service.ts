@@ -38,6 +38,8 @@ export class AccountService {
   private _reportId: number;
   private _userId: number;
 
+  private _user:any;
+
   menuFeatures: BehaviorSubject<object> = new BehaviorSubject(null);
 
   constructor(private http: HttpClient,private httpN:HTTP, private platform:Platform) {
@@ -96,6 +98,7 @@ export class AccountService {
     for (const branch of this.value.branchesList) {
       this._accountBranchesListIds.push(branch.id);
     }
+    this._user = this.value;
 
     this.menuFeatures.next(this.value.accountFeatures);
   }
@@ -232,4 +235,12 @@ export class AccountService {
     return this._userAccount;
   }
 
+
+  get user(): any {
+    return this._user;
+  }
+
+  set user(value: any) {
+    this._user = value;
+  }
 }

@@ -31,7 +31,7 @@ export class FCMService {
     if (this.platform.is('ios')) {
       await this.fcm.requestPermission().then(
           tokens => {
-            this.fcm.getToken().then(token => {
+            this.fcm.getToken('apns-string').then(token => {
               this.Token = token;
               this.sendTokenToServer();
             });
