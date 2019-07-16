@@ -18,6 +18,8 @@ import {MedicalReportViewPage} from '../medical-report-view/medical-report-view.
 import {MedicalCareMedicationViewPage} from '../medical-care-medication-view/medical-care-medication-view.page';
 import {MedicalCareNewMedicalReportPage} from '../medical-care-new-medical-report/medical-care-new-medical-report.page';
 import {MedicalCareNewMedicalReportMedicinePage} from '../medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.page';
+import {PassDataService} from '../../services/pass-data.service';
+import {FilterViewPage} from '../filter-view/filter-view.page';
 @Component({
   selector: 'app-medical-care',
   templateUrl: './medical-care.page.html',
@@ -115,7 +117,7 @@ export class MedicalCarePage implements OnInit {
   loading;
   infScrollEv;
 
-  constructor(public popoverCtrl:PopoverController,public platform:Platform,
+  constructor(public popoverCtrl:PopoverController,public platform:Platform,public passData:PassDataService,
               public medicalService:MedicalCareService, private storage:Storage,public transformDate:TransFormDateService,private toastCtrl:ToastViewService,
               private modalCtrl:ModalController,private classServ:ClassesService,private studentServ:StudentsService, private  alrtCtrl:AlertController,
               private  loadCtrl:LoadingViewService,public accountServ:AccountService,private templetService:TemplateFunctionsService,private excal:ExcelService)
@@ -402,11 +404,16 @@ export class MedicalCarePage implements OnInit {
 
 
   async showMedicationOption(ev:any,medRecord,view,index,editButton,deleteButton){
+
+    let data = {Edit:editButton, Delete:deleteButton};
+
+    this.passData.dataToPass = data;
+
     const popover = await this.popoverCtrl.create({
       component: MedicalCareCardOptionPage,
       event: ev,
       translucent: true,
-      componentProps:{Edit:editButton, Delete:deleteButton}
+      componentProps:data
     });
 
     popover.onDidDismiss().then(data => {
@@ -786,14 +793,24 @@ export class MedicalCarePage implements OnInit {
     let modal;
 
     if(index == 0){
+
+      let data = {for:'Incident', operation:'new'};
+
+      this.passData.dataToPass = data;
+
       modal = await this.modalCtrl.create({
         component: MedicalCareNewMedicalReportPage,
-        componentProps: {for:'Incident', operation:'new'}
+        componentProps: data
       });
     }else{
+
+      let data = {for:'Checkup', operation:'new'};
+
+      this.passData.dataToPass = data;
+
       modal = await this.modalCtrl.create({
         component: MedicalCareNewMedicalReportPage,
-        componentProps: {for:'Checkup', operation:'new'}
+        componentProps: data
       });
     }
     modal.onDidDismiss();
@@ -928,14 +945,20 @@ export class MedicalCarePage implements OnInit {
   }
 
   async openExportIncidentsPage(){
-    let modal = await this.modalCtrl.create({
-      component: 'FilterViewPage',
-      componentProps: {
+
+    let data = {
       theFilter: JSON.stringify(this.search),
       pageName: 'Export Incidents',
       doneButton: 'Export',
       students:this.allStudents,
-      classes:this.allclasses }
+      classes:this.allclasses
+    };
+
+    this.passData.dataToPass = data;
+
+    let modal = await this.modalCtrl.create({
+      component: FilterViewPage,
+      componentProps: data
     });
 
     modal.onDidDismiss().then(
@@ -1049,11 +1072,16 @@ export class MedicalCarePage implements OnInit {
 
   async editOrDeleteMedication(data,medRecord,index,view){
     if(data == "edit"){
+
+        let data = { operation:"edit",
+            medicalRecord: medRecord,
+            pageName:"Edit Medication" };
+
+        this.passData.dataToPass = data;
+
       const modal = await this.modalCtrl.create({
         component: MedicalCareNewMedicalReportMedicinePage,
-        componentProps: { operation:"edit",
-          medicalRecord: medRecord,
-          pageName:"Edit Medication" }
+        componentProps: data
       });
 
       modal.onDidDismiss().then(
@@ -1103,12 +1131,17 @@ export class MedicalCarePage implements OnInit {
 
   async editOrDeleteIncident(data,medRecord,index,view){
     if(data == "edit"){
+
+        let data = { for:'Incident',
+            operation:"edit",
+            medicalRecord:medRecord,
+            pageName:"Edit Incident"};
+
+        this.passData.dataToPass = data;
+
       const modal = await this.modalCtrl.create({
           component: MedicalCareNewMedicalReportPage,
-          componentProps: { for:'Incident',
-        operation:"edit",
-        medicalRecord:medRecord,
-        pageName:"Edit Incident"}
+          componentProps: data
     });
 
       modal.onDidDismiss().then(
@@ -1184,12 +1217,17 @@ export class MedicalCarePage implements OnInit {
 
   async editOrDeleteCheckup(data,medRecord,index,view){
     if(data == "edit"){
+
+        let data = { for:'Checkup',
+            operation:"edit",
+            medicalRecord:medRecord,
+            pageName:"Edit Checkup" };
+
+        this.passData.dataToPass = data;
+
       const modal = await this.modalCtrl.create({
           component: MedicalCareNewMedicalReportPage,
-          componentProps: { for:'Checkup',
-        operation:"edit",
-        medicalRecord:medRecord,
-        pageName:"Edit Checkup" }
+          componentProps: data
     });
 
       modal.onDidDismiss().then(
@@ -1459,9 +1497,13 @@ export class MedicalCarePage implements OnInit {
       cssClassName = 'contact-popovers-ios';
     }
 
+    let data = { medication: medication };
+
+    this.passData.dataToPass = data;
+
     const pop = await this.modalCtrl.create({
         component: MedicalCareMedicationViewPage,
-        componentProps: { medication: medication },
+        componentProps: data,
         cssClass: cssClassName
     });
 
@@ -1480,9 +1522,13 @@ export class MedicalCarePage implements OnInit {
       cssClassName = 'contact-popovers-ios';
     }
 
+    let data = { viewName: view, medicalReport:report};
+
+    this.passData.dataToPass = data;
+
     const model = await this.modalCtrl.create({
       component: MedicalReportViewPage,
-      componentProps: { viewName: view, medicalReport:report},
+      componentProps: data,
       cssClass: cssClassName
     });
 

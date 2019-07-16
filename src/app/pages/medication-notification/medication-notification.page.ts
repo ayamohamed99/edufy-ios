@@ -3,6 +3,7 @@ import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import {MedicalCareService} from '../../services/MedicalCare/medical-care.service';
 import {ModalController, NavParams, Platform} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-medication-notification',
@@ -22,28 +23,29 @@ export class MedicationNotificationPage implements OnInit {
   medicationNextTime;
   shceduleId;
 
-  constructor( private medicalService:MedicalCareService
+  constructor( private medicalService:MedicalCareService, public passData:PassDataService
       ,private toastCtrl:ToastViewService,private  modalCtrl:ModalController,private platform:Platform,private storage:Storage)
   {
-    // this.medicationName = navParams.get("medicationName");
-    // this.dosageNumber = navParams.get("dosageNumber");
-    // this.dosageType = navParams.get("dosageType");
-    // this.student = navParams.get("student");
-    // this.studentName = this.student.name;
-    // this.className = this.student.classes.grade.name+' - '+this.student.classes.name;
-    // this.medicationTime = navParams.get("medicationTime");
-    // this.medicationNextTime = navParams.get("medicationNextTime");
-    // this.shceduleId = navParams.get("shceduleId");
 
-    this.medicationName = "medicationName";
-    this.dosageNumber = "dosageNumber";
-    this.dosageType = "dosageType";
-    this.student = "student";
-    this.studentName = "student name";
-    this.className = "student classes";
-    this.medicationTime = "medicationTime";
-    this.medicationNextTime = "medicationNextTime";
-    this.shceduleId = "shceduleId";
+    this.medicationName = passData.dataToPass.medicationName;
+    this.dosageNumber = passData.dataToPass.dosageNumber;
+    this.dosageType = passData.dataToPass.dosageType;
+    this.student = passData.dataToPass.student;
+    this.studentName = this.student.name;
+    this.className = this.student.classes.grade.name+' - '+this.student.classes.name;
+    this.medicationTime = passData.dataToPass.medicationTime;
+    this.medicationNextTime = passData.dataToPass.medicationNextTime;
+    this.shceduleId = passData.dataToPass.shceduleId;
+
+    // this.medicationName = "medicationName";
+    // this.dosageNumber = "dosageNumber";
+    // this.dosageType = "dosageType";
+    // this.student = "student";
+    // this.studentName = "student name";
+    // this.className = "student classes";
+    // this.medicationTime = "medicationTime";
+    // this.medicationNextTime = "medicationNextTime";
+    // this.shceduleId = "shceduleId";
 
 
     if (platform.is('desktop')) {

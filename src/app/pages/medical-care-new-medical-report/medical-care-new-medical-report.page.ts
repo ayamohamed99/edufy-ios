@@ -19,6 +19,7 @@ import {Postattachment} from '../../models/postattachment';
 import {__await} from 'tslib';
 import {MedicalCareMedicationViewPage} from '../medical-care-medication-view/medical-care-medication-view.page';
 import {MedicalCareNewMedicalReportMedicinePage} from '../medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.page';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-medical-care-new-medical-report',
@@ -85,14 +86,14 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
   EditView = false;
   tempFullMedicalRecord;
 
-  @Input() operation:any;
-  @Input() for:any;
-  @Input() pageName:any;
-  @Input() forAdd:any;
-  @Input() selectedIncidentDate:any;
-  @Input() medicalRecord:any;
+  // @Input() operation:any;
+  // @Input() for:any;
+  // @Input() pageName:any;
+  // @Input() forAdd:any;
+  // @Input() selectedIncidentDate:any;
+  // @Input() medicalRecord:any;
 
-  constructor(private config: NgSelectConfig, private modalCtrl: ModalController,
+  constructor(private config: NgSelectConfig, private modalCtrl: ModalController,public passData:PassDataService,
               private medicalService: MedicalCareService, private alrtCtrl: AlertController, private loadCtrl: LoadingViewService,
               private classServ: ClassesService, private studentServ: StudentsService, private transDate: TransFormDateService,
               private accountServ: AccountService, private checkboxFunctionService: CheckboxFunctionService,
@@ -104,16 +105,16 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
 
 
     this.todayDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy");
-    this.operations = this.operation;
+    this.operations = this.passData.dataToPass.operation;
     this.templateLoading = true;
-    if (this.for) {
-      this.pageNames = "New " + this.for;
+    if (this.passData.dataToPass.for) {
+      this.pageNames = "New " + this.passData.dataToPass.for;
       this.addCheckup = false;
       if(this.operations == "edit"){
         this.EditView = true;
-        this.pageNames = this.pageName;
+        this.pageNames = this.passData.dataToPass.pageName;
       }
-      if (this.for == "Incident") {
+      if (this.passData.dataToPass.for == "Incident") {
         this.newIncident = true;
         this.incidentMinDate = new Date(2016, 0, 1);
         this.incidentMaxDate = new Date();
@@ -139,9 +140,9 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
           this.getCheckUpTemplate();
         }
       }
-    } else if(this.forAdd &&this.operation == 'new'){
-      let date = this.selectedIncidentDate;
-      this.pageNames = "Add " + this.forAdd;
+    } else if(this.passData.dataToPass.forAdd && this.passData.dataToPass.operation == 'new'){
+      let date = this.passData.dataToPass.selectedIncidentDate;
+      this.pageNames = "Add " + this.passData.dataToPass.forAdd;
       this.addCheckup = true;
       this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
@@ -164,11 +165,11 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
 
     if(this.operations == "edit"){
       this.EditView = true;
-      this.tempFullMedicalRecord = this.medicalRecord;
+      this.tempFullMedicalRecord = this.passData.dataToPass.medicalRecord;
       this.setSelectedClassFromEdit(this.tempFullMedicalRecord.medicalRecord.student.classes);
       this.setSelectedStudentFromEdit(this.tempFullMedicalRecord.medicalRecord.student);
       this.medicalRecords=this.tempFullMedicalRecord.medicalRecord;
-      if (this.for == "Incident") {
+      if (this.passData.dataToPass.for == "Incident") {
         this.newIncident = true;
         this.incidentTitle = this.tempFullMedicalRecord.medicalRecord.incident.title;
         if(this.tempFullMedicalRecord.medicalRecord.incident.followUpPhone) {
@@ -200,9 +201,9 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
       }
     }
 
-    if(this.forAdd && this.operation == 'edit') {
-      let date = this.selectedIncidentDate;
-      this.pageNames = "Add " + this.forAdd;
+    if(this.passData.dataToPass.forAdd && this.passData.dataToPass.operation == 'edit') {
+      let date = this.passData.dataToPass.selectedIncidentDate;
+      this.pageNames = "Add " + this.passData.dataToPass.forAdd;
       this.addCheckup = true;
       this.checkupMinDate = new Date(parseInt(date[2]), parseInt(date[1])-1, parseInt(date[0]));
       this.checkupMaxDate = new Date();
@@ -265,20 +266,28 @@ export class MedicalCareNewMedicalReportPage implements OnInit {
     await fab.close();
     let modal;
     if (index == 0) {
+      let data = {Date: this.todayDate, operation: 'new'};
+
+      this.passData.dataToPass = data;
+
       modal = await this.modalCtrl.create({
         component: MedicalCareNewMedicalReportMedicinePage,
-      componentProps: {Date: this.todayDate, operation: 'new'}});
+      componentProps: data});
 
     } else {
 
-      modal = await this.modalCtrl.create({
-        component: MedicalCareNewMedicalReportPage,
-      componentProps: {
+      let data = {
         forAdd: "Checkup",
         Date: this.todayDate,
         operation: this.operations,
         selectedIncidentDate:dateArray
-      }
+      };
+
+      this.passData.dataToPass = data;
+
+      modal = await this.modalCtrl.create({
+        component: MedicalCareNewMedicalReportPage,
+      componentProps: data
     });
 
     }

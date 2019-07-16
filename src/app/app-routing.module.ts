@@ -5,6 +5,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
   { path: 'menu', loadChildren: './pages/menu/menu.module#MenuPageModule' },
+  // { path: 'filter-view', loadChildren: './pages/filter-view/filter-view.module#FilterViewPageModule' },
   // { path: 'attendance-rank', loadChildren: './pages/attendance-rank/attendance-rank.module#AttendanceRankPageModule' },
 
   // { path: 'attendance-tabs', loadChildren: './pages/attendance-tabs/attendance-tabs.module#AttendanceTabsPageModule' },

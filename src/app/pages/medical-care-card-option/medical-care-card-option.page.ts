@@ -4,6 +4,7 @@ import {Storage} from '@ionic/storage';
 import {AccountService} from '../../services/Account/account.service';
 import {NotificationService} from '../../services/Notification/notification.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-medical-care-card-option',
@@ -18,15 +19,15 @@ export class MedicalCareCardOptionPage implements OnInit {
   enableDelete = false;
 
   // Data passed in by componentProps
-  @Input() Edit: boolean;
-  @Input() Delete: boolean;
+  // @Input() Edit: boolean;
+  // @Input() Delete: boolean;
 
-  constructor(public popCtrl: PopoverController,
+  constructor(public popCtrl: PopoverController,public passData:PassDataService,
               public platform:Platform,public storage:Storage,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingViewService, public alrtCtrl:AlertController)
   {
-    this.enableEdit = this.Edit;
-    this.enableDelete = this.Delete;
+    this.enableEdit = this.passData.dataToPass.Edit;
+    this.enableDelete = this.passData.dataToPass.Delete;
     let plat=this.platform.is('desktop');
 
     if(plat){

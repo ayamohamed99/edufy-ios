@@ -22,6 +22,7 @@ import {MedicationNotificationPage} from './pages/medication-notification/medica
 import {ChatDialoguePage} from './pages/chat-dialogue/chat-dialogue.page';
 import {Student} from './models';
 import { Storage } from '@ionic/storage';
+import {PassDataService} from './services/pass-data.service';
 
 @Component({
   selector: 'app-root',
@@ -67,7 +68,8 @@ export class AppComponent {
       private chatServ: ChatService,
       private modalCtrl: ModalController,
       private alertCtrl: AlertController,
-      private navCtrl: NavController
+      private navCtrl: NavController,
+      public passData:PassDataService
   ) {
     this.initializeApp();
   }
@@ -430,9 +432,13 @@ export class AppComponent {
   }
 
   async presentChatDialogue(Stud, student) {
+    let data = {studentData: Stud};
+
+    this.passData.dataToPass = data;
+
     const modal = await this.modalCtrl.create({
       component: ChatDialoguePage,
-      componentProps: {studentData: Stud}
+      componentProps: data
     });
 
     modal.onDidDismiss().then(
@@ -576,15 +582,19 @@ export class AppComponent {
 
   async openMedicalCareNotification(data) {
 
+    let medData = { medicationName: data.medicationName,
+      dosageType: data.dosageType,
+      dosageNumber: data.dosageNumber,
+      shceduleId: parseInt(data.shceduleId),
+      medicationTime: data.medicationTime.slice(0, -3),
+      medicationNextTime: data.medicationNextTime.slice(0, -3),
+      student: JSON.parse(data.student) };
+
+    this.passData.dataToPass = medData
+
     const modal = await this.modalCtrl.create({
       component: MedicationNotificationPage,
-      componentProps: { medicationName: data.medicationName,
-        dosageType: data.dosageType,
-        dosageNumber: data.dosageNumber,
-        shceduleId: parseInt(data.shceduleId),
-        medicationTime: data.medicationTime.slice(0, -3),
-        medicationNextTime: data.medicationNextTime.slice(0, -3),
-        student: JSON.parse(data.student) }
+      componentProps: medData
     });
 
     modal.onDidDismiss();

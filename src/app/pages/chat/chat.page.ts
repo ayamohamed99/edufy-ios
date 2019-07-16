@@ -5,6 +5,7 @@ import {ChatService} from '../../services/Chat/chat.service';
 import {Student} from '../../models';
 import {Storage} from '@ionic/storage';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-chat',
@@ -21,7 +22,7 @@ export class ChatPage implements OnInit {
 
   constructor(public studentServ:StudentsService,
               public platform:Platform,private storage:Storage,public alrt:AlertController, public modalCtrl:ModalController,
-              public chatServ:ChatService) {
+              public chatServ:ChatService,public passData:PassDataService) {
 
     if (platform.is('desktop')) {
       studentServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
@@ -160,9 +161,14 @@ export class ChatPage implements OnInit {
   }
 
   async openDialog(student,index,From){
+
+    let data = {studentData:student};
+
+    this.passData.dataToPass = data;
+
     const modal = await this.modalCtrl.create({
       component: ChatDialoguePage,
-      componentProps: {studentData:student}
+      componentProps: data
     });
 
     modal.onDidDismiss().then(data=>{

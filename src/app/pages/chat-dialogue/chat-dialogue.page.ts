@@ -6,6 +6,7 @@ import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {ChatDialogue} from '../../models/chat-dialogue';
 import {Storage} from '@ionic/storage';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-chat-dialogue',
@@ -22,12 +23,12 @@ export class ChatDialoguePage implements OnInit {
   sendLoading=false;
   resendLoading=false;
 
-  @Input() studentData:any;
+  // @Input() studentData:any;
   constructor(public modalCtrl:ModalController,
-              public platform:Platform,public storage:Storage,public chatServ:ChatService,
+              public platform:Platform,public storage:Storage,public chatServ:ChatService,public passData:PassDataService,
               public accountServ:AccountService, public getDate:TransFormDateService, public tost:ToastViewService)
   {
-    this.student = this.studentData;
+    this.student = this.passData.dataToPass.studentData;
     if (platform.is('desktop')) {
       chatServ.putHeader(localStorage.getItem('LOCAL_STORAGE_TOKEN'));
       this.getChatHistory();

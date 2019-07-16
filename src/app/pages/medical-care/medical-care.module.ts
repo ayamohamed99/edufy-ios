@@ -11,6 +11,8 @@ import {MedicalReportViewPageModule} from '../medical-report-view/medical-report
 import {MedicalCareMedicationViewPageModule} from '../medical-care-medication-view/medical-care-medication-view.module';
 import {MedicalCareNewMedicalReportPageModule} from '../medical-care-new-medical-report/medical-care-new-medical-report.module';
 import {MedicalCareNewMedicalReportMedicinePageModule} from '../medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.module';
+import {FilterViewPage} from '../filter-view/filter-view.page';
+import {FilterViewPageModule} from '../filter-view/filter-view.module';
 
 const routes: Routes = [
   {
@@ -29,7 +31,8 @@ const routes: Routes = [
     MedicalReportViewPageModule,
     MedicalCareMedicationViewPageModule,
     MedicalCareNewMedicalReportPageModule,
-    MedicalCareNewMedicalReportMedicinePageModule
+    MedicalCareNewMedicalReportMedicinePageModule,
+    FilterViewPageModule
   ],
   declarations: [MedicalCarePage]
 })

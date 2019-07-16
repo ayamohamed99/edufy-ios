@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgSelectConfig} from '@ng-select/ng-select';
 import {ModalController, NavParams} from '@ionic/angular';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-medical-report-view',
@@ -33,18 +34,15 @@ export class MedicalReportViewPage implements OnInit {
   checkupQuestionsEditParamTemps:any[]=[];
   loopData;
 
-  @Input() viewName:any;
-  @Input() medicalReport:any;
-
-  constructor(private config: NgSelectConfig, private modalCtrl: ModalController) {
+  constructor(private config: NgSelectConfig, private modalCtrl: ModalController,public passData:PassDataService) {
     this.config.notFoundText = 'No match found';
 
-    this.viewNames ="View " + this.viewName;
-    this.fullMedicalReport = this.medicalReport;
-    if(this.viewName == "Incident"){
+    this.viewNames ="View " + this.passData.dataToPass.viewName;
+    this.fullMedicalReport = this.passData.dataToPass.medicalReport;
+    if(this.passData.dataToPass.viewName == "Incident"){
       this.incidentfound = true;
     }
-    this.reportTitle = this.viewName+" Title";
+    this.reportTitle = this.passData.dataToPass.viewName+" Title";
 
     this.incidentAnswer[0] = {
       "incidentAnswersObjectsList": []
@@ -58,7 +56,7 @@ export class MedicalReportViewPage implements OnInit {
 
 
 
-    if (this.viewName == "Incident") {
+    if (this.passData.dataToPass.viewName == "Incident") {
       this.incident = this.fullMedicalReport.medicalRecord.incident;
       this.incident.answers = this.fullMedicalReport.incidentAnswers;
       this.setIncidentTempletFromEdit(this.fullMedicalReport.incidentTemplate);

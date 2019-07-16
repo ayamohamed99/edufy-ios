@@ -8,6 +8,7 @@ import {LoadingViewService} from '../../services/LoadingView/loading-view.servic
 import {MedicalCareService} from '../../services/MedicalCare/medical-care.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {FormControl} from '@angular/forms';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-medical-care-new-medical-report-medicine',
@@ -50,14 +51,14 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
   /////////////////////EDIT VIEW
   tempMedicalRecord:MedicalRecord;
 
-  @Input() Date:any;
-  @Input() operation:any;
-  @Input() pageName:any;
-  @Input() medicalRecord:any;
+  // @Input() Date:any;
+  // @Input() operation:any;
+  // @Input() pageName:any;
+  // @Input() medicalRecord:any;
 
   constructor(private config: NgSelectConfig, private medicalService:MedicalCareService,private loadCtrl:LoadingViewService,
               private alrtCtrl:AlertController,private transDate:TransFormDateService,private modalCtrl:ModalController,private toastCtrl:ToastViewService,
-              private platform:Platform) {
+              private platform:Platform,public passData:PassDataService) {
     this.config.notFoundText = 'No match found';
 
     this.medication = new Medication();
@@ -75,14 +76,14 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.getInstructionsList();
 
     let todayDate;
-    if(this.Date) {
-      todayDate = this.Date;
+    if(this.passData.dataToPass.Date) {
+      todayDate = this.passData.dataToPass.Date;
     }
     this.fromMinDate = new Date();
     this.toMinDate = new Date();
     this.fromShowDate = new FormControl(new Date()).value;
     this.toShowDate = new FormControl(new Date()).value;
-    if(this.Date) {
+    if(this.passData.dataToPass.Date) {
       let getYear = parseInt(todayDate.split("-")[2]);
       this.fromMaxDate = new Date(getYear + 10, 11, 31);
       this.toMaxDate = new Date(getYear + 10, 11, 31);
@@ -90,11 +91,11 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
     this.fromSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
     this.toSelectedDate = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
 
-    if(this.operation == 'edit'){
-      this.pageNames = this.pageName;
+    if(this.passData.dataToPass.operation == 'edit'){
+      this.pageNames = this.passData.dataToPass.pageName;
       this.EditView = true;
       let nullEndDateState = this.transDate.transformTheDate(new Date(), "dd-MM-yyyy")+" "+ this.transDate.transformTheDate(new Date(),"HH:mm");
-      this.tempMedicalRecord = this.medicalRecord;
+      this.tempMedicalRecord = this.passData.dataToPass.medicalRecord;
       this.selectedMedicine = this.tempMedicalRecord.oneMedication.medicine;
       this.dosageNumber = this.tempMedicalRecord.oneMedication.dosageNumber;
       this.selectedDosageType = this.tempMedicalRecord.oneMedication.dosageType;
@@ -219,7 +220,7 @@ export class MedicalCareNewMedicalReportMedicinePage implements OnInit {
       this.selectedTimes[i].thursday = thursday;
     }
     this.medication.medicationSchedule = this.selectedTimes;
-    if(this.operation == 'edit'){
+    if(this.passData.dataToPass.operation == 'edit'){
       this.UpdateMedication(this.medication);
     }else {
       this.modalCtrl.dismiss({medication: this.medication});

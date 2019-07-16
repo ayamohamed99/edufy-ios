@@ -7,20 +7,13 @@ import { IonicModule } from '@ionic/angular';
 
 import { MedicationNotificationPage } from './medication-notification.page';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: MedicationNotificationPage
-  }
-];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
   ],
-  declarations: [MedicationNotificationPage]
+  declarations: [MedicationNotificationPage],
+  entryComponents: [MedicationNotificationPage]
 })
 export class MedicationNotificationPageModule {}
