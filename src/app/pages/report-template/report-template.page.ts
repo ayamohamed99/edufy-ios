@@ -12,6 +12,7 @@ import {ReportCommentService} from '../../services/ReportComment/report-comment.
 import {TemplateShape} from '../../models/template_Shape';
 import {Storage} from '@ionic/storage';
 import {combineLatest} from 'rxjs';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-report-template',
@@ -64,22 +65,22 @@ export class ReportTemplatePage implements OnInit {
   checkIfChangesAnswer = false;
   showBackDrop = false;
 
-  @Input() comment:any;
-  @Input() template:any;
-  @Input() class:any;
-  @Input() selected:any;
-  @Input() theClassIsSelected:any;
-  @Input() reportDate:any;
-  @Input() classIndex:any;
-  @Input() selectedDate:any;
-  @Input() reportAnswer:any;
-  @Input() reportAnswersNoOfItems:any;
-  @Input() reportQuestionsRecovery:any;
-  @Input() reportQuestionsEditParamTemps:any;
-  @Input() editQuestionAllowed:any;
-  @Input() reportConflict:any;
-  @Input() classId:any;
-  @Input() student:any;
+  comment:any;
+  template:any;
+  class:any;
+  selected:any;
+  theClassIsSelected:any;
+  reportDate:any;
+  classIndex:any;
+  selectedDate:any;
+  reportAnswer:any;
+  reportAnswersNoOfItems:any;
+  reportQuestionsRecovery:any;
+  reportQuestionsEditParamTemps:any;
+  editQuestionAllowed:any;
+  reportConflict:any;
+  classId:any;
+  student:any;
 
   ///////////////////// HERE ORGANIZE THE VIEW//////////////////////
   showNames(){
@@ -285,11 +286,28 @@ export class ReportTemplatePage implements OnInit {
   }
 
 /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
-  constructor(public accountServ:AccountService, public sanitizer:DomSanitizer,
+  constructor(public accountServ:AccountService, public sanitizer:DomSanitizer,private passData:PassDataService,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingViewService,
               private toastCtrl: ToastViewService, private modalCtrl:ModalController,public alrtCtrl: AlertController, private reportCommentProvider:ReportCommentService,
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDateService)
   {
+
+    this.comment = passData.dataToPass.student;
+    this.template = passData.dataToPass.student;
+    this.class = passData.dataToPass.student;
+    this.selected = passData.dataToPass.student;
+    this.theClassIsSelected = passData.dataToPass.student;
+    this.reportDate = passData.dataToPass.student;
+    this.classIndex = passData.dataToPass.student;
+    this.selectedDate = passData.dataToPass.student;
+    this.reportAnswer = passData.dataToPass.student;
+    this.reportAnswersNoOfItems = passData.dataToPass.student;
+    this.reportQuestionsRecovery = passData.dataToPass.student;
+    this.reportQuestionsEditParamTemps = passData.dataToPass.student;
+    this.editQuestionAllowed = passData.dataToPass.student;
+    this.reportConflict = passData.dataToPass.student;
+    this.classId = passData.dataToPass.student;
+    this.student = passData.dataToPass.student;
 
     this.shouldAutoExpandComments = !!this.comment;
     if (this.shouldAutoExpandComments) {

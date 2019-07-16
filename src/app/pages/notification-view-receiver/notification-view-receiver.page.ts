@@ -10,6 +10,7 @@ import { Chart } from 'chart.js';
 import * as jsPDF from 'jspdf';
 // @ts-ignore
 import Any = jasmine.Any;
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-notification-view-receiver',
@@ -33,15 +34,14 @@ export class NotificationViewReceiverPage implements OnInit {
   UnseenNumOfReceivers;
   BASE64_MARKER = ';base64,';
 
-  @Input() notification: any;
   constructor(public modalCtrl:ModalController,
               private accountServ:AccountService,private notificationServ:NotificationService,public load:LoadingViewService,
-              public toastCtrl:ToastViewService,private platform:Platform,private file:File,private fileOpener: FileOpener) {
-    this.notifications = this.notification;
-    this.receivers = this.notification.receiversList;
+              public toastCtrl:ToastViewService,private platform:Platform,private file:File,private fileOpener: FileOpener, private passData:PassDataService) {
+    this.notifications = passData.dataToPass.selectedNotification;
+    this.receivers = this.notifications.receiversList;
     this.branchesNumber = this.accountServ.accountBranchesList.length;
     this.getReceivers();
-
+    this.load.stopLoading();
   }
 
   ngOnInit() {

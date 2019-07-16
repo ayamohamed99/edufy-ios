@@ -41,15 +41,14 @@ export class ProfilePage implements OnInit {
   uploadedImage: File;
   imagePreview:any[]=[];
 
-  attendanceButton = '';
   wifi:any;
   attendData:[any];
   userShiftData;
   connectedToSameWiFi = false;
+  checkIn = true;
 
-
-  constructor(private platform:Platform,private accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
-      ,private storage:Storage, private network:Network, private notiServ:NotificationService, private attend:AttendanceTeachersService, public transDate:TransFormDateService,
+  constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
+      ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
     public datepipe: DatePipe) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
@@ -71,6 +70,16 @@ export class ProfilePage implements OnInit {
     if(!this.userAddress || this.userAddress == ""){
       this.userAddress = "No Address";
     }
+
+      this.storage.get(this.localStorageAttendanceShift).then(
+          value => {
+              this.userShiftData = JSON.parse(value);
+              if(this.userShiftData != null){
+                  this.checkIn = false;
+              }
+          },
+          (err) => {})
+          .catch((err) => {});
 
     network.onchange().subscribe(
         value => {
@@ -123,7 +132,7 @@ export class ProfilePage implements OnInit {
 
 
   getAttendData(){
-      this.load.startLoading('',false,'loadingWithoutBackground');
+      this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
       this.attend.getBranchAttendMeathodsData(this.accountServ.userBranchId,1).subscribe(
           next => {
               this.load.stopLoading();
@@ -138,21 +147,24 @@ export class ProfilePage implements OnInit {
                   }
               });
 
-              if(this.attendData.length > 0){
-                  this.attendanceButton = "Check In";
-              }else if(this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint){
-                  this.attendanceButton = "Add this wifi";
-              }
+              // if(this.attendData.length > 0 && this.userShiftData == null){
+              //     this.checkIn = true;
+              // }else if(this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint){
+              //     this.attendanceButton = "";
+              // }else if(this.attendData.length > 0 && this.userShiftData != null){
+              //     this.checkIn = false;
+              // }
           },err => {
               this.load.stopLoading();
           }
       )
+      });
   }
 
-  checkInOut(){
-      if(this.accountServ.getUserRole().controlWifiPoint && this.attendanceButton == "Add this wifi") {
+  checkInOut(from){
+      if(this.accountServ.getUserRole().controlWifiPoint && from == 'Add') {
           this.getWifiIPAddress();
-      }else if((this.accountServ.getUserRole().checkInAttendance || this.accountServ.getUserRole().checkOutAttendance) && this.attendanceButton != "Add this wifi"){
+      }else if((this.accountServ.getUserRole().checkInAttendance || this.accountServ.getUserRole().checkOutAttendance) && from != "Add"){
           this.attendData.forEach(val => {
               let data = JSON.parse(val.methodData);
               if(val.methods.id == this.WIFI_CODE && (data.mac == this.wifi.mac)){
@@ -166,20 +178,64 @@ export class ProfilePage implements OnInit {
           } else {
               let date = this.transDate.transformTheDate(new Date(), "yyyy-MM-dd HH:mm");
               this.load.startLoading('', false, 'loadingWithoutBackground');
-              this.attend.checkInAttendance(date, this.accountServ.userId).subscribe(
-                  value => {
-                      let val = value;
-                      this.load.stopLoading();
-                      this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
-                  }, error1 => {
-                      this.load.stopLoading().then(value => {
-                          this.presentAlert('Alert', error1.error);
-                      });
-                  }
-              );
+              if(from == 'In'){
+                  this.CallCheckIn(date);
+              }else{
+                  this.CallCheckOut(date);
+              }
           }
       }
   }
+
+  CallCheckIn(date){
+      this.attend.checkInAttendance(date, this.accountServ.userId).subscribe(
+          value => {
+              let val = value;
+              this.load.stopLoading();
+              this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
+          }, error1 => {
+              this.load.stopLoading().then(value => {
+                  this.presentAlert('Alert', error1.error);
+              });
+          }
+      );
+  }
+
+  CallCheckOut(date){
+      this.attend.checkOutAttendance(date, this.userShiftData).subscribe(
+          value => {
+              let val = value;
+              this.load.stopLoading();
+              this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
+          }, error1 => {
+              this.load.stopLoading().then(value => {
+                  this.presentAlert('Alert', error1.error);
+              });
+          }
+      );
+  }
+
+    checktheDateIn(){
+      let savedShiftDate = this.transDate.transformTheDate(new Date(this.userShiftData.checkInDate),"yyyy/MM/dd");
+        let nowDate = this.transDate.transformTheDate(new Date(),"yyyy/MM/dd");
+
+        if(savedShiftDate == nowDate){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    checktheDateOut(){
+        let savedShiftDate = this.transDate.transformTheDate(new Date(this.userShiftData.checkOutDate),"yyyy/MM/dd");
+        let nowDate = this.transDate.transformTheDate(new Date(),"yyyy/MM/dd");
+
+        if(savedShiftDate == nowDate){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
   getWifiIPAddress() {
       wifiinformation.getSampleInfo(wifi => {
@@ -195,7 +251,6 @@ export class ProfilePage implements OnInit {
           this.attend.addMethodData(this.accountServ.userBranchId, 1,JSON.stringify(wifi)).subscribe(
               value => {
                   alert(wifi.ssid+' saved as login wifi');
-                  this.attendanceButton = "Check In";
               },error1 => {
                   alert('Couldn\'t save '+wifi.ssid+'as login WiFi');
               }

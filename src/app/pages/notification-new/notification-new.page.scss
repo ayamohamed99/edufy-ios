@@ -137,6 +137,7 @@ rl-autocomplete-header {
 }
 .container img {
   height: 210px;
+  width: auto;
 }
 
 .container .buttonOnImg {
@@ -199,12 +200,14 @@ ion-slides {
 .imgUrl{
   height: 200px;
   //width: 100%;
+  width: auto;
   background: #eee0;
   margin-bottom: 35px;
 }
 
 .imgAttach{
   height: 200px;
+  width: auto;
   background: #eee0;
   margin-bottom: 35px;
 }

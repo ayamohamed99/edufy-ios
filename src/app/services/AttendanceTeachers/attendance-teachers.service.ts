@@ -63,8 +63,25 @@ export class AttendanceTeachersService {
 
 
   checkInAttendance(date,userId){
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/postAttendanceCheckIn.ent?checkInDate='+date, {'id':userId}, this.httpOptions);
+  }
 
-    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/attendanceCheckIn.ent?checkInDate='+date, {'id':userId}, this.httpOptions);
+  checkOutAttendance(date,userAttentOp){
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/postAttendanceCheckOut.ent?checkOutDate='+date, userAttentOp, this.httpOptions);
+  }
+
+
+  getAllUserAttendanceByDate(userId, fromDate, toDate){
+    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getAttendanceByAttribute.ent?fromDate='+fromDate;
+
+    if(toDate){
+      url += '&toDate=' + toDate;
+    }
+    if(userId){
+      url += '&userId=' + userId;
+    }
+
+    return this.http.get(url);
   }
 
 

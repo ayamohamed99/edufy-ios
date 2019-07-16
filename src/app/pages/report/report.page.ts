@@ -12,6 +12,7 @@ import {DatePicker} from '@ionic-native/date-picker/ngx';
 import {Class, Student} from '../../models';
 import {Storage} from '@ionic/storage';
 import {ReportTemplatePage} from '../report-template/report-template.page';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-report',
@@ -208,7 +209,7 @@ export class ReportPage implements OnInit {
 
 
   constructor(public navCtrl: NavController,private dailyReportServ:DailyReportService, public accountServ: AccountService,
-              public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,
+              public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,private passData:PassDataService,
               public loadCtrl: LoadingViewService, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
               private toastCtrl:ToastViewService, private modalCtrl:ModalController,private reportComment:ReportCommentService,public transformDate:TransFormDateService)
   {
@@ -706,9 +707,9 @@ export class ReportPage implements OnInit {
     }
 
     if(this.ReportQuestionsList) {
-      const modal = await this.modalCtrl.create({
-       component: ReportTemplatePage,
-       componentProps: {
+
+
+      let data = {
         selected: selectedStudents,
         template: this.ReportQuestionsList,
         reportDate: this.dateView,
@@ -723,7 +724,14 @@ export class ReportPage implements OnInit {
         selectedStudentIndex:selectStudentIndex,
         theClassIsSelected:this.isAll,
         reportConflict:this.questionsToBeReset
-      }});
+      };
+
+      this.passData.dataToPass = data;
+
+      const modal = await this.modalCtrl.create({
+       component: ReportTemplatePage,
+       componentProps: data
+      });
 
 
       modal.onDidDismiss().then(data => {

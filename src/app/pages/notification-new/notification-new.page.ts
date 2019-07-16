@@ -12,6 +12,7 @@ import {ImageCompressorService} from '../../services/ImageCompressor/image-compr
 import {BackgroundNotificationService} from '../../services/BackgroundNotification/background-notification.service';
 import {Postattachment} from '../../models/postattachment';
 import {Storage} from "@ionic/storage";
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-notification-new',
@@ -46,35 +47,37 @@ export class NotificationNewPage implements OnInit {
   pendingNotification:any[]=[];
   reciverListFound = 0;
 
-  @Input() title:any;
-  @Input() details:any;
-  @Input() studetsNameList:any;
-  @Input() studentsdetailsList:any;
-  @Input() recieverList:any;
-  @Input() tagList:any;
-  @Input() attachmentList:any;
-  @Input() classesList:any;
+  // @Input() title:any;
+  // @Input() details:any;
+  // @Input() studetsNameList:any;
+  // @Input() studentsdetailsList:any;
+  // @Input() recieverList:any;
+  // @Input() tagList:any;
+  // @Input() attachmentList:any;
+  // @Input() classesList:any;
 
   constructor(private config: NgSelectConfig,public modalCtrl: ModalController,public notiServ:NotificationService,
               public network:Network,private toastCtrl: ToastViewService, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingViewService,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private compress:ImageCompressorService,
-              public backNotify:BackgroundNotificationService) {
+              public backNotify:BackgroundNotificationService, private passData:PassDataService) {
+
     this.config.notFoundText = 'Custom not found';
 
+    this.loadingCtrl.stopLoading();
 
     this.backNotify.sendTo = [];this.preparedTags = [];
     this.backNotify.wifiUpload = false;
     this.placeHolder = "To :";
     this.showSupportFiles = false;
     this.backNotify.tagsArr = accServ.tagArry;
-    this.Title =this.title;
-    this.Details=this.details;
+    this.Title =this.passData.dataToPass.title;
+    this.Details=this.passData.dataToPass.details;
     this.backNotify.sendTo.splice(0);this.preparedTags.splice(0);
-    this.allStudentNames=this.studetsNameList;
-    this.allStudentsDetails=this.studentsdetailsList;
-    let reciverArray = this.recieverList;
-    this.backNotify.tags = this.tagList;
+    this.allStudentNames=this.passData.dataToPass.studetsNameList;
+    this.allStudentsDetails=this.passData.dataToPass.studentsdetailsList;
+    let reciverArray = this.passData.dataToPass.recieverList;
+    this.backNotify.tags = this.passData.dataToPass.tagList;
     if(reciverArray) {
       this.reciverListFound = reciverArray.length;
       for (let temp of reciverArray) {
@@ -85,7 +88,7 @@ export class NotificationNewPage implements OnInit {
         this.backNotify.sendTo.push(autoShownReciever);
       }
       if(this.accountServ.getUserRole().notificationAttachmentUpload) {
-        for (let temp of this.attachmentList) {
+        for (let temp of this.passData.dataToPass.attachmentList) {
           let attach = new Postattachment();
           attach.name = temp.name;
           attach.type = temp.type;
@@ -104,7 +107,7 @@ export class NotificationNewPage implements OnInit {
     autoShownAllClasses.dataList=this.chooseAllClasses;
 
     //+++++++++Classes+++++++++
-    this.allClasses=this.classesList;
+    this.allClasses=this.passData.dataToPass.classesList;
     for (let classes of this.allClasses){
       let autoShownClasses = new Autocomplete_shown_array();
       autoShownClasses.id = classes.id;

@@ -55,7 +55,7 @@
   }
   .contentScroll{
     //background: #f4f4f4;
-    min-height: 100% !important;
+    //min-height: 100% !important;
     width: 100%;
   }
   .slide-zoom {
@@ -91,12 +91,14 @@
   .imgUrl{
     height: 200px;
     //width: 100%;
+    width: auto;
     background: #eee0;
     margin-bottom: 35px;
   }
 
   .imgAttach{
     height: 200px;
+    width: auto;
     background: #eee0;
     margin-bottom: 35px;
   }

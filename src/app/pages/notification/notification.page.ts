@@ -22,6 +22,7 @@ import {PopoverNotificationCardPage} from '../popover-notification-card/popover-
 import {NotificationEditPage} from '../notification-edit/notification-edit.page';
 import {NotificationViewReceiverPage} from '../notification-view-receiver/notification-view-receiver.page';
 import {NotificationNewPage} from '../notification-new/notification-new.page';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-notification',
@@ -78,7 +79,7 @@ export class NotificationPage implements OnInit {
               private accService:AccountService, private transfer: FileTransfer, public audio: Media, private fileOpener: FileOpener,
               private transferF: FileTransfer, public accountServ:AccountService, private network:Network, private androidPermissions: AndroidPermissions,
               private toastCtrl:ToastViewService, private classesServ:ClassesService,private studentService:StudentsService, private document: DocumentViewer,
-              private file: File) {
+              private file: File, private passData:PassDataService) {
 
     this.approved = null;
     this.archived = null;
@@ -127,9 +128,14 @@ export class NotificationPage implements OnInit {
   }
 
   async presentCardOptionPopover(ev: any,i,notification) {
+
+    let data = {notification:notification};
+
+    this.passData.dataToPass = data;
+
     const popoverOption = await this.popoverCtrl.create({
       component: PopoverNotificationCardPage,
-      componentProps: {notification:notification},
+      componentProps: data,
       event: ev,
       translucent: true,
       cssClass:"PopOverOptionMenu"
@@ -193,9 +199,14 @@ export class NotificationPage implements OnInit {
   }
 
   async presentEditNotificationModal(notification) {
+
+    let data = {notification:notification};
+
+    this.passData.dataToPass = data;
+
     const eModal = await this.modalCtrl.create({
       component: NotificationEditPage,
-      componentProps: {notification:notification}
+      componentProps: data
     });
 
     eModal.onDidDismiss().then( data => {
@@ -468,6 +479,7 @@ export class NotificationPage implements OnInit {
               this.studentwithClass.push(students);
             }
 
+            this.load.stopLoading();
 
             if(this.NewNotification){
 
@@ -488,11 +500,18 @@ export class NotificationPage implements OnInit {
   }
 
   async presentNewNotificationModal() {
+
+    let data = {classesList:this.classes,
+      studetsNameList:this.studentsName,
+      studentsdetailsList:this.studentwithClass};
+
+    this.passData.dataToPass = data;
     const nModal = await this.modalCtrl.create({
       component: NotificationNewPage,
-      componentProps: {classesList:this.classes,
-        studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass}
+      componentProps: data
     });
+
+    this.load.stopLoading().then(value => {
 
     nModal.onDidDismiss().then(data =>{
       if(data.data.name =="dismissed&SENT"){
@@ -518,28 +537,41 @@ export class NotificationPage implements OnInit {
         }
       }
     });
-
+    });
     return await nModal.present();
   }
 
   async presentEditAsNewNotificationModal() {
-    const enModal = await this.modalCtrl.create({
-      component: NotificationNewPage,
-      componentProps: {id:this.editId,title:this.editTitle, details:this.editDetails,
-        classesList:this.classes, studetsNameList:this.studentsName, studentsdetailsList:this.studentwithClass
-        ,recieverList:this.reciversList, tagList:this.editTags, attachmentList:this.editAsNewAttachmentList}
+
+
+
+    this.load.stopLoading().then(async value => {
+
+      let data = {
+        id: this.editId, title: this.editTitle, details: this.editDetails,
+        classesList: this.classes, studetsNameList: this.studentsName, studentsdetailsList: this.studentwithClass
+        , recieverList: this.reciversList, tagList: this.editTags, attachmentList: this.editAsNewAttachmentList
+      };
+
+      this.passData.dataToPass = data;
+
+      const enModal = await this.modalCtrl.create({
+        component: NotificationNewPage,
+        componentProps: data
+      });
+
+      enModal.onDidDismiss().then(data => {
+        this.notifications.splice(0);
+        this.notificationPage = 1;
+
+        this.notificationService.putHeader(this.tokenKey);
+        this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
+
+      });
+      return await enModal.present();
     });
 
-    enModal.onDidDismiss().then(data => {
-      this.notifications.splice(0);
-      this.notificationPage = 1;
 
-      this.notificationService.putHeader(this.tokenKey);
-      this.getNotifications(this.notificationPage,0,0,this.approved, this.archived, this.sent,0);
-
-    });
-
-    return await enModal.present();
   }
 
   async onAttachmentClick(event:Event, attachmentName:any,attachmentId:any,attachmentType:any,attachmentURL:any,pending:any){
@@ -804,23 +836,27 @@ export class NotificationPage implements OnInit {
     // if(this.NewNotification) {
     //   this.load.startLoading('',true,'loadingWithoutBackground');
     // }
-    this.load.startLoading('',true,'loadingWithoutBackground').then( () =>{
-      if(this.platform.is('desktop')) {
-        this.tokenKey = localStorage.getItem(this.localStorageToken);
-        this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-        this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
-        this.getAllClasses();
-      }else {
-        this.storage.get(this.localStorageToken).then(
-            val => {
-              this.tokenKey = val;
-              this.studentService.putHeader(val);
-              this.classesServ.putHeader(val);
-              this.getAllClasses();
-              this.fristOpen = false;
-            });
-      }
+    this.load.stopLoading().then(value => {
+      this.load.startLoading('',true,'loadingWithoutBackground').then( () =>{
+        if(this.platform.is('desktop')) {
+          this.tokenKey = localStorage.getItem(this.localStorageToken);
+          this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+          this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
+          this.getAllClasses();
+        }else {
+          this.storage.get(this.localStorageToken).then(
+              val => {
+                this.tokenKey = val;
+                this.studentService.putHeader(val);
+                this.classesServ.putHeader(val);
+                this.getAllClasses();
+                this.fristOpen = false;
+              });
+        }
+      });
     });
+
+
   }
 
   tabThatSelectedDo(tabName){
@@ -1102,7 +1138,17 @@ export class NotificationPage implements OnInit {
 
 
   async openNotificationViewBy(notification){
-    let model = await this.modalCtrl.create( {component:NotificationViewReceiverPage, componentProps: {notification:notification}});
+
+    this.load.stopLoading();
+
+    let data = {selectedNotification: notification};
+
+    this.passData.dataToPass = data;
+
+    let model = await this.modalCtrl.create( {
+      component:NotificationViewReceiverPage,
+      componentProps: data
+    });
     model.onDidDismiss().then(data=>{
       this.console.log('Page Dismissed');
     });

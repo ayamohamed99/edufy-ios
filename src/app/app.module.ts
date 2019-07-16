@@ -25,7 +25,6 @@ import {MedicalReportViewPageModule} from './pages/medical-report-view/medical-r
 import {MedicalCareCardOptionPageModule} from './pages/medical-care-card-option/medical-care-card-option.module';
 import {ChatDialoguePageModule} from './pages/chat-dialogue/chat-dialogue.module';
 import {NotificationNewPageModule} from './pages/notification-new/notification-new.module';
-import {NotificationViewReceiverPageModule} from './pages/notification-view-receiver/notification-view-receiver.module';
 import {NotificationEditPageModule} from './pages/notification-edit/notification-edit.module';
 import {PopoverNotificationCardPageModule} from './pages/popover-notification-card/popover-notification-card.module';
 import {FormsModule} from '@angular/forms';

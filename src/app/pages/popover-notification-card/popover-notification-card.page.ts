@@ -6,6 +6,7 @@ import {LoadingViewService} from '../../services/LoadingView/loading-view.servic
 import {Storage} from "@ionic/storage";
 // @ts-ignore
 import Any = jasmine.Any;
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: 'app-popover-notification-card',
@@ -21,12 +22,10 @@ export class PopoverNotificationCardPage implements OnInit {
   notifications;
   Archiving:string;
 
-  @Input() notification: any;
-
   constructor(public popOver:PopoverController,
               public platform:Platform,public storage:Storage,public alertCtrl:AlertController,public accountServ:AccountService,
               public notiServ:NotificationService, public load:LoadingViewService,
-              public notificationService:NotificationService) {
+              public notificationService:NotificationService, private passDate:PassDataService) {
     let plat=this.platform.is('desktop');
 
     if(plat){
@@ -39,7 +38,7 @@ export class PopoverNotificationCardPage implements OnInit {
 
   ngOnInit() {
 
-    this.notifications = this.notification;
+    this.notifications = this.passDate.dataToPass.notification;
     this.notificationID = this.notifications.notificationId;
     this.notificationTitle = this.notifications.title;
     this.notificationDetails = this.notifications.body;

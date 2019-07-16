@@ -103,9 +103,18 @@
 
         <div style="background: #E9E1E1;height: 1.0px;width: 100%;margin-bottom: 20px;"></div>
 
-        <ion-button expand="full" (click)="checkInOut()" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">
-          {{attendanceButton}}
+
+          <ion-button expand="full" (click)="checkInOut('Add')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi' && this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint">
+              Add this wifi
+          </ion-button>
+
+        <ion-button expand="full" (click)="checkInOut('In')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance && network.type == 'wifi' && attendData.length > 0 && userShiftData == null && !checktheDateIn() && checkIn ">
+          Check In
         </ion-button>
+
+          <ion-button  color="danger" expand="full" (click)="checkInOut('Out')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance && network.type == 'wifi' && attendData.length > 0 && this.userShiftData != null && (userShiftData.checkOutDate == null || !checktheDateOut()) && !checkIn">
+              Check Out
+          </ion-button>
 
           <label *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">Connected To: {{wifi.ssid}}</label>
 
