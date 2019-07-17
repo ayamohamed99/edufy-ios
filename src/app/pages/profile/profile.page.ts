@@ -73,8 +73,11 @@ export class ProfilePage implements OnInit {
 
       this.storage.get(this.localStorageAttendanceShift).then(
           value => {
-              this.userShiftData = JSON.parse(value);
-              if(this.userShiftData != null){
+              let date = JSON.parse(value);
+              if(this.checktheDateIn(date.checkInDate)) {
+                  this.userShiftData = JSON.parse(value);
+              }
+              if(this.userShiftData != null && this.checktheDateIn(date.checkInDate)){
                   this.checkIn = false;
               }
           },
@@ -215,8 +218,8 @@ export class ProfilePage implements OnInit {
       );
   }
 
-    checktheDateIn(){
-      let savedShiftDate = this.transDate.transformTheDate(new Date(this.userShiftData.checkInDate),"yyyy/MM/dd");
+    checktheDateIn(date){
+      let savedShiftDate = this.transDate.transformTheDate(new Date(date),"yyyy/MM/dd");
         let nowDate = this.transDate.transformTheDate(new Date(),"yyyy/MM/dd");
 
         if(savedShiftDate == nowDate){

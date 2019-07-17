@@ -34,15 +34,26 @@
 
 
         <div *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
-            <ion-list style="background: #faebd700;">
+            <ion-list style="background: #faebd700;position: absolute;width: 100%;bottom: 75px;z-index: 1;">
                 <ion-item class="itemEdit" (click)="checkInNow()">
+                    <div class="infoOneDiv">
+                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
+                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
+                            <label class="checkInDiv">Check In</label>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+
+            <ion-list style="background: #faebd700;">
+                <ion-item class="itemEdit">
                     <div class="dateOneDiv">
                         <label class="todayNum">24</label>
                         <label class="todayMonth">Mars</label>
                     </div>
                     <div class="infoOneDiv">
                         <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoOne" *ngIf="!activeCheckInOneTeacherButton()">
+                        <div class="partTwoOne">
                             <div class="topPart">
                                 <label class="fristName">fristName</label>
                                 <label class="comeInOne">Absent</label>
@@ -51,10 +62,6 @@
                                 <label class="lastName">lastName</label>
                                 <label class="goOutOne">00:00</label>
                             </div>
-                        </div>
-
-                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
-                            <label class="checkInDiv">Check In</label>
                         </div>
                     </div>
                 </ion-item>
@@ -66,31 +73,32 @@
         <div *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == MONTHLY_TAB">
 
             <ion-list style="background: #faebd700;">
-                <ion-item class="itemEdit" (click)="checkInNow()">
-                    <ion-card style="width: 100%;padding: 10px;" [ngClass]="absent?'redColor':'greenColor'">
+                <ion-item class="itemEdit" *ngFor="let user of monthlyAttend">
+                    <ion-card style="width: 100%;padding: 10px;" [ngClass]="user.panlties>5?'redColor':'greenColor'">
                         <div>
-                            <img class="imgMonthlyProfile" src="assets/imgs/profile.png"/>
+                            <img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
+                            <img class="imgMonthlyProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
                             <div class="teacherName">
-                                    <label class="teacherNameLabel">TeacherName</label>
+                                <label class="teacherNameLabel">{{user.user.name}}</label>
                             </div>
                         </div>
                         <div style="margin-top: 15px;">
+                            <!--<div class="dateMonthlyDiv" col-3>-->
+                            <!--<label class="monthlyNum">01</label>-->
+                            <!--<label class="monthlyTitle">Absent</label>-->
+                            <!--</div>-->
                             <div class="dateMonthlyDiv" col-3>
-                                <label class="monthlyNum">01</label>
-                                <label class="monthlyTitle">Absent</label>
-                            </div>
-                            <div class="dateMonthlyDiv" col-3>
-                                <label class="monthlyNum">05</label>
+                                <label class="monthlyNum">{{user.panlties}}</label>
                                 <label class="monthlyTitle">Late</label>
                             </div>
                             <div class="dateMonthlyDiv" col-3>
-                                <label class="monthlyNum">20</label>
+                                <label class="monthlyNum">{{user.Attend}}</label>
                                 <label class="monthlyTitle">Attend</label>
                             </div>
-<!--                            <div class="dateMonthlyDiv" col-3>-->
-<!--                                <label class="todayNum">24</label>-->
-<!--                                <label class="todayMonth">Mars</label>-->
-<!--                            </div>-->
+                            <!--                            <div class="dateMonthlyDiv" col-3>-->
+                            <!--                                <label class="todayNum">24</label>-->
+                            <!--                                <label class="todayMonth">Mars</label>-->
+                            <!--                            </div>-->
                         </div>
                     </ion-card>
                 </ion-item>
@@ -103,11 +111,22 @@
                                       <!--ONE TEACHER TODAY TAB-->
 
         <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == TODAY_TAB">
-            <ion-list style="background: #faebd700;">
+            <ion-list style="background: #faebd700;position: absolute;width: 100%;bottom: 75px;z-index: 1;">
                 <ion-item class="itemEdit" (click)="checkInNow()">
                     <div class="infoOneDiv">
                         <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoOne" *ngIf="!activeCheckInTeachersButton()">
+                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
+                            <label class="checkInDiv">Check In</label>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
+
+            <ion-list style="background: #faebd700;">
+                <ion-item class="itemEdit">
+                    <div class="infoOneDiv">
+                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
+                        <div class="partTwoOne">
                             <div class="topPart">
                                 <label class="fristName">fristName</label>
                                 <label class="comeInOne">Absent</label>
@@ -116,10 +135,6 @@
                                 <label class="lastName">lastName</label>
                                 <label class="goOutOne">00:00</label>
                             </div>
-                        </div>
-
-                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
-                            <label class="checkInDiv">Check In</label>
                         </div>
                     </div>
                 </ion-item>
@@ -130,7 +145,23 @@
 
         <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
 
-
+            <ion-list style="background: #faebd700;">
+                <ion-item class="itemEdit">
+                    <div class="infoOneDiv">
+                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
+                        <div class="partTwoOne">
+                            <div class="topPart">
+                                <label class="fristName">fristName</label>
+                                <label class="comeInOne">Absent</label>
+                            </div>
+                            <div class="downPart">
+                                <label class="lastName">lastName</label>
+                                <label class="goOutOne">00:00</label>
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
 
         </div>
 
@@ -139,7 +170,37 @@
 
         <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == MONTHLY_TAB">
 
-
+            <ion-list style="background: #faebd700;">
+                <ion-item class="itemEdit" *ngFor="let user of monthlyAttend">
+                    <ion-card style="width: 100%;padding: 10px;" [ngClass]="user.panlties>5?'redColor':'greenColor'">
+                        <div>
+                            <img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
+                            <img class="imgMonthlyProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                            <div class="teacherName">
+                                <label class="teacherNameLabel">{{user.user.name}}</label>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <!--<div class="dateMonthlyDiv" col-3>-->
+                                <!--<label class="monthlyNum">01</label>-->
+                                <!--<label class="monthlyTitle">Absent</label>-->
+                            <!--</div>-->
+                            <div class="dateMonthlyDiv" col-6>
+                                <label class="monthlyNum">{{user.panlties}}</label>
+                                <label class="monthlyTitle">Late</label>
+                            </div>
+                            <div class="dateMonthlyDiv" col-6>
+                                <label class="monthlyNum">{{user.Attend}}</label>
+                                <label class="monthlyTitle">Attend</label>
+                            </div>
+                            <!--                            <div class="dateMonthlyDiv" col-3>-->
+                            <!--                                <label class="todayNum">24</label>-->
+                            <!--                                <label class="todayMonth">Mars</label>-->
+                            <!--                            </div>-->
+                        </div>
+                    </ion-card>
+                </ion-item>
+            </ion-list>
 
         </div>
 

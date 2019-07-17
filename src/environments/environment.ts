@@ -6,6 +6,7 @@ export const environment = {
   production: false
 };
 
+// export const DOMAIN_URL = '';
 export const DOMAIN_URL = 'http://192.168.1.19:8080';
 
 /*

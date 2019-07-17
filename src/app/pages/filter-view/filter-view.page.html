@@ -1,8 +1,8 @@
 <ion-header>
 
-  <ion-navbar color="primary">
+  <ion-toolbar color="primary">
     <ion-title>{{pageName}}</ion-title>
-  </ion-navbar>
+  </ion-toolbar>
 
 </ion-header>
 
@@ -10,7 +10,7 @@
 <ion-content padding>
 
 
-  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+  <div class="spaceBetNgSelect" >
     <ng-select [items]="allclasses"
                bindLabel="classWithGrade"
                [loading]="classesLoading"
@@ -22,7 +22,7 @@
   </div>
 
 
-  <div class="spaceBetNgSelect" *ngIf="!addCheckup">
+  <div class="spaceBetNgSelect" >
     <ng-select [items]="showAllStudents"
                bindLabel="name"
                [loading]="studentsLoading"
@@ -65,11 +65,11 @@
 
 <ion-footer>
   <ion-item>
-    <button class="buttonOfFilter" ion-button (click)="close('done')">
+    <ion-button class="buttonOfFilter" (click)="close('done')">
       {{doneButton}}
-    </button>
-    <button class="buttonOfFilter" ion-button color="light"  (click)="close('cancel')">
+    </ion-button>
+    <ion-button class="buttonOfFilter" color="light"  (click)="close('cancel')">
       Cancel
-    </button>
+    </ion-button>
   </ion-item>
 </ion-footer>

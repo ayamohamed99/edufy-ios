@@ -10,7 +10,7 @@ import {PassDataService} from '../../services/pass-data.service';
 })
 export class MedicalCareMedicationViewPage implements OnInit {
 
-  // medication;
+  medication;
   dosageWord = "";
   daysOfDosage = [];
   timesWords;
@@ -20,7 +20,7 @@ export class MedicalCareMedicationViewPage implements OnInit {
   {
     this.config.notFoundText = 'No match found';
 
-
+    this.medication = this.passData.dataToPass.medication;
     // this.medication = navParams.get('medication');
     if(this.passData.dataToPass.medication.dosageNumber > 1){
       this.dosageWord = "Dosages"

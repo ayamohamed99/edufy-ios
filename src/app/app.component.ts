@@ -23,6 +23,8 @@ import {ChatDialoguePage} from './pages/chat-dialogue/chat-dialogue.page';
 import {Student} from './models';
 import { Storage } from '@ionic/storage';
 import {PassDataService} from './services/pass-data.service';
+import * as dateFNS from "date-fns";
+import {TransFormDateService} from './services/TransFormDate/trans-form-date.service';
 
 @Component({
   selector: 'app-root',
@@ -69,7 +71,8 @@ export class AppComponent {
       private modalCtrl: ModalController,
       private alertCtrl: AlertController,
       private navCtrl: NavController,
-      public passData:PassDataService
+      public passData:PassDataService,
+      public transDate:TransFormDateService
   ) {
     this.initializeApp();
   }

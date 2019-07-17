@@ -7,7 +7,7 @@
   </ion-toolbar>
 
   <ion-toolbar class="toolBarShap" color="light" scrollable="true">
-    <ion-segment [(ngModel)]="View" color="primary">
+    <ion-segment [(ngModel)]="View" color="primary" scrollable="true">
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)" *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME" (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="CHECKUPS_NAME" (click)="tabThatSelectedDo(CHECKUPS_NAME)" *ngIf="accountServ.getUserRole().viewCheckup">{{CHECKUP_TAB}}</ion-segment-button>

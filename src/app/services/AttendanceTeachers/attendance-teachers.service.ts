@@ -71,8 +71,8 @@ export class AttendanceTeachersService {
   }
 
 
-  getAllUserAttendanceByDate(userId, fromDate, toDate){
-    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getAttendanceByAttribute.ent?fromDate='+fromDate;
+  getAllUserAttendanceToday(userId, fromDate, toDate,isOrderedByName){
+    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getAttendanceForDay.ent?fromDate='+fromDate;
 
     if(toDate){
       url += '&toDate=' + toDate;
@@ -81,7 +81,40 @@ export class AttendanceTeachersService {
       url += '&userId=' + userId;
     }
 
+    url +=  + '&ordered=' + isOrderedByName;
     return this.http.get(url);
+  }
+
+    getAllUserAttendanceWeek(userId, fromDate, toDate,isOrderedByName){
+        let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getAttendanceForWeekOrMonth.ent?fromDate='+fromDate;
+
+        if(toDate){
+            url += '&toDate=' + toDate;
+        }
+        if(userId){
+            url += '&userId=' + userId;
+        }
+
+        url +=  + '&ordered=' + isOrderedByName;
+        return this.http.get(url);
+    }
+
+  getAttendanceByOrder(branchId, userId, isOrderByName){
+
+    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getUserAttendanceRank.ent?';
+
+
+    if(branchId && isOrderByName){
+      url += 'branchId=' + branchId + '&ordered=' + isOrderByName;
+    }
+
+    if(userId  && isOrderByName){
+      url += 'userId=' + userId + '&ordered=' + isOrderByName;
+    }
+
+
+
+    return this.http.get(url)
   }
 
 

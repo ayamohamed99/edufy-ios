@@ -292,21 +292,21 @@ export class ReportTemplatePage implements OnInit {
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDateService)
   {
 
-    this.comment = passData.dataToPass.student;
-    this.template = passData.dataToPass.student;
-    this.class = passData.dataToPass.student;
-    this.selected = passData.dataToPass.student;
-    this.theClassIsSelected = passData.dataToPass.student;
-    this.reportDate = passData.dataToPass.student;
-    this.classIndex = passData.dataToPass.student;
-    this.selectedDate = passData.dataToPass.student;
-    this.reportAnswer = passData.dataToPass.student;
-    this.reportAnswersNoOfItems = passData.dataToPass.student;
-    this.reportQuestionsRecovery = passData.dataToPass.student;
-    this.reportQuestionsEditParamTemps = passData.dataToPass.student;
-    this.editQuestionAllowed = passData.dataToPass.student;
-    this.reportConflict = passData.dataToPass.student;
-    this.classId = passData.dataToPass.student;
+    this.comment = passData.dataToPass.comment;
+    this.template = passData.dataToPass.template;
+    this.class = passData.dataToPass.class;
+    this.selected = passData.dataToPass.selected;
+    this.theClassIsSelected = passData.dataToPass.theClassIsSelected;
+    this.reportDate = passData.dataToPass.reportDate;
+    this.classIndex = passData.dataToPass.classIndex;
+    this.selectedDate = passData.dataToPass.selectedDate;
+    this.reportAnswer = passData.dataToPass.reportAnswer;
+    this.reportAnswersNoOfItems = passData.dataToPass.reportAnswersNoOfItems;
+    this.reportQuestionsRecovery = passData.dataToPass.reportQuestionsRecovery;
+    this.reportQuestionsEditParamTemps = passData.dataToPass.reportQuestionsEditParamTemps;
+    this.editQuestionAllowed = passData.dataToPass.editQuestionAllowed;
+    this.reportConflict = passData.dataToPass.reportConflict;
+    this.classId = passData.dataToPass.classId;
     this.student = passData.dataToPass.student;
 
     this.shouldAutoExpandComments = !!this.comment;

@@ -13,38 +13,41 @@
 
     <div class="rankTwoDiv">
       <div class="rankNumDiv">
-        2
+        {{Rank2.index}}
       </div>
-      <img class="secoundPlaceImg" src="assets/imgs/profile.png"/>
+      <img class="secoundPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank2.user.profileImg"/>
+      <img class="secoundPlaceImg" [src]="Rank2.user.profileImg" *ngIf="Rank2.user.profileImg"/>
       <label class="firstNameDiv">
-        Name2
+        {{getFristName(Rank2.user.name)}}
       </label>
       <label class="lastNameDiv">
-        LASTNAME2
+        {{getlastName(Rank2.user.name)}}
       </label>
     </div>
     <div class="rankOneDiv">
       <div class="rankNumDiv">
-        1
+        {{Rank1.index}}
       </div>
-      <img class="firstPlaceImg" src="assets/imgs/profile.png"/>
+      <img class="firstPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank1.user.profileImg"/>
+      <img class="firstPlaceImg" [src]="Rank1.user.profileImg" *ngIf="Rank1.user.profileImg"/>
       <label class="firstNameDiv">
-        Name2
+        {{getFristName(Rank1.user.name)}}
       </label>
       <label class="lastNameDiv">
-        LASTNAME2
+        {{getlastName(Rank1.user.name)}}
       </label>
     </div>
     <div class="rankThreeDiv rankLastDiv">
       <div class="rankNumDiv">
-        3
+        {{Rank3.index}}
       </div>
-      <img class="thridPlaceImg" src="assets/imgs/profile.png"/>
+      <img class="thridPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank3.user.profileImg"/>
+      <img class="thridPlaceImg" [src]="Rank3.user.profileImg" *ngIf="Rank3.user.profileImg"/>
       <label class="firstNameDiv">
-        Name2
+        {{getFristName(Rank3.user.name)}}
       </label>
       <label class="lastNameDiv">
-        LASTNAME2
+        {{getlastName(Rank3.user.name)}}
       </label>
     </div>
   </div>
@@ -53,18 +56,19 @@
 
 
     <ion-list style="background: #faebd700;margin-top: 20px;">
-      <ion-item class="itemEdit">
+      <ion-item class="itemEdit" *ngFor="let user of allOtherRanks">
         <div class="dateOneDiv">
-          <label class="todayNum">24</label>
+          <label class="todayNum">{{user.index}}</label>
         </div>
         <div class="infoOneDiv">
-          <img class="imgOneProfile" src="assets/imgs/profile.png"/>
+          <img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
+          <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
           <div class="partTwoOne">
             <div class="topPart">
-              <label class="fristName">fristName</label>
+              <label class="fristName">{{getFristName(user.user.name)}}</label>
             </div>
             <div class="downPart">
-              <label class="lastName">lastName</label>
+              <label class="lastName">{{getlastName(user.user.name)}}</label>
             </div>
           </div>
         </div>
