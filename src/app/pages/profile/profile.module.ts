@@ -6,6 +6,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ProfilePage } from './profile.page';
+import {AvatarModule} from 'ng2-avatar';
+
+
 
 const routes: Routes = [
   {
@@ -19,7 +22,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AvatarModule
   ],
   declarations: [ProfilePage]
 })

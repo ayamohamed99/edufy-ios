@@ -26,46 +26,68 @@
     </div>
 
 
-    <ion-content class="container">
+    <ion-content class="container" style="overflow: hidden;height: calc(100% - 74px);">
 
                                     <!--ONE TEACHER LIST-->
 
                                    <!--ONE TEACHER WEEKLY TAB-->
 
 
-        <div *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
-            <ion-list style="background: #faebd700;position: absolute;width: 100%;bottom: 75px;z-index: 1;">
-                <ion-item class="itemEdit" (click)="checkInNow()">
+        <div  style="height: 100%;overflow: hidden;" class="container" *ngIf="!this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
+
+
+            <ion-list class="resizeContentList" [ngClass]="checkContent()?'resizeContentNoList':'resizeContentList'" >
+                <ion-item class="itemEdit" *ngFor="let user of weeklyAttend">
+                    <div class="dateOneDiv">
+                        <label class="todayNum">{{getDay(user.checkInDate)}}</label>
+                        <label class="todayMonth">{{getMonth(user.checkInDate)}}</label>
+                    </div>
                     <div class="infoOneDiv">
-                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
-                            <label class="checkInDiv">Check In</label>
+                        <avatar class="imgOneProfileAvatar" [name]="user.user.name" [size]="45" *ngIf="!user.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                        <div class="partTwoOne">
+                            <div class="topPart">
+                                <label class="fristName">{{getFristName(user.user.name)}}</label>
+                                <label class="comeInOne">{{getTime(user.checkInDate)}}</label>
+                            </div>
+                            <div class="downPart">
+                                <label class="lastName">{{getlastName(user.user.name)}}</label>
+                                <label class="goOutOne">{{getTime(user.checkOutDate)}}</label>
+                            </div>
                         </div>
                     </div>
                 </ion-item>
             </ion-list>
 
-            <ion-list style="background: #faebd700;">
-                <ion-item class="itemEdit">
-                    <div class="dateOneDiv">
-                        <label class="todayNum">24</label>
-                        <label class="todayMonth">Mars</label>
-                    </div>
+            <ion-list style="background: #faebd700;width: 100%;bottom: 75px;z-index: 1;">
+                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="checkInCondition()">
                     <div class="infoOneDiv">
-                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoOne">
-                            <div class="topPart">
-                                <label class="fristName">fristName</label>
-                                <label class="comeInOne">Absent</label>
-                            </div>
-                            <div class="downPart">
-                                <label class="lastName">lastName</label>
-                                <label class="goOutOne">00:00</label>
-                            </div>
+                        <!--<img class="imgOneProfile" src="assets/imgs/profile.png" />-->
+                        <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="accountServ.user.profileImg" *ngIf="accountServ.user.profileImg"/>
+                        <div class="partTwoCheckin">
+                            <label class="checkInDiv">Check In</label>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="checkOutCondition()">
+                    <div class="infoOneDivRed">
+                        <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!accountServ.user.profileImg"/>-->
+                        <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="accountServ.user.profileImg" *ngIf="accountServ.user.profileImg"/>
+                        <div class="partTwoCheckin">
+                            <label class="checkInDiv">Check Out</label>
                         </div>
                     </div>
                 </ion-item>
             </ion-list>
+
+            <!--<ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">-->
+                <!--<ion-infinite-scroll-content-->
+                        <!--loadingSpinner="bubbles"-->
+                        <!--loadingText="Loading more data...">-->
+                <!--</ion-infinite-scroll-content>-->
+            <!--</ion-infinite-scroll>-->
         </div>
 
                                   <!--ONE TEACHER MONTHLY TAB-->
@@ -76,10 +98,10 @@
                 <ion-item class="itemEdit" *ngFor="let user of monthlyAttend">
                     <ion-card style="width: 100%;padding: 10px;" [ngClass]="user.panlties>5?'redColor':'greenColor'">
                         <div>
-                            <img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
-                            <img class="imgMonthlyProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                            <avatar class="monthlyEditAvatar" [name]="user.name" [displayType]="'rounded'" [size]="30" *ngIf="!user.profileImg"></avatar>
+                            <img class="imgMonthlyProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
                             <div class="teacherName">
-                                <label class="teacherNameLabel">{{user.user.name}}</label>
+                                <label class="teacherNameLabel">{{user.name}}</label>
                             </div>
                         </div>
                         <div style="margin-top: 15px;">
@@ -87,11 +109,11 @@
                             <!--<label class="monthlyNum">01</label>-->
                             <!--<label class="monthlyTitle">Absent</label>-->
                             <!--</div>-->
-                            <div class="dateMonthlyDiv" col-3>
-                                <label class="monthlyNum">{{user.panlties}}</label>
+                            <div class="dateMonthlyDiv" col-6>
+                                <label class="monthlyNum">{{user.Late}}</label>
                                 <label class="monthlyTitle">Late</label>
                             </div>
-                            <div class="dateMonthlyDiv" col-3>
+                            <div class="dateMonthlyDiv" col-6>
                                 <label class="monthlyNum">{{user.Attend}}</label>
                                 <label class="monthlyTitle">Attend</label>
                             </div>
@@ -106,35 +128,63 @@
 
         </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                        <!--MULTI TEACHERS LIST-->
 
                                       <!--ONE TEACHER TODAY TAB-->
 
-        <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == TODAY_TAB">
-            <ion-list style="background: #faebd700;position: absolute;width: 100%;bottom: 75px;z-index: 1;">
-                <ion-item class="itemEdit" (click)="checkInNow()">
-                    <div class="infoOneDiv">
-                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoCheckin" *ngIf="activeCheckInOneTeacherButton()">
-                            <label class="checkInDiv">Check In</label>
+        <div style="height: 100%;overflow: hidden;" *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == TODAY_TAB">
+            <ion-list class="resizeContentList" [ngClass]="checkContent()?'resizeContentNoList':'resizeContentList'" >
+                <ion-item class="itemEdit" *ngFor="let user of todayAttend">
+                    <div class="infoOneDiv" [ngClass]="user.shift_PENALTY_id?'redC':'greenC'">
+                        <!--<img class="imgOneProfile" src="assets/imgs/profile.png"/>-->
+                        <avatar class="imgOneProfileAvatar" [name]="user.name" [size]="45" *ngIf="!user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
+                        <div class="partTwoOne">
+                            <div class="topPart">
+                                <label class="fristName">{{getFristName(user.name)}}</label>
+                                <label class="comeInOne">{{getTime(user.checkin_DATE)}}</label>
+                            </div>
+                            <div class="downPart">
+                                <label class="lastName">{{getlastName(user.name)}}</label>
+                                <label class="goOutOne">{{getTime(user.checkout_DATE)}}</label>
+                            </div>
                         </div>
                     </div>
                 </ion-item>
             </ion-list>
 
-            <ion-list style="background: #faebd700;">
-                <ion-item class="itemEdit">
+            <ion-list style="background: #faebd700;width: 100%;bottom: 75px;z-index: 1;">
+                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="checkInCondition()">
                     <div class="infoOneDiv">
-                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
-                        <div class="partTwoOne">
-                            <div class="topPart">
-                                <label class="fristName">fristName</label>
-                                <label class="comeInOne">Absent</label>
-                            </div>
-                            <div class="downPart">
-                                <label class="lastName">lastName</label>
-                                <label class="goOutOne">00:00</label>
-                            </div>
+                        <!--<img class="imgOneProfile" src="assets/imgs/profile.png" />-->
+                        <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="accountServ.user.profileImg" *ngIf="accountServ.user.profileImg"/>
+                        <div class="partTwoCheckin">
+                            <label class="checkInDiv">Check In</label>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="checkOutCondition()">
+                    <div class="infoOneDivRed">
+                        <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!accountServ.user.profileImg"/>-->
+                        <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="accountServ.user.profileImg" *ngIf="accountServ.user.profileImg"/>
+                        <div class="partTwoCheckin">
+                            <label class="checkInDiv">Check Out</label>
                         </div>
                     </div>
                 </ion-item>
@@ -143,27 +193,37 @@
 
                                        <!--ONE TEACHER WEEKLY TAB-->
 
-        <div *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
+        <ion-content class="container" *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == WEEKLY_TAB">
 
             <ion-list style="background: #faebd700;">
-                <ion-item class="itemEdit">
-                    <div class="infoOneDiv">
-                        <img class="imgOneProfile" src="assets/imgs/profile.png"/>
+                <ion-item class="itemEdit" *ngFor="let user of weeklyAttend">
+                    <ion-list-header style="text-align: center" *ngIf="!user.isUser">
+                        <ion-label>{{user.header}}</ion-label>
+                    </ion-list-header>
+                    <div class="infoOneDiv" *ngIf="user.isUser">
+                        <avatar class="imgOneProfileAvatar" [name]="user.user.name" [size]="45" *ngIf="!user.user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
                         <div class="partTwoOne">
                             <div class="topPart">
-                                <label class="fristName">fristName</label>
-                                <label class="comeInOne">Absent</label>
+                                <label class="fristName">{{getFristName(user.user.name)}}</label>
+                                <label class="comeInOne">{{getTime(user.checkInDate)}}</label>
                             </div>
                             <div class="downPart">
-                                <label class="lastName">lastName</label>
-                                <label class="goOutOne">00:00</label>
+                                <label class="lastName">{{getlastName(user.user.name)}}</label>
+                                <label class="goOutOne">{{getTime(user.checkOutDate)}}</label>
                             </div>
                         </div>
                     </div>
                 </ion-item>
             </ion-list>
 
-        </div>
+            <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+                <ion-infinite-scroll-content
+                        loadingSpinner="bubbles"
+                        loadingText="Loading more data...">
+                </ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </ion-content>
 
 
                                        <!--ONE TEACHER MONTHLY TAB-->
@@ -174,10 +234,11 @@
                 <ion-item class="itemEdit" *ngFor="let user of monthlyAttend">
                     <ion-card style="width: 100%;padding: 10px;" [ngClass]="user.panlties>5?'redColor':'greenColor'">
                         <div>
-                            <img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
-                            <img class="imgMonthlyProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                            <!--<img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.profileImg"/>-->
+                            <avatar class="monthlyEditAvatar" [name]="user.name" [displayType]="'rounded'" [size]="30" *ngIf="!user.profileImg"></avatar>
+                            <img class="imgMonthlyProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
                             <div class="teacherName">
-                                <label class="teacherNameLabel">{{user.user.name}}</label>
+                                <label class="teacherNameLabel">{{user.name}}</label>
                             </div>
                         </div>
                         <div style="margin-top: 15px;">
@@ -186,7 +247,7 @@
                                 <!--<label class="monthlyTitle">Absent</label>-->
                             <!--</div>-->
                             <div class="dateMonthlyDiv" col-6>
-                                <label class="monthlyNum">{{user.panlties}}</label>
+                                <label class="monthlyNum">{{user.Late}}</label>
                                 <label class="monthlyTitle">Late</label>
                             </div>
                             <div class="dateMonthlyDiv" col-6>

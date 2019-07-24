@@ -24,9 +24,31 @@
     box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.25);
   }
 
+  .resizeContent{
+    --background: #faebd700;
+    //height: calc(100% - 145px);
+  }
+
+  .resizeContentNo{
+    --background: #faebd700;
+    height: calc(100% - 75px);
+  }
+
   .itemEdit{
     --background: #f4f4f4;
     --border-color: #f0f8ff00;
+    margin-bottom: 10px;
+  }
+
+  .resizeContentList{
+    background: #faebd700;
+    overflow: auto;
+    height: calc(100% - 70px);
+  }
+
+  .resizeContentNoList{
+    --background: #faebd700;
+    height: 100%;
   }
 
   .dateOneDiv{
@@ -41,6 +63,7 @@
   .todayMonth{
     font-size: 15px;
     display: block;
+    text-align: center;
   }
 
   .imgOneProfile{
@@ -48,6 +71,14 @@
     height: 45px;
     border-radius: 5px;
     margin-top: 5px;
+  }
+
+  .imgOneProfileAvatar{
+    div{
+      border-radius: 5px !important;
+      margin-top: 5px !important;
+      display: inline-block !important;
+    }
   }
 
   .partTwoOne{
@@ -64,6 +95,56 @@
     background: #55a9ff;
     border-radius: 6px;
     padding: 0 5px;
+  }
+
+  .infoOneDivRed{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: rgba(230, 120, 121, 0.78);
+    border-radius: 6px;
+    padding: 0 5px;
+  }
+
+  .infoOneDivOnce{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: #55a9ff;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    /deep/ avatar{
+      div{
+        width: 45px !important;
+        height: 45px !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+        line-height: 45px !important;
+        font-size: 20px !important;
+        display: inline-block !important;
+      }
+    }
+  }
+
+  .infoOneDivRedOnce{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: rgba(230, 120, 121, 0.78);
+    border-radius: 6px;
+    padding: 0 5px;
+    /deep/ avatar{
+      div{
+        width: 45px !important;
+        height: 45px !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+        line-height: 45px !important;
+        font-size: 20px !important;
+        display: inline-block !important;
+      }
+    }
   }
 
   .topPart{
@@ -132,6 +213,12 @@
     font-weight: 800;
   }
 
+  .monthlyEditAvatar{
+    div{
+      display: inline-block !important;
+      border-radius: 5px !important;
+    }
+  }
   .imgMonthlyProfile{
     width: 30px;
     height: 30px;
@@ -164,6 +251,14 @@
 
   .greenColor{
     --background: #4EDDE4;
+  }
+
+  .redC{
+    background: rgba(230, 120, 121, 0.78);
+  }
+
+  .greenC{
+    background: #4EDDE4;
   }
 
   .grayColor{

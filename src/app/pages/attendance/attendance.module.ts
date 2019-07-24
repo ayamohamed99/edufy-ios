@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { AttendancePage } from './attendance.page';
 import {MatTabsModule} from '@angular/material/tabs';
+import {AvatarModule} from 'ng2-avatar';
 
 
 const routes: Routes = [
@@ -22,7 +23,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    MatTabsModule
+    MatTabsModule,AvatarModule
   ],
   declarations: [AttendancePage]
 })

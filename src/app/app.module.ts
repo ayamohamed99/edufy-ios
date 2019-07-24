@@ -49,6 +49,7 @@ import { DatePicker } from '@ionic-native/date-picker/ngx';
 import { HTTP } from '@ionic-native/http/ngx';
 import {IonicStorageModule} from '@ionic/storage';
 import {TokenInterceptorService} from './services/token-interceptor.service';
+import {AvatarModule} from 'ng2-avatar';
 
 const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule,MatFormFieldModule,MatInputModule,MatCheckboxModule,MatRadioModule];
 const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
@@ -69,6 +70,7 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
     modals,
     NgSelectModule,
     FormsModule,
+    AvatarModule.forRoot()
   ],
   providers: [
     StatusBar,

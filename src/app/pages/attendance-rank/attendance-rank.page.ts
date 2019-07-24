@@ -29,24 +29,26 @@ export class AttendanceRankPage implements OnInit {
 
   getUsersByRanks(){
     this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
-    this.attendServ.getAttendanceByOrder(this.accountServ.userBranchId, null, false).subscribe(
+
+        let bId = this.accountServ.userBranchId;
+    this.attendServ.getAttendanceByOrder(bId, null, false).subscribe(
         value => {
           // @ts-ignore
           this.allData = value;
           this.load.stopLoading().then(value1 => {
+            this.allOtherRanks = [];
             this.allData.forEach(
                 (val, index) => {
                   if(index == 0){
-                    this.Rank1 = {'user':val[0], 'Attend':val[1], 'panlties':val[2], 'index':index+1};
+                    this.Rank1 = {'id':val[0], 'name':val[1], 'profileImg':val[2],'Attend':val[3], 'Late':val[4] ,'index':index+1};
                   }
                   else if(index == 1){
-                    this.Rank2 = {'user':val[0], 'Attend':val[1], 'panlties':val[2], 'index':index+1};
+                    this.Rank2 = {'id':val[0], 'name':val[1], 'profileImg':val[2],'Attend':val[3], 'Late':val[4] ,'index':index+1};
                   }
                   else if(index == 2){
-                    this.Rank3 = {'user':val[0], 'Attend':val[1], 'panlties':val[2], 'index':index+1};
+                    this.Rank3 = {'id':val[0], 'name':val[1], 'profileImg':val[2],'Attend':val[3], 'Late':val[4] ,'index':index+1};
                   }else{
-                    this.allOtherRanks = [];
-                    this.allOtherRanks.push({'user':val[0], 'Attend':val[1], 'panlties':val[2], 'index':index+1});
+                    this.allOtherRanks.push({'id':val[0], 'name':val[1], 'profileImg':val[2],'Attend':val[3], 'Late':val[4] ,'index':index+1});
                   }
 
                 });

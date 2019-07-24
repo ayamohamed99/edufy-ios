@@ -12,63 +12,67 @@
   <div style="text-align: center;margin-top: 10px;">
 
     <div class="rankTwoDiv">
-      <div class="rankNumDiv">
+      <div class="rankNumDiv" *ngIf="Rank2.index">
         {{Rank2.index}}
       </div>
-      <img class="secoundPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank2.user.profileImg"/>
-      <img class="secoundPlaceImg" [src]="Rank2.user.profileImg" *ngIf="Rank2.user.profileImg"/>
+      <!--<img class="secoundPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank2.profileImg"/>-->
+      <avatar [name]="Rank2.name" [displayType]="'circle'" [size]="80" *ngIf="!Rank2.profileImg"></avatar>
+      <img class="secoundPlaceImg" [src]="Rank2.profileImg" *ngIf="Rank2.profileImg"/>
       <label class="firstNameDiv">
-        {{getFristName(Rank2.user.name)}}
+        {{getFristName(Rank2.name)}}
       </label>
       <label class="lastNameDiv">
-        {{getlastName(Rank2.user.name)}}
+        {{getlastName(Rank2.name)}}
       </label>
     </div>
     <div class="rankOneDiv">
-      <div class="rankNumDiv">
+      <div class="rankNumDiv" *ngIf="Rank1.index">
         {{Rank1.index}}
       </div>
-      <img class="firstPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank1.user.profileImg"/>
-      <img class="firstPlaceImg" [src]="Rank1.user.profileImg" *ngIf="Rank1.user.profileImg"/>
+      <!--<img class="firstPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank1.profileImg"/>-->
+      <avatar [name]="Rank1.name" [displayType]="'circle'" [size]="100" *ngIf="!Rank1.profileImg"></avatar>
+      <img class="firstPlaceImg" [src]="Rank1.profileImg" *ngIf="Rank1.profileImg"/>
       <label class="firstNameDiv">
-        {{getFristName(Rank1.user.name)}}
+        {{getFristName(Rank1.name)}}
       </label>
       <label class="lastNameDiv">
-        {{getlastName(Rank1.user.name)}}
+        {{getlastName(Rank1.name)}}
       </label>
     </div>
     <div class="rankThreeDiv rankLastDiv">
-      <div class="rankNumDiv">
+      <div class="rankNumDiv" *ngIf="Rank3.index">
         {{Rank3.index}}
       </div>
-      <img class="thridPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank3.user.profileImg"/>
-      <img class="thridPlaceImg" [src]="Rank3.user.profileImg" *ngIf="Rank3.user.profileImg"/>
+      <!--<img class="thridPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank3.user.profileImg"/>-->
+      <avatar [name]="Rank3.name" [displayType]="'circle'" [size]="70" *ngIf="!Rank3.profileImg"></avatar>
+      <img class="thridPlaceImg" [src]="Rank3.profileImg" *ngIf="Rank3.profileImg"/>
       <label class="firstNameDiv">
-        {{getFristName(Rank3.user.name)}}
+        {{getFristName(Rank3.name)}}
       </label>
       <label class="lastNameDiv">
-        {{getlastName(Rank3.user.name)}}
+        {{getlastName(Rank3.name)}}
       </label>
     </div>
   </div>
 
-  <ion-content class="container" >
+  <!--<ion-content class="container"  style="height: calc(100% - 148px);">-->
 
 
-    <ion-list style="background: #faebd700;margin-top: 20px;">
+    <ion-list style="background: #faebd700;margin-top: 20px; overflow: auto;">
       <ion-item class="itemEdit" *ngFor="let user of allOtherRanks">
         <div class="dateOneDiv">
           <label class="todayNum">{{user.index}}</label>
         </div>
-        <div class="infoOneDiv">
-          <img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!user.user.profileImg"/>
-          <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+        <div class="infoOneDivAvatar">
+          <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!user.profileImg"/>-->
+          <avatar [name]="user.name" *ngIf="!user.profileImg"></avatar>
+          <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
           <div class="partTwoOne">
             <div class="topPart">
-              <label class="fristName">{{getFristName(user.user.name)}}</label>
+              <label class="fristName">{{getFristName(user.name)}}</label>
             </div>
             <div class="downPart">
-              <label class="lastName">{{getlastName(user.user.name)}}</label>
+              <label class="lastName">{{getlastName(user.name)}}</label>
             </div>
           </div>
         </div>
@@ -76,6 +80,6 @@
     </ion-list>
 
 
-  </ion-content>
+  <!--</ion-content>-->
 
 </ion-content>

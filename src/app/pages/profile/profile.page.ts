@@ -12,6 +12,7 @@ import {AttendanceTeachersService} from '../../services/AttendanceTeachers/atten
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {DatePipe} from '@angular/common';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 declare var wifiinformation: any;
 
@@ -35,6 +36,8 @@ export class ProfilePage implements OnInit {
   wifiUploadKey = 'WIFI_UPLOAD';
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
   localStorageAttendanceShift:string = 'LOCAL_STORAGE_USER_SHIFT';
+  localStorageAttendanceWIFIS:string = 'LOCAL_STORAGE_USER_WIFIS';
+
   WIFI_CODE = 1;
   QRCODE_CODE = 2;
 
@@ -49,7 +52,7 @@ export class ProfilePage implements OnInit {
 
   constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
       ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
-    public datepipe: DatePipe) {
+    public datepipe: DatePipe, public androidPermissions:AndroidPermissions) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -70,6 +73,40 @@ export class ProfilePage implements OnInit {
     if(!this.userAddress || this.userAddress == ""){
       this.userAddress = "No Address";
     }
+
+
+      if (platform.is('android')) {
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
+              result => {
+                  console.log('Has permission?',result.hasPermission);
+                  if(!result.hasPermission){
+                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION);
+                  }
+              },
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
+          );
+
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+              result => {
+                  console.log('Has permission?',result.hasPermission);
+                  if(!result.hasPermission){
+                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
+                  }
+              },
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+          );
+
+          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE).then(
+              result => {
+                  console.log('Has permission?',result.hasPermission);
+                  if(!result.hasPermission){
+                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE);
+                  }
+              },
+              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE)
+          );
+      }
+
 
       this.storage.get(this.localStorageAttendanceShift).then(
           value => {
@@ -143,6 +180,8 @@ export class ProfilePage implements OnInit {
               // @ts-ignore
               this.attendData = data;
 
+              this.storage.set(this.localStorageAttendanceWIFIS, JSON.stringify(data));
+
               this.attendData.forEach(val => {
                   let data = JSON.parse(val.methodData);
                   if(val.methods.id == this.WIFI_CODE && (data.mac == this.wifi.mac)){
@@ -195,6 +234,7 @@ export class ProfilePage implements OnInit {
           value => {
               let val = value;
               this.load.stopLoading();
+              this.checkIn = false;
               this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
           }, error1 => {
               this.load.stopLoading().then(value => {
