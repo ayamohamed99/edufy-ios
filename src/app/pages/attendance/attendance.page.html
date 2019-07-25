@@ -42,16 +42,16 @@
                         <label class="todayNum">{{getDay(user.checkInDate)}}</label>
                         <label class="todayMonth">{{getMonth(user.checkInDate)}}</label>
                     </div>
-                    <div class="infoOneDiv">
-                        <avatar class="imgOneProfileAvatar" [name]="user.user.name" [size]="45" *ngIf="!user.user.profileImg"></avatar>
-                        <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                    <div class="infoOneDiv" [ngClass]="getColor(user)">
+                        <avatar class="imgOneProfileAvatar" [name]="user.name" [size]="45" *ngIf="!user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
                         <div class="partTwoOne">
                             <div class="topPart">
-                                <label class="fristName">{{getFristName(user.user.name)}}</label>
+                                <label class="fristName">{{getFristName(user.name)}}</label>
                                 <label class="comeInOne">{{getTime(user.checkInDate)}}</label>
                             </div>
                             <div class="downPart">
-                                <label class="lastName">{{getlastName(user.user.name)}}</label>
+                                <label class="lastName">{{getlastName(user.name)}}</label>
                                 <label class="goOutOne">{{getTime(user.checkOutDate)}}</label>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
         <div style="height: 100%;overflow: hidden;" *ngIf="this.accountServ.getUserRole().attendanceAllTeachersAppear && selectedTab == TODAY_TAB">
             <ion-list class="resizeContentList" [ngClass]="checkContent()?'resizeContentNoList':'resizeContentList'" >
                 <ion-item class="itemEdit" *ngFor="let user of todayAttend">
-                    <div class="infoOneDiv" [ngClass]="user.shift_PENALTY_id?'redC':'greenC'">
+                    <div class="infoOneDiv" [ngClass]="getColorDay(user)">
                         <!--<img class="imgOneProfile" src="assets/imgs/profile.png"/>-->
                         <avatar class="imgOneProfileAvatar" [name]="user.name" [size]="45" *ngIf="!user.profileImg"></avatar>
                         <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
@@ -197,19 +197,19 @@
 
             <ion-list style="background: #faebd700;">
                 <ion-item class="itemEdit" *ngFor="let user of weeklyAttend">
-                    <ion-list-header style="text-align: center" *ngIf="!user.isUser">
-                        <ion-label>{{user.header}}</ion-label>
+                    <ion-list-header style="text-align: center" class="editListHeader" *ngIf="!user.isUser">
+                        <ion-label><strong>{{setDateFormat(user.header)}}</strong></ion-label>
                     </ion-list-header>
-                    <div class="infoOneDiv" *ngIf="user.isUser">
-                        <avatar class="imgOneProfileAvatar" [name]="user.user.name" [size]="45" *ngIf="!user.user.profileImg"></avatar>
-                        <img class="imgOneProfile" [src]="user.user.profileImg" *ngIf="user.user.profileImg"/>
+                    <div class="infoOneDiv" [ngClass]="getColor(user)" *ngIf="user.isUser">
+                        <avatar class="imgOneProfileAvatar" [name]="user.name" [size]="45" *ngIf="!user.profileImg"></avatar>
+                        <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
                         <div class="partTwoOne">
                             <div class="topPart">
-                                <label class="fristName">{{getFristName(user.user.name)}}</label>
+                                <label class="fristName">{{getFristName(user.name)}}</label>
                                 <label class="comeInOne">{{getTime(user.checkInDate)}}</label>
                             </div>
                             <div class="downPart">
-                                <label class="lastName">{{getlastName(user.user.name)}}</label>
+                                <label class="lastName">{{getlastName(user.name)}}</label>
                                 <label class="goOutOne">{{getTime(user.checkOutDate)}}</label>
                             </div>
                         </div>
@@ -232,7 +232,7 @@
 
             <ion-list style="background: #faebd700;">
                 <ion-item class="itemEdit" *ngFor="let user of monthlyAttend">
-                    <ion-card style="width: 100%;padding: 10px;" [ngClass]="user.panlties>5?'redColor':'greenColor'">
+                    <ion-card style="width: 100%;padding: 10px;" [ngClass]="getColorMonth(user)">
                         <div>
                             <!--<img class="imgMonthlyProfile" src="assets/imgs/profile.png" *ngIf="!user.profileImg"/>-->
                             <avatar class="monthlyEditAvatar" [name]="user.name" [displayType]="'rounded'" [size]="30" *ngIf="!user.profileImg"></avatar>

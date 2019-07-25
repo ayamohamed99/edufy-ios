@@ -23,6 +23,24 @@ export class TransFormDateService {
     return this.transformTheDate(endWeek, dateFormat);
   }
 
+  geteachDayOfWeek(startDate, endDate){
+    return dateFNS.eachDay(
+        new Date(startDate),
+        new Date(endDate)
+    );
+  }
+
+  isEqualDate(dateOne, dateTwo){
+    return dateFNS.isEqual(
+        dateOne,
+        dateTwo
+    );
+  }
+
+  isFutureDate(date){
+    return dateFNS.isFuture(date);
+  }
+
   getWeekBeforeFromStartDateOfWeek(theStartDate, dateSeparator, dateFormat){
     let arrDate = theStartDate.split(dateSeparator);
     let year = arrDate[0];

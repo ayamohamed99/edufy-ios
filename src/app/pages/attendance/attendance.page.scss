@@ -92,7 +92,7 @@
     display: inline-block;
     width: 100%;
     margin-right: 10px;
-    background: #55a9ff;
+    background: #4EDDE4;
     border-radius: 6px;
     padding: 0 5px;
   }
@@ -102,6 +102,15 @@
     width: 100%;
     margin-right: 10px;
     background: rgba(230, 120, 121, 0.78);
+    border-radius: 6px;
+    padding: 0 5px;
+  }
+
+  .infoOneDivGray{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: #55a9ff;
     border-radius: 6px;
     padding: 0 5px;
   }
@@ -245,6 +254,13 @@
     color: white;
   }
 
+  .editListHeader{
+    -webkit-padding-start: 0 !important;
+    padding-inline-start: 0 !important;
+    font-size: 17px;
+    padding-left: 30% !important;
+  }
+
   .redColor{
     --background: rgba(230, 120, 121, 0.78);
   }
@@ -261,8 +277,8 @@
     background: #4EDDE4;
   }
 
-  .grayColor{
-    --background: #C4C4C4;
+  .blueColor{
+    --background: #55a9ff;
   }
 
 }
