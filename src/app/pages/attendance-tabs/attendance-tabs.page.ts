@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, RouterEvent} from '@angular/router';
+import {AccountService} from '../../services/Account/account.service';
 
 @Component({
   selector: 'app-attendance-tabs',
@@ -8,7 +9,7 @@ import {Router, RouterEvent} from '@angular/router';
 })
 export class AttendanceTabsPage implements OnInit {
   selectedPath = '';
-  constructor(private router: Router) {
+  constructor(private router: Router, private accountServ:AccountService) {
 
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {

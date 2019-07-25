@@ -12,9 +12,9 @@ import {AttendanceTeachersService} from '../../services/AttendanceTeachers/atten
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {DatePipe} from '@angular/common';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
-import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
-declare var wifiinformation: any;
+// declare var wifiinformation: any;
+declare var WifiWizard2: any;
 
 @Component({
   selector: 'app-profile',
@@ -52,7 +52,7 @@ export class ProfilePage implements OnInit {
 
   constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
       ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
-    public datepipe: DatePipe, public androidPermissions:AndroidPermissions) {
+    public datepipe: DatePipe) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -74,40 +74,6 @@ export class ProfilePage implements OnInit {
       this.userAddress = "No Address";
     }
 
-
-      if (platform.is('android')) {
-          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION).then(
-              result => {
-                  console.log('Has permission?',result.hasPermission);
-                  if(!result.hasPermission){
-                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION);
-                  }
-              },
-              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-          );
-
-          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-              result => {
-                  console.log('Has permission?',result.hasPermission);
-                  if(!result.hasPermission){
-                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION);
-                  }
-              },
-              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-          );
-
-          this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE).then(
-              result => {
-                  console.log('Has permission?',result.hasPermission);
-                  if(!result.hasPermission){
-                      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE);
-                  }
-              },
-              err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CHANGE_WIFI_STATE)
-          );
-      }
-
-
       this.storage.get(this.localStorageAttendanceShift).then(
           value => {
               let date = JSON.parse(value);
@@ -128,17 +94,38 @@ export class ProfilePage implements OnInit {
         }
     );
       if(network.type == 'wifi'){
-          wifiinformation.getSampleInfo(wifi => {
-              // alert(
-              //     'SSID: ' + wifi.ssid +
-              //     '\nMAC: ' + wifi.mac +
-              //     '\nIP: ' + wifi.ip +
-              //     '\nGateway: ' + wifi.gateway
-              // );
 
-              this.wifi = wifi;
 
-          }, (err) => console.error(err));
+          WifiWizard2.requestPermission().then( (per) => {
+              console.log('requestPermission' + per);
+              this.wifi = {'ssid':'' ,'mac':''};
+              WifiWizard2.getConnectedSSID().then( (ssid) => {
+                  console.log('SSID' + ssid);
+                  this.wifi.ssid = ssid;
+              });
+
+              WifiWizard2.getConnectedBSSID().then( (bssid) => {
+                  console.log('BSSID' + bssid);
+                  this.wifi.mac = bssid;
+              });
+
+          }).catch( (err) => {
+              console.log('Error' + err);
+          });
+
+
+
+          // wifiinformation.getSampleInfo(wifi => {
+          //     // alert(
+          //     //     'SSID: ' + wifi.ssid +
+          //     //     '\nMAC: ' + wifi.mac +
+          //     //     '\nIP: ' + wifi.ip +
+          //     //     '\nGateway: ' + wifi.gateway
+          //     // );
+          //
+          //     this.wifi = wifi;
+          //
+          // }, (err) => console.error(err));
       }
     if (platform.is('desktop')) {
 
@@ -281,25 +268,14 @@ export class ProfilePage implements OnInit {
     }
 
   getWifiIPAddress() {
-      wifiinformation.getSampleInfo(wifi => {
-          // alert(
-          //     'SSID: ' + wifi.ssid +
-          //     '\nMAC: ' + wifi.mac +
-          //     '\nIP: ' + wifi.ip +
-          //     '\nGateway: ' + wifi.gateway
-          // );
 
-          this.wifi = wifi;
-
-          this.attend.addMethodData(this.accountServ.userBranchId, 1,JSON.stringify(wifi)).subscribe(
+          this.attend.addMethodData(this.accountServ.userBranchId, 1,JSON.stringify(this.wifi)).subscribe(
               value => {
-                  alert(wifi.ssid+' saved as login wifi');
+                  alert(this.wifi.ssid+' saved as login wifi');
               },error1 => {
-                  alert('Couldn\'t save '+wifi.ssid+'as login WiFi');
+                  alert('Couldn\'t save '+this.wifi.ssid+'as login WiFi');
               }
           )
-
-          }, (err) => console.error(err));
   }
 
 

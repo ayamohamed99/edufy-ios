@@ -19,6 +19,10 @@ const routes: Routes = [
       {
         path: 'ranks',
         loadChildren: '../attendance-rank/attendance-rank.module#AttendanceRankPageModule'
+      },
+      {
+        path: 'settings',
+        loadChildren: '../attendance-settings/attendance-settings.module#AttendanceSettingsPageModule'
       }
     ]
   },

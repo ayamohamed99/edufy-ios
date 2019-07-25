@@ -266,6 +266,7 @@ export class AttendancePage implements OnInit {
                                         'checkout_DATE': val.checkout_DATE,
                                         'checkin_DATE': val.checkin_DATE,
                                         'shift_PENALTY_id': val.shift_PENALTY_id,
+                                        'profileImg':val.profile_IMG,
                                         'name': val.name,
                                         'id': val.id
                                     });
@@ -274,6 +275,7 @@ export class AttendancePage implements OnInit {
                                         'checkout_DATE': val.checkout_DATE,
                                         'checkin_DATE': val.checkin_DATE,
                                         'shift_PENALTY_id': val.shift_PENALTY_id,
+                                        'profileImg':val.profile_IMG,
                                         'name': val.name,
                                         'id': val.id
                                     });
@@ -285,6 +287,7 @@ export class AttendancePage implements OnInit {
                                     'checkout_DATE': val.checkout_DATE,
                                     'checkin_DATE': val.checkin_DATE,
                                     'shift_PENALTY_id': val.shift_PENALTY_id,
+                                    'profileImg':val.profile_IMG,
                                     'name': val.name,
                                     'id': val.id
                                 });
@@ -343,13 +346,16 @@ export class AttendancePage implements OnInit {
                                 });
                             }else{
                                 if(!this.accountServ.getUserRole().attendanceAllTeachersAppear) {
-                                    this.weeklyAttend.push({
-                                        'checkInDate': val.checkInDate,
-                                        'checkOutDate': val.checkOutDate,
-                                        'penaltyRules': val.penaltyRules,
-                                        'user': val.user,
-                                        'workShifts': val.workShifts
-                                    });
+                                    if(val.user.name){
+                                        this.weeklyAttend.push({
+                                            'checkInDate': val.checkInDate,
+                                            'checkOutDate': val.checkOutDate,
+                                            'penaltyRules': val.penaltyRules,
+                                            'user': val.user,
+                                            'workShifts': val.workShifts
+                                        });
+                                    }
+
                                 }else{
                                     let date = this.getDateOnly(val.checkInDate);
                                     if(date != lastDate){

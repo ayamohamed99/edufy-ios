@@ -70,8 +70,8 @@
 
     <div class="profile-card js-profile-card">
       <div class="profile-card__img">
-        <!--<img src="assets/imgs/profile.png" alt="profile card">-->
-          <avatar [name]="name" [displayType]="'circle'" alt="profile card"></avatar>
+        <img [src]="accountServ.user.profileImg" alt="profile card" *ngIf="accountServ.user.profileImg">
+          <avatar [name]="name" [displayType]="'circle'" alt="profile card" *ngIf="!accountServ.user.profileImg"></avatar>
       </div>
 
       <div class="profile-card__cnt js-profile-cnt">

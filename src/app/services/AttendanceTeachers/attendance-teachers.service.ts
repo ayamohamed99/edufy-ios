@@ -72,7 +72,7 @@ export class AttendanceTeachersService {
 
 
   getAllUserAttendanceTodayOrWeek(branchId, userId, fromDate, toDate,isOrderedByName){
-    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getAttendanceForDay.ent?fromDate='+fromDate;
+    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getWeekAttendance.ent?fromDate='+fromDate;
 
     if(toDate){
       url += '&toDate=' + toDate;

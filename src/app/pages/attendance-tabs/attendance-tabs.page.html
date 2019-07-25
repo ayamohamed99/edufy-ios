@@ -26,6 +26,14 @@
       <img src="assets/icon/rankspagegray.png" *ngIf="!selectedPath.endsWith('ranks')"/>
       <ion-label>Ranks</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button tab="settings" *ngIf="accountServ.getUserRole().attendanceAdmin || accountServ.getUserRole().controlWifiPoint">
+        <!--      <ion-icon name="moon"></ion-icon>-->
+        <img src="assets/icon/settingspage.png" *ngIf="selectedPath.endsWith('settings')"/>
+        <img src="assets/icon/settingspagegray.png" *ngIf="!selectedPath.endsWith('settings')"/>
+        <ion-label>Settings</ion-label>
+    </ion-tab-button>
+
   </ion-tab-bar>
 
 </ion-tabs>
