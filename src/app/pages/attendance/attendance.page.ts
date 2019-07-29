@@ -137,7 +137,31 @@ export class AttendancePage implements OnInit {
         this.attendServ.getCheckUserAttendance(this.accountServ.userId, todat).subscribe(
             value => {
                 console.log(value);
-                this.userShiftData = value
+                this.userShiftData = value;
+                if(this.userShiftData != null){
+
+                    if(this.accountServ.getUserRole().checkInAttendance && this.accountServ.getUserRole().checkOutAttendance){
+                        if(this.userShiftData.checkOutDate != null){
+                            this.checkIn = "CheckIn"
+                        }else if(this.userShiftData.checkOutDate == null){
+                            this.checkIn = "CheckOut"
+                        }
+                    }else if(this.accountServ.getUserRole().checkInAttendance || this.accountServ.getUserRole().checkOutAttendance){
+                        if(this.userShiftData.checkOutDate != null  && this.accountServ.getUserRole().checkInAttendance){
+                            this.checkIn = "CheckIn"
+                        }else if(this.userShiftData.checkOutDate == null && this.accountServ.getUserRole().checkOutAttendance){
+                            this.checkIn = "CheckOut"
+                        }else{
+                            this.checkIn = ""
+                        }
+                    }else{
+                        this.checkIn = ""
+                    }
+
+
+                }else{
+                    this.checkIn = "CheckIn"
+                }
             },error1 => {
                 if(error1.error == 'This user has no attendance in this date'){
 

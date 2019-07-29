@@ -12,7 +12,7 @@
   </ion-toolbar>
 
   <ion-toolbar  class="toolBarShap" color="gray" *ngIf="platform.is('ios')" scrollable="true">
-    <ion-segment [(ngModel)]="selectedTab" color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" *ngIf="platform.is('ios')">
+    <ion-segment [(ngModel)]="selectedTab" color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" *ngIf="platform.is('ios')" scrollable="true">
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
       <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval</ion-segment-button>

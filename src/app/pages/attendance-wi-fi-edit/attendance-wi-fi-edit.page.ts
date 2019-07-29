@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {AttendanceTeachersService} from '../../services/AttendanceTeachers/attendance-teachers.service';
 import {AccountService} from '../../services/Account/account.service';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
-import {AlertController, ModalController, ToastController} from '@ionic/angular';
+import {AlertController, ModalController, Platform, ToastController} from '@ionic/angular';
 import {Network} from '@ionic-native/network/ngx';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
+import _ from "lodash";
+
 declare var WifiWizard2: any;
 
 
@@ -15,18 +17,28 @@ declare var WifiWizard2: any;
 })
 export class AttendanceWiFiEditPage implements OnInit {
 
-  wifiList:[any];
-  attendData:[any];
+  wifiList = [];
+  // attendData:[any];
   WIFI_CODE = 1;
   wifi;
+  otherWifiList;
 
-  constructor(public accountServ:AccountService, public attend:AttendanceTeachersService, public load:LoadingViewService, public modal:ModalController, public alrt:AlertController, public network:Network, public toast:ToastViewService) {
+  branchesList = [];
+  selectedTab;
 
-    this.getAllAttendData();
+
+  constructor(public accountServ:AccountService, public attend:AttendanceTeachersService, public load:LoadingViewService,
+              public modal:ModalController, public alrt:AlertController, public network:Network, public toast:ToastViewService,
+              public platform:Platform) {
+
+    this.branchesList = this.accountServ.accountBranchesList;
+
+    this.selectedTab = this.branchesList[0].id;
+
+    this.getAllAttendData(this.selectedTab);
 
 
     if(network.type == 'wifi'){
-
 
       WifiWizard2.requestPermission().then( (per) => {
         console.log('requestPermission' + per);
@@ -44,70 +56,106 @@ export class AttendanceWiFiEditPage implements OnInit {
       }).catch( (err) => {
         console.log('Error' + err);
       });
-
-
-
-      // wifiinformation.getSampleInfo(wifi => {
-      //     // alert(
-      //     //     'SSID: ' + wifi.ssid +
-      //     //     '\nMAC: ' + wifi.mac +
-      //     //     '\nIP: ' + wifi.ip +
-      //     //     '\nGateway: ' + wifi.gateway
-      //     // );
-      //
-      //     this.wifi = wifi;
-      //
-      // }, (err) => console.error(err));
     }
+
+    network.onchange().subscribe(
+        value => {
+
+          if(network.type == 'wifi'){
+
+            WifiWizard2.requestPermission().then( (per) => {
+              console.log('requestPermission' + per);
+              this.wifi = {'ssid':'' ,'mac':''};
+              WifiWizard2.getConnectedSSID().then( (ssid) => {
+                console.log('SSID' + ssid);
+                this.wifi.ssid = ssid;
+              });
+
+              WifiWizard2.getConnectedBSSID().then( (bssid) => {
+                console.log('BSSID' + bssid);
+                this.wifi.mac = bssid;
+              });
+
+            }).catch( (err) => {
+              console.log('Error' + err);
+            });
+
+
+            // wifiinformation.getSampleInfo(wifi => {
+            //     // alert(
+            //     //     'SSID: ' + wifi.ssid +
+            //     //     '\nMAC: ' + wifi.mac +
+            //     //     '\nIP: ' + wifi.ip +
+            //     //     '\nGateway: ' + wifi.gateway
+            //     // );
+            //
+            //     this.wifi = wifi;
+            //
+            // }, (err) => console.error(err));
+          }
+
+        });
+  }
+
+  scanWiFi(){
+    if(this.network.type == 'wifi'){
+          WifiWizard2.scan().then(
+              val => {
+                console.log(val);
+                let temp = val;
+                this.otherWifiList = [];
+                temp.forEach( wiFi => {
+
+                  if(!this.findWiFi(wiFi.BSSID)){
+                    let wifiData = {'ssid':wiFi.SSID, 'mac':wiFi.BSSID};
+                    this.otherWifiList.push(wifiData);
+                  }
+                });
+              }).catch(
+              err=>{
+                console.log(err);
+              });
+    }
+  }
+
+  findWiFi(BSSID){
+
+    let findWIFI = false;
+
+    this.wifiList.forEach(wifi => {
+      let data = JSON.parse(wifi.data.methodData);
+
+      if(data.mac == BSSID){
+        findWIFI = true;
+      }
+
+    });
+
+    return findWIFI;
   }
 
   ngOnInit() {
   }
 
+  tabThatSelectedDo(branchId){
+    console.log(branchId);
+    this.selectedTab = branchId;
+    this.getAllAttendData(branchId);
+  }
 
-  addThisWiFi(){
-
-
-    let listUserBranch:[any] = this.accountServ.accountBranchesList;
-
+  addThisWiFi(wifi, branchId){
 
     if(this.network.type == 'wifi') {
-      if(listUserBranch.length > 1){
-        let inputs = [{}];
-        inputs.splice(0);
-        listUserBranch.forEach(
-            (val, index) => {
-              if(index == 0){
-                inputs.push({
-                  name: 'radio',
-                  type: 'radio',
-                  label: val.name,
-                  value: val.id,
-                  checked: true
-                });
-              }else{
-                inputs.push({
-                  name: 'radio',
-                  type: 'radio',
-                  label: val.name,
-                  value: val.id,
-                });
-              }
-            });
-
-        this.saveAttendForManyBranch(inputs);
-      }else{
-        this.saveAttentOneBranch();
-      }
+        this.saveAttentOneBranch(wifi, branchId);
     }else {
       alert('Please Connect to any wifi to register it');
     }
   }
 
-  async saveAttentOneBranch(){
+  async saveAttentOneBranch(wifi, branchId){
     const alert = await this.alrt.create({
       header: 'Confirm!',
-      message: 'Are you want to add <strong>'+ this.wifi.ssid+'</strong> to your attend wifi list?',
+      message: 'Are you sure you want to add <strong>'+ wifi.ssid+'</strong> to your wifi list?',
       buttons: [
         {
           text: 'Cancel',
@@ -119,9 +167,10 @@ export class AttendanceWiFiEditPage implements OnInit {
         }, {
           text: 'Okay',
           handler: () => {
-            this.attend.addMethodData(this.accountServ.userBranchId,this.WIFI_CODE,JSON.stringify(this.wifi)).subscribe(
+            this.attend.addMethodData(branchId,this.WIFI_CODE,JSON.stringify(wifi)).subscribe(
                 value => {
-                  this.toast.presentTimerToast('The WiFi Point save for your branch');
+                  this.getAllAttendData(this.selectedTab);
+                  this.toast.presentTimerToast('The WiFi Point saved for your branch');
                 },error1 => {
                   this.toast.presentTimerToast('Couldn\'t save the wifi point');
                 });
@@ -133,52 +182,28 @@ export class AttendanceWiFiEditPage implements OnInit {
     await alert.present();
   }
 
-  async saveAttendForManyBranch(data){
-    const alerts = await this.alrt.create({
-      header: 'Confirm!',
-      message: 'Are you want to add <strong>'+ this.wifi.ssid+'</strong> to your attend wifi list?',
-      inputs: data,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: (blah) => {
-            console.log('Confirm Cancel: blah');
-          }
-        }, {
-          text: 'Okay',
-          handler: () => {
-            // this.attend.addMethodData(this.accountServ.)
-          }
-        }
-      ]
-    });
-
-    await alerts.present();
-  }
-
   close(){
     this.modal.dismiss();
   }
 
-  getAllAttendData(){
+  getAllAttendData(branchId){
     this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
-      this.attend.getBranchAttendMeathodsData(this.accountServ.userBranchId,1).subscribe(
+      this.attend.getBranchAttendMeathodsData(branchId,1).subscribe(
           next => {
             this.load.stopLoading();
-            let data = next;
-            // @ts-ignore
-            this.attendData = data;
+            let attendData = [];
+            //@ts-ignore
+            attendData = next;
 
-            this.wifiList = [{}];
-            this.wifiList.splice(0);
-            this.attendData.forEach(val => {
+            this.wifiList = [];
+            attendData.forEach(val => {
               let data = JSON.parse(val.methodData);
               if(val.methods.id == this.WIFI_CODE){
                 this.wifiList.push({'data':val,'name':data.ssid});
               }
             });
+
+            this.scanWiFi();
           },err => {
             this.load.stopLoading();
           }
@@ -186,20 +211,47 @@ export class AttendanceWiFiEditPage implements OnInit {
     });
   }
 
-  deleteItem(data){
-    this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
+  async deleteItem(data){
+     const alert = await this.alrt.create({
+        header: 'Confirm!',
+        message: 'Are you sure you want to delete this WiFi to your wifi list?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {
+              console.log('Confirm Cancel: blah');
+            }
+          }, {
+            text: 'Okay',
+            handler: () => {
+              this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
 
-      this.attend.deleteMethodAttendData(data).subscribe(
-        value => {
-          this.load.stopLoading().then( val=>{
-            this.getAllAttendData();
-          });
-        },error1 => {
-            this.load.stopLoading().then( val=>{
-              alert('Couldn\'t delete the wifi point');
-            });
-        });
-    });
+                this.attend.deleteMethodAttendData(data).subscribe(
+                    value => {
+                      this.load.stopLoading().then( val=>{
+                        this.getAllAttendData(this.selectedTab);
+                      });
+                    },error1 => {
+                      this.load.stopLoading().then( val=>{
+                        if(error1.error.text == "DELETE_ATTENDANCE_DATA"){
+                          this.getAllAttendData(this.selectedTab);
+                        }else{
+                          this.showAlert();
+                        }
+                      });
+                    });
+              });
+            }
+          }
+        ]
+      });
+
+  }
+
+  showAlert(){
+    alert('Couldn\'t delete the wifi point');
   }
 
 }

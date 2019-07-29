@@ -59,7 +59,7 @@ export class AttendanceTeachersService {
     //   'methods':{'id':selectedData.methods},
     //   'methodData':selectedData.methodData
     // };
-    return this.http.delete(this.DomainUrl.Domain + '/authentication/attendanceTeachers.ent/deleteBranchMethodsData.ent',selectedData);
+    return this.http.post(this.DomainUrl.Domain + '/authentication/attendanceTeachers.ent/deleteBranchMethodsData.ent',selectedData,this.httpOptions);
   }
 
   updateBranchAttendData(selectedData){

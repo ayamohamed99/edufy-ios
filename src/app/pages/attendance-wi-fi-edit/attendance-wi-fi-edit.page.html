@@ -6,26 +6,49 @@
       </ion-button>
     </ion-buttons>
     <ion-title>WiFi Settings</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="addThisWiFi()">
-        <ion-icon name="add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <!--<ion-buttons slot="end">-->
+      <!--<ion-button (click)="addThisWiFi()">-->
+        <!--<ion-icon name="add-circle-outline"></ion-icon>-->
+      <!--</ion-button>-->
+    <!--</ion-buttons>-->
   </ion-toolbar>
+
+  <ion-toolbar color="gray" scrollable="true">
+    <ion-segment [(ngModel)]="selectedTab" color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true">
+      <ion-segment-button *ngFor="let branch of branchesList" style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="branch.id" (click)="tabThatSelectedDo(branch.id)">
+        {{branch.name}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
 </ion-header>
 
-<ion-content class="container" scrollY="false" scrollX="false">
+<ion-content class="container">
 
 
   <ion-list style="background: #faebd700; overflow: auto;">
-    <ion-item-sliding *ngFor="let wifi of wifiList">
-      <ion-item>
+    <ion-list-header>
+      <ion-label>Branch Assigned WiFi</ion-label>
+    </ion-list-header>
+      <ion-item *ngFor="let wifi of wifiList">
         <ion-label>{{wifi.name}}</ion-label>
+        <ion-button color="danger" slot="end" (click)="deleteItem(wifi.data)">
+          Delete
+        </ion-button>
       </ion-item>
-      <ion-item-options color="danger" side="end">
-        <ion-item-option  (click)="deleteItem(wifi.data)">Delete</ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+
+  </ion-list>
+
+  <ion-list style="background: #faebd700; overflow: auto;" *ngIf="otherWifiList">
+    <ion-list-header>
+      <ion-label>Nearby Connection</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let wifi of otherWifiList">
+      <ion-label>{{wifi.ssid}}</ion-label>
+      <ion-button slot="end" (click)="addThisWiFi(wifi, selectedTab)">
+        Add
+      </ion-button>
+    </ion-item>
 
   </ion-list>
 
