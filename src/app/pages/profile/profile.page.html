@@ -111,12 +111,12 @@
           </ion-button>
 
         <ion-button expand="full" (click)="checkInOut('In')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance
-         && network.type == 'wifi' && attendData.length > 0 && userShiftData == null && checkIn ">
+         && network.type == 'wifi' && attendData.length > 0 && (userShiftData == null || userShiftData.checkOutDate != null)">
           Check In
         </ion-button>
 
           <ion-button  color="danger" expand="full" (click)="checkInOut('Out')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance
-          && network.type == 'wifi' && attendData.length > 0 && userShiftData != null && userShiftData.checkOutDate == null && !checkIn">
+          && network.type == 'wifi' && attendData.length > 0 && userShiftData != null && userShiftData.checkOutDate == null">
               Check Out
           </ion-button>
 

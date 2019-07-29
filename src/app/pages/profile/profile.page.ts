@@ -12,6 +12,9 @@ import {AttendanceTeachersService} from '../../services/AttendanceTeachers/atten
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {DatePipe} from '@angular/common';
 import {LoadingViewService} from '../../services/LoadingView/loading-view.service';
+import { Device } from '@ionic-native/device/ngx';
+import {error} from 'selenium-webdriver';
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 
 // declare var wifiinformation: any;
 declare var WifiWizard2: any;
@@ -35,7 +38,7 @@ export class ProfilePage implements OnInit {
   arrayToPostAttachment:any[]=[];
   wifiUploadKey = 'WIFI_UPLOAD';
   localStorageToken:string = 'LOCAL_STORAGE_TOKEN';
-  localStorageAttendanceShift:string = 'LOCAL_STORAGE_USER_SHIFT';
+  // localStorageAttendanceShift:string = 'LOCAL_STORAGE_USER_SHIFT';
   localStorageAttendanceWIFIS:string = 'LOCAL_STORAGE_USER_WIFIS';
 
   WIFI_CODE = 1;
@@ -48,11 +51,12 @@ export class ProfilePage implements OnInit {
   attendData:[any];
   userShiftData;
   connectedToSameWiFi = false;
-  checkIn = true;
+  // checkIn = true;
+  samePhone = false;
 
   constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
       ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
-    public datepipe: DatePipe) {
+    public datepipe: DatePipe, public androidPermission:AndroidPermissions) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -74,25 +78,12 @@ export class ProfilePage implements OnInit {
       this.userAddress = "No Address";
     }
 
-      this.storage.get(this.localStorageAttendanceShift).then(
-          value => {
-              let date = JSON.parse(value);
-              if(this.checktheDateIn(date.checkInDate)) {
-                  this.userShiftData = JSON.parse(value);
-              }
-              if(this.userShiftData != null && this.checktheDateIn(date.checkInDate)){
-                  this.checkIn = false;
-              }
-          },
-          (err) => {})
-          .catch((err) => {});
-
     network.onchange().subscribe(
         value => {
             let val = value;
-
         }
     );
+
       if(network.type == 'wifi'){
 
 
@@ -141,22 +132,76 @@ export class ProfilePage implements OnInit {
 
       if (platform.is('desktop')) {
           attend.putHeader(localStorage.getItem(this.localStorageToken));
+          this.checkTheAttendanceShift();
           this.getAttendData();
+
       } else {
           storage.get(this.localStorageToken).then(
               val => {
                   attend.putHeader(val);
+                  this.checkTheAttendanceShift();
                   this.getAttendData();
               });
       }
 
+      if (platform.is('android')) {
+          this.androidPermission.checkPermission(this.androidPermission.PERMISSION.READ_PHONE_STATE).then(
+              result => {
+                  console.log('Has permission?',result.hasPermission);
+                  if(!result.hasPermission){
+                      this.androidPermission.requestPermission(this.androidPermission.PERMISSION.READ_PHONE_STATE).then(
+                          value => {
+                              if(value){
+                                  this.checkSamePhone();
+                              }
+                          });
+                  }else{
+                      this.checkSamePhone();
+                  }
+              },
+              err => {
+                  this.androidPermission.requestPermission(this.androidPermission.PERMISSION.READ_PHONE_STATE).then(
+                      value => {
+                          if(value){
+                              this.checkSamePhone();
+                          }
+                      });
+              }
+          );
+      }else{
+          this.checkSamePhone();
+      }
+  }
 
-
+  checkSamePhone(){
+      this.attend.sentMobileMacAddress(this.accountServ.userId).subscribe(
+          value=>{
+              this.samePhone = this.attend.checkIfSameMobile(this.accountServ.userId);
+          },err => {
+              this.presentAlert('Alert', 'Can\'t Link this phone to your account');
+          });
   }
 
   ngOnInit() {
   }
 
+
+  checkTheAttendanceShift(){
+
+      let todat = this.transDate.transformTheDate(new Date(), 'yyyy-MM-dd HH:mm');
+      this.attend.getCheckUserAttendance(this.accountServ.userId, todat).subscribe(
+          value => {
+              console.log(value);
+              this.userShiftData = value
+          },error1 => {
+              if(error1.error == 'This user has no attendance in this date'){
+
+              }else{
+                  this.presentAlert('Error', error1.error)
+              }
+
+          });
+  }
 
   getAttendData(){
       this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
@@ -206,26 +251,59 @@ export class ProfilePage implements OnInit {
               this.presentAlert('Alert','You need to connect to one of saved wifi');
           } else {
               let date = this.transDate.transformTheDate(new Date(), "yyyy-MM-dd HH:mm");
-              this.load.startLoading('', false, 'loadingWithoutBackground');
               if(from == 'In'){
-                  this.CallCheckIn(date);
+                  if(this.samePhone) {
+                      this.load.startLoading('', false, 'loadingWithoutBackground');
+                      this.CallCheckIn(date);
+                  }else{
+                      this.presentChangePhoneAlert();
+                  }
               }else{
-                  this.CallCheckOut(date);
+                  if(this.samePhone) {
+                      this.load.startLoading('', false, 'loadingWithoutBackground');
+                      this.CallCheckOut(date);
+                  }else{
+                      this.presentChangePhoneAlert();
+                  }
               }
           }
       }
   }
+
+
+    async presentChangePhoneAlert() {
+        const alert = await this.alertController.create({
+            header: 'Alert',
+            message: 'This phone not connect to your account do you want to change your phone and inform your admin?',
+            buttons: [
+            {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: (blah) => {
+                    console.log('Confirm Cancel: blah');
+                }
+            }, {
+                text: 'Okay',
+                handler: () => {
+                    this.attend.sentMobileMacAddress(this.accountServ.userId);
+                }
+            }
+        ]
+        });
+
+        await alert.present();
+    }
 
   CallCheckIn(date){
       this.attend.checkInAttendance(date, this.accountServ.userId).subscribe(
           value => {
               let val = value;
               this.load.stopLoading();
-              this.checkIn = false;
-              this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
+              // this.checkIn = false;
+              this.userShiftData = value;
           }, error1 => {
               this.load.stopLoading().then(value => {
-                  this.presentAlert('Alert', error1.error);
+                  this.presentAlert('Alert', error1.error.text);
               });
           }
       );
@@ -236,10 +314,14 @@ export class ProfilePage implements OnInit {
           value => {
               let val = value;
               this.load.stopLoading();
-              this.storage.set(this.localStorageAttendanceShift, JSON.stringify(val));
+              this.userShiftData = value;
           }, error1 => {
               this.load.stopLoading().then(value => {
-                  this.presentAlert('Alert', error1.error);
+                  if(error1.error.text){
+                      this.presentAlert('Alert', error1.error.text);
+                  }else{
+                      this.presentAlert('Alert', error1.error);
+                  }
               });
           }
       );

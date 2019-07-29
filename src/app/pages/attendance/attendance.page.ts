@@ -42,9 +42,12 @@ export class AttendancePage implements OnInit {
   checkIn = "CheckIn";
   wifi;
   connectedToSameWiFi = false;
-    WIFI_CODE = 1;
+  WIFI_CODE = 1;
 
-    tempData;
+  tempData;
+
+  samePhone = false;
+
   constructor(public accountServ:AccountService, public attendServ:AttendanceTeachersService,
               public tranDate:TransFormDateService,public load:LoadingViewService,public alertController:AlertController,
               public storage:Storage, public network:Network)
@@ -55,21 +58,21 @@ export class AttendancePage implements OnInit {
       this.selectedTab = this.WEEKLY_TAB;
     }
 
-    this.storage.get(this.localStorageAttendanceShift).then(
-        value => {
-          let date = JSON.parse(value);
-          if(this.checktheDateIn(date.checkInDate)) {
-            this.userShiftData = JSON.parse(value);
-          }
-          if(this.userShiftData != null && this.checktheDateIn(date.checkInDate)){
-            this.checkIn = "CheckOut";
-          }
-            if(this.userShiftData != null && this.checktheDateIn(date.checkInDate) && this.userShiftData.checkOutDate != null){
-                this.checkIn = "";
-            }
-        },
-        (err) => {})
-        .catch((err) => {});
+    // this.storage.get(this.localStorageAttendanceShift).then(
+    //     value => {
+    //       let date = JSON.parse(value);
+    //       if(this.checktheDateIn(date.checkInDate)) {
+    //         this.userShiftData = JSON.parse(value);
+    //       }
+    //       if(this.userShiftData != null && this.checktheDateIn(date.checkInDate)){
+    //         this.checkIn = "CheckOut";
+    //       }
+    //         if(this.userShiftData != null && this.checktheDateIn(date.checkInDate) && this.userShiftData.checkOutDate != null){
+    //             this.checkIn = "";
+    //         }
+    //     },
+    //     (err) => {})
+    //     .catch((err) => {});
 
       this.storage.get(this.localStorageAttendanceWIFIS).then(
           value => {
@@ -103,12 +106,17 @@ export class AttendancePage implements OnInit {
 
       }, (err) => console.error(err));
     }
+
+      this.checkTheAttendanceShift();
       if(this.selectedTab == this.WEEKLY_TAB){
           this.getAttendanceWeek();
       }
       if(this.selectedTab == this.TODAY_TAB){
           this.getTODAYData();
       }
+
+
+      this.samePhone = this.attendServ.checkIfSameMobile(this.accountServ.userId);
 
   }
 
@@ -122,6 +130,24 @@ export class AttendancePage implements OnInit {
   ngOnInit() {
 
   }
+
+  checkTheAttendanceShift(){
+
+        let todat = this.tranDate.transformTheDate(new Date(), 'yyyy-MM-dd HH:mm');
+        this.attendServ.getCheckUserAttendance(this.accountServ.userId, todat).subscribe(
+            value => {
+                console.log(value);
+                this.userShiftData = value
+            },error1 => {
+                if(error1.error == 'This user has no attendance in this date'){
+
+                }else{
+                    this.presentAlert('Error', error1.error)
+                }
+
+            });
+    }
+
   segmentChanged(ev){
     if(this.selectedTab == this.TODAY_TAB){
       this.getTODAYData();
@@ -144,7 +170,14 @@ export class AttendancePage implements OnInit {
   }
 
   checkInNow(){
+      if(this.samePhone){
+          this.funcCheckIn();
+      }else{
+          this.presentChangePhoneAlert();
+      }
+  }
 
+  funcCheckIn(){
       if(this.network.type != 'wifi'){
           this.presentAlert('Alert','You need to connect to wifi');
       }else if(!this.connectedToSameWiFi){
@@ -158,8 +191,12 @@ export class AttendancePage implements OnInit {
               value => {
                   this.tempData = value;
                   this.load.stopLoading().then(val=>{
-                  this.checkIn = "CheckOut";
-                  this.storage.set(this.localStorageAttendanceShift, JSON.stringify(this.tempData));
+                      if(this.accountServ.getUserRole().checkOutAttendance) {
+                          this.checkIn = "CheckOut";
+                      }else{
+                          this.checkIn = "";
+                      }
+                      // this.storage.set(this.localStorageAttendanceShift, JSON.stringify(this.tempData));
                       this.userShiftData = this.tempData;
                       if(this.selectedTab == this.WEEKLY_TAB){
                           this.getAttendanceWeek();
@@ -177,49 +214,61 @@ export class AttendancePage implements OnInit {
       }
   }
 
-    checkInCondition(){
-        if(this.accountServ.getUserRole().checkInAttendance && this.network.type == 'wifi' && this.userShiftData == null && this.checkIn == "CheckIn"){
+  checkInCondition(){
+        if(this.accountServ.getUserRole().checkInAttendance && this.network.type == 'wifi' && (this.userShiftData == null || this.userShiftData.checkOutDate != null)){
             return true;
         }else{
             return false;
         }
     }
 
-    checkOutNow(){
-        if(this.network.type != 'wifi'){
-            this.presentAlert('Alert','You need to connect to wifi');
-        }else if(!this.connectedToSameWiFi){
-            this.presentAlert('Alert','You need to connect to one of saved wifi');
-        } else {
-
-
-            let date = this.tranDate.transformTheDate(new Date(), "yyyy-MM-dd HH:mm");
-            this.load.startLoading('', false, 'loadingWithoutBackground');
-            this.attendServ.checkOutAttendance(date, this.userShiftData).subscribe(
-                value => {
-                    this.tempData = value;
-                    this.load.stopLoading().then(val=>{
-                    this.storage.set(this.localStorageAttendanceShift, JSON.stringify(this.tempData));
-                    this.userShiftData = this.tempData;
-                    this.checkIn = "";
-                    if(this.selectedTab == this.WEEKLY_TAB){
-                        this.getAttendanceWeek();
-                    }
-                    if(this.selectedTab == this.TODAY_TAB){
-                        this.getTODAYData();
-                    }
-
-                    });
-                }, error1 => {
-                    this.load.stopLoading().then(value => {
-                        this.presentAlert('Alert', error1.error);
-                    });
-                }
-            );
+  checkOutNow(){
+        if(this.samePhone){
+            this.funcCheckOut();
+        }else{
+            this.presentChangePhoneAlert();
         }
     }
 
-    checkOutCondition(){
+  funcCheckOut(){
+      if(this.network.type != 'wifi'){
+          this.presentAlert('Alert','You need to connect to wifi');
+      }else if(!this.connectedToSameWiFi){
+          this.presentAlert('Alert','You need to connect to one of saved wifi');
+      } else {
+
+
+          let date = this.tranDate.transformTheDate(new Date(), "yyyy-MM-dd HH:mm");
+          this.load.startLoading('', false, 'loadingWithoutBackground');
+          this.attendServ.checkOutAttendance(date, this.userShiftData).subscribe(
+              value => {
+                  this.tempData = value;
+                  this.load.stopLoading().then(val=>{
+                      // this.storage.set(this.localStorageAttendanceShift, JSON.stringify(this.tempData));
+                      this.userShiftData = this.tempData;
+                      if(this.accountServ.getUserRole().checkInAttendance) {
+                          this.checkIn = "CheckIn";
+                      }else{
+                          this.checkIn = "";
+                      }
+                      if(this.selectedTab == this.WEEKLY_TAB){
+                          this.getAttendanceWeek();
+                      }
+                      if(this.selectedTab == this.TODAY_TAB){
+                          this.getTODAYData();
+                      }
+
+                  });
+              }, error1 => {
+                  this.load.stopLoading().then(value => {
+                      this.presentAlert('Alert', error1.error);
+                  });
+              }
+          );
+      }
+  }
+
+  checkOutCondition(){
       if(this.checkIn == "CheckOut" && this.accountServ.getUserRole().checkOutAttendance && this.network.type == 'wifi' && this.userShiftData != null && this.userShiftData.checkOutDate == null){
           return true;
       }else{
@@ -227,7 +276,28 @@ export class AttendancePage implements OnInit {
       }
     }
 
-    async presentAlert(head,msg) {
+  async presentChangePhoneAlert() {
+      const alert = await this.alertController.create({
+          header: 'Alert',
+          message: 'This phone not connect to your account do you want to change your phone and inform your admin?',
+          buttons: [
+              {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  handler: (blah) => {
+                      console.log('Confirm Cancel: blah');
+                  }
+              }, {
+                text: 'Okay',
+                handler: () => {
+                    this.attendServ.sentMobileMacAddress(this.accountServ.userId);
+                }
+              }]
+      });
+      await alert.present();
+  }
+
+  async presentAlert(head,msg) {
         const alert = await this.alertController.create({
             header: head,
             message: msg,
@@ -237,7 +307,7 @@ export class AttendancePage implements OnInit {
         await alert.present();
     }
 
-    getTODAYData(){
+  getTODAYData(){
         let userId;
         let from;
         let to;
@@ -466,7 +536,7 @@ export class AttendancePage implements OnInit {
     });
   }
 
-    loadData(ev){
+  loadData(ev){
 
         let branchId = this.accountServ.userBranchId;
         let from = this.tranDate.transformTheDate(this.weekDays[this.nextDayIndexInArray], 'yyyy-MM-dd HH:MM');
@@ -532,45 +602,43 @@ export class AttendancePage implements OnInit {
             });
     }
 
-    toggleInfiniteScroll() {
+  toggleInfiniteScroll() {
         this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
     }
 
 
-    getFristName(name){
+  getFristName(name){
         let arr = name.split(" ");
         return arr[0];
     }
 
-    getlastName(name){
+  getlastName(name){
         let arr = name.split(" ");
         return arr[1];
     }
 
-    getDateOnly(date){
+  getDateOnly(date){
         return this.tranDate.transformTheDate(new Date(date),'dd/MM/yyyy');
     }
 
-    getDay(date){
+  getDay(date){
        let D = this.tranDate.transformTheDate(new Date(date),'yyyy-MM-dd');
        let arrD = D.split('-');
        return arrD[2];
     }
 
-    getMonth(date){
+  getMonth(date){
         let M = this.tranDate.transformTheDate(new Date(date),'yyyy-MMM-dd');
         let arrM = M.split('-');
         return arrM[1];
     }
 
-
-    setDateFormat(date){
+  setDateFormat(date){
       let newFormat = this.tranDate.transformTheDate(new Date(date),'dd / MMM / yyyy');
       return newFormat
     }
 
-
-    getColor(user){
+  getColor(user){
       if(user.penaltyRules && user.checkInDate){
           return 'infoOneDivRed';
       }else if(!user.penaltyRules && user.checkInDate){
@@ -580,7 +648,7 @@ export class AttendancePage implements OnInit {
       }
     }
 
-    getColorDay(user){
+  getColorDay(user){
         if(user.shift_PENALTY_id && user.checkin_DATE){
             return 'infoOneDivRed';
         }else if(!user.shift_PENALTY_id && user.checkin_DATE){
@@ -590,8 +658,7 @@ export class AttendancePage implements OnInit {
         }
     }
 
-
-    getColorMonth(user){
+  getColorMonth(user){
         if(user.Late > 5 && user.Attend > 0){
             return 'redColor';
         }else if(user.Late <= 5 && user.Late != 0 && user.Attend > 0){

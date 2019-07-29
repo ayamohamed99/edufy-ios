@@ -27,6 +27,7 @@
     "@ionic-native/background-mode": "^5.8.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/date-picker": "^5.8.0",
+    "@ionic-native/device": "^5.10.0",
     "@ionic-native/document-viewer": "^5.8.0",
     "@ionic-native/file": "^5.8.0",
     "@ionic-native/file-opener": "^5.8.0",

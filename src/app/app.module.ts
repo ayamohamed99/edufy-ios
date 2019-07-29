@@ -50,6 +50,7 @@ import { HTTP } from '@ionic-native/http/ngx';
 import {IonicStorageModule} from '@ionic/storage';
 import {TokenInterceptorService} from './services/token-interceptor.service';
 import {AvatarModule} from 'ng2-avatar';
+import { Device } from '@ionic-native/device/ngx';
 
 const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule,MatFormFieldModule,MatInputModule,MatCheckboxModule,MatRadioModule];
 const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
@@ -91,7 +92,8 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
     FCMService, FirebaseMessaging,
     DatePipe,
     DatePicker,
-    HTTP
+    HTTP,
+    Device
   ],
   bootstrap: [AppComponent]
 })

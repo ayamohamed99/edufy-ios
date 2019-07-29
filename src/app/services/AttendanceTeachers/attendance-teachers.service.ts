@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Url_domain} from '../../models/url_domain';
 import {AttendanceData} from '../../models/attendance_data';
+import {Device} from '@ionic-native/device/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,11 @@ export class AttendanceTeachersService {
   DomainUrl: Url_domain = new Url_domain;
 
   httpOptions;
-  constructor(private http: HttpClient) {}
+
+  private deviceInfo = {};
+  private LOGIN_WITH_SAME_PHONE = false;
+
+  constructor(private http: HttpClient, public device:Device) {}
 
   putHeader(value) {
     this.httpOptions = {
@@ -122,8 +127,47 @@ export class AttendanceTeachersService {
     return this.http.get(url)
   }
 
+  getCheckUserAttendance(userId, todayDate){
+    let url = this.DomainUrl.Domain + '/authentication/userAttendance.ent/getCheckUserAttendance.ent?userId='+userId+'&checkDate=' + todayDate;
+
+    return this.http.get(url)
+  }
+
+  sentMobileMacAddress(userId){
+    let serial = this.device.serial;
+    let uuid = this.device.uuid;
+    let platform = this.device.platform;
+    let model = this.device.model;
+    let manufacturer = this.device.manufacturer;
+
+    console.log(serial);
+    console.log(uuid);
+    console.log(platform);
+    console.log(model);
+    console.log(manufacturer);
 
 
+
+    let url = 'www.google.com';
+
+    return this.http.get(url);
+  }
+
+  checkIfSameMobile(userId){
+    let serial = this.device.serial;
+    let uuid = this.device.uuid;
+    let platform = this.device.platform;
+    let model = this.device.model;
+    let manufacturer = this.device.manufacturer;
+
+    console.log(serial);
+    console.log(uuid);
+    console.log(platform);
+    console.log(model);
+    console.log(manufacturer);
+
+    return this.LOGIN_WITH_SAME_PHONE;
+  }
 
 
 
