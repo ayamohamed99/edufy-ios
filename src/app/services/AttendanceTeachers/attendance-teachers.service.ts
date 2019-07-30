@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Url_domain} from '../../models/url_domain';
 import {AttendanceData} from '../../models/attendance_data';
 import {Device} from '@ionic-native/device/ngx';
+import {BehaviorSubject} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {TransFormDateService} from '../TransFormDate/trans-form-date.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,7 @@ export class AttendanceTeachersService {
   private deviceInfo = {};
   private LOGIN_WITH_SAME_PHONE = false;
 
-  constructor(private http: HttpClient, public device:Device) {}
+  constructor(private http: HttpClient, public device:Device, public transDate:TransFormDateService) {}
 
   putHeader(value) {
     this.httpOptions = {
@@ -133,42 +136,45 @@ export class AttendanceTeachersService {
     return this.http.get(url)
   }
 
-  sentMobileMacAddress(userId){
+  sentMobileMacAddress(user){
     let serial = this.device.serial;
     let uuid = this.device.uuid;
-    let platform = this.device.platform;
-    let model = this.device.model;
-    let manufacturer = this.device.manufacturer;
+    let name = this.device.manufacturer + ' ' +this.device.model;
 
-    console.log(serial);
-    console.log(uuid);
-    console.log(platform);
-    console.log(model);
-    console.log(manufacturer);
+    let userDevice = {
+      "uuid":uuid,
+      "name":name,
+      "user":{"id":user.id},
+      "date": new Date()
+    };
 
-
-
-    let url = 'www.google.com';
-
-    return this.http.get(url);
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/postAddUserDevice.ent',userDevice);
   }
 
-  checkIfSameMobile(userId){
-    let serial = this.device.serial;
+  checkIfSameMobile(user){
     let uuid = this.device.uuid;
-    let platform = this.device.platform;
-    let model = this.device.model;
-    let manufacturer = this.device.manufacturer;
 
-    console.log(serial);
-    console.log(uuid);
-    console.log(platform);
-    console.log(model);
-    console.log(manufacturer);
+    let userS = {'id':user.id,'deleted':false};
 
-    return this.LOGIN_WITH_SAME_PHONE;
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/postUserDeviceByID.ent?uuId='+uuid,userS);
+
   }
 
+
+  getCurrentUUID(){
+    return this.device.uuid;
+  }
+
+
+  getAllPhoneRequestes(branchId){
+    let branch = {'id':branchId};
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/getUserDevicesByBranch.ent',branch);
+  }
+
+  responceOnRequest(request, confirmation){
+
+    return this.http.post(this.DomainUrl.Domain + '/authentication/userAttendance.ent/postUserDevicesApproved.ent?id=' + request.id + '&approved=' + confirmation, null);
+  }
 
 
 }

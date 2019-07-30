@@ -9,6 +9,7 @@ import {Storage} from '@ionic/storage';
 import {Network} from '@ionic-native/network/ngx';
 import {load} from '@angular/core/src/render3';
 import {AlertController, IonInfiniteScroll} from '@ionic/angular';
+import {ToastViewService} from '../../services/ToastView/toast-view.service';
 
 declare var wifiinformation: any;
 
@@ -50,7 +51,7 @@ export class AttendancePage implements OnInit {
 
   constructor(public accountServ:AccountService, public attendServ:AttendanceTeachersService,
               public tranDate:TransFormDateService,public load:LoadingViewService,public alertController:AlertController,
-              public storage:Storage, public network:Network)
+              public storage:Storage, public network:Network,public toast:ToastViewService)
   {
     if(this.accountServ.getUserRole().attendanceAllTeachersAppear){
       this.selectedTab = this.TODAY_TAB;
@@ -116,7 +117,22 @@ export class AttendancePage implements OnInit {
       }
 
 
-      this.samePhone = this.attendServ.checkIfSameMobile(this.accountServ.userId);
+      this.attendServ.checkIfSameMobile(this.accountServ.user).subscribe(
+          value => {
+              console.log(value);
+              let dataArr  = [];
+              //@ts-ignore
+              dataArr = value;
+              let foundThatUUID = false;
+              dataArr.forEach( value1 => {
+                  if(value1.uuid == this.attendServ.getCurrentUUID()){
+                      foundThatUUID = true;
+                  }
+              });
+              this.samePhone = foundThatUUID;
+          },error1 => {
+              this.samePhone = false;
+          });
 
   }
 
@@ -314,7 +330,26 @@ export class AttendancePage implements OnInit {
               }, {
                 text: 'Okay',
                 handler: () => {
-                    this.attendServ.sentMobileMacAddress(this.accountServ.userId);
+                    this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
+                        this.attendServ.sentMobileMacAddress(this.accountServ.user).subscribe(
+                            value => {
+                                console.log(value);
+                                this.load.stopLoading().then(val=>{
+                                    this.toast.presentTimerToast('Request sent');
+                                });
+                            }, error1 => {
+                                console.log(error1);
+                                this.load.stopLoading().then(val=> {
+                                    if (error1.error == 'Saved' || error1.error.text == 'Saved') {
+                                        this.toast.presentTimerToast('Request sent');
+                                    } else if(error1.error == 'UUID IS ALREADY EXISTS'){
+                                        this.toast.presentTimerToast('The request already sent');
+                                    } else {
+                                        this.toast.presentTimerToast('Can\'t send request, right now !');
+                                    }
+                                });
+                            });
+                    });
                 }
               }]
       });

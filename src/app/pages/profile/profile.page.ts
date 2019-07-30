@@ -15,6 +15,7 @@ import {LoadingViewService} from '../../services/LoadingView/loading-view.servic
 import { Device } from '@ionic-native/device/ngx';
 import {error} from 'selenium-webdriver';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
+import {ToastViewService} from '../../services/ToastView/toast-view.service';
 
 // declare var wifiinformation: any;
 declare var WifiWizard2: any;
@@ -54,7 +55,7 @@ export class ProfilePage implements OnInit {
   // checkIn = true;
   samePhone = false;
 
-  constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService
+  constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService,public toast:ToastViewService
       ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
     public datepipe: DatePipe, public androidPermission:AndroidPermissions) {
     this.name = accountServ.getUserName();
@@ -174,11 +175,22 @@ export class ProfilePage implements OnInit {
   }
 
   checkSamePhone(){
-      this.attend.sentMobileMacAddress(this.accountServ.userId).subscribe(
-          value=>{
-              this.samePhone = this.attend.checkIfSameMobile(this.accountServ.userId);
-          },err => {
-              this.presentAlert('Alert', 'Can\'t Link this phone to your account');
+      this.attend.checkIfSameMobile(this.accountServ.user).subscribe(
+          value => {
+              console.log(value);
+              let dataArr  = [];
+              //@ts-ignore
+              dataArr = value;
+              let foundThatUUID = false;
+              dataArr.forEach( value1 => {
+                  if(value1.uuid == this.attend.getCurrentUUID()){
+                      foundThatUUID = true;
+                  }
+              });
+              this.samePhone = foundThatUUID;
+          },error1 => {
+              // "WOULD YOU LIKE TO REQUEST APPROVE FROM ADMIN TO LOGIN ?"
+              this.samePhone = false;
           });
   }
 
@@ -274,7 +286,7 @@ export class ProfilePage implements OnInit {
     async presentChangePhoneAlert() {
         const alert = await this.alertController.create({
             header: 'Alert',
-            message: 'This phone not connect to your account do you want to change your phone and inform your admin?',
+            message: 'This phone not connect to your account do you want to add it by request to your admin?',
             buttons: [
             {
                 text: 'Cancel',
@@ -285,7 +297,27 @@ export class ProfilePage implements OnInit {
             }, {
                 text: 'Okay',
                 handler: () => {
-                    this.attend.sentMobileMacAddress(this.accountServ.userId);
+
+                    this.load.startLoading('',false,'loadingWithoutBackground').then(value => {
+                        this.attend.sentMobileMacAddress(this.accountServ.user).subscribe(
+                            value => {
+                                console.log(value);
+                                this.load.stopLoading().then(val=>{
+                                this.toast.presentTimerToast('Request sent');
+                                });
+                            }, error1 => {
+                                console.log(error1);
+                                this.load.stopLoading().then(val=> {
+                                    if (error1.error == 'Saved' || error1.error.text == 'Saved') {
+                                        this.toast.presentTimerToast('Request sent');
+                                    } else if(error1.error == 'UUID IS ALREADY EXISTS'){
+                                        this.toast.presentTimerToast('The request already sent');
+                                    } else {
+                                        this.toast.presentTimerToast('Can\'t send request, right now !');
+                                    }
+                                });
+                            });
+                    });
                 }
             }
         ]
