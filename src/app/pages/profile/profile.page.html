@@ -105,17 +105,17 @@
         <div style="background: #E9E1E1;height: 1.0px;width: 100%;margin-bottom: 20px;"></div>
 
 
-          <ion-button expand="full" (click)="checkInOut('Add')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'
+          <ion-button expand="full" (click)="checkInOut('Add')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().attendanceAdmin && network.type == 'wifi'
           && this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint">
               Add this wifi
           </ion-button>
 
-        <ion-button expand="full" (click)="checkInOut('In')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance
+        <ion-button expand="full" (click)="checkInOut('In')" *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance
          && network.type == 'wifi' && attendData.length > 0 && (userShiftData == null || userShiftData.checkOutDate != null)">
           Check In
         </ion-button>
 
-          <ion-button  color="danger" expand="full" (click)="checkInOut('Out')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance
+          <ion-button  color="danger" expand="full" (click)="checkInOut('Out')" *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance
           && network.type == 'wifi' && attendData.length > 0 && userShiftData != null && userShiftData.checkOutDate == null">
               Check Out
           </ion-button>

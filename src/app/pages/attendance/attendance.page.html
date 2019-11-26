@@ -60,7 +60,7 @@
             </ion-list>
 
             <ion-list style="background: #faebd700;width: 100%;bottom: 75px;z-index: 1;">
-                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="checkInCondition()">
+                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="!accountServ.getUserRole().attendanceAdmin && checkInCondition()">
                     <div class="infoOneDivOnce">
                         <!--<img class="imgOneProfile" src="assets/imgs/profile.png" />-->
                         <avatar [name]="accountServ.user.name" *ngIf="!accountServ.user.profileImg"></avatar>
@@ -70,7 +70,7 @@
                         </div>
                     </div>
                 </ion-item>
-                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="checkOutCondition()">
+                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="!accountServ.getUserRole().attendanceAdmin && checkOutCondition()">
                     <div class="infoOneDivRedOnce">
                         <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!accountServ.user.profileImg"/>-->
                         <avatar [name]="accountServ.user.name" *ngIf="!accountServ.user.profileImg"></avatar>
@@ -168,7 +168,7 @@
             </ion-list>
 
             <ion-list style="background: #faebd700;width: 100%;bottom: 75px;z-index: 1;">
-                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="checkInCondition()">
+                <ion-item class="itemEdit" (click)="checkInNow()" *ngIf="!accountServ.getUserRole().attendanceAdmin && checkInCondition()">
                     <div class="infoOneDiv">
                         <!--<img class="imgOneProfile" src="assets/imgs/profile.png" />-->
                         <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>
@@ -178,7 +178,7 @@
                         </div>
                     </div>
                 </ion-item>
-                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="checkOutCondition()">
+                <ion-item class="itemEdit" (click)="checkOutNow()"  *ngIf="!accountServ.getUserRole().attendanceAdmin && checkOutCondition()">
                     <div class="infoOneDivRed">
                         <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!accountServ.user.profileImg"/>-->
                         <avatar class="imgOneProfileAvatar" [name]="accountServ.user.name" [size]="45" *ngIf="!accountServ.user.profileImg"></avatar>

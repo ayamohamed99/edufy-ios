@@ -9,7 +9,7 @@ import {AccountService} from '../../services/Account/account.service';
 })
 export class AttendanceTabsPage implements OnInit {
   selectedPath = '';
-  constructor(private router: Router, private accountServ:AccountService) {
+  constructor(private router: Router, public accountServ:AccountService) {
 
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {

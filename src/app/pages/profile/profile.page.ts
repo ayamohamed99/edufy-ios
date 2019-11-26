@@ -335,7 +335,11 @@ export class ProfilePage implements OnInit {
               this.userShiftData = value;
           }, error1 => {
               this.load.stopLoading().then(value => {
-                  this.presentAlert('Alert', error1.error.text);
+                  if(error1.error.text){
+                      this.presentAlert('Alert', error1.error.text);
+                  }else{
+                      this.presentAlert('Alert', error1.error);
+                  }
               });
           }
       );
