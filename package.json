@@ -46,7 +46,7 @@
     "add": "^2.0.6",
     "chart.js": "^2.8.0",
     "cordova": "^9.0.0",
-    "cordova-android": "7.1.4",
+    "cordova-android": "^8.1.0",
     "cordova-plugin-advanced-http": "2.1.1",
     "cordova-plugin-android-permissions": "1.0.0",
     "cordova-plugin-background-mode": "0.7.2",
@@ -140,8 +140,6 @@
       "cordova-plugin-wifi-info": {},
       "wifiwizard2": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   }
 }
