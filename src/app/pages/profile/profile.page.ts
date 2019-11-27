@@ -16,6 +16,7 @@ import { Device } from '@ionic-native/device/ngx';
 import {error} from 'selenium-webdriver';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
+import {LoginService} from '../../services/Login/login.service';
 
 // declare var wifiinformation: any;
 declare var WifiWizard2: any;
@@ -57,7 +58,7 @@ export class ProfilePage implements OnInit {
 
   constructor(public platform:Platform,public accountServ:AccountService, public alertController:AlertController, public load:LoadingViewService,public toast:ToastViewService
       ,public storage:Storage, public network:Network, public notiServ:NotificationService, public attend:AttendanceTeachersService, public transDate:TransFormDateService,
-    public datepipe: DatePipe, public androidPermission:AndroidPermissions) {
+    public datepipe: DatePipe, public androidPermission:AndroidPermissions, public auth: LoginService) {
     this.name = accountServ.getUserName();
     this.userName = accountServ.getUserUserName();
     this.userPhone = accountServ.getUserTelephone();
@@ -124,11 +125,11 @@ export class ProfilePage implements OnInit {
       notiServ.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotificationINStorage();
     } else {
-      storage.get(this.localStorageToken).then(
-          val => {
-            notiServ.putHeader(val);
+      // storage.get(this.localStorageToken).then(
+      //     val => {
+            notiServ.putHeader(this.auth.accessToken);
             this.getNotificationINStorage();
-          });
+          // });
     }
 
       if (platform.is('desktop')) {
@@ -137,12 +138,12 @@ export class ProfilePage implements OnInit {
           this.getAttendData();
 
       } else {
-          storage.get(this.localStorageToken).then(
-              val => {
-                  attend.putHeader(val);
+          // storage.get(this.localStorageToken).then(
+          //     val => {
+                  attend.putHeader(this.auth.accessToken);
                   this.checkTheAttendanceShift();
                   this.getAttendData();
-              });
+              // });
       }
 
       if (platform.is('android')) {

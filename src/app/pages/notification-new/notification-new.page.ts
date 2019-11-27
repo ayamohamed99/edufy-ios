@@ -13,6 +13,8 @@ import {BackgroundNotificationService} from '../../services/BackgroundNotificati
 import {Postattachment} from '../../models/postattachment';
 import {Storage} from "@ionic/storage";
 import {PassDataService} from '../../services/pass-data.service';
+import {File} from '@ionic-native/file/ngx';
+import {Media} from '@ionic-native/media/ngx';
 
 @Component({
   selector: 'app-notification-new',
@@ -47,6 +49,8 @@ export class NotificationNewPage implements OnInit {
   pendingNotification:any[]=[];
   reciverListFound = 0;
 
+  btnColor = "primary";
+  btnRecordingName = "Start Recording";
   // @Input() title:any;
   // @Input() details:any;
   // @Input() studetsNameList:any;
@@ -60,7 +64,7 @@ export class NotificationNewPage implements OnInit {
               public network:Network,private toastCtrl: ToastViewService, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingViewService,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private compress:ImageCompressorService,
-              public backNotify:BackgroundNotificationService, private passData:PassDataService) {
+              public backNotify:BackgroundNotificationService, private passData:PassDataService,private filePlugin: File,public media: Media) {
 
     this.config.notFoundText = 'Custom not found';
 
@@ -301,7 +305,7 @@ export class NotificationNewPage implements OnInit {
         if (num <= 26214400 && this.fileTypes.find(x => x == fileExtintion)) {
           let formData = new FormData();
           debugger;
-          let file: File=inputEl.files.item(i);
+          let file =inputEl.files.item(i);
           let fileType = this.getFileType(inputEl.files.item(i).name);
           if (fileType == "IMAGE") {
             // this.loadingCtrl.startLoading('',true,'loadingWithoutBackground');
@@ -443,7 +447,7 @@ export class NotificationNewPage implements OnInit {
     }
   }
 
-  readFile(file: File){
+  readFile(file){
     let that = this;
     let reader = new FileReader();
     reader.onloadend = function(e){
@@ -515,5 +519,121 @@ export class NotificationNewPage implements OnInit {
   async DismissClick(data) {
     await this.modalCtrl.dismiss(data);
   }
+
+  buttonStop = false;
+  isStopped = false;
+  isStarted = false;
+  rippleAnimation = 'ripple 0s linear infinite';
+  fileName = '';
+  filePath = null;
+  audio = null;
+  isRecording = false;
+  audioDuration = 0;
+  audioDurationText = '';
+  //////MARK: RECORDING
+  controlRecordingButton () {
+    if (this.platform.is('ios')) {
+      this.filePath = this.filePlugin.documentsDirectory;
+    } else if (this.platform.is('android')) {
+      this.filePath = this.filePlugin.externalRootDirectory + '/Download/';
+    }
+    if (this.buttonStop === false) {
+      this.buttonStop = true;
+      if (this.isStopped === false) {
+          // Start listening
+          this.rippleAnimation = 'ripple 0.7s linear infinite';
+          this.isStarted = true;
+          if (this.platform.is('ios')) {
+            this.fileName = this.accServ.getUserName() + '_record.aac';
+            this.filePath = this.filePlugin.tempDirectory.replace(/^file:\/\//, '') + this.fileName;
+            this.filePlugin.createFile(this.filePlugin.tempDirectory, this.fileName, true).then(() => {
+              this.audio = this.media.create(this.filePlugin.tempDirectory.replace(/^file:\/\//, '') + this.fileName);
+              this.audio.startRecord();
+              // this.audio = this.media.create(this.filePath);
+            });
+          } else if (this.platform.is('android')) {
+            this.fileName = this.accServ.getUserName() + '_record.aac';
+            this.filePlugin.createFile(this.filePlugin.externalDataDirectory, this.fileName, true).then(() => {
+              this.filePath = this.filePlugin.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
+              this.audio = this.media.create(this.filePath);
+              // this.audio.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
+              //
+              // this.audio.onSuccess.subscribe(() => console.log('Action is successful'));
+              //
+              // this.audio.onError.subscribe(error => console.log('Error!', error));
+              this.audio.startRecord();
+            });
+
+          }
+          this.isRecording = true;
+          setInterval((variable) => {
+            if (this.isRecording === true) {
+              this.audioDuration++;
+              const hours = Math.floor(this.audioDuration / 3600);
+              const totalSeconds = this.audioDuration % 3600;
+              const minutes = Math.floor(totalSeconds / 60);
+              const seconds = totalSeconds % 60;
+              if (hours < 10) {
+                this.audioDurationText = '0' + hours + ':';
+              } else {
+                this.audioDurationText += hours + ':';
+              }
+              if (minutes < 10) {
+                this.audioDurationText += '0' + minutes + ':';
+              } else {
+                this.audioDurationText += minutes + ':';
+              }
+              if (seconds < 10) {
+                this.audioDurationText += '0' + seconds;
+              } else {
+                this.audioDurationText += seconds;
+              }
+              this.btnRecordingName = this.audioDurationText
+            }
+          }, 1000);
+          console.log('Recording started.');
+      } else {
+        console.log('Recording stopped.');
+      }
+    } else if (this.buttonStop === true) {
+      this.buttonStop = false;
+      if (this.isStopped === false) {
+        // Stop listening
+        this.rippleAnimation = 'ripple 0s linear infinite';
+        this.audio.stopRecord();
+        this.isRecording = false;
+        this.isStopped = true;
+        // console.log(this.filePath);
+        // this.playAudio('record.aac');
+        // this.showToast('Recording stopped and saving audio..');
+
+      } else {
+        console.log('Recording already stopped.');
+      }
+    }
+  }
+
+
+
+//  else if (type === 'pause') {
+//   if (this.isStopped === false) {
+//     if (this.isRecording === true) {
+//       // Stop listening
+//       this.rippleAnimation = 'ripple 0s linear infinite';
+//       this.audio.pauseRecord();
+//       this.isRecording = false;
+//       this.showToast('Recording paused.');
+//     } else {
+//       this.showToast('Not recording.');
+//     }
+//   } else {
+//     this.showToast('Recording stopped.');
+//   }
+// }
+// }
+
+
+
+
 
 }

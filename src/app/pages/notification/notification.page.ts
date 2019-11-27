@@ -23,6 +23,7 @@ import {NotificationEditPage} from '../notification-edit/notification-edit.page'
 import {NotificationViewReceiverPage} from '../notification-view-receiver/notification-view-receiver.page';
 import {NotificationNewPage} from '../notification-new/notification-new.page';
 import {PassDataService} from '../../services/pass-data.service';
+import {LoginService} from '../../services/Login/login.service';
 
 @Component({
   selector: 'app-notification',
@@ -79,7 +80,7 @@ export class NotificationPage implements OnInit {
               private accService:AccountService, private transfer: FileTransfer, public audio: Media, private fileOpener: FileOpener,
               private transferF: FileTransfer, public accountServ:AccountService, private network:Network, private androidPermissions: AndroidPermissions,
               private toastCtrl:ToastViewService, private classesServ:ClassesService,private studentService:StudentsService, private document: DocumentViewer,
-              private file: File, private passData:PassDataService) {
+              private file: File, private passData:PassDataService, public auth: LoginService) {
 
     this.approved = null;
     this.archived = null;
@@ -91,13 +92,13 @@ export class NotificationPage implements OnInit {
       notificationService.putHeader(localStorage.getItem(this.localStorageToken));
       this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
     } else {
-      storage.get(this.localStorageToken).then(
-          val => {
+      // storage.get(this.localStorageToken).then(
+      //     val => {
             this.getPendingNotification();
-            this.tokenKey = val;
-            notificationService.putHeader(val);
+            this.tokenKey = this.auth.accessToken;
+            notificationService.putHeader(this.auth.accessToken);
             this.getNotifications(this.notificationPage, 0, 0, this.approved, this.archived, this.sent, 0);
-          });
+          // });
     }
     if (platform.is('android')) {
       this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.WRITE_EXTERNAL_STORAGE).then(
@@ -846,14 +847,14 @@ export class NotificationPage implements OnInit {
           that.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
           that.getAllClasses();
         }else {
-          that.storage.get(this.localStorageToken).then(
-              val => {
-                that.tokenKey = val;
-                that.studentService.putHeader(val);
-                that.classesServ.putHeader(val);
+          // that.storage.get(this.localStorageToken).then(
+          //     val => {
+                that.tokenKey = this.auth.accessToken;
+                that.studentService.putHeader(this.auth.accessToken);
+                that.classesServ.putHeader(this.auth.accessToken);
                 that.getAllClasses();
                 that.fristOpen = false;
-              });
+              // });
         }
       // });
     });

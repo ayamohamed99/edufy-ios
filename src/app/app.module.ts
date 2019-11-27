@@ -61,7 +61,10 @@ const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    IonicStorageModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__edufydb',
+      driverOrder: ['localstorage']
+    }),
     AppRoutingModule,
     BrowserAnimationsModule,
     NoopAnimationsModule,

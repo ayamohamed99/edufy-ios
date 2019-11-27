@@ -124,6 +124,11 @@
     Choose Files
   </label>
 
+  <ion-button expand="block" fill="clear" shape="round" [color]="btnColor" (click)="controlRecordingButton()">
+    {{btnRecordingName}}
+    <ion-ripple-effect [type]="rippleAnimation"></ion-ripple-effect>
+  </ion-button>
+
   <div >
     <ion-label text-center style="color: #f53d3d" *ngIf="showSupportFiles">
       The following files is only supported <br> (Image,PDF,Word,Excel,Powerpoint,Audio,Video,Text)
