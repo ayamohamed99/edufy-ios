@@ -22,7 +22,7 @@
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="10000" />
-    <allow-navigation href="http://localhost:8100/*" />
+    <allow-navigation href="http://localhost/*" />
     <allow-navigation href="http://*/*" />
     <allow-navigation href="httpsionic://*" />
     <preference name="WKSuspendInBackground" value="false" />
@@ -110,5 +110,4 @@
     <plugin name="cordova-plugin-advanced-http" spec="2.1.1">
         <variable name="OKHTTP_VERSION" value="3.10.0" />
     </plugin>
-    <plugin name="cordova-sqlite-storage" spec="3.2.0" />
 </widget>

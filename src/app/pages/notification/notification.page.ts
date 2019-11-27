@@ -836,24 +836,26 @@ export class NotificationPage implements OnInit {
     // if(this.NewNotification) {
     //   this.load.startLoading('',true,'loadingWithoutBackground');
     // }
+    let that = this;
     this.load.stopLoading().then(value => {
-      this.load.startLoading('',true,'loadingWithoutBackground').then( () =>{
-        if(this.platform.is('desktop')) {
-          this.tokenKey = localStorage.getItem(this.localStorageToken);
-          this.studentService.putHeader(localStorage.getItem(this.localStorageToken));
-          this.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
-          this.getAllClasses();
+      that.load.startLoading('',true,'loadingWithoutBackground');
+          // .then( () =>{
+        if(that.platform.is('desktop')) {
+          that.tokenKey = localStorage.getItem(this.localStorageToken);
+          that.studentService.putHeader(localStorage.getItem(this.localStorageToken));
+          that.classesServ.putHeader(localStorage.getItem(this.localStorageToken));
+          that.getAllClasses();
         }else {
-          this.storage.get(this.localStorageToken).then(
+          that.storage.get(this.localStorageToken).then(
               val => {
-                this.tokenKey = val;
-                this.studentService.putHeader(val);
-                this.classesServ.putHeader(val);
-                this.getAllClasses();
-                this.fristOpen = false;
+                that.tokenKey = val;
+                that.studentService.putHeader(val);
+                that.classesServ.putHeader(val);
+                that.getAllClasses();
+                that.fristOpen = false;
               });
         }
-      });
+      // });
     });
 
 
