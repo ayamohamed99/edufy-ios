@@ -58,7 +58,7 @@ export class AttendanceWiFiEditPage implements OnInit {
       });
     }
 
-    network.onchange().subscribe(
+    network.onChange().subscribe(
         value => {
 
           if(network.type == 'wifi'){

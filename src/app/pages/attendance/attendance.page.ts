@@ -88,7 +88,7 @@ export class AttendancePage implements OnInit {
           (err) => {})
           .catch((err) => {});
 
-    network.onchange().subscribe(
+    network.onChange().subscribe(
         value => {
           let val = value;
 

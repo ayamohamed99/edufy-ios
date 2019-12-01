@@ -80,7 +80,7 @@ export class ProfilePage implements OnInit {
       this.userAddress = "No Address";
     }
 
-    network.onchange().subscribe(
+    network.onChange().subscribe(
         value => {
             let val = value;
         }

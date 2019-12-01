@@ -126,7 +126,7 @@
 
   <ion-button expand="block" fill="clear" shape="round" [color]="btnColor" (click)="controlRecordingButton()">
     {{btnRecordingName}}
-    <ion-ripple-effect [type]="rippleAnimation"></ion-ripple-effect>
+    <ion-ripple-effect   [attr.base]="rippleAnimation" type="unbounded"></ion-ripple-effect>
   </ion-button>
 
   <div >
