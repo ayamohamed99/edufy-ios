@@ -25,6 +25,7 @@ export class Url_domain {
   // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
 
   // ionic cordova build android --prod --release
+  //ionic cordova build android --aot --minifyjs --minifycss --optimizejs --prod --release
   // keytool -genkey -v -keystore edufy_teachers.jks -keyalg RSA -keysize 2048 -validity 10000 -alias edufy_teachers
   // jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.jks app-release-unsigned.apk edufy_teachers
   // PASSWORD : @Entrepreware123

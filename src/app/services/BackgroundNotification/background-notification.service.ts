@@ -18,6 +18,7 @@ import {LoadingViewService} from '../LoadingView/loading-view.service';
 import {ImageCompressorService} from '../ImageCompressor/image-compressor.service';
 import {tap} from 'rxjs/operators';
 import {combineLatest} from 'rxjs';
+import {AccountService} from '../Account/account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class BackgroundNotificationService {
   tagsArr: any[] = [];
   number = 1;
   constructor(private platform: Platform, private notiServ: NotificationService, private backgroundMode: BackgroundMode,
-              private storage: Storage, private alertCtrl: AlertController, public network: Network,
+              private storage: Storage, private alertCtrl: AlertController, public network: Network, public accServ:AccountService,
               private localNotifications: LocalNotifications,private loadingCtrl:LoadingViewService,private compress:ImageCompressorService) {
 
     if (!this.platform.is('desktop')) {
@@ -71,7 +72,6 @@ export class BackgroundNotificationService {
             // }else{
               data = result;
             // }
-
             formData.append('file', data, data.name);
             console.log(JSON.stringify(formData));
             this.arrayFormData.push(data);
@@ -138,80 +138,100 @@ export class BackgroundNotificationService {
 
     let RecieverArray:any[] = [];
     this.startLocalNotification();
-      this.loadingCtrl.startNormalLoading('');
-    let promisesArray = [];
-    for (let index = 0; index <files.length; index++) {
-      // let form: FormData = this.arrayFormData[index];
-      // let form = new FormData();
-      promisesArray.push(this.compressTheImage(files[index]));
-    }
+      this.loadingCtrl.startNormalLoading('').then(_ => {
 
 
-
-    // Promise.all(promisesArray).then( data=> {
-
-    combineLatest(promisesArray).subscribe(
-
-        data=> {
-          if (this.sendTo && this.sendTo.some(x => x.id === -1)) {
-            for (const temp of this.sendTo) {
-              for (const sub of temp.dataList) {
-                const ssn = new Send_student_notification();
-                ssn.id = sub.id;
-                if (sub.type == 'STUDENT') {
-                  ssn.type = 'Student';
-                } else if (sub.type == 'CLASS') {
-                  ssn.type = 'Class';
-                } else {
-                  ssn.type = sub.type;
-                }
-                ssn.name = sub.name;
-                RecieverArray.push(ssn);
+          let promisesArray = [];
+          for (let index = 0; index <files.length; index++) {
+              // let form: FormData = this.arrayFormData[index];
+              // let form = new FormData();
+              let fileType = this.getFileType(files[index].name);
+              if(fileType == "IMAGE") {
+                  promisesArray.push(this.compressTheImage(files[index]));
+              }else{
+                  // let formData:FormData = new FormData();
+                  // formData.append('file',files[index],files[index].name);
+                  this.arrayFormData.push(files[index]);
               }
-            }
-          } else {
-            for (const temp of this.sendTo) {
+          }
+
+          // Promise.all(promisesArray).then( data=> {
+
+          combineLatest(promisesArray).subscribe(
+
+              data=> {
+
+                  this.uploadAllFiles(RecieverArray);
+
+              },
+              e=>{
+                  console.log("Promises Error: "+e);
+              });
+
+
+          if (promisesArray.length == 0){
+              this.uploadAllFiles(RecieverArray);
+          }
+
+      });
+
+  }
+
+  uploadAllFiles (RecieverArray) {
+      if (this.sendTo && this.sendTo.some(x => x.id === -1)) {
+          for (const temp of this.sendTo) {
+              for (const sub of temp.dataList) {
+                  const ssn = new Send_student_notification();
+                  ssn.id = sub.id;
+                  if (sub.type == 'STUDENT') {
+                      ssn.type = 'Student';
+                  } else if (sub.type == 'CLASS') {
+                      ssn.type = 'Class';
+                  } else {
+                      ssn.type = sub.type;
+                  }
+                  ssn.name = sub.name;
+                  RecieverArray.push(ssn);
+              }
+          }
+      } else {
+          for (const temp of this.sendTo) {
               const ssn = new Send_student_notification();
               ssn.id = temp.id;
               if (temp.type == 'STUDENT') {
-                ssn.type = 'Student';
+                  ssn.type = 'Student';
               } else if (temp.type == 'CLASS') {
-                ssn.type = 'Class';
+                  ssn.type = 'Class';
               } else {
-                ssn.type = temp.type;
+                  ssn.type = temp.type;
               }
               ssn.name = temp.name;
               RecieverArray.push(ssn);
-            }
           }
+      }
 
-          const SelectedTags: any[] = [];
-          if (this.tags) {
-            for (const tag of this.tags) {
+      const SelectedTags: any[] = [];
+      if (this.tags) {
+          for (const tag of this.tags) {
               for (const tagArr of this.tagsArr) {
-                if (tagArr.name === tag) {
-                  SelectedTags.push(tagArr);
-                }
+                  if (tagArr.name === tag) {
+                      SelectedTags.push(tagArr);
+                  }
               }
-            }
           }
+      }
 
-          if (this.platform.is('desktop')) {
+      if (this.platform.is('desktop')) {
 
-            this.uploadFromWeb(RecieverArray, SelectedTags);
+          this.uploadFromWeb(RecieverArray, SelectedTags);
 
-          } else {
+      } else {
 
-            this.uploadFromMobile(RecieverArray, SelectedTags, this.viewCtrl, this.Title,
-                this.Details, this.arrayFormData);
+          this.uploadFromMobile(RecieverArray, SelectedTags, this.viewCtrl, this.Title,
+              this.Details, this.arrayFormData);
 
-          }
-        },
-        e=>{
-          console.log("Promises Error: "+e);
-        });
+      }
   }
-
 
   uploadFromMobile(RecieverArray, SelectedTags, viewCtrl, title, details, arrayFromData) {
     debugger;
@@ -242,7 +262,11 @@ export class BackgroundNotificationService {
           if (fileType == 'IMAGE') {
             form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
           } else {
-            form.append('file', this.arrayFormData[index]);
+              if (this.arrayFormData[index].record){
+                  form.append('file', this.arrayFormData[index].file,this.arrayFormData[index].name);
+              }else{
+                  form.append('file', this.arrayFormData[index],this.arrayFormData[index].name);
+              }
           }
           promisesArray.push(this.uploadAttach(form));
         }
@@ -382,7 +406,12 @@ export class BackgroundNotificationService {
                       if (fileType == 'IMAGE') {
                         form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
                       } else {
-                        form.append('file', this.arrayFormData[index]);
+                          if (this.arrayFormData[index].record){
+                              form.append('file', this.arrayFormData[index].file,this.arrayFormData[index].name);
+                          }else{
+                              form.append('file', this.arrayFormData[index]);
+                          }
+                        // form.append('file', this.arrayFormData[index]);
                       }
                       promisesArray.push(this.uploadAttach(form));
                     }
@@ -540,7 +569,12 @@ export class BackgroundNotificationService {
                     if (fileType == 'IMAGE') {
                       form.append('file', this.arrayFormData[index], this.arrayFormData[index].name);
                     } else {
-                      form.append('file', this.arrayFormData[index]);
+                        if (this.arrayFormData[index].record){
+                            form.append('file', this.arrayFormData[index].file,this.arrayFormData[index].name);
+                        }else{
+                            form.append('file', this.arrayFormData[index]);
+                        }
+                      // form.append('file', this.arrayFormData[index]);
                     }
                     promisesArray.push(this.uploadAttach(form));
                   }

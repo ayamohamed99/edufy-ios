@@ -142,6 +142,8 @@ export class NotificationService {
     const option = {
       headers: new HttpHeaders({
         'optional-header': 'header-value',
+        'Content-Type': 'multipart/form-data',
+        'Accept': "multipart/form-data",
         Authorization: this.val
       })
     };
@@ -188,6 +190,11 @@ export class NotificationService {
     // }
 
   }
+
+
+
+
+
 
 
 }

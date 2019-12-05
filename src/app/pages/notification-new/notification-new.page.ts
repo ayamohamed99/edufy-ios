@@ -13,8 +13,9 @@ import {BackgroundNotificationService} from '../../services/BackgroundNotificati
 import {Postattachment} from '../../models/postattachment';
 import {Storage} from "@ionic/storage";
 import {PassDataService} from '../../services/pass-data.service';
-import {File} from '@ionic-native/file/ngx';
+import {File, IFile} from '@ionic-native/file/ngx';
 import {Media} from '@ionic-native/media/ngx';
+import {ConvertorIFileToFileService} from '../../services/convertor-ifile-to-file.service';
 
 @Component({
   selector: 'app-notification-new',
@@ -64,7 +65,8 @@ export class NotificationNewPage implements OnInit {
               public network:Network,private toastCtrl: ToastViewService, private platform:Platform,public accountServ:AccountService,
               private accServ:AccountService, private alertCtrl:AlertController, private loadingCtrl:LoadingViewService,
               public actionSheetCtrl: ActionSheetController, private storage:Storage,private compress:ImageCompressorService,
-              public backNotify:BackgroundNotificationService, private passData:PassDataService,private filePlugin: File,public media: Media) {
+              public backNotify:BackgroundNotificationService, private passData:PassDataService,private filePlugin: File,public media: Media,
+              public convFile:ConvertorIFileToFileService) {
 
     this.config.notFoundText = 'Custom not found';
 
@@ -523,37 +525,40 @@ export class NotificationNewPage implements OnInit {
   buttonStop = false;
   isStopped = false;
   isStarted = false;
-  rippleAnimation = 'ripple 0s linear infinite';
+  rippleAnimation = 'animation: ripple 0s linear infinite';
   fileName = '';
   filePath = null;
   audio = null;
   isRecording = false;
   audioDuration = 0;
   audioDurationText = '';
+
   //////MARK: RECORDING
   controlRecordingButton () {
     if (this.platform.is('ios')) {
       this.filePath = this.filePlugin.documentsDirectory;
     } else if (this.platform.is('android')) {
-      this.filePath = this.filePlugin.externalRootDirectory + '/Download/';
+      this.filePath = this.filePlugin.externalRootDirectory + 'Download/';
     }
     if (this.buttonStop === false) {
       this.buttonStop = true;
-      if (this.isStopped === false) {
           // Start listening
-          this.rippleAnimation = 'ripple 0.7s linear infinite';
+          this.rippleAnimation = 'animation: ripple 0.7s linear infinite';
           this.isStarted = true;
           if (this.platform.is('ios')) {
-            this.fileName = this.accServ.getUserName() + '_record.aac';
+            this.fileName = this.accServ.getUserName() + '_audio_record_'+Date.now()+'.mp3';
             this.filePath = this.filePlugin.tempDirectory.replace(/^file:\/\//, '') + this.fileName;
             this.filePlugin.createFile(this.filePlugin.tempDirectory, this.fileName, true).then(() => {
               this.audio = this.media.create(this.filePlugin.tempDirectory.replace(/^file:\/\//, '') + this.fileName);
               this.audio.startRecord();
               // this.audio = this.media.create(this.filePath);
+              this.btnColor = "danger";
+              this.isRecording = true;
+              this.startTimer()
             });
           } else if (this.platform.is('android')) {
-            this.fileName = this.accServ.getUserName() + '_record.aac';
-            this.filePlugin.createFile(this.filePlugin.externalDataDirectory, this.fileName, true).then(() => {
+            this.fileName = this.accServ.getUserName() + '_audio_record_'+Date.now()+'.mp3';
+            this.filePlugin.createFile(this.filePlugin.externalDataDirectory, this.fileName, false).then(() => {
               this.filePath = this.filePlugin.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
               this.audio = this.media.create(this.filePath);
               // this.audio.onStatusUpdate.subscribe(status => console.log(status)); // fires when file status changes
@@ -562,58 +567,150 @@ export class NotificationNewPage implements OnInit {
               //
               // this.audio.onError.subscribe(error => console.log('Error!', error));
               this.audio.startRecord();
+              this.btnColor = "danger";
+              this.isRecording = true;
+              this.startTimer()
+            }).catch( reason => {
+              console.log(reason);
             });
 
           }
-          this.isRecording = true;
-          setInterval((variable) => {
-            if (this.isRecording === true) {
-              this.audioDuration++;
-              const hours = Math.floor(this.audioDuration / 3600);
-              const totalSeconds = this.audioDuration % 3600;
-              const minutes = Math.floor(totalSeconds / 60);
-              const seconds = totalSeconds % 60;
-              if (hours < 10) {
-                this.audioDurationText = '0' + hours + ':';
-              } else {
-                this.audioDurationText += hours + ':';
-              }
-              if (minutes < 10) {
-                this.audioDurationText += '0' + minutes + ':';
-              } else {
-                this.audioDurationText += minutes + ':';
-              }
-              if (seconds < 10) {
-                this.audioDurationText += '0' + seconds;
-              } else {
-                this.audioDurationText += seconds;
-              }
-              this.btnRecordingName = this.audioDurationText
-            }
-          }, 1000);
-          console.log('Recording started.');
-      } else {
-        console.log('Recording stopped.');
-      }
+//Timer Was Here
+
     } else if (this.buttonStop === true) {
       this.buttonStop = false;
-      if (this.isStopped === false) {
         // Stop listening
-        this.rippleAnimation = 'ripple 0s linear infinite';
-        this.audio.stopRecord();
-        this.isRecording = false;
-        this.isStopped = true;
+
+      this.stopRecording();
+
+      //   this.rippleAnimation = 'animation: ripple 0s linear infinite';
+      //   this.audio.stopRecord();
+      //   this.btnColor = "primary";
+      //   this.btnRecordingName = "Start Recording";
+      //   this.isRecording = false;
+      // let dir;
+      // if (this.platform.is('ios')) {
+      //   dir = this.filePlugin.tempDirectory;
+      // } else if (this.platform.is('android')) {
+      //   dir = this.filePlugin.externalDataDirectory;
+      // }
+      //
+      // this.filePlugin.resolveDirectoryUrl(dir).then((rootDir) => {
+      //   return this.filePlugin.getFile(rootDir, this.fileName, { create: false })
+      // }).then((fileEntry) => {
+      //   fileEntry.file(file => {
+      //     console.log(file)
+      //     let formData = new FormData();
+      //     formData.append('file', file);
+      //     this.attachmentFiles.push(file);
+      //     let attach = new Postattachment();
+      //     attach.name = this.fileName;
+      //     attach.type = "AUDIO";
+      //     attach.file = file;
+      //     this.attachmentArray.push(attach);
+      //   })
+      // });
+
+
+
+
         // console.log(this.filePath);
         // this.playAudio('record.aac');
         // this.showToast('Recording stopped and saving audio..');
 
-      } else {
-        console.log('Recording already stopped.');
-      }
     }
   }
 
 
+  stopRecording(){
+    this.buttonStop = false;
+    // Stop listening
+    this.rippleAnimation = 'animation: ripple 0s linear infinite';
+    this.audio.stopRecord();
+    this.btnColor = "primary";
+    this.btnRecordingName = "Start Recording";
+    this.isRecording = false;
+
+    let dir;
+    if (this.platform.is('ios')) {
+      dir = this.filePlugin.tempDirectory;
+    } else if (this.platform.is('android')) {
+      dir = this.filePlugin.externalDataDirectory;
+    }
+
+    this.filePlugin.resolveDirectoryUrl(dir).then((rootDir) => {
+      return this.filePlugin.getFile(rootDir, this.fileName, { create: false })
+    }).then((fileEntry) => {
+      fileEntry.file(file => {
+        console.log(file);
+        // let formData = new FormData();
+        // formData.append('file', file);
+        this.convFile.IFlieToFile(file).then( fFile => {
+          let ff = this.blobTFile(fFile,this.fileName);
+          this.attachmentFiles.push(ff);
+          let attach = new Postattachment();
+          attach.name = this.fileName;
+          attach.type = "AUDIO";
+          attach.file = ff;
+          this.attachmentArray.push(attach);
+        });
+
+      })
+    });
+
+    // if (this.platform.is('ios')) {
+    //   this.makeFileIntoBlob(this.filePlugin.tempDirectory,this.fileName,"AUDIO");
+    // }else{
+    //   this.makeFileIntoBlob(this.filePlugin.externalDataDirectory,this.fileName,"AUDIO");
+    // }
+  }
+
+  blobTFile (theBlob: Blob, fileName:string){
+    var b: any = theBlob;
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    b.lastModifiedDate = new Date();
+    b.name = fileName;
+
+    //Cast to a File() type
+    // @ts-ignore
+    return <File>theBlob;
+  }
+
+startTimer() {
+  setInterval((variable) => {
+    const hours = Math.floor(this.audioDuration / 3600);
+    const totalSeconds = this.audioDuration % 3600;
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    if (this.isRecording === true) {
+      this.audioDuration++;
+      if (hours < 10) {
+        this.audioDurationText = '0' + hours + ':';
+      } else {
+        this.audioDurationText += hours + ':';
+      }
+      if (minutes < 10) {
+        this.audioDurationText += '0' + minutes + ':';
+        if (minutes == 1) {
+          this.stopRecording();
+        }
+      } else {
+        this.audioDurationText += minutes + ':';
+      }
+      if (seconds < 10) {
+        this.audioDurationText += '0' + seconds;
+      } else {
+        this.audioDurationText += seconds;
+      }
+      this.btnRecordingName = this.audioDurationText
+    }else{
+      this.btnRecordingName = "Start Recording";
+      this.audioDuration = 0;
+    }
+  }, 1000);
+  console.log('Recording started.');
+}
 
 //  else if (type === 'pause') {
 //   if (this.isStopped === false) {
@@ -631,6 +728,32 @@ export class NotificationNewPage implements OnInit {
 //   }
 // }
 // }
+
+
+  makeFileIntoBlob(filePath, fileName, fileType) {
+    let typeExtension = fileName.split('.')[1].trim();
+    return new Promise((resolve, reject) => {
+      this.filePlugin.readAsArrayBuffer(filePath, fileName).then(buffer => {
+        // get the buffer and make a blob to be saved
+        let blob;
+            blob = new Blob([buffer], {
+              type: "audio/"+typeExtension
+            });
+        this.attachmentFiles.push({'name':fileName,'file':blob,'record':true});
+        let attach = new Postattachment();
+        attach.name = this.fileName;
+        attach.type = "AUDIO";
+        attach.file = blob;
+
+        this.attachmentArray.push(attach);
+        console.log(blob.type, blob.size);
+        resolve(blob);
+      })
+          .catch(e => {
+            console.log(e);
+          });
+    });
+  }
 
 
 

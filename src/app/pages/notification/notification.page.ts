@@ -480,16 +480,16 @@ export class NotificationPage implements OnInit {
               this.studentwithClass.push(students);
             }
 
-            this.load.stopLoading();
+            this.load.stopLoading().then(value => {
+              if(this.NewNotification){
 
-            if(this.NewNotification){
+                this.presentNewNotificationModal();
 
-              this.presentNewNotificationModal();
+              }else{
 
-            }else{
-
-              this.presentEditAsNewNotificationModal();
-            }
+                this.presentEditAsNewNotificationModal();
+              }
+            });
           });
         },
         err=>{
@@ -839,8 +839,7 @@ export class NotificationPage implements OnInit {
     // }
     let that = this;
     this.load.stopLoading().then(value => {
-      that.load.startLoading('',true,'loadingWithoutBackground');
-          // .then( () =>{
+      that.load.startLoading('',true,'loadingWithoutBackground').then( () =>{
         if(that.platform.is('desktop')) {
           that.tokenKey = localStorage.getItem(this.localStorageToken);
           that.studentService.putHeader(localStorage.getItem(this.localStorageToken));
@@ -856,7 +855,7 @@ export class NotificationPage implements OnInit {
                 that.fristOpen = false;
               // });
         }
-      // });
+      });
     });
 
 

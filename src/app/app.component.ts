@@ -283,10 +283,16 @@ export class AppComponent {
             //     data = JSON.parse(val.data);
             // }
 
-
-          this.accountServ.setDate(data);
-          // this.accountServ.getTags(this.fullToken());
-          this.CustomReport();
+          // @ts-ignore
+          if (data.id){
+            this.accountServ.setDate(data);
+            // this.accountServ.getTags(this.fullToken());
+            this.CustomReport();
+          }else{
+            this.loadCtrl.stopLoading().then( () => {
+              this.navCtrl.navigateRoot(this.homePath);
+            });
+          }
           // this.setNameInMenu(this.accountServ.getUserName());
           // this.knowFeatures(this.accountServ.getAccountFeature());
           // this.load.dismiss();

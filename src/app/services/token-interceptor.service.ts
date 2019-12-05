@@ -9,11 +9,11 @@ import {LoginService} from './Login/login.service';
 export class TokenInterceptorService implements HttpInterceptor {
   constructor(public auth: LoginService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+    console.log(this.auth.accessToken);
     if(!request.url.includes("/oauth/")){
       request = request.clone({
         setHeaders: {
-          Authorization: `${this.auth.accessToken}`
+          Authorization: `${this.auth.accessToken}`,
         },
         withCredentials: true
       });

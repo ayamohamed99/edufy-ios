@@ -86,7 +86,43 @@ export class ProfilePage implements OnInit {
         }
     );
 
-      if(network.type == 'wifi'){
+
+    if (platform.is('desktop')) {
+
+      notiServ.putHeader(localStorage.getItem(this.localStorageToken));
+      this.getNotificationINStorage();
+    } else {
+      // storage.get(this.localStorageToken).then(
+      //     val => {
+            notiServ.putHeader(this.auth.accessToken);
+            this.getNotificationINStorage();
+          // });
+    }
+
+      if (this.accountServ.getAccountFeature().attendanceTeachersActivated){
+          this.startWiFiWiz();
+      }
+
+  }
+
+
+  startWiFiWiz(){
+
+      if (this.platform.is('desktop')) {
+          this.attend.putHeader(localStorage.getItem(this.localStorageToken));
+          this.checkTheAttendanceShift();
+          this.getAttendData();
+
+      } else {
+          // storage.get(this.localStorageToken).then(
+          //     val => {
+          this.attend.putHeader(this.auth.accessToken);
+          this.checkTheAttendanceShift();
+          this.getAttendData();
+          // });
+      }
+
+      if(this.network.type == 'wifi'){
 
 
           WifiWizard2.requestPermission().then( (per) => {
@@ -120,33 +156,10 @@ export class ProfilePage implements OnInit {
           //
           // }, (err) => console.error(err));
       }
-    if (platform.is('desktop')) {
 
-      notiServ.putHeader(localStorage.getItem(this.localStorageToken));
-      this.getNotificationINStorage();
-    } else {
-      // storage.get(this.localStorageToken).then(
-      //     val => {
-            notiServ.putHeader(this.auth.accessToken);
-            this.getNotificationINStorage();
-          // });
-    }
 
-      if (platform.is('desktop')) {
-          attend.putHeader(localStorage.getItem(this.localStorageToken));
-          this.checkTheAttendanceShift();
-          this.getAttendData();
 
-      } else {
-          // storage.get(this.localStorageToken).then(
-          //     val => {
-                  attend.putHeader(this.auth.accessToken);
-                  this.checkTheAttendanceShift();
-                  this.getAttendData();
-              // });
-      }
-
-      if (platform.is('android')) {
+      if (this.platform.is('android')) {
           this.androidPermission.checkPermission(this.androidPermission.PERMISSION.READ_PHONE_STATE).then(
               result => {
                   console.log('Has permission?',result.hasPermission);

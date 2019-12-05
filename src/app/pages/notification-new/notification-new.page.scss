@@ -265,4 +265,50 @@ ion-slides {
   position: absolute;
 }
 
+  .newNotiSeparator {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #cbcbcb;
+    line-height: 0.1em;
+    margin: 20px 0 10px;
+  }
+
+  .newNotiSeparator span {
+    background: #f1f1f1;
+    padding: 0 33px;
+  }
+
+  .ripple {
+    margin: auto;
+    margin-top: 5rem;
+    background-color: #f04141;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    position:relative;
+    animation: ripple 3s linear infinite;
+  }
+  .ripple::before,
+  .ripple::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    border-radius: 50%;
+    animation: ripple 3s linear infinite 1s;
+  }
+  .ripple::after {
+    animation: ripple 3s linear infinite 2s;
+  }
+  @keyframes ripple {
+    0% {
+      box-shadow: 0 0 0 .7rem rgba(255,255,255, 0.2);
+    }
+    100% {
+      box-shadow: 0 0 0 8rem rgba(255,255,255, 0);
+    }
+  }
+
 }

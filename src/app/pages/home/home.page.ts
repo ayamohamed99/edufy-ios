@@ -193,10 +193,21 @@ export class HomePage {
             //     // @ts-ignore
             //     data = JSON.parse(val.data);
             // }
-          this.accountServ.setDate(data);
-          // this.accountServ.getTags(this.fullToken());
-          // this.navCtrl.setRoot(ProfilePage);
-          this.CustomReport();
+
+            // @ts-ignore
+            if (data.id){
+                this.accountServ.setDate(data);
+                // this.accountServ.getTags(this.fullToken());
+                // this.navCtrl.setRoot(ProfilePage);
+                this.CustomReport();
+            }else{
+                this.load.stopLoading();
+                this.alertCtrl.create({
+                    header: 'Error!',
+                    subHeader: "Wrong Username or Password",
+                    buttons: ['OK']
+                }).then(alert => alert.present());
+            }
         },
         err => {
             this.load.stopLoading();
