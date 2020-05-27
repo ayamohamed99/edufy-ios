@@ -28,6 +28,11 @@ const routes: Routes = [
           "../cafeteria-products/cafeteria-products.module#CafeteriaProductsPageModule",
       },
       {
+        path: "cafeteria-credit",
+        loadChildren:
+          "../cafeteria-credit/cafeteria-credit.module#CafeteriaCreditPageModule",
+      },
+      {
         path: "daily-report",
         loadChildren: "../report/report.module#ReportPageModule",
       },
