@@ -56,6 +56,34 @@ export class MenuPage implements OnInit {
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
     }
+    
+    // TODO
+    // if(this.accountServ.getUserRole().cafeteriaCanOrder && data.cafeteriaActivated){
+    if(data.cafeteriaActivated){
+      let data = {
+        title: "Cafeteria",
+        icon: "cafe",
+        main: true,
+        url: "/menu/cafeteria-",
+        customReport: false,
+        children: [
+          {
+            title: "Products",
+            icon: "",
+            url: "/menu/cafeteria-products",
+            customReport: false,
+          },
+          {
+            title: "Credit",
+            icon: "",
+            url: "/menu/cafeteria-credit",
+            customReport: false,
+          },
+        ],
+      };
+      
+      this.pages.push(data);
+    }
 
     if(this.accountServ.getUserRole().dailyReportView && data.dailyReportActivated){
       let data = {title: 'Daily Report', icon: 'document', main:true, url: '/menu/daily-report', customReport:false};

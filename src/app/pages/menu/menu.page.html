@@ -1,54 +1,78 @@
 <ion-split-pane>
-  <ion-menu contentId="content">
+    <ion-menu contentId="content">
 
-<!--    <ion-header>-->
-<!--      <ion-toolbar color="primary">-->
-<!--        <ion-title>Menu</ion-title>-->
-<!--      </ion-toolbar>-->
-<!--    </ion-header>-->
+        <!--    <ion-header>-->
+        <!--      <ion-toolbar color="primary">-->
+        <!--        <ion-title>Menu</ion-title>-->
+        <!--      </ion-toolbar>-->
+        <!--    </ion-header>-->
 
-    <ion-content style=".content.outer-content {background: #ffffff;}">
+        <ion-content style=".content.outer-content {background: #ffffff;}">
 
 
-        <ion-menu-toggle auto-hide="false" *ngFor="let p of pages" class="navMenuClass">
-          <div *ngIf="p.main && !p.customReport">
-              <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)" [class.active-item]="selectedPath.startsWith(p.url)">
-                  <ion-icon [name]="p.icon" slot="start"></ion-icon>
-                  {{ p.title }}
-              </ion-item>
-          </div>
-            <div *ngIf="p.main && p.customReport" [ngClass]="setCollaps()">
-
-                <button class="collopsible" color="light" (click)="stopAll($event)">
-                    <ion-icon icon-left name="ios-copy"></ion-icon>
-                    <ion-label>
-                    Reports
-                    </ion-label>
-                </button>
-
-                <div class="contont">
-                    <ion-item *ngFor="let itm of customReportList; let i = index"  [routerLink]="['/menu/report',itm.title]" routerDirection="root" (click)="onLoadReport(itm.url, itm.title, itm.id)" [id]="'ReportPage'+itm.id" [class.active-item]="getUrlPartTwo(selectedPath).startsWith(itm.url+'/'+itm.title)">
-                        <ion-icon name="document" small></ion-icon>
-                        {{ itm.title }}
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of pages" class="navMenuClass">
+                <div *ngIf="p.main && !p.customReport && !p.children">
+                    <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)"
+                        [class.active-item]="selectedPath.startsWith(p.url)">
+                        <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                        {{ p.title }}
                     </ion-item>
                 </div>
 
-            </div>
+                <div *ngIf="p.main && p.children">
 
-            <div *ngIf="!p.main">
-                <ion-item [routerLink]="p.url" routerDirection="root" class="toolsItem" [class.active-item]="selectedPath.startsWith(p.url)">
-                    <ion-icon [name]="p.icon" slot="start"></ion-icon>
-                    {{ p.title }}
-                </ion-item>
-            </div>
-        </ion-menu-toggle>
+                    <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)"
+                        [class.active-item]="selectedPath.startsWith(p.url)">
+                        <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                        {{ p.title }}
+                    </ion-item>
+
+                    <ion-item-group>
+                        <ion-item *ngFor="let child of p.children" [routerLink]="child.url" routerDirection="root"
+                            (click)="onLoadReport(child.url, child.title, -1)"
+                            [class.active-item]="selectedPath.startsWith(child.url)">
+                            <ion-icon [name]="child.icon" slot="start"></ion-icon>
+                            {{ child.title }}
+                        </ion-item>
+                    </ion-item-group>
+
+                </div>
+                <div *ngIf="p.main && p.customReport  && !p.children" [ngClass]="setCollaps()">
+
+                    <button class="collopsible" color="light" (click)="stopAll($event)">
+                        <ion-icon icon-left name="ios-copy"></ion-icon>
+                        <ion-label>
+                            Reports
+                        </ion-label>
+                    </button>
+
+                    <div class="contont">
+                        <ion-item *ngFor="let itm of customReportList; let i = index"
+                            [routerLink]="['/menu/report',itm.title]" routerDirection="root"
+                            (click)="onLoadReport(itm.url, itm.title, itm.id)" [id]="'ReportPage'+itm.id"
+                            [class.active-item]="getUrlPartTwo(selectedPath).startsWith(itm.url+'/'+itm.title)">
+                            <ion-icon name="document" small></ion-icon>
+                            {{ itm.title }}
+                        </ion-item>
+                    </div>
+
+                </div>
+
+                <div *ngIf="!p.main  && !p.children">
+                    <ion-item [routerLink]="p.url" routerDirection="root" class="toolsItem"
+                        [class.active-item]="selectedPath.startsWith(p.url)">
+                        <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                        {{ p.title }}
+                    </ion-item>
+                </div>
+            </ion-menu-toggle>
 
 
 
-    </ion-content>
+        </ion-content>
 
-  </ion-menu>
+    </ion-menu>
 
-  <ion-router-outlet id="content" main></ion-router-outlet>
+    <ion-router-outlet id="content" main></ion-router-outlet>
 
 </ion-split-pane>
