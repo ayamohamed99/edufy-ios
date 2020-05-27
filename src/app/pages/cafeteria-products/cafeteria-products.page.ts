@@ -12,4 +12,6 @@ export class CafeteriaProductsPage implements OnInit {
   ngOnInit() {
   }
 
+  getCategories(){}
+
 }

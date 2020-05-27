@@ -1,9 +1,52 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>cafeteria-products</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title text-center>Products</ion-title>
   </ion-toolbar>
+
+
+  <ion-toolbar class="toolBarShap" color="gray" scrollable="true">
+    <ion-segment [(ngModel)]="selectedTab" color="primary"
+      style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true">
+      <ion-segment-button>
+        <ion-icon name="home"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button checked>
+        <ion-icon name="heart"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="pin"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="star"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="star"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="star"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="star"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="call"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="globe"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button>
+        <ion-icon name="basket"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content>
+
+
 
 </ion-content>
