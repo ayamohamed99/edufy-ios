@@ -8,45 +8,21 @@
 
 
   <ion-toolbar class="toolBarShap" color="gray" scrollable="true">
-    <ion-segment [(ngModel)]="selectedTab" color="primary"
+    <ion-segment [(ngModel)]="selectedTab" color="primary" (ionChange)="segmentChanged($event)"
       style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true">
-      <ion-segment-button>
-        <ion-icon name="home"></ion-icon>
+      <ion-segment-button *ngFor="let category of categories; let i= index" [checked]="i==0">
+        <ion-label>{{category.name}}</ion-label>
       </ion-segment-button>
-      <ion-segment-button checked>
-        <ion-icon name="heart"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="pin"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="star"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="star"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="star"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="star"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="call"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="globe"></ion-icon>
-      </ion-segment-button>
-      <ion-segment-button>
-        <ion-icon name="basket"></ion-icon>
-      </ion-segment-button>
+
     </ion-segment>
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content>
-
-
-
+  <ion-list>
+    <ion-item *ngFor="let product of products.products">
+      <ion-label>{{product.name}}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
