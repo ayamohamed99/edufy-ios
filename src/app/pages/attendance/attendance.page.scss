@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/deep/ app-attendance{
+  .container{
+    --background: #F4F4F4;
+  }
+
+  /deep/ .border-remove {
+    --border-width: 0 !important;
+  }
+
+  /deep/ .icon-color{
+    --color: black !important;
+  }
+
+  /deep/ .segmentRaduis {
+    border-radius: 100px;
+    border-color: rgba(255, 255, 255, 0);
+  }
+
+  /deep/ .sc-ion-segment-ios-h.ion-color.sc-ion-segment-ios-s > .segment-button-checked, .sc-ion-segment-ios-h.ion-color.sc-ion-segment-ios-s > .segment-button-checked.activated {
+    background: #55A9FF;
+    color: white;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.25);
+  }
+
+  .resizeContent{
+    --background: #faebd700;
+    //height: calc(100% - 145px);
+  }
+
+  .resizeContentNo{
+    --background: #faebd700;
+    height: calc(100% - 75px);
+  }
+
+  .itemEdit{
+    --background: #f4f4f4;
+    --border-color: #f0f8ff00;
+    margin-bottom: 10px;
+  }
+
+  .resizeContentList{
+    background: #faebd700;
+    overflow: auto;
+    height: calc(100% - 70px);
+  }
+
+  .resizeContentNoList{
+    --background: #faebd700;
+    height: 100%;
+  }
+
+  .dateOneDiv{
+    margin-right: 10px;
+  }
+
+  .todayNum{
+    font-size: 32px;
+    display: block;
+  }
+
+  .todayMonth{
+    font-size: 15px;
+    display: block;
+    text-align: center;
+  }
+
+  .imgOneProfile{
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+
+  .imgOneProfileAvatar{
+    div{
+      border-radius: 5px !important;
+      margin-top: 5px !important;
+      display: inline-block !important;
+    }
+  }
+
+  .partTwoOne{
+    display: inline-block;
+    vertical-align: super;
+    width: calc(100% - 50px);
+    margin-left: 5px;
+  }
+
+  .infoOneDiv{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: #4EDDE4;
+    border-radius: 6px;
+    padding: 0 5px;
+  }
+
+  .infoOneDivRed{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: rgba(230, 120, 121, 0.78);
+    border-radius: 6px;
+    padding: 0 5px;
+  }
+
+  .infoOneDivGray{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: #55a9ff;
+    border-radius: 6px;
+    padding: 0 5px;
+  }
+
+  .infoOneDivOnce{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: #55a9ff;
+    border-radius: 6px;
+    padding: 0 5px;
+
+    /deep/ avatar{
+      div{
+        width: 45px !important;
+        height: 45px !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+        line-height: 45px !important;
+        font-size: 20px !important;
+        display: inline-block !important;
+      }
+    }
+  }
+
+  .infoOneDivRedOnce{
+    display: inline-block;
+    width: 100%;
+    margin-right: 10px;
+    background: rgba(230, 120, 121, 0.78);
+    border-radius: 6px;
+    padding: 0 5px;
+    /deep/ avatar{
+      div{
+        width: 45px !important;
+        height: 45px !important;
+        border-radius: 5px !important;
+        margin-top: 5px !important;
+        line-height: 45px !important;
+        font-size: 20px !important;
+        display: inline-block !important;
+      }
+    }
+  }
+
+  .topPart{
+    width: 100%;
+  }
+
+  .fristName{
+    display: inline-block;
+    width: calc(100% - 66px);
+    color: white;
+  }
+
+  .comeInOne{
+    display: inline-block;
+    color: white;
+    text-align: center;
+    width: 66px;
+  }
+
+  .downPart{
+    width: 100%;
+  }
+
+  .lastName{
+    display: inline-block;
+    width: calc(100% - 66px);
+    color: white;
+  }
+
+  .goOutOne{
+    display: inline-block;
+    color: white;
+    text-align: center;
+    width: 66px;
+  }
+
+  .partTwoCheckin{
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 50px);
+    margin-left: 5px;
+    height: 45px;
+  }
+
+  .checkInDiv{
+    display: block;
+    color: white;
+    text-align: center;
+    width: 100%;
+    margin-top: 18px;
+  }
+
+  .teacherName{
+    width: calc(100% - 35px);
+    margin-left: 5px;
+    display: inline-block;
+    height: 30px;
+    vertical-align: top;
+  }
+
+  .teacherNameLabel{
+    width: 100%;
+    display: block;
+    margin-top: 8px;
+    color: white;
+    font-weight: 800;
+  }
+
+  .monthlyEditAvatar{
+    div{
+      display: inline-block !important;
+      border-radius: 5px !important;
+    }
+  }
+  .imgMonthlyProfile{
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+
+  .dateMonthlyDiv{
+    /* margin-right: 10px; */
+    display: inline-block;
+    width: calc(100% / 2);
+    text-align: center;
+  }
+
+  .monthlyNum{
+    font-size: 32px;
+    display: block;
+    color: white;
+  }
+
+  .monthlyTitle{
+    font-size: 15px;
+    display: block;
+    color: white;
+  }
+
+  .editListHeader{
+    -webkit-padding-start: 0 !important;
+    padding-inline-start: 0 !important;
+    font-size: 17px;
+    padding-left: 30% !important;
+  }
+
+  .redColor{
+    --background: rgba(230, 120, 121, 0.78);
+  }
+
+  .greenColor{
+    --background: #4EDDE4;
+  }
+
+  .redC{
+    background: rgba(230, 120, 121, 0.78);
+  }
+
+  .greenC{
+    background: #4EDDE4;
+  }
+
+  .blueColor{
+    --background: #55a9ff;
+  }
+
+}

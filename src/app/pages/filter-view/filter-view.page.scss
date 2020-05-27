@@ -1,0 +1,26 @@
+/deep/ app-filter-view{
+  /deep/ .spaceBetNgSelect{
+    margin-bottom: 15px;
+    ion-item{
+      padding-left: 0px;
+    }
+  }
+
+  .buttonOfFilter{
+    height: 35px !important;
+    float: right;
+  }
+
+  /deep/ .mat-input-element:disabled {
+    color: black;
+  }
+  /deep/ .ng-select .ng-clear-wrapper .ng-clear {
+    display: none;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /deep/ .mat-form-field {
+    display: block;
+  }
+}

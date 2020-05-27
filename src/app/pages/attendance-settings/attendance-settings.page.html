@@ -1,0 +1,33 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" class="container border-remove">
+    <ion-buttons slot="start">
+      <ion-menu-button class="icon-color"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="container">
+
+  <ion-list style="background: #faebd700; overflow: auto;">
+    <ion-item class="itemEdit" (click)="selectedItem(WIFI_ID)" *ngIf="accountServ.getUserRole().controlWifiPoint || accountServ.getUserRole().attendanceAdmin" detail>
+      <ion-avatar style="height: 27px;width: 27px;" slot="start">
+        <img src="assets/icon/wifisignalpage.png">
+      </ion-avatar>
+      <ion-label>
+        Edit your WiFi
+      </ion-label>
+    </ion-item>
+
+
+    <ion-item class="itemEdit" (click)="selectedItem(PHONE_CHANGE)" *ngIf="accountServ.getUserRole().attendanceAdmin" detail>
+      <ion-avatar style="height: 27px;width: 27px;" slot="start">
+        <img src="assets/icon/checkPhone.png">
+      </ion-avatar>
+      <ion-label>
+        Phone Change Confirmation
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

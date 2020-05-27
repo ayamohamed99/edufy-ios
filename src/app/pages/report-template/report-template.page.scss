@@ -1,0 +1,910 @@
+/deep/ app-report-template {
+
+  .contentColor{
+    --background: #f4f4f4;
+  }
+
+  /deep/ .mainDiv{
+    padding-bottom: 20px;
+  }
+
+  /deep/ .select-md .select-icon {
+    padding-right: 16px;
+  }
+
+  /deep/ .select-ios .select-icon {
+    padding-right: 16px;
+  }
+
+  /deep/ .loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+
+  ///////////////////////////Edit Ion-Fab
+  button[ion-fab][mini]{
+    padding: 8px;
+  }
+
+  /deep/ ion-fab-list[side=startTop] {
+    margin: -54px 68px;
+    right: 0;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row-reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    ion-fab-button {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+      border-radius: 100px;
+    }
+
+    ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: 18px;
+      right: 49px;
+      color: #000000;
+      background-color: white;
+      line-height: 16px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+    }
+  }
+
+  /deep/ ion-fab-list[side=top] {
+    top: auto;
+    bottom: 39px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: column-reverse;
+    -ms-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    ion-fab-button {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+      border-radius: 100px;
+    }
+
+    ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: 20px;
+      right: 56px;
+      color: #000000;
+      background-color: white;
+      line-height: 16px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+    }
+  }
+
+
+  /deep/ .forSave{
+    ion-label {
+      right: -8px !important;
+    }
+  }
+
+  /deep/ ion-fab-list[side=start] {
+    margin: 0px 100px;
+    img {
+      max-width: 100%;
+      border: 0;
+      width: 25px;
+      height: 25px;
+    }
+    ion-fab-button {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      overflow: visible;
+      position: relative;
+      //box-shadow: 5px 5px 5px grey;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+      border-radius: 100px;
+    }
+
+    ion-label {
+      -moz-appearance: none;
+      -ms-appearance: none;
+      -webkit-appearance: none;
+      position: absolute;
+      top: 16px;
+      right: 56px;
+      color: #000000;
+      background-color: white;
+      line-height: 16px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      -webkit-box-shadow: 1px 1px 1px grey;
+      box-shadow: 1px 1px 1px grey;
+    }
+  }
+
+  //////////////////////////////End Of Edit Ion-Fab
+
+  /////////////////////////////Report Question
+  .mainDivQuestion{
+    padding-bottom: 20px;
+  }
+
+  .ErrorIcon{
+    float: right;
+    font-size: 1.8em;
+    position: relative;
+    margin-bottom: -12px;
+    right: -11px;
+    top: 1px;
+    z-index: 1;
+    //-webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .questionCard{
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+  .questionCardElse{
+    border-radius: 10px;
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    width: 100%;
+    -webkit-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .questionTitle{
+    background-color: #5c87f7;
+    .formLabel{
+      background-color: #5c87f7;
+      color: white;
+      padding: 10px;
+    }
+
+    .formLabelTen{
+      background-color: #5c87f7;
+      color: white;
+      padding: 10px;
+      width: calc(100% - 105px);
+      display: inline-block;
+    }
+    .createButton{
+      color: white;
+      float: right;
+      display: inline;
+      height: 36px;
+      margin: 0;
+    }
+    .cancelButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 55px;
+      height: 36px;
+      margin: 0;
+    }
+    .saveButton{
+      color: white;
+      float: right;
+      display: inline;
+      width: 42px;
+      height: 36px;
+      margin: 0;
+    }
+  }
+
+  .questionBodyMULTI_SHORT_TEXT_ONE_VIEW_SELECTED{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    .divRadioButton{
+      margin-right: 31px;
+    }
+  }
+
+  .questionBodyLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 10px;
+    margin-bottom: -1px;
+  }
+
+  /deep/ .questionBody{
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    /deep/ .custom-Field_QOne{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+    }
+
+    /deep/ .custom-Field_QThree{
+      .mat-form-field-infix {
+        width: fit-content;
+        padding: 0;
+
+        input{
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-bottom: 0 !important;
+          top: 0 !important;
+        }
+      }
+    }
+
+    /deep/ .custom-Field_QFour{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    /deep/ .custom-Field_QSix{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    /deep/ .custom-Field_QEight{
+      width: 100%;
+      margin-top: -18px;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      .mat-form-field-wrapper {
+        margin-bottom: -17px;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+    }
+
+    /deep/ .custom-Field_QNine{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    /deep/ .custom-Field_QTen{
+      width: 100%;
+      .custom-textArea{
+        margin-bottom: 0;
+      }
+      textarea.mat-autosize {
+        font-size: initial;
+      }
+      /deep/ .mat-form-field-label:not(.mat-form-field-empty){
+        font-size: larger;
+      }
+      /deep/ .mat-form-field-flex {
+        margin-top: 10px;
+      }
+    }
+
+    .custom-Field_QTwelve{
+      width: 70px;
+      margin-top: 15px;
+      margin-right: 25px;
+    }
+
+    .divElevenCheckbox{
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+    .divElevenButtonIcon{
+      height: 25px;
+      //width: 25px;
+      padding: 0;
+      bottom: 5px;
+      float: right;
+    }
+    .divElevenInput{
+      display: inline-block;
+      width: 100%;
+    }
+    .divElevenOfInput{
+      width: calc(100% - 50px);
+      height: 40px;
+      padding: 0;
+    }
+    .divElevenOfInputButton{
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      margin: 0;
+      float: right;
+    }
+    /deep/ .radioButtonOfDropMenu{
+      /deep/.radio{
+        margin-right: 20px;
+        margin-bottom: 10px;
+        /deep/.mat-radio-outer-circle {
+          border-width: 1px;
+          border-radius: 50%;
+          border-color: #b4b4b4;
+          -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+          box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+
+      }
+    }
+
+  }
+
+  /////////////////////////////End of Report Question
+
+
+  /deep/ .select-md .select-placeholder {
+    color: #222;
+  }
+
+  /deep/ .select-ios .select-placeholder {
+    color: #222;
+  }
+  .fab[mini] {
+    margin: 8px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .fab {
+    contain: layout;
+    background-color: #0A73A4;
+  }
+
+  /deep/.fab-vertical-bottom {
+    bottom: 50px;
+  }
+
+  /deep/ion-fab[bottom] {
+    bottom: 60px;
+  }
+
+  .imgOfRadio{
+    width: 40px;
+    height: 40px;
+    display: inline;
+  }
+
+  .dateTopCenterBoldGray{
+    padding: 4px;
+    margin: 0;
+    color: #488aff;
+    font-size: 18px;
+  }
+  /////////////////////////////////////////Edit All Mat Checkboxes
+  /deep/ .checkbox{
+    .mat-checkbox-frame {
+      border-width: 1px;
+      border-radius: 5px;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    .mat-checkbox-background {
+      border-radius: 5px;
+    }
+
+  }
+
+  /deep/ .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: #a0a0a0;
+  }
+
+  /deep/ .mat-checkbox-input.cdk-visually-hidden.cdk-focused.cdk-program-focused{
+    color: #A0A0A0;
+  }
+  /deep/ .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  /deep/ .mat-checkbox:not(.mat-checkbox-disabled).mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  /////////////////////////////////////////End Of Edit All Mat Checkboxes
+
+
+  /////////////////////////////////////////Edit All Mat RadioButtons
+  /deep/ .radio{
+
+    /deep/ .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+  }
+
+  /deep/ .radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER{
+    display: block;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    /deep/ .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  /deep/ .radioNine{
+    margin-right: 20px;
+    margin-bottom: 10px;
+    /deep/ .mat-radio-outer-circle {
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: #b4b4b4;
+      -webkit-box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+      box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+  }
+
+  /deep/ .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #a0a0a0;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  /deep/ .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #a0a0a0;
+    -webkit-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  /deep/ .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #a0a0a0;
+  }
+  /deep/ .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    background-color: #a0a0a0;
+  }
+  /deep/ .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  /deep/ .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+    background-color: rgba(160, 160, 160,.26);
+  }
+  /deep/ .mat-ripple-element {
+    background-color: rgba(0,0,0,.1);
+  }
+  ///////////////////////////////////////End Of Edit All Mat RadioButtons
+
+  //////////////////////////////////////Organize Radio - CheckBox
+  .LoopManyCheckWithEdit{
+    display:inline-block;
+    padding-right: 25px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .LopContain{
+    display:inline-block;
+    padding-right: 0;
+    width: 50%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .LoopContainWithoutWidth{
+    display:inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  ///////////////////////////////////////End Of Organize Radio - CheckBox
+
+
+  butonOfEdit{
+    width: 5px;
+    height: 5px;
+  }
+
+
+
+
+  /deep/ .col{
+    width: 100%;
+  }
+
+  /deep/ .input{
+    width: 100%;
+  }
+
+  /deep/ .section{
+    display: inline-block;
+  }
+
+  /deep/  .custom-scroll{
+    width: 100%;
+  }
+
+  /deep/ .panel-body {
+    padding-right: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  /deep/ .dropdown-menu {
+    /*width: 78%;*/
+    margin-right: 11px;
+  }
+
+
+  /deep/ .label-as-badge {
+    border-radius: 1em;
+  }
+
+  /deep/ .inline-group{
+    display:inline-block;
+    width: 100%;
+  }
+
+  .T7sen{
+    display: inline !important;
+  }
+
+  /deep/ .row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+
+  .formLabel {
+    width: 100%;
+    font-size: 18px;
+    //margin-bottom: 10px;
+    //margin-top: 13px;
+    //padding-bottom: 10px;
+    font-weight: bold;
+  }
+
+  .englishPostionApprove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    float: right;
+
+  }
+
+  .arabicPostionApprove {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    float: left;
+  }
+
+  .englishPostionRemaining {
+    position: absolute;
+    top: 15px;
+    right: 190px;
+    float: right;
+  }
+
+  .arabicPostionRemaining {
+    position: absolute;
+    top: 15px;
+    left: 130px;
+    float: left;
+  }
+
+  .col-md-auto {
+    width: auto;
+  }
+  @-webkit-keyframes greenglow {
+    from {
+      left: -120px;
+    }
+    to {
+      left: 100%;
+    }
+  }
+
+  @-moz-keyframes greenglow {
+    from {
+      left: -120px;
+    }
+    to {
+      left: 100%;
+    }
+  }
+
+  @-o-keyframes greenglow {
+    from {
+      left: -120px;
+    }
+    to {
+      left: 100%;
+    }
+  }
+
+  @keyframes greenglow {
+    from {
+      left: -120px;
+    }
+    to {
+      left: 100%;
+    }
+  }
+
+  /deep/ .selectClassArabicPostion .checkbox {
+    position: absolute !important;
+    display: inline-block;
+    min-height: 18px;
+    margin-top: -10px !important;
+    margin-right: -29px !important;
+    padding-top: 1px !important;
+  }
+
+  /deep/ .selectClassArabicPostion .checkbox label::after {
+    padding-top: 3px !important;
+    padding-right: 2px;
+  }
+
+  /deep/ .selectClassArabicPostion .checkbox input[type=checkbox] {
+    margin-top: 10px;
+    margin-right: 15px;
+  }
+
+  /deep/ .selectClassEnglishPostion .checkbox {
+    position: absolute !important;
+    display: inline-block;
+    min-height: 18px;
+    margin-top: -10px !important;
+    margin-left: -22px !important;
+    padding-top: 1px !important;
+  }
+
+  /deep/ .selectClassEnglishPostion .checkbox label::after {
+    padding-top: 3px !important;
+  }
+
+  /deep/ .selectClassEnglishPostion .checkbox input[type=checkbox] {
+    margin-top: 10px;
+  }
+
+  /*  .date .dropdown-menu{
+      width: 83%;
+  }*/
+  .englishPostionSelectClass {
+    padding-left: 27px;
+
+  }
+
+  .arabicPostionSelectClass {
+    padding-right: 30px;
+
+  }
+
+  /deep/ .multiStudentEnglishPostion .checkbox {
+    position: absolute !important;
+    display: inline-block;
+    min-height: 18px;
+    margin-top: -10px !important;
+  }
+
+  /deep/ .multiStudentArabicPostion .checkbox {
+    position: absolute !important;
+    display: inline-block;
+    min-height: 18px;
+    margin-top: -10px !important;
+    margin-right: -10px !important;
+  }
+
+  /deep/ .multiStudentArabicPostion .checkbox label::after {
+    padding-right: 2px;
+  }
+
+  /deep/ .commentContainer {
+    position: relative;
+    max-height: 400px;
+    overflow-x: auto;
+    background: #f5f5f5;
+  }
+
+  /deep/ .multiStudentEnglishPostion .checkbox input[type=checkbox] {
+    margin-top: 15px;
+  }
+
+  /deep/ .multiStudentArabicPostion .checkbox input[type=checkbox] {
+    margin-right: 15px;
+  }
+
+  /deep/ .multiStudentArabicPostion .checkbox input[type=checkbox] {
+    margin-top: 15px;
+  }
+
+  /deep/ .select {
+    border-bottom-style: solid;
+    border-bottom-color: #c1c1c1;
+    border-bottom-width: thin;
+  }
+
+  /deep/ .ui-select-choices-row.ng-hide {
+    display: block !important;
+  }
+
+  /deep/ .disable-true {
+    opacity: .35;
+    background-color: lightgray;
+    border: 1px solid gray;
+
+  }
+
+  /deep/ .commentEditDeleteTools {
+    padding-top: 0px;
+    position: absolute;
+    right: -2px;
+    z-index: 1;
+    padding-right: 8px;
+    top: 0px;
+  }
+
+  /deep/ .fadein, .fadeout {
+    opacity: 0;
+    -moz-transition: opacity 0.4s ease-in-out;
+    -o-transition: opacity 0.4s ease-in-out;
+    -webkit-transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.4s ease-in-out;
+  }
+
+  /deep/ .fadein {
+    opacity: 1;
+  }
+
+  /deep/ .sample-show-hide {
+    -webkit-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+    max-width: 345px;
+  }
+
+  /deep/ .sample-show-hide.ng-hide {
+    opacity: 0;
+  }
+
+  /deep/ .message {
+    background: rgba(255, 255, 255, .8);
+    display: absolute;
+    padding-top: 0px;
+    position: absolute;
+    right: -2px;
+    z-index: 1;
+    padding-right: 8px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  /deep/ .messageSpan {
+    font-size: 18px;
+    display: inline-block;
+    margin-top: 25px;
+    font-family: "Arial Black", Gadget, sans-serif;
+  }
+
+  /deep/ .media-body textarea {
+    width: 99%;
+  }
+
+  /deep/ .replace {
+    display: none;
+  }
+
+  /deep/ [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
+
+  .div > div > h1 > i {
+    display: block;
+  }
+
+  /deep/ .custom-scroll::-webkit-scrollbar{-webkit-overflow-scrolling:touch;height:10px;width:10px}
+  //border-radius: 50%;
+  //position: relative;
+  //width: 21px;
+  //height: 21px;
+  //border-width: 1px;
+  //border-style: solid;
+  //border-color: #c8c7cc;
+  //background-color: #fff;
+
+}

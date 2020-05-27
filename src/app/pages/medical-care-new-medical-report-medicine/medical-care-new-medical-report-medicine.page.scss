@@ -1,0 +1,40 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+/deep/ app-medical-care-new-medical-report-medicine {
+
+/deep/ .contentColor{
+  background: #f4f4f4;
+}
+
+/deep/ .ng-select .ng-select-container {
+  border: 0px;
+}
+
+/deep/ .mat-form-field {
+  //margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 5px 10px;
+  padding-bottom: 0;
+  width: 100%;
+  background: white;
+  border-radius: 4px;
+}
+
+/deep/ .mat-form-field-wrapper {
+  padding-bottom: 2px;
+}
+
+/deep/ .mat-form-field-underline {
+  bottom: -0.04em;
+  //width: 106%;
+  //left: -9px;
+}
+
+/deep/ .mat-input-element:disabled {
+  color: black;
+}
+
+/deep/ .spaceBetNgSelect{
+  margin-bottom: 15px;
+}
+}

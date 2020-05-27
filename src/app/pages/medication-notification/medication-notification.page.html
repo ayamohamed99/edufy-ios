@@ -1,0 +1,29 @@
+<ion-content padding class="contentColor">
+
+  <div class="containerDIV">
+
+    <label class="medicationLable">{{medicationName}}</label>
+
+    <label class="dosageNumberType">{{dosageNumber+' '+dosageType}}</label>
+
+    <label class="studentData">{{studentName}}</label>
+
+    <label class="studentData">{{className}}</label>
+
+
+    <div class="divOfImg">
+      <img class="medicationTypeImg" [src]="setImageOfNotification(dosageType)"/>
+    </div>
+
+    <label class="studentData">{{medicationTime}}</label>
+
+    <label class="studentData">next at {{medicationNextTime}}</label>
+
+    <div class="midScreen">
+      <ion-button mode="ios" fill="outline" color="white" class="leftButtonClass" (click)="confimTime(shceduleId)">Give</ion-button>
+      <ion-button mode="ios" fill="outline"  color="white" class="rightButtonClass" (click)="cancelTime()">Late</ion-button>
+    </div>
+
+  </div>
+
+</ion-content>

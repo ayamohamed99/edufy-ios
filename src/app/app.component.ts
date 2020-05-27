@@ -1,42 +1,47 @@
-import {Component, ViewChild} from '@angular/core';
-import {AlertController, LoadingController, MenuController, ModalController, Nav, Platform} from 'ionic-angular';
-import {StatusBar} from '@ionic-native/status-bar';
-import {SplashScreen} from '@ionic-native/splash-screen';
+import { Component } from '@angular/core';
 
-import {HomePage} from '../pages/home/home';
-import {Storage} from "@ionic/storage";
-import {LoginService} from "../services/login";
-import {NotificationPage} from "../pages/notification/notification";
-import {AccountService} from "../services/account";
-import {ProfilePage} from "../pages/profile/profile";
-import {SettingsPage} from "../pages/settings/settings";
-import {LogoutService} from "../services/logout";
-import {ReportPage} from "../pages/report/report";
-import {FCMService} from "../services/fcm";
-import {InAppBrowser} from "@ionic-native/in-app-browser";
-import {Url_domain} from "../models/url_domain";
-import {ChatService} from "../services/chat";
-import {Student} from "../models";
-import {tryCatch} from "rxjs/util/tryCatch";
-import {LocalNotifications} from "@ionic-native/local-notifications";
-import {MedicalCareService} from "../services/medicalcare";
-import {StudentsService} from "../services/students";
-import {ClassesService} from "../services/classes";
-import {BehaviorSubject} from "rxjs";
+import {AlertController, ModalController, NavController, Platform} from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-declare var window:any;
+import {Url_domain} from './models/url_domain';
+import {ChatService} from './services/Chat/chat.service';
+import {FCMService} from './services/FCM/fcm.service';
+import {AccountService} from './services/Account/account.service';
+import {LogoutService} from './services/Logout/logout.service';
+import {MedicalCareService} from './services/MedicalCare/medical-care.service';
+import {StudentsService} from './services/Students/students.service';
+import {ClassesService} from './services/Classes/classes.service';
+import {LoadingViewService} from './services/LoadingView/loading-view.service';
+import {Router, RouterEvent} from '@angular/router';
+import {LoginService} from './services/Login/login.service';
+import {BehaviorSubject} from 'rxjs';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
+import {MedicationNotificationPage} from './pages/medication-notification/medication-notification.page';
+import {ChatDialoguePage} from './pages/chat-dialogue/chat-dialogue.page';
+import {Student} from './models';
+import { Storage } from '@ionic/storage';
+import {PassDataService} from './services/pass-data.service';
+import * as dateFNS from "date-fns";
+import {TransFormDateService} from './services/TransFormDate/trans-form-date.service';
 
 @Component({
-  templateUrl: 'app.html'
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
+export class AppComponent {
+  homePath = '/home';
+  menuPath = '/menu';
+  userName: string;
+  password: string;
+  accessToken: string;
 
-export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+  token: string;
+  values: any = [];
+  toKenFull: string;
 
-  view:any = [];
-  rootPage:any;
   profilePage = 'ProfilePage';
-  homePage = HomePage;
   notificationPage = 'NotificationPage';
   settingsPage = 'SettingsPage';
   reportPage = 'ReportPage';
@@ -44,169 +49,75 @@ export class MyApp {
   medicalcarePage = 'MedicalCarePage';
   medicationNotificationPage = 'MedicationNotificationPage';
 
-  userName:string;
-  password:string;
-  accessToken:string;
-  // refreshToken:string;
-  token:string;
-  values:any =[];
-  toKenFull:string;
-  load:any;
-  names:string;
+  DomainUrl: Url_domain;
 
-  appearNotification:boolean = false;
-  appearDailyReport:boolean = false;
-  appearCustomReport:boolean = false;
-  appearChat:boolean = false;
-  appearMedicalReport:boolean = false;
-  customReportList:any = [];
+  constructor(
+      private platform: Platform,
+      private splashScreen: SplashScreen,
+      private statusBar: StatusBar,
+      private loginServ: LoginService,
+      private storage: Storage,
+      private router: Router,
+      private loadCtrl: LoadingViewService,
+      private classesServ: ClassesService,
+      private studentServ: StudentsService,
+      private medicalService: MedicalCareService,
+      private logout: LogoutService,
+      private localNotifications: LocalNotifications,
+      private accountServ: AccountService,
+      private iab: InAppBrowser,
+      private fire: FCMService,
+      private chatServ: ChatService,
+      private modalCtrl: ModalController,
+      private alertCtrl: AlertController,
+      private navCtrl: NavController,
+      public passData:PassDataService,
+      public transDate:TransFormDateService
+  ) {
+    this.initializeApp();
+  }
 
-  elementByClass:any = [];
-  oldPage = null;
-  startApp = false;
-  DomainUrl:Url_domain;
-  hereONPage;
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#5C87F7');
+      this.startAutoLogin();
+      this.splashScreen.hide();
+    });
+  }
 
-  constructor(private platform: Platform, statusBar: StatusBar,splashScreen: SplashScreen, private menu: MenuController,private storage:Storage,
-              private loginServ:LoginService, private loading:LoadingController, private accountServ:AccountService,public chatServ:ChatService,
-              private logout:LogoutService, private alertCtrl: AlertController, private fire:FCMService, private iab: InAppBrowser,public modalCtrl:ModalController,
-              private localNotifications:LocalNotifications,public medicalService:MedicalCareService,public studentServ:StudentsService,public classesServ:ClassesService) {
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      // statusBar.overlaysWebView(true);
-      statusBar.backgroundColorByHexString('#5C87F7');
-      if(platform.is('core')){
-        this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
-        this.password = localStorage.getItem(this.loginServ.localStoragePassword);
-      }else{
-        storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err) => {
-        }).catch((err) => {
-        });
-        storage.get(this.loginServ.localStoragePassword).then(
-            value =>{
-              this.password = value;
-              if((this.userName && this.userName != '') && (this.password && this.password != '')){
-                this.startLogIn();
-              }else {
-                this.rootPage = this.homePage;
-              }
-
-            });
-      }
-
-      if((this.userName && this.userName != '') && (this.password && this.password != '') &&
-        platform.is('core')){
+  startAutoLogin() {
+    if (this.platform.is('desktop')) {
+      this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
+      this.password = localStorage.getItem(this.loginServ.localStoragePassword);
+      if ((this.userName && this.userName != '') && (this.password && this.password != '')) {
         this.startLogIn();
-      }else {
-        this.rootPage = this.homePage;
+      } else {
+        this.navCtrl.navigateRoot(this.homePath);
       }
-      statusBar.styleDefault();
-      splashScreen.hide();
-      this.startApp = true;
-      // this.oldPage = 'profilePage';
-      // document.getElementById('profilePage').classList.toggle("selected");
-      // document.getElementById('logOutPage').classList.remove("selected");
-      this.nav.viewDidEnter.subscribe(
-        page=>{
-          console.log(page);
-          if(page.name) {
-            this.hereONPage = page.name;
-          }else{
-            this.hereONPage = page.id;
-          }
-          this.onSelectView(page.name);
-        },err=>{
-          console.log(err);
-        });
-    });
-  }
+    } else {
+      this.storage.get(this.loginServ.localStorageUserName).then(value => this.userName = value, (err) => {
+      }).catch((err) => {
+      });
+      this.storage.get(this.loginServ.localStoragePassword).then(
+          value => {
+            this.password = value;
+            if ((this.userName && this.userName != '') && (this.password && this.password != '')) {
+              this.startLogIn();
+            } else {
+              this.navCtrl.navigateRoot(this.homePath);
+            }
 
-  public whichPage(){
-
-
-    var coll = document.getElementsByClassName("collopsible");
-    var i;
-
-    let foundBefore;
-
-    for (i = 0; i < coll.length; i++) {
-     this.elementByClass.find(x =>{
-       if(x === coll[i]){
-         foundBefore=true;
-       }else{
-         foundBefore=false;
-       }
-     });
-
-      if(!foundBefore) {
-        coll[i].addEventListener("click", function () {
-          this.classList.toggle("active");
-          var content = this.nextElementSibling;
-          if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-          } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-          }
-        });
-        this.elementByClass.push(coll[i]);
-      }
-    }
-
-
-
-    this.view=this.nav.getActive();
-    this.setNameInMenu(this.accountServ.getUserName());
-    this.knowFeatures(this.accountServ.getAccountFeature());
-    this.knowCustomReport(this.accountServ.getCustomReportsList());
-    if(this.view && this.platform.is('core') && this.platform.width() > 992){
-      if(this.view.name == 'HomePage' && this.platform.is('core')){
-        return false;
-      }else{
-        return true;
-      }
-    }
-    else
-    {
-      return false;
+          });
     }
   }
 
-  onLoad(page:any){
-    this.nav.setRoot(page);
-    this.menu.close();
-  }
 
-  onLoadReport(page:any, pageName:any, reportId:any){
-    this.accountServ.reportPage = pageName;
-    this.accountServ.reportId = reportId;
-    this.nav.setRoot(page);
-    this.menu.close();
-  }
 
-  onLoadReportTemplateWithComments(params?) {
-    this.accountServ.reportId = params.reportId;
-    this.accountServ.reportPage = params.reportName;
-   const model = this.modalCtrl.create('ReportTemplatePage',
-     {student:{id:params.studentId,name:params.studentName},
-       classId:params.classId,reportDate:params.reportDate,comment:true});
-    model.present();
-    this.menu.close();
 
-    //  this.accountServ.reportId = 1;
-    //  this.accountServ.reportPage = "Weakly";
-    // const model = this.modalCtrl.create('ReportTemplatePage',
-    //   {student:{id:9020,name:"Lina"},
-    //     classId:36,reportDate:"02-06-2019",comment:true});
-    //  model.present();
-    //  this.menu.close();
-  }
-
-  onSignOut(){
-    this.load = this.loading.create({
-      content: 'Wait please ...'
-    });
-    this.load.present();
+  // Mark: SignOut Method
+  onSignOut() {
+    this.loadCtrl.startNormalLoading('Wait please ...');
 
     this.classesServ.getClassListWithID_2_AND_NOT_REPORTS = new BehaviorSubject(null);
     this.studentServ.getAllStudentWithID_7 = new BehaviorSubject(null);
@@ -217,422 +128,413 @@ export class MyApp {
     this.medicalService.getCheckupTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
     this.medicalService.getSETINGS_FOR_MEDICALREPORT = new BehaviorSubject(null);
 
-    let plat=this.platform.is('core');
+    const plat = this.platform.is('desktop');
 
-    if(plat){
-      let token = localStorage.getItem(this.loginServ.localStorageToken);
+    if (plat) {
+      const token = localStorage.getItem(this.loginServ.localStorageToken);
       this.logout.putHeader(token);
-      if(this.platform.is('core')) {
+      if (this.platform.is('desktop')) {
         localStorage.clear();
-      }else {
+      } else {
         this.storage.clear();
       }
-      this.load.dismiss();
-      this.menu.close();
-      this.nav.setRoot(this.homePage);
-    }else{
+      this.loadCtrl.stopLoading().then( () => {
+        this.navCtrl.navigateRoot(this.homePath);
+      });
+    } else {
       this.storage.get(this.loginServ.localStorageToken).then(
-        value => {
-          this.logout.putHeader(value);
-          // this.logoutMethod();
-          if(this.platform.is('core')) {
-            localStorage.clear();
-          }else {
-            this.storage.clear();
-          }
-          this.load.dismiss();
-          this.menu.close();
-          this.nav.setRoot(this.homePage);
-        })
+          value => {
+            this.logout.putHeader(value);
+            // this.logoutMethod();
+            if (this.platform.is('desktop')) {
+              localStorage.clear();
+            } else {
+              this.storage.clear();
+            }
+            this.loadCtrl.stopLoading().then( () => {
+              this.navCtrl.navigateRoot(this.homePath);
+            });
+          });
 
     }
 
-    // document.getElementById('ProfilePage').classList.toggle("selected");
-    // document.getElementById('logOutPage').classList.remove("selected");
-
   }
 
 
-  logoutMethod(){
-    this.logout.postlogout(null,null,null).subscribe(
-      (data) => {
-        this.load.dismiss();
-        if(this.platform.is('core')) {
-          localStorage.clear();
-        }else {
-          this.storage.clear();
-        }
-        this.menu.close();
-        this.nav.setRoot(this.homePage);
-      },
-      err => {
-        this.load.dismiss();
-        if(this.platform.is('core')) {
-          localStorage.clear();
-        }else {
-          this.storage.clear();
-        }
-        this.menu.close();
-        this.nav.setRoot(this.homePage);
-      },
-      () => {
-      });
+  logoutMethod() {
+    this.logout.postlogout(null, null, null).subscribe(
+        // @ts-ignore
+        (data) => {
+          this.loadCtrl.stopLoading().then( () => {
+            if (this.platform.is('desktop')) {
+              localStorage.clear();
+            } else {
+              this.storage.clear();
+            }
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        },
+        err => {
+          this.loadCtrl.stopLoading().then( () => {
+            if (this.platform.is('desktop')) {
+              localStorage.clear();
+            } else {
+              this.storage.clear();
+            }
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        },
+        () => {
+        });
   }
 
 
 
-
-
-
-
-
-
-
-
-//All services For Auto login
-
-  startLogIn(){
-    this.load = this.loading.create({
-      content: 'Logging in...'
-    });
-    this.load.present();
+  // MARK: START LOGIN METHODS
+  startLogIn() {
+    this.loadCtrl.startNormalLoading('Logging in...');
     this.localNotifications.clear(2481993);
-    let getToken:string;
+    let getToken: string;
     this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
-    this.loginServ.postlogin(this.userName,this.password).subscribe(
-      (data) => {
-        this.values = data;
-        this.accessToken = this.values.refreshToken.value;
-        this.refreshToken();
-      },
-      err => {
-        this.load.dismiss();
-        this.nav.setRoot(this.homePage);
-      },
-      () => {
-      });
+    this.loginServ.postlogin(this.userName, this.password).subscribe(
+        (data) => {
+            this.values = data;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     this.values = JSON.parse(data.data);
+            // }
+          this.accessToken = this.values.refreshToken.value;
+          this.refreshToken();
+        },
+        err => {
+          this.loadCtrl.stopLoading().then( () => {
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        },
+        () => {
+        });
   }
 
-  fullToken(){
-    return 'Bearer ' +this.token;
+  fullToken() {
+    return 'Bearer ' + this.token;
   }
 
-  refreshToken(){
+  refreshToken() {
     this.loginServ.authenticateUserByRefreshToken(this.accessToken).subscribe(
-      (data) => {
-        this.values = data;
-        this.token = this.values.value;
-        this.toKenFull = this.fullToken();
+        (data) => {
+          this.values = data;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     this.values = JSON.parse(data.data);
+            // }
+          this.token = this.values.value;
+          this.toKenFull = this.fullToken();
 
-        let getToken:string;
-        this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
+          let getToken: string;
+          this.storage.get(this.loginServ.localStorageToken).then(value => getToken = value);
 
-        if ( (this.platform.is("core") )
-          && (this.token != null || this.token != '')
-          && (this.fullToken() != localStorage.getItem(this.loginServ.localStorageToken)))
-        {
+          if ( (this.platform.is('desktop') )
+              && (this.token != null || this.token != '')
+              && (this.fullToken() != localStorage.getItem(this.loginServ.localStorageToken))) {
 
-          localStorage.setItem(this.loginServ.localStorageToken, this.fullToken());
-          localStorage.setItem(this.loginServ.localStorageAccessToken, this.token);
-          localStorage.setItem(this.loginServ.localStorageUserName, this.userName);
-          localStorage.setItem(this.loginServ.localStoragePassword, this.password);
+            localStorage.setItem(this.loginServ.localStorageToken, this.fullToken());
+            localStorage.setItem(this.loginServ.localStorageAccessToken, this.token);
+            localStorage.setItem(this.loginServ.localStorageUserName, this.userName);
+            localStorage.setItem(this.loginServ.localStoragePassword, this.password);
 
-        } else {
-          if ((this.token != null || this.token != '')
-            && (getToken != this.fullToken()))
-          {
-            this.storage.set(this.loginServ.localStorageToken, this.fullToken());
-            this.storage.set(this.loginServ.localStorageUserName, this.userName);
-            this.storage.set(this.loginServ.localStoragePassword, this.password);
+          } else {
+            if ((this.token != null || this.token != '')
+                && (getToken != this.fullToken())) {
+              this.storage.set(this.loginServ.localStorageToken, this.fullToken());
+              this.storage.set(this.loginServ.localStorageUserName, this.userName);
+              this.storage.set(this.loginServ.localStoragePassword, this.password);
+            }
           }
-        }
 
-        this.manageAccount();
-      },
-      err => {
-        this.load.dismiss();
-        this.nav.setRoot(this.homePage);
-      });
+          this.manageAccount();
+        },
+        err => {
+          this.loadCtrl.stopLoading().then( () => {
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        });
   }
 
-
-  manageAccount(){
-    this.loginServ.authenticateUserManager(this.token,this.toKenFull).subscribe(
-      (data) => {
-        this.accountInfo();
-      },
-      err => {
-        this.load.dismiss();
-        this.nav.setRoot(this.homePage);
-      },
-      () => {
-      });
+  manageAccount() {
+    this.loginServ.authenticateUserManager(this.token, this.toKenFull).subscribe(
+        (data) => {
+          this.accountInfo();
+        },
+        err => {
+          this.loadCtrl.stopLoading().then( () => {
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        },
+        () => {
+        });
   }
 
-  accountInfo(){
+  accountInfo() {
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
-      (data) => {
-        this.accountServ.setDate(data);
-        // this.accountServ.getTags(this.fullToken());
-        this.CustomReport();
-        // this.setNameInMenu(this.accountServ.getUserName());
-        // this.knowFeatures(this.accountServ.getAccountFeature());
-        // this.load.dismiss();
-        // this.nav.setRoot(this.profilePage);
-      },
-      err => {
-        this.load.dismiss();
-        this.nav.setRoot(this.homePage);
-      },
-      () => {
-      });
+        (val) => {
+            let data = val;
+            // if(this.platform.is('cordova')){
+            //     // @ts-ignore
+            //     data = JSON.parse(val.data);
+            // }
+
+          // @ts-ignore
+          if (data.id){
+            this.accountServ.setDate(data);
+            // this.accountServ.getTags(this.fullToken());
+            this.CustomReport();
+          }else{
+            this.loadCtrl.stopLoading().then( () => {
+              this.navCtrl.navigateRoot(this.homePath);
+            });
+          }
+          // this.setNameInMenu(this.accountServ.getUserName());
+          // this.knowFeatures(this.accountServ.getAccountFeature());
+          // this.load.dismiss();
+          // this.nav.setRoot(this.profilePage);
+        },
+        err => {
+          this.loadCtrl.stopLoading().then( () => {
+            this.navCtrl.navigateRoot(this.homePath);
+          });
+        },
+        () => {
+        });
   }
 
-  setNameInMenu(name:string){
-    this.names = name;
-  }
 
-  knowFeatures(data:any){
-    if(this.accountServ.getUserRole().notificationView && data.notificationActivated){
-      this.appearNotification = true;
-    }else{
-      this.appearNotification = false;
-    }
-
-    if(this.accountServ.getUserRole().dailyReportView && data.dailyReportActivated){
-      this.appearDailyReport = true;
-    }else{
-      this.appearDailyReport = false;
-    }
-
-    if(this.accountServ.getUserRole().chatView && data.chatActivated){
-      this.appearChat = true;
-    }else{
-      this.appearChat = false;
-    }
-
-    if(this.accountServ.getUserRole().viewMedicalCare && data.medicalCareActivated && this.accountServ.getUserRole().viewMedicalRecord){
-      this.appearMedicalReport = true;
-    }else{
-      this.appearMedicalReport = false;
-    }
-
-  }
-
-  knowCustomReport(data){
-    let customReports:any = [];
-    customReports = data;
-    if(customReports.length > 0){
-      this.appearCustomReport = true;
-      this.customReportList = data;
-    }
-  }
-
-  CustomReport(){
+  // MARKS: GET CUSTOM REPORTS
+  CustomReport() {
     this.accountServ.getCustomReports(this.toKenFull).subscribe(
-      (data) => {
-        this.accountServ.setCustomReport(data);
-        this.accountServ.getTags(this.fullToken());
-        this.setNameInMenu(this.accountServ.getUserName());
-        this.knowFeatures(this.accountServ.getAccountFeature());
-        this.knowCustomReport(this.accountServ.getCustomReportsList());
-        this.load.dismiss();
-        this.nav.setRoot(this.profilePage);
-        this.startSocket(this.accountServ.userId);
-        this.setupNotification();
-      },
-      err => {
-        if(err.error == "FORBIDDEN" ||err.error ==  "NO_REPORTS_FOUNDED_FOR_YOUR_ACCOUNT"){
-          this.load.dismiss();
-          console.log('Has No Custom report(s)');
-          this.accountServ.getTags(this.fullToken());
-          this.nav.setRoot('ProfilePage');
-          this.startSocket(this.accountServ.userId);
-          this.setupNotification();
-          if(this.accountServ.getUserRole().viewMedicalRecord) {
-            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+        (data) => {
+          this.loadCtrl.stopLoading().then( () => {
+              // if(this.platform.is('cordova')){
+              //     let val = data;
+              //     // @ts-ignore
+              //     this.accountServ.setCustomReport(JSON.parse(val.data));
+              // }else{
+                  this.accountServ.setCustomReport(data);
+              // }
+            this.accountServ.getTags(this.fullToken());
+            // this.navCtrl.setRoot('ProfilePage');
+            this.navCtrl.navigateRoot('/menu/profile');
+            this.startSocket(this.accountServ.userId);
+            this.setupNotification();
+          });
+        },
+        err => {
+          if (err.error == 'FORBIDDEN' || err.error ==  'NO_REPORTS_FOUNDED_FOR_YOUR_ACCOUNT') {
+            this.loadCtrl.stopLoading().then( () => {
+              console.log('Has No Custom report(s)');
+              this.accountServ.getTags(this.fullToken());
+              // this.navCtrl.setRoot('ProfilePage');
+              this.navCtrl.navigateRoot('/menu/profile');
+              this.startSocket(this.accountServ.userId);
+              this.setupNotification();
+              if (this.accountServ.getUserRole().viewMedicalRecord) {
+                this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+              }
+            });
+          } else if (!err.error) {
+            this.loadCtrl.stopLoading().then( () => {
+              console.log('Has No Custom report(s)');
+              this.accountServ.getTags(this.fullToken());
+              // this.navCtrl.setRoot('ProfilePage');
+              this.navCtrl.navigateRoot('/menu/profile');
+              this.startSocket(this.accountServ.userId);
+              this.setupNotification();
+              if (this.accountServ.getUserRole().viewMedicalRecord) {
+                this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
+              }
+            });
+          } else {
+            this.loadCtrl.stopLoading().then( () => {
+              this.navCtrl.navigateRoot(this.homePath);
+            });
           }
-        }else if(!err.error){
-          this.load.dismiss();
-          console.log('Has No Custom report(s)');
-          this.accountServ.getTags(this.fullToken());
-          this.nav.setRoot('ProfilePage');
-          this.startSocket(this.accountServ.userId);
-          this.setupNotification();
-          if(this.accountServ.getUserRole().viewMedicalRecord) {
-            this.medicalService.getAccountMedicalCareSettings(this.accountServ.userAccount.accountId).subscribe();
-          }
-        } else {
-          this.load.dismiss();
-          this.nav.setRoot(this.homePage);
-        }
-      });
+        },
+        () => {
+        });
   }
 
-  onSelectView(page){
-    let TO_OPEN_PAGE = page;
-    if(page == "ReportPage" && this.accountServ.reportId > 0){
-      TO_OPEN_PAGE = page+this.accountServ.reportId;
-    }
 
-    if(this.oldPage != null && document.getElementById(this.oldPage) ) {
-      document.getElementById(this.oldPage).classList.toggle("selected");
-    }
-    if (document.getElementById(TO_OPEN_PAGE)) {
-      document.getElementById(TO_OPEN_PAGE).classList.toggle("selected");
-    }
-    this.oldPage = TO_OPEN_PAGE;
-  }
-
-  setupNotification(){
+  // MARKS: SETUP NOTIFICATION
+  setupNotification() {
     this.fire.getToken();
 
     this.fire.onBackgroundNotification().subscribe(
-      data => {
+        data => {
 
-        console.log("Background Notification : \n", JSON.stringify(data));
-        if (data.isCommentNotification) {
-          this.onLoadReportTemplateWithComments(data)
-        } else if(data.page === this.reportPage){
-          this.onLoadReport(this.reportPage, data.reportName,data.reportId);
-        }else if(data.page === this.chatPage){
-          let JData = JSON.parse(data.chatMessage);
-          let student = JData.chatThread.student;
-          let Stud = new Student();
-          Stud.id = student.id;
-          Stud.name = student.name;
-          Stud.address = student.address;
-          Stud.classes = student.classes;
-          Stud.profileImg = student.profileImg;
-          Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
-          let modal = this.modalCtrl.create('ChatDialoguePage',
-            {studentData:Stud});
-          modal.onDidDismiss(
-            val=>{
-              this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
-                val => {
-                  if(val) {
-                    this.updateRecentChatData(val,student);
-                  }
-                });
-            });
-          modal.present();
-        } else if(data.page === this.medicationNotificationPage){
-          this.openMedicalCare(data);
-        } else{
-          this.nav.setRoot(data.page).then(
-            value => {
-              console.log(value);
-            }).catch( err=>{
-              console.log('err');
-              console.log(err);
-              if(err.includes("invalid")){
-                this.openWeb();
-              }
-          });
-        }
+          console.log('Background Notification : \n', JSON.stringify(data));
+          if (data.isCommentNotification) {
+            this.onLoadReportTemplateWithComments(data);
+          } else if (data.page === this.reportPage) {
+            this.onLoadReport(this.reportPage, data.reportName, data.reportId);
+          } else if (data.page === this.chatPage) {
+            this.handelChatOnBackground(data);
+          } else if (data.page === this.medicationNotificationPage) {
+            this.openMedicalCareNotification(data);
+          } else {
+            if (this.getPathFromPageName(data.data.page) != null) {
+              this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
+            } else {
+              this.openWeb();
+            }
+          }
 
-      });
+        });
 
     this.fire.onForgroundNotification().subscribe(
-      data => {
-        debugger;
-        let title;
-        let body;
-        if(this.platform.is('ios')){
-          title = data.aps.alert.title;
-          body = data.aps.alert.body;
-        }else{
-          title = data.gcm.title;
-          body = data.gcm.body;
-        }
-        this.fire.setLocatNotification(title,body,JSON.parse(JSON.stringify(data)));
-        this.fire.onOpenLocalNotification().subscribe(
-          data => {
-            debugger;
-            console.log('Foreground');
-            if (data.data.isCommentNotification) {
-              this.onLoadReportTemplateWithComments(data.data)
-            } else if(data.data.page === this.reportPage){
-              this.onLoadReport(this.reportPage, data.data.reportName,data.data.reportId);
-            }else if(data.data.page === this.chatPage){
-              let JData = JSON.parse(data.data.chatMessage);
-              let student = JData.chatThread.student;
-              let Stud = new Student();
-              Stud.id = student.id;
-              Stud.name = student.name;
-              Stud.address = student.address;
-              Stud.classes = student.classes;
-              Stud.profileImg = student.profileImg;
-              Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
-              let modal = this.modalCtrl.create('ChatDialoguePage',
-                {studentData:Stud});
-              modal.onDidDismiss(
-                val=>{
-                  this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
-                    val => {
-                      if(val) {
-                        this.updateRecentChatData(val,student);
-                      }
-                    });
-                });
-              modal.present();
-            } else if(data.data.page === this.medicationNotificationPage){
-              this.openMedicalCare(data.data);
-            }else{
-              this.nav.setRoot(data.data.page).then(
-                value => {
-                  console.log(value);
-                }).catch(
-                  err=>{
-                    console.log('err');
-                    console.log(err);
-                    if(err.includes("invalid")){
-                      this.openWeb();
-                    }
+        data => {
+          debugger;
+          let title;
+          let body;
+          if (this.platform.is('ios')) {
+            title = data.aps.alert.title;
+            body = data.aps.alert.body;
+          } else {
+            title = data.gcm.title;
+            body = data.gcm.body;
+          }
+          this.fire.setLocatNotification(title, body, JSON.parse(JSON.stringify(data)));
+          this.fire.onOpenLocalNotification().subscribe(
+              data => {
+                debugger;
+                console.log('Foreground');
+                if (data.data.isCommentNotification) {
+                  this.onLoadReportTemplateWithComments(data.data);
+                } else if (data.data.page === this.reportPage) {
+                  this.onLoadReport(this.reportPage, data.data.reportName, data.data.reportId);
+                } else if (data.data.page === this.chatPage) {
+                  this.handelChatONForeground(data);
+                } else if (data.data.page === this.medicationNotificationPage) {
+                  this.openMedicalCareNotification(data.data);
+                } else {
+                  if (this.getPathFromPageName(data.data.page) != null) {
+                    this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
+                  } else {
+                    this.openWeb();
+                  }
+                }
+
               });
-            }
-
-          });
-      });
+        });
   }
 
-  openWeb(){
 
-    this.iab.create("http://104.198.175.198/", "_self");
-
+  handelChatOnBackground(data) {
+    const JData = JSON.parse(data.chatMessage);
+    const student = JData.chatThread.student;
+    const Stud = new Student();
+    Stud.id = student.id;
+    Stud.name = student.name;
+    Stud.address = student.address;
+    Stud.classes = student.classes;
+    Stud.profileImg = student.profileImg;
+    Stud.searchByClassGrade = student.classes.grade.name + ' ' + student.classes.name;
+    this.presentChatDialogue(Stud, student);
   }
 
-  startSocket(userId){
-    let that = this;
-    this.DomainUrl = new Url_domain;
+  async presentChatDialogue(Stud, student) {
+    let data = {studentData: Stud};
 
-    let hostName= this.DomainUrl.Domain;
+    this.passData.dataToPass = data;
 
-    if (hostName == null || hostName == "") {
-      hostName = "wss://" + "education.entrepreware.com";
-    } else if(hostName.includes("192.168.1")){
-      hostName = "ws://" + hostName.substring(6);
-    }else{
-      hostName = "wss://" + "education.entrepreware.com";
+    const modal = await this.modalCtrl.create({
+      component: ChatDialoguePage,
+      componentProps: data
+    });
+
+    modal.onDidDismiss().then(
+        val => {
+          this.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
+              val => {
+                if (val) {
+                  this.updateRecentChatData(val, student);
+                }
+              });
+        });
+
+    return await modal.present();
+  }
+
+  handelChatONForeground(data) {
+    const JData = JSON.parse(data.data.chatMessage);
+    const student = JData.chatThread.student;
+    const Stud = new Student();
+    Stud.id = student.id;
+    Stud.name = student.name;
+    Stud.address = student.address;
+    Stud.classes = student.classes;
+    Stud.profileImg = student.profileImg;
+    Stud.searchByClassGrade = student.classes.grade.name + ' ' + student.classes.name;
+    this.presentChatDialogue(Stud, student);
+  }
+
+
+
+  openWeb() {
+    // _self in app //_system in phone browser
+    this.iab.create('http://104.198.175.198/', '_system');
+  }
+
+  startSocket(userId) {
+    const that = this;
+    this.DomainUrl = new Url_domain();
+
+    let hostName = this.DomainUrl.Domain;
+
+    if (hostName == null || hostName == '') {
+      hostName = 'wss://' + 'education.entrepreware.com';
+    } else if (hostName.includes('192.168.1')) {
+      hostName = 'ws://' + hostName.substring(6);
+    } else {
+      hostName = 'wss://' + 'education.entrepreware.com';
     }
-    let websocket = new WebSocket(hostName + "/socket");
+    const websocket = new WebSocket(hostName + '/socket');
     websocket.onopen = function(message) {
-      console.log("OPEN_WEB_SOCKET");
-      websocket.send("id" + userId);
+      console.log('OPEN_WEB_SOCKET');
+      websocket.send('id' + userId);
     };
     websocket.onmessage = function(message) {
-      console.log("onmessage");
+      console.log('onmessage');
       console.log(JSON.parse(message.data));
-      let data = JSON.parse(message.data);
-      if(that.hereONPage == that.chatPage){
-        that.chatServ.newMessageSubject$.next(JSON.parse(message.data));
-      }else {
-        if(!data.user){
-          that.chatServ.NewChats.push(JSON.parse(message.data));
-          that.alertCtrl.create({
-            title: 'Chat',
-            message: "New chat from your student " + data.chatThread.student.name,
+      const data = JSON.parse(message.data);
+      that.handelOnMassage(data, message);
+    };
+    websocket.onclose = function(message) {
+      console.log('onclose');
+      console.log(message);
+    };
+    websocket.onerror = function(message) {
+      console.log('onerror');
+      console.log(message);
+      try {
+        websocket.onopen = function(message) {
+          console.log('OPEN_WEB_SOCKET');
+          websocket.send('id' + userId);
+        };
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }
+
+  handelOnMassage(data, message) {
+    this.router.events.subscribe((event: RouterEvent) => {
+      if (event.url.startsWith(this.getPathFromPageName(this.chatPage))) {
+        this.chatServ.newMessageSubject$.next(JSON.parse(message.data));
+      } else {
+        if (!data.user) {
+          this.chatServ.NewChats.push(JSON.parse(message.data));
+          this.alertCtrl.create({
+            header: 'Chat',
+            message: 'New chat from your student ' + data.chatThread.student.name,
             buttons: [
               {
                 text: 'Later',
@@ -644,55 +546,29 @@ export class MyApp {
               {
                 text: 'See now',
                 handler: () => {
-                  // that.nav.setRoot(that.chatPage);
-                  let student = data.chatThread.student;
-                  let Stud = new Student();
+                  // this.nav.setRoot(this.chatPage);
+                  this.navCtrl.navigateRoot(this.getPathFromPageName(this.chatPage));
+                  const student = data.chatThread.student;
+                  const Stud = new Student();
                   Stud.id = student.id;
                   Stud.name = student.name;
                   Stud.address = student.address;
                   Stud.classes = student.classes;
                   Stud.profileImg = student.profileImg;
-                  Stud.searchByClassGrade = student.classes.grade.name+" "+student.classes.name;
-                  let modal = that.modalCtrl.create('ChatDialoguePage',
-                    {studentData:Stud});
-                  modal.onDidDismiss(
-                    val=>{
-                      that.storage.get('LOCAL_STORAGE_RECENT_CHAT').then(
-                        val => {
-                          if(val) {
-                            that.updateRecentChatData(val,student);
-                          }
-                        });
-                    });
-                  modal.present();
+                  Stud.searchByClassGrade = student.classes.grade.name + ' ' + student.classes.name;
+                  this.presentChatDialogue(Stud, student);
                 }
               }
             ]
-          }).present();
+          }).then( alrt => alrt.present());
         }
       }
-    };
-    websocket.onclose = function(message) {
-      console.log("onclose");
-      console.log(message);
-    };
-    websocket.onerror = function(message) {
-      console.log("onerror");
-      console.log(message);
-      try {
-        websocket.onopen = function(message) {
-          console.log("OPEN_WEB_SOCKET");
-          websocket.send("id" + userId);
-        };
-      }catch (e) {
-        console.log(e);
-      }
-    };
+
+    });
   }
 
-
-  updateRecentChatData(val,student){
-    let studentsInStorage:any = JSON.parse(val);
+  updateRecentChatData(val, student) {
+    const studentsInStorage: any = JSON.parse(val);
     let found = false;
     for (let i = 0; i < studentsInStorage.length; i++) {
       if (student.id == studentsInStorage[i].id) {
@@ -702,33 +578,84 @@ export class MyApp {
       }
     }
 
-    if(!found){
-      studentsInStorage.splice(0, 0,student);
+    if (!found) {
+      studentsInStorage.splice(0, 0, student);
     }
 
-    if (this.platform.is('core')) {
+    if (this.platform.is('desktop')) {
       localStorage.setItem('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
-    }else {
+    } else {
       this.storage.set('LOCAL_STORAGE_RECENT_CHAT', JSON.stringify(studentsInStorage));
     }
   }
 
-  openMedicalCare(data){
+  async openMedicalCareNotification(data) {
 
-    let modal = this.modalCtrl.create(this.medicationNotificationPage,
-      {
+    let medData = { medicationName: data.medicationName,
+      dosageType: data.dosageType,
+      dosageNumber: data.dosageNumber,
+      shceduleId: parseInt(data.shceduleId),
+      medicationTime: data.medicationTime.slice(0, -3),
+      medicationNextTime: data.medicationNextTime.slice(0, -3),
+      student: JSON.parse(data.student) };
 
-        medicationName: data.medicationName,
-        dosageType: data.dosageType,
-        dosageNumber: data.dosageNumber,
-        shceduleId:parseInt(data.shceduleId),
-        medicationTime:data.medicationTime.slice(0, -3),
-        medicationNextTime:data.medicationNextTime.slice(0,-3),
-        student:JSON.parse(data.student)
+    this.passData.dataToPass = medData
 
-      });
-    modal.onDidDismiss(val=>{});
-    modal.present();
+    const modal = await this.modalCtrl.create({
+      component: MedicationNotificationPage,
+      componentProps: medData
+    });
+
+    modal.onDidDismiss();
+    return await modal.present();
   }
+
+  onLoadReport(page: any, pageName: any, reportId: any) {
+    this.accountServ.reportPage = pageName;
+    this.accountServ.reportId = reportId;
+    this.navCtrl.navigateRoot(this.getPathFromPageName(this.reportPage));
+  }
+
+  async onLoadReportTemplateWithComments(params?) {
+    this.accountServ.reportId = params.reportId;
+    this.accountServ.reportPage = params.reportName;
+    const model = await this.modalCtrl.create({
+      component: 'ReportTemplatePage',
+      componentProps: {student: {id: params.studentId, name: params.studentName},
+        classId: params.classId, reportDate: params.reportDate, comment: true}
+    });
+
+    return await model.present();
+    //  this.accountServ.reportId = 1;
+    //  this.accountServ.reportPage = "Weakly";
+    // const model = this.modalCtrl.create('ReportTemplatePage',
+    //   {student:{id:9020,name:"Lina"},
+    //     classId:36,reportDate:"02-06-2019",comment:true});
+    //  model.present();
+    //  this.menu.close();
+  }
+
+  getPathFromPageName(name) {
+    if (name == 'NotificationPage') {
+      return '/menu/notification';
+    } else if (name == 'SettingsPage') {
+      return '/menu/profile';
+    } else if (name == 'ReportPage') {
+      return '/menu/profile';
+    } else if (name == 'ChatPage') {
+      return '/menu/chat';
+    } else if (name == 'MedicalCarePage') {
+      return '/menu/profile';
+    } else if (name == 'MedicationNotificationPage') {
+      return '/menu/profile';
+    } else if (name == 'ProfilePage') {
+      return '/menu/profile';
+    } else {
+      return null;
+    }
+  }
+
+
+
 }
 

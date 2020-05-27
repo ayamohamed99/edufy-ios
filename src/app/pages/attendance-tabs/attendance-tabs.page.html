@@ -1,0 +1,39 @@
+<!--<ion-header>-->
+<!--  <ion-toolbar>-->
+<!--    <ion-title>AttendanceTabs</ion-title>-->
+<!--  </ion-toolbar>-->
+<!--</ion-header>-->
+
+<!--<ion-content>-->
+
+<!--</ion-content>-->
+
+
+<ion-tabs>
+
+  <ion-tab-bar slot="bottom">
+
+    <ion-tab-button tab="home">
+<!--      <ion-icon name="sunny"></ion-icon>-->
+      <img src="assets/icon/homepage.png" *ngIf="selectedPath.endsWith('home')||selectedPath.endsWith('attendance-plus')"/>
+      <img src="assets/icon/homepagegray.png" *ngIf="!selectedPath.endsWith('home')&&!selectedPath.endsWith('attendance-plus')"/>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="ranks">
+<!--      <ion-icon name="moon"></ion-icon>-->
+      <img src="assets/icon/rankspage.png" *ngIf="selectedPath.endsWith('ranks')"/>
+      <img src="assets/icon/rankspagegray.png" *ngIf="!selectedPath.endsWith('ranks')"/>
+      <ion-label>Ranks</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="settings" *ngIf="accountServ.getUserRole().attendanceAdmin || accountServ.getUserRole().controlWifiPoint">
+        <!--      <ion-icon name="moon"></ion-icon>-->
+        <img src="assets/icon/settingspage.png" *ngIf="selectedPath.endsWith('settings')"/>
+        <img src="assets/icon/settingspagegray.png" *ngIf="!selectedPath.endsWith('settings')"/>
+        <ion-label>Settings</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+
+</ion-tabs>

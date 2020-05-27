@@ -1,169 +1,141 @@
-// http://ionicframework.com/docs/theming/
+// App Styles
+// ----------------------------------------------------------------------------
+// Put style rules here that you want to apply to the entire application. These 
+// styles are for the entire app and not just one component. Additionally, this 
+// file can hold Sass mixins, functions, and placeholder classes to be imported 
+// and used throughout the application.
 
 
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
-@mixin calc($property, $expression) {
-  #{$property}: -webkit-calc(#{$expression});
-  #{$property}:    -moz-calc(#{$expression});
-  #{$property}:         calc(#{$expression});
-}
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-  -moz-border-radius: $radius;
-  -ms-border-radius: $radius;
-  border-radius: $radius;
-}
-@mixin box-shadow($value) {
-  -webkit-box-shadow: $value;
-  -moz-box-shadow: $value;
-  -ms-box-shadow: $value;
-  box-shadow: $value;
-}
-@mixin appearance($value) {
-  -webkit-appearance: $value;
-  -moz-appearance: $value;
-  -ms-appearance: $value;
-  appearance: $value;
-}
-@mixin transform($value) {
-  -webkit-transform: $value;
-  -moz-transform: $value;
-  -ms-transform: $value;
-  transform: $value;
-}
-@mixin transition($value) {
-  -webkit-transition: $value;
-  -moz-transition: $value;
-  -ms-transition: $value;
-  transition: $value;
+.collopsible {
+  background-color: #ffffff;
+  color: #000000;
+  cursor: pointer;
+  padding: 16px;
+  padding-right: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.1rem;
+  height: 59px;
 }
 
-/* Flex */
-@mixin flexbox() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-}
-//@mixin inline-flex {
-//  display: -webkit-inline-box;
-//  display: -webkit-inline-flex;
-//  display: -moz-inline-flex;
-//  display: -ms-inline-flexbox;
-//  display: inline-flex;
-//}
-@mixin flex-wrap($value) {
-  -webkit-flex-wrap: $value;
-  -moz-flex-wrap: $value;
-  -ms-flex-wrap: $value;
-  flex-wrap: $value;
+.active, .collopsible:hover {
+  background-color: #ffffff;
 }
 
-@mixin align-items($value) {
-  -webkit-align-items: $value;
-  -moz-align-items: $value;
-  -ms-align-items: $value;
-  align-items: $value;
-}
-@mixin align-self($value) {
-  -webkit-align-self: $value;
-  -moz-align-self: $value;
-  -ms-align-self: $value;
-  align-self: $value;
-}
-@mixin justify-content($value) {
-  -webkit-justify-content: $value;
-  -moz-justify-content: $value;
-  -ms-justify-content: $value;
-  justify-content: $value;
+.collopsible:after {
+  content: '\002B';
+  color: #474747;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
 }
 
-/* font Color */
-@mixin font-color-set-yellow {
-  * { color: $yellow; }
-  a {
-    &:hover { color: $yellow; }
-  }
+.active:after {
+  content: "\2212";
 }
 
-@mixin font-color-set-brown {
-  *:not(.btn):not(input):not(textarea):not(select):not(.form-control) { color: $brown; }
-  a:not(.btn) {
-    &:hover { color: $brown; }
-  }
+.contont {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #ffffff;
 }
 
-.navMenuClass{
-  margin-top: 16+8px;
-  padding-left: 16px;
-  padding-right: 16px;
-  .item.item-block .item-inner {
-    padding-right: 0px;
-    border-bottom: 0px;
-  }
-
-  .item {
-    height: 59px;
-    border-radius: 15px;
-    //margin-bottom: 8px;
-  }
-  ion-icon{
-    color: #5C87F7;
-  }
-  .input-wrapper {
-    padding-left: 16px;
-    padding-right: 16px;
-    .label {
-      margin: 19px 8px 13px 0;
-    }
-  }
-
-  .toolsItem{
-    color: #8C92A0;
-    ion-icon{
-      color: #8C92A0;
-    }
-  }
-
-  .selected, .item:hover{
-    height: 59px;
+ion-popover.contact-popovers{
+  .popover-content {
+    width: 90%;
     border-radius: 10px;
-    margin-bottom: 8px;
-    background-color: #5C87F7;
-    color: #fff9fb;
-    animation: shadow-drop-2-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    ion-icon{
-      color: white;
-    }
+    height: fit-content;
+  }
+  .popover-viewport{
+    overflow: auto;
+  }
+  ion-backdrop[tappable]{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    transition: 0s;
+    opacity: .35;
+    padding-top: 60px;
+    background-color: #000;
+  }
+}
+
+
+ion-popover.contact-popovers-ios{
+  .popover-content {
+    width: 90%;
+    border-radius: 10px;
+    height: fit-content;
+    left: calc(17px + env(safe-area-inset-left)) !important;
+  }
+  .popover-viewport{
+    overflow: auto;
+  }
+  .scroll-content{
+    max-height: 80vh;
   }
 
-  @keyframes shadow-drop-2-center {
-    0% {
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    }
-    100% {
-      -webkit-transform: translateZ(50px);
-      transform: translateZ(50px);
-      box-shadow: 0 0 20px 0px rgba(92, 135, 247, 0.35);
-    }
+  ion-backdrop[tappable]{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    right: 0;
+    overflow-x: hidden;
+    transition: 0s;
+    opacity: .35 !important;
+    padding-top: 60px;
+    background-color: #000;
   }
 }
 
 
 
+ion-loading.loadingWithoutBackground {
+  .loading-wrapper {
+    background: rgba(0, 0, 0, 0);
+    -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+    padding: 0;
+  }
+  .loading-wrapper.sc-ion-loading-ios{
+    background-color: rgba(0, 0, 0, 0);
+    --background-color: rgba(0, 0, 0, 0);
+  }
 
+  //ion-backdrop {
+  //  left: 0;
+  //  top: 0;
+  //  position: absolute;
+  //  z-index: 2;
+  //  display: block;
+  //  width: 100%;
+  //  height: 100%;
+  //  background-color: rgba(0, 0, 0, 0);
+  //  opacity: .01;
+  //  -webkit-transform: translateZ(0);
+  //  transform: translateZ(0);
+  //}
+}
+
+.ng-select.ng-select-opened>.ng-select-container{background:#fff;border-color:#b3b3b3 #ccc #d9d9d9}.ng-select.ng-select-opened>.ng-select-container:hover{box-shadow:none}.ng-select.ng-select-opened>.ng-select-container .ng-arrow{top:-2px;border-color:transparent transparent #999;border-width:0 5px 5px}.ng-select.ng-select-opened>.ng-select-container .ng-arrow:hover{border-color:transparent transparent #666}.ng-select.ng-select-opened.ng-select-bottom>.ng-select-container{border-bottom-right-radius:0;border-bottom-left-radius:0}.ng-select.ng-select-opened.ng-select-top>.ng-select-container{border-top-right-radius:0;border-top-left-radius:0}.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container{border-color:#007eff;box-shadow:inset 0 1px 1px rgba(0,0,0,0.075),0 0 0 3px rgba(0,126,255,0.1)}.ng-select.ng-select-disabled>.ng-select-container{background-color:#f9f9f9}.ng-select .ng-has-value .ng-placeholder{display:none}.ng-select .ng-select-container{background-color:#fff;border-radius:4px;border:1px solid #ccc;min-height:36px;align-items:center}.ng-select .ng-select-container:hover{box-shadow:0 1px 0 rgba(0,0,0,0.06)}.ng-select .ng-select-container .ng-value-container{align-items:center;padding-left:10px}.ng-select .ng-select-container .ng-value-container .ng-placeholder{color:#aaa}.ng-select.ng-select-single .ng-select-container{height:36px}.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input{left:0;padding-left:10px;padding-right:50px;top:5px}.ng-select.ng-select-multiple.ng-select-disabled>.ng-select-container .ng-value-container .ng-value{background-color:#f9f9f9;border:1px solid #e3e3e3}.ng-select.ng-select-multiple.ng-select-disabled>.ng-select-container .ng-value-container .ng-value .ng-value-label{padding:0px 5px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container{padding-left:7px;padding-top:5px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value{font-size:0.9em;margin-right:5px;margin-bottom:5px;background-color:#f5faff;border-radius:2px;border:1px solid #c2e0ff}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value.ng-value-disabled{background-color:#f9f9f9;border:1px solid #e3e3e3}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value.ng-value-disabled .ng-value-label{padding-left:5px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-label{display:inline-block;padding:0px 5px 0px 5px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon{display:inline-block;padding:0px 5px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon:hover{background-color:#d8eafd}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left{border-right:1px solid #c2e0ff}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.right{border-left:1px solid #c2e0ff}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-input{padding-bottom:3px;padding-left:3px}.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder{top:5px;padding-bottom:5px;padding-left:3px}.ng-select .ng-clear-wrapper{color:#999}.ng-select .ng-clear-wrapper .ng-clear:hover{color:#D0021B}.ng-select .ng-spinner-zone{padding-right:5px;padding-top:5px}.ng-select .ng-arrow-wrapper{padding-right:5px;width:25px}.ng-select .ng-arrow-wrapper .ng-arrow{border-color:#999 transparent transparent;border-style:solid;border-width:5px 5px 2.5px}.ng-select .ng-arrow-wrapper .ng-arrow:hover{border-top-color:#666}.ng-dropdown-panel{background-color:#fff;border:1px solid #ccc;box-shadow:0 1px 0 rgba(0,0,0,0.06)}.ng-dropdown-panel.ng-select-bottom{top:100%;border-bottom-right-radius:4px;border-bottom-left-radius:4px;border-top-color:#e6e6e6;margin-top:-1px}.ng-dropdown-panel.ng-select-bottom .ng-dropdown-panel-items .ng-option:last-child{border-bottom-right-radius:4px;border-bottom-left-radius:4px}.ng-dropdown-panel.ng-select-top{bottom:100%;border-top-right-radius:4px;border-top-left-radius:4px;border-bottom-color:#e6e6e6;margin-bottom:-1px}.ng-dropdown-panel.ng-select-top .ng-dropdown-panel-items .ng-option:first-child{border-top-right-radius:4px;border-top-left-radius:4px}.ng-dropdown-panel .ng-dropdown-header{border-bottom:1px solid #ccc;padding:5px 7px}.ng-dropdown-panel .ng-dropdown-footer{border-top:1px solid #ccc;padding:5px 7px}.ng-dropdown-panel .ng-dropdown-panel-items{margin-bottom:1px}.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup{user-select:none;cursor:default;padding:8px 10px;font-weight:500;color:rgba(0,0,0,0.54);cursor:pointer}.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-disabled{cursor:default}.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-marked{background-color:#ebf5ff}.ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-selected{background-color:#f5faff;font-weight:600}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option{background-color:#fff;color:rgba(0,0,0,0.87);padding:8px 10px}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected{color:#333;background-color:#f5faff}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected .ng-option-label{font-weight:600}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked{background-color:#ebf5ff;color:#333}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled{color:#cccccc}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-child{padding-left:22px}.ng-dropdown-panel .ng-dropdown-panel-items .ng-option .ng-tag-label{padding-right:5px;font-size:80%;font-weight:400}
+
+
+.PopOverOptionMenu{
+  .popover-content{
+    width: fit-content;
+    border-radius:10px;
+    height: fit-content;
+  }
+}

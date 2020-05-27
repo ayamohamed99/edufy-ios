@@ -1,0 +1,117 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/deep/app-notification-view-receiver {
+
+.ChartDataNumber{
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-size: 24px;
+  text-align: center;
+  color: #7D7B7B;
+  margin: 8px 8px 0 0;
+
+}
+
+.ChartDataDescribtion{
+
+  ont-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-size: 12px;
+  text-align: center;
+  color: #ABA9A9;
+  margin: 0 8px 0 0;
+
+}
+
+.ChartDataContainer{
+  padding: 0;
+  text-align: center;
+  align-content: center;
+}
+
+.ChartDataContainerDescrubtion{
+  padding-bottom: 10px;
+  text-align: center;
+  align-content: center;
+}
+
+.circleGreen:before {
+  content: '';
+  height: 21px;
+  width: 21px;
+  background-color: #468847;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.circleRed:before {
+  content: '';
+  height: 21px;
+  width: 21px;
+  background-color: #b94a48;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mat-expansion-panel {
+  border-radius: 15px !important;
+  transition: all !important;
+  margin-bottom: 8px;
+}
+
+.mat-expansion-panel-header:hover {
+  background-color: white !important;
+}
+
+.header:hover {
+  background-color: white !important;
+}
+
+.mat-expansion-panel-header {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.mat-expansion-panel-body {
+  padding: 8px 8px 8px 8px;
+  background-color: #f4f4f4;
+  border-radius: 15px;
+  transition: all;
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+  -webkit-box-shadow:  0 0px 0px 0px;
+  box-shadow: 0 0px 0px 0px;
+}
+
+.mat-expansion-panel-spacing {
+  margin: 16px 0;
+  padding-bottom: 17px;
+}
+
+//.scroll-content {
+//  background-color: map-get($colors, light);
+//}
+
+ion-card-header {
+  font-weight: bold;
+}
+
+.S{
+  width: 20px;
+  text-align: center;
+}
+
+.FD{
+  width: 20px;
+  text-align: center;
+}
+
+.searchbar-md .searchbar-input {
+  border-radius: 15px;
+}
+}

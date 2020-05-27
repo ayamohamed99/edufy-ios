@@ -1,0 +1,85 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" class="container border-remove">
+    <ion-buttons slot="start">
+      <ion-menu-button class="icon-color"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="container" scrollY="false" scrollX="false">
+
+  <div style="text-align: center;margin-top: 10px;">
+
+    <div class="rankTwoDiv">
+      <div class="rankNumDiv" *ngIf="Rank2.index">
+        {{Rank2.index}}
+      </div>
+      <!--<img class="secoundPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank2.profileImg"/>-->
+      <avatar [name]="Rank2.name" [displayType]="'circle'" [size]="80" *ngIf="!Rank2.profileImg"></avatar>
+      <img class="secoundPlaceImg" [src]="Rank2.profileImg" *ngIf="Rank2.profileImg"/>
+      <label class="firstNameDiv">
+        {{getFristName(Rank2.name)}}
+      </label>
+      <label class="lastNameDiv">
+        {{getlastName(Rank2.name)}}
+      </label>
+    </div>
+    <div class="rankOneDiv">
+      <div class="rankNumDiv" *ngIf="Rank1.index">
+        {{Rank1.index}}
+      </div>
+      <!--<img class="firstPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank1.profileImg"/>-->
+      <avatar [name]="Rank1.name" [displayType]="'circle'" [size]="100" *ngIf="!Rank1.profileImg"></avatar>
+      <img class="firstPlaceImg" [src]="Rank1.profileImg" *ngIf="Rank1.profileImg"/>
+      <label class="firstNameDiv">
+        {{getFristName(Rank1.name)}}
+      </label>
+      <label class="lastNameDiv">
+        {{getlastName(Rank1.name)}}
+      </label>
+    </div>
+    <div class="rankThreeDiv rankLastDiv">
+      <div class="rankNumDiv" *ngIf="Rank3.index">
+        {{Rank3.index}}
+      </div>
+      <!--<img class="thridPlaceImg" src="assets/imgs/profile.png" *ngIf="!Rank3.user.profileImg"/>-->
+      <avatar [name]="Rank3.name" [displayType]="'circle'" [size]="70" *ngIf="!Rank3.profileImg"></avatar>
+      <img class="thridPlaceImg" [src]="Rank3.profileImg" *ngIf="Rank3.profileImg"/>
+      <label class="firstNameDiv">
+        {{getFristName(Rank3.name)}}
+      </label>
+      <label class="lastNameDiv">
+        {{getlastName(Rank3.name)}}
+      </label>
+    </div>
+  </div>
+
+  <!--<ion-content class="container"  style="height: calc(100% - 148px);">-->
+
+
+    <ion-list style="background: #faebd700;margin-top: 20px; overflow: auto; height: calc(100% - 164px);">
+      <ion-item class="itemEdit" *ngFor="let user of allOtherRanks">
+        <div class="dateOneDiv">
+          <label class="todayNum">{{user.index}}</label>
+        </div>
+        <div class="infoOneDivAvatar">
+          <!--<img class="imgOneProfile" src="assets/imgs/profile.png" *ngIf="!user.profileImg"/>-->
+          <avatar [name]="user.name" *ngIf="!user.profileImg"></avatar>
+          <img class="imgOneProfile" [src]="user.profileImg" *ngIf="user.profileImg"/>
+          <div class="partTwoOne">
+            <div class="topPart">
+              <label class="fristName">{{getFristName(user.name)}}</label>
+            </div>
+            <div class="downPart">
+              <label class="lastName">{{getlastName(user.name)}}</label>
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+
+
+  <!--</ion-content>-->
+
+</ion-content>

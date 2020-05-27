@@ -1,142 +1,118 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {ErrorHandler, NgModule} from '@angular/core';
-import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
-import {SplashScreen} from '@ionic-native/splash-screen';
-import {StatusBar} from '@ionic-native/status-bar';
-import {Network} from '@ionic-native/network';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
 
-import {LoginService} from "../services/login";
-import {HttpClientModule} from "@angular/common/http";
+import {IonicModule, IonicRouteStrategy, NavParams} from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
-import {IonicStorageModule} from "@ionic/storage";
-import {NotificationPage} from "../pages/notification/notification";
-import {AccountService} from "../services/account";
-import {ProfilePage} from "../pages/profile/profile";
-import {NotificationNewPage} from "../pages/notification-new/notification-new";
-import {RlTagInputModule} from "angular2-tag-input/dist";
-import {NotificationService} from "../services/notification";
-import {PopoverNotificationCardPage} from "../pages/notification/popover_notification/popovernotificationcard";
-import {SettingsPage} from "../pages/settings/settings";
-import {NativeStorage} from "@ionic-native/native-storage";
-import {NotificationEditPage} from "../pages/notification/popover_notification/notification-edit/notification-edit";
-import {StudentsService} from "../services/students";
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import {
+  MatAutocompleteModule, MatCheckboxModule,
+  MatDatepickerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule, MatInputModule, MatNativeDateModule, MatRadioModule,
+  MatSelectModule
+} from '@angular/material';
+import {ReportTemplatePageModule} from './pages/report-template/report-template.module';
+import {MedicationNotificationPageModule} from './pages/medication-notification/medication-notification.module';
+import {MedicalCareNewMedicalReportMedicinePageModule} from './pages/medical-care-new-medical-report-medicine/medical-care-new-medical-report-medicine.module';
+import {MedicalCareNewMedicalReportPageModule} from './pages/medical-care-new-medical-report/medical-care-new-medical-report.module';
+import {MedicalCareMedicationViewPageModule} from './pages/medical-care-medication-view/medical-care-medication-view.module';
+import {MedicalReportViewPageModule} from './pages/medical-report-view/medical-report-view.module';
+import {MedicalCareCardOptionPageModule} from './pages/medical-care-card-option/medical-care-card-option.module';
+import {ChatDialoguePageModule} from './pages/chat-dialogue/chat-dialogue.module';
+import {NotificationNewPageModule} from './pages/notification-new/notification-new.module';
+import {NotificationEditPageModule} from './pages/notification-edit/notification-edit.module';
+import {PopoverNotificationCardPageModule} from './pages/popover-notification-card/popover-notification-card.module';
+import {FormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {Ng2ImgMaxModule} from 'ng2-img-max';
+import {NgSelectModule} from '@ng-select/ng-select';
+import {InAppBrowser} from '@ionic-native/in-app-browser/ngx';
+import {LocalNotifications} from '@ionic-native/local-notifications/ngx';
+import {FCMService} from './services/FCM/fcm.service';
+import {DatePipe} from '@angular/common';
+import { File } from '@ionic-native/file/ngx';
+import {FileTransfer} from '@ionic-native/file-transfer/ngx';
+import {Network} from '@ionic-native/network/ngx';
+import {FirebaseMessaging} from '@ionic-native/firebase-messaging/ngx';
+import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
+import {Media} from '@ionic-native/media/ngx';
+import {FileOpener} from '@ionic-native/file-opener/ngx';
+import {BackgroundMode} from '@ionic-native/background-mode/ngx';
+import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
+import { DatePicker } from '@ionic-native/date-picker/ngx';
+import { HTTP } from '@ionic-native/http/ngx';
+import {IonicStorageModule} from '@ionic/storage';
+import {TokenInterceptorService} from './services/token-interceptor.service';
+import {AvatarModule} from 'ng2-avatar';
+import { Device } from '@ionic-native/device/ngx';
 
-import {File} from '@ionic-native/file';
-import {FileTransfer} from '@ionic-native/file-transfer'
-import {DocumentViewer} from '@ionic-native/document-viewer';
-import {Media} from '@ionic-native/media';
-import {PhotoViewer} from "@ionic-native/photo-viewer";
-import {FileOpener} from "@ionic-native/file-opener";
-import {Transfer} from '@ionic-native/transfer';
-import {LogoutService} from "../services/logout";
+const mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule, MatIconModule, MatDatepickerModule, MatSelectModule, MatNativeDateModule, MatInputModule,MatFormFieldModule,MatInputModule,MatCheckboxModule,MatRadioModule];
+const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
 
-import {BackgroundMode} from '@ionic-native/background-mode';
-import {HTTP} from '@ionic-native/http';
-
-import {AndroidPermissions} from '@ionic-native/android-permissions';
-import {ClassesService} from "../services/classes";
-import {DailyReportService} from "../services/dailyreport";
-
-import {DatePicker} from '@ionic-native/date-picker';
-
-import {MatAutocompleteModule, MatExpansionModule, MatFormFieldModule, MatInputModule} from '@angular/material';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatIconModule} from '@angular/material/icon';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSelectModule} from '@angular/material/select'
-import {CheckboxFunctionService} from "../services/checkboxFunctionService";
-import {DatePipe} from "@angular/common";
-import {TransFormDate} from "../services/transFormDate";
-import {ComponentsModule} from "../components/components.module";
-import {ReportCommentProvider} from "../providers/report-comment/report-comment";
-import {FCMService} from "../services/fcm";
-import { LocalNotifications } from '@ionic-native/local-notifications';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import {ChatService} from "../services/chat";
-import {BackgroundNotificationService} from "../services/background-notification";
-import {ImageCompressorService} from "../services/image-compress";
-import {Ng2ImgMaxModule} from "ng2-img-max";
-import {MedicalCareService} from '../services/medicalcare';
-import {MatNativeDateModule} from "@angular/material";
-import {BackgroundMedicalcareService} from "../services/background-medicalcare";
-import {TemplateFunctionsService} from "../services/templateFunctionsService";
-import {Excel} from "../services/excel";
-import {FirebaseMessaging} from "@ionic-native/firebase-messaging";
-
-
-let mods = [MatExpansionModule , MatAutocompleteModule , MatFormFieldModule,MatIconModule,MatDatepickerModule,MatSelectModule,MatNativeDateModule,MatInputModule];
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage,
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
-    HttpClientModule,
-    IonicStorageModule.forRoot(),
-    RlTagInputModule,
-    mods,Ng2ImgMaxModule,
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot({
+      name: '__edufydb',
+      driverOrder: ['localstorage']
+    }),
+    AppRoutingModule,
     BrowserAnimationsModule,
-    ComponentsModule,
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage,
+    NoopAnimationsModule,
+    HttpClientModule,
+    Ng2ImgMaxModule,
+    mods,
+    modals,
+    NgSelectModule,
+    FormsModule,
+    AvatarModule.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoginService,
-    LogoutService,
-    NotificationService,
-    AccountService,
-    Network,NativeStorage,
-    StudentsService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true},
+    Network,
+    FirebaseMessaging,
+    LocalNotifications,
+    InAppBrowser,
     File,
     DocumentViewer,
     FileTransfer,
     Media,
-    PhotoViewer,
     FileOpener,
-    Transfer,
     BackgroundMode,
-    HTTP,
     AndroidPermissions,
-    ClassesService,
-    DailyReportService,
+    FCMService, FirebaseMessaging,
+    DatePipe,
     DatePicker,
-    CheckboxFunctionService,
-    CheckboxFunctionService,
-    ReportCommentProvider,
-    [DatePipe],TransFormDate,
-    FCMService,FirebaseMessaging,
-    LocalNotifications,InAppBrowser,
-    ChatService,BackgroundNotificationService,
-    ImageCompressorService,MedicalCareService,BackgroundMedicalcareService,TemplateFunctionsService,Excel
-  ]
+    HTTP,
+    Device
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-constructor(){
-  console.log("still format");
-  const stringPrototype = <any>String.prototype;
-  stringPrototype.format = function() {
-    console.log("formated");
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-        ;
-    });
-  };
+  constructor() {
+    console.log('still format');
+    const stringPrototype = String.prototype as any;
+    stringPrototype.format = function() {
+      console.log('formated');
+      const args = arguments;
+      return this.replace(/{(\d+)}/g, function(match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+      });
+    };
+  }
 }
-}
-
-
-
-

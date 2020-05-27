@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start" style="width: 30px;">
+      <ion-button color="light" [disabled]="enableDoneAllButton()" (click)="addMedication()">
+        <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title text-center>{{pageNames}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="contentColor">
+  <div class="spaceBetNgSelect">
+    <ng-select [items]="allMedicines"
+               bindLabel="name"
+               [loading]="medicineLoading"
+               [addTag]="true"
+               [placeholder]="'Select Medicine'"
+               [(ngModel)]="selectedMedicine"
+               [disabled]="EditView">
+    </ng-select>
+  </div>
+
+
+  <mat-form-field>
+    <input matInput type="number" placeholder="Dosage Number" [(ngModel)]="dosageNumber">
+  </mat-form-field>
+
+  <div class="spaceBetNgSelect">
+    <ng-select [items]="allDosageTypes"
+               bindLabel="type"
+               [loading]="dosageLoading"
+               [placeholder]="'Select Dosage Type'"
+               [(ngModel)]="selectedDosageType">
+    </ng-select>
+  </div>
+
+  <mat-form-field>
+    <input matInput id="fromInput" [min]="fromMinDate" [max]="fromMaxDate" [matDatepicker]="picker" placeholder="From" [value]="fromShowDate"
+           (dateChange)="addSelectedDate('From',$event)" disabled>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker touchUi="true" #picker [disabled]="EditView"></mat-datepicker>
+  </mat-form-field>
+
+
+  <mat-form-field *ngIf="!continues">
+    <input matInput id="toInput" [min]="toMinDate" [max]="toMaxDate" [matDatepicker]="pickerto" placeholder="To" [value]="toShowDate"
+           (dateChange)="addSelectedDate('To',$event)" disabled>
+    <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+    <mat-datepicker touchUi="true" #pickerto [disabled]="!fromShowDate"></mat-datepicker>
+  </mat-form-field>
+
+
+  <div class="spaceBetNgSelect">
+    <ion-item *ngIf="sameDay()">
+      <ion-label item-start>Continues</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="continues"></ion-toggle>
+    </ion-item>
+  </div>
+
+
+  <div class="spaceBetNgSelect">
+    <ng-select [items]="allTimes"
+               bindLabel="time"
+               [multiple]="true"
+               [hideSelected]="true"
+               [placeholder]="'Select one or more time'"
+               [(ngModel)]="selectedTimes">
+    </ng-select>
+  </div>
+
+  <ion-list *ngIf="sameDay()">
+    <ion-item>
+      <ion-label item-start>Everyday</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="everyDay" (ngModelChange)="clickEveryday($event)"></ion-toggle>
+    </ion-item>
+    <ion-item *ngFor="let day of allDays">
+      <ion-label item-start>{{day.Name}}</ion-label>
+      <ion-toggle color="primary" item-end [(ngModel)]="day.selected" (ngModelChange)="selectEveryDay(day.selected)" [disabled]="everyDay"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <div class="spaceBetNgSelect">
+    <ng-select [items]="allInstructions"
+               bindLabel="name"
+               [loading]="instructionLoading"
+               [addTag]="true"
+               [multiple]="true"
+               [hideSelected]="true"
+               [placeholder]="'Select one or more instructions'"
+               [(ngModel)]="selectedInstruction">
+    </ng-select>
+  </div>
+</ion-content>
+

@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item>
+      <ion-label item-start> Upload with wifi only</ion-label>
+      <ion-checkbox item-end [(ngModel)]="wifiUpload" (click)="ifCheckedWifi()"></ion-checkbox>
+    </ion-item>
+<!--    <ion-item>-->
+<!--      <ion-label> {{temp}}</ion-label>-->
+<!--    </ion-item>-->
+  </ion-list>
+
+</ion-content>
