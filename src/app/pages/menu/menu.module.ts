@@ -28,9 +28,9 @@ const routes: Routes = [
           "../cafeteria-menu/cafeteria-menu.module#CafeteriaMenuPageModule",
       },
       {
-        path: "cafeteria-credit",
+        path: "cafeteria-card",
         loadChildren:
-          "../cafeteria-credit/cafeteria-credit.module#CafeteriaCreditPageModule",
+          "../cafeteria-card/cafeteria-card.module#CafeteriaCreditPageModule",
       },
       {
         path: "daily-report",
