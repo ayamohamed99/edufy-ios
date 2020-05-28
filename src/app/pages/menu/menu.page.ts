@@ -81,15 +81,15 @@ export class MenuPage implements OnInit {
         customReport: false,
         children: [
           {
-            title: "Menu",
-            icon: "",
-            url: "/menu/cafeteria-menu",
-            customReport: false,
-          },
-          {
             title: "Credit",
             icon: "",
             url: "/menu/cafeteria-credit",
+            customReport: false,
+          },
+          {
+            title: "Online Ordering",
+            icon: "",
+            url: "/menu/cafeteria-menu",
             customReport: false,
           },
         ],
