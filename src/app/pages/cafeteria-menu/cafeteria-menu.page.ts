@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CafeteriaService } from 'src/app/services/Cafeteria/cafeteria.service';
-import { LoadingViewService } from 'src/app/services/LoadingView/loading-view.service';
-import { CafeteriaCategory } from 'src/app/models/cafeteria_category';
+import { Component, OnInit } from "@angular/core";
+import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
+import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
+import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 
 @Component({
-  selector: "app-cafeteria-products",
-  templateUrl: "./cafeteria-products.page.html",
-  styleUrls: ["./cafeteria-products.page.scss"],
+  selector: "app-cafeteria-menu",
+  templateUrl: "./cafeteria-menu.page.html",
+  styleUrls: ["./cafeteria-menu.page.scss"],
 })
-export class CafeteriaProductsPage implements OnInit {
+export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
   constructor(
@@ -27,7 +27,7 @@ export class CafeteriaProductsPage implements OnInit {
     this.load.stopLoading();
   }
 
-  segmentChanged(index){
+  segmentChanged(index) {
     console.log("segmentChanged:", event);
     this.selectedCategory = this.categories[index];
   }

@@ -23,9 +23,9 @@ const routes: Routes = [
           "../notification/notification.module#NotificationPageModule",
       },
       {
-        path: "cafeteria-products",
+        path: "cafeteria-menu",
         loadChildren:
-          "../cafeteria-products/cafeteria-products.module#CafeteriaProductsPageModule",
+          "../cafeteria-menu/cafeteria-menu.module#CafeteriaMenuPageModule",
       },
       {
         path: "cafeteria-credit",
