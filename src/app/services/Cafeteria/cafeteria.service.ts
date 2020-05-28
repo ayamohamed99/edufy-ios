@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AccountService } from '../Account/account.service';
 import { HttpClient } from '@angular/common/http';
 import { Url_domain } from 'src/app/models/url_domain';
+import { CafeteriaCategory } from 'src/app/models/cafeteria_category';
 
 @Injectable({
   providedIn: "root",
@@ -39,6 +40,6 @@ export class CafeteriaService {
       promisesArray.push(this.getCafeteriaCategoryProducts(category.id).toPromise());
     }
     const result = await Promise.all(promisesArray);
-    return result;
+    return result as CafeteriaCategory[];
   }
 }
