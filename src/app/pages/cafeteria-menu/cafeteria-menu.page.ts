@@ -14,10 +14,11 @@ import { DrawerState } from 'ion-bottom-drawer';
 export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
-  cart: CafeteriaProduct[];
+  cart: Map<CafeteriaProduct,number>;
   total: number = 0.0;
+  count: number = 0.0;
   drawerState = DrawerState.Docked;
-  distanceTop = 10;
+  distanceTop = 20;
   minimumHeight = 56;
   dockedHeight = 56;
   constructor(
@@ -44,13 +45,22 @@ export class CafeteriaMenuPage implements OnInit {
 
   addItem(product: CafeteriaProduct){
     if(this.cart == null) {
-      this.cart = new Array();
+      this.cart = new Map();
     }
-    this.cart.push(product);
+    let count = 0;
+    if(this.cart.get(product)) {
+      count = this.cart.get(product);
+    }
+    this.cart.set(product, count+1);
     this.total += product.price;
+    this.count++;
   }
 
   openCart() {
     this.drawerState = DrawerState.Top;
+  }
+
+  closeCart() {
+    this.drawerState = DrawerState.Docked;
   }
 }
