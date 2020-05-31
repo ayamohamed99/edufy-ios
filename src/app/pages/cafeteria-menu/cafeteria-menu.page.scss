@@ -1,0 +1,9 @@
+.bottom-drawer-grid {
+    background: var(--ion-color-primary-tint);
+    color: white;
+    height: fit-content;
+
+    ion-row, ion-col {
+        height: 100%;
+    }
+}
