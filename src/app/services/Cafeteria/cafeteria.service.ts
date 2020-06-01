@@ -42,4 +42,10 @@ export class CafeteriaService {
     const result = await Promise.all(promisesArray);
     return result as CafeteriaCategory[];
   }
+
+
+  placeOrder() {
+    // TODO
+    // return this.http.post(this.DomainUrl.Domain + "authentication/CafeteriaPos.ent/postCafeteriaReceipt.ent?isNew=true", null);
+  }
 }
