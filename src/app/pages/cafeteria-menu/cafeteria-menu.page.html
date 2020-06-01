@@ -6,6 +6,17 @@
     <ion-title text-center>Online Ordering</ion-title>
   </ion-toolbar>
 
+  <ion-toolbar color="primary">
+    <ion-searchbar
+            mode="ios"
+            (ionInput)="onSearchInput($event)"
+            (ionCancel)="onSearchCancel($event)"
+            showCancelButton
+            debounce="500"
+            animated>
+    </ion-searchbar>
+  </ion-toolbar>
+
 
   <ion-toolbar class="toolBarShap" color="gray" scrollable="true">
     <ion-segment [(ngModel)]="selectedTab" color="primary"

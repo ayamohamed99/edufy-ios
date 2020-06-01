@@ -110,4 +110,19 @@ export class CafeteriaMenuPage implements OnInit {
     this.total = 0.0;
     this.count = 0.0;
   }
+
+  onSearchInput(event){
+    // set val to the value of the searchbar
+    const val = event.target.value;
+    console.log('Search'+val);
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+    }
+  }
+
+  onSearchCancel(event){
+    const val = event.target.value;
+    console.log('Search'+val);
+  }
 }
