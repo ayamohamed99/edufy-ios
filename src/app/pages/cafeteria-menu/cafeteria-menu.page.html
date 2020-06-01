@@ -84,22 +84,22 @@
                   <ion-col size="9">
                     <ion-label style="text-transform: capitalize;" class="ion-text-wrap">{{product.name}}</ion-label>
                     <div class="quantity-div">
-                      <ion-button size="small" fill="clear" (click)="increment()">
+                      <ion-button size="small" fill="clear" (click)="decrement(product)">
                         <ion-icon slot="icon-only" name="remove"></ion-icon>
                       </ion-button>
                       <p style="margin: 8px;">{{cart.get(product)}}</p>
-                      <ion-button size="small" fill="clear" (click)="decrement()">
+                      <ion-button size="small" fill="clear" (click)="increment(product)">
                         <ion-icon slot="icon-only" name="add"></ion-icon>
                       </ion-button>
                     </div>
                     <ion-grid class="price-grid">
                       <ion-row>
                         <ion-col>
-                          <p style="color: black; margin-right: 2px;">Item price</p>
+                          <p style="color: black; margin-right: 4px;">Item price</p>
                           <p >{{product.price}}</p>
                         </ion-col>
                         <ion-col>
-                          <p style="color: black; margin-right: 2px;">Total</p>
+                          <p style="color: black; margin-right: 4px;">Total</p>
                           <p>{{product.price*cart.get(product)}}</p>
                         </ion-col>
                       </ion-row>
@@ -110,6 +110,11 @@
             </ion-item>
           </ion-list>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-button expand="block" style="width: 100%;" (click)="placeOrder()">
+          PLACE ORDER
+        </ion-button>
       </ion-row>
     </ion-grid>
 </ion-bottom-drawer>

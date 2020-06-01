@@ -56,11 +56,41 @@ export class CafeteriaMenuPage implements OnInit {
     this.count++;
   }
 
+  increment(product: CafeteriaProduct){
+    const count = this.cart.get(product);
+    this.cart.set(product, count+1);
+    this.total += product.price;
+    this.count++;
+  }
+
+  decrement(product: CafeteriaProduct){
+    const count = this.cart.get(product);
+    if (count == 1){
+      this.cart.delete(product);
+    } else {
+    this.cart.set(product, count-1);
+    }
+    this.total -= product.price;
+    this.count--;
+  }
+
   openCart() {
     this.drawerState = DrawerState.Top;
   }
 
   closeCart() {
     this.drawerState = DrawerState.Docked;
+  }
+
+  placeOrder() {
+    this.closeCart();
+    this.load.startNormalLoading("Placing Order...");
+    this.emptyCart();
+  }
+
+  emptyCart() {
+    this.cart.clear();
+    this.total = 0.0;
+    this.count = 0.0;
   }
 }
