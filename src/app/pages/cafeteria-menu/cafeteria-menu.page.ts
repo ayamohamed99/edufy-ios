@@ -3,7 +3,7 @@ import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
 import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 import { CafeteriaProduct } from 'src/app/models/cafeteria_product';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 import { DrawerState } from 'ion-bottom-drawer';
 
 @Component({
@@ -24,7 +24,8 @@ export class CafeteriaMenuPage implements OnInit {
   constructor(
     private cafeteriaService: CafeteriaService,
     private load: LoadingViewService,
-    public actionSheetController: ActionSheetController
+    public actionSheetController: ActionSheetController,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -85,7 +86,18 @@ export class CafeteriaMenuPage implements OnInit {
   placeOrder() {
     this.closeCart();
     this.load.startNormalLoading("Placing Order...");
+    // TODO
+    setTimeout(async() => {
+      const alert = await this.alertController.create({
+        // cssClass: 'my-custom-class',
+        header: 'Order Placed',
+        message: 'Your order is being prepared.',
+        buttons: ['OK']
+      });
+      this.load.stopLoading();
+      await alert.present();
     this.emptyCart();
+    }, 2000);
   }
 
   emptyCart() {
