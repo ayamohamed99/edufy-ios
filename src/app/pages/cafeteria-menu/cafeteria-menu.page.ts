@@ -3,6 +3,7 @@ import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
 import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 import { CafeteriaProduct } from 'src/app/models/cafeteria_product';
+import { CafeteriaOrder } from 'src/app/models/cafeteria_order';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { DrawerState } from 'ion-bottom-drawer';
 
@@ -21,6 +22,9 @@ export class CafeteriaMenuPage implements OnInit {
   distanceTop = 20;
   minimumHeight = 56;
   dockedHeight = 56;
+
+  order: CafeteriaOrder;
+
   constructor(
     private cafeteriaService: CafeteriaService,
     private load: LoadingViewService,
@@ -30,6 +34,7 @@ export class CafeteriaMenuPage implements OnInit {
 
   ngOnInit() {
     this.getCategories();
+    this.order = new CafeteriaOrder();
   }
 
   async getCategories() {

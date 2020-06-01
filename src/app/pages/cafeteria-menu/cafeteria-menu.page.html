@@ -112,9 +112,17 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-button expand="block" style="width: 100%;" (click)="placeOrder()">
-          PLACE ORDER
-        </ion-button>
+        <ion-col class="comment-col">
+            <ion-label position="floating" style="font-weight: bold;">Add any comments here</ion-label>
+            <ion-textarea autoGrow="true" maxlength="250" [(ngModel)]="order.comment" class="comment-textarea"></ion-textarea>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" size="large" (click)="placeOrder()">
+            PLACE ORDER
+          </ion-button>
+        </ion-col>
       </ion-row>
     </ion-grid>
 </ion-bottom-drawer>
