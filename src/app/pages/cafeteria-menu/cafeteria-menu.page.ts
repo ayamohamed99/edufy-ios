@@ -15,6 +15,8 @@ import { DrawerState } from 'ion-bottom-drawer';
 export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
+  isSearching: boolean = false;
+  
   cart: Map<CafeteriaProduct,number>;
   total: number = 0.0;
   count: number = 0.0;
@@ -114,7 +116,7 @@ export class CafeteriaMenuPage implements OnInit {
   onSearchInput(event){
     // set val to the value of the searchbar
     const val = event.target.value;
-    console.log('Search'+val);
+    console.log('onSearchInput'+val);
 
     // if the value is an empty string don't filter the items
     if (val && val.trim() != '') {
@@ -123,6 +125,12 @@ export class CafeteriaMenuPage implements OnInit {
 
   onSearchCancel(event){
     const val = event.target.value;
-    console.log('Search'+val);
+    console.log('onSearchCancel'+val);
+  }
+
+  
+  onSearchFocus(event){
+    const val = event.target.value;
+    console.log('onSearchFocus'+val);
   }
 }

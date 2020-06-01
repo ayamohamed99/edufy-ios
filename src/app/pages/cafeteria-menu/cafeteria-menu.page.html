@@ -11,6 +11,7 @@
             mode="ios"
             (ionInput)="onSearchInput($event)"
             (ionCancel)="onSearchCancel($event)"
+            (ionFocus)="onSearchFocus($event)"
             showCancelButton
             debounce="500"
             animated>
@@ -18,7 +19,7 @@
   </ion-toolbar>
 
 
-  <ion-toolbar class="toolBarShap" color="gray" scrollable="true">
+  <ion-toolbar class="toolBarShap" color="gray" scrollable="true" *ngIf="isSearching">
     <ion-segment [(ngModel)]="selectedTab" color="primary"
       style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true">
       <ion-segment-button *ngFor="let category of categories; let i= index" [checked]="i==0"
