@@ -1,15 +1,6 @@
-<ion-split-pane>
+<ion-split-pane contentId="content">
     <ion-menu contentId="content">
-
-        <!--    <ion-header>-->
-        <!--      <ion-toolbar color="primary">-->
-        <!--        <ion-title>Menu</ion-title>-->
-        <!--      </ion-toolbar>-->
-        <!--    </ion-header>-->
-
         <ion-content style=".content.outer-content {background: #ffffff;}">
-
-
             <ion-menu-toggle auto-hide="false" *ngFor="let p of pages" class="navMenuClass">
                 <div *ngIf="p.main && !p.customReport && !p.children">
                     <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)"
@@ -40,7 +31,7 @@
                 <div *ngIf="p.main && p.customReport  && !p.children" [ngClass]="setCollaps()">
 
                     <button class="collopsible" color="light" (click)="stopAll($event)">
-                        <ion-icon icon-left name="ios-copy"></ion-icon>
+                        <ion-icon icon-left name="copy"></ion-icon>
                         <ion-label>
                             Reports
                         </ion-label>
@@ -70,9 +61,8 @@
 
 
         </ion-content>
-
     </ion-menu>
 
-    <ion-router-outlet id="content" main></ion-router-outlet>
+    <ion-router-outlet id="content"></ion-router-outlet>
 
 </ion-split-pane>

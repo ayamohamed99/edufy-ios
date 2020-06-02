@@ -3,29 +3,42 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title text-center>Notification</ion-title>
-<!--    <ion-buttons right style="width: 30px">-->
-<!--      <ion-button [disabled]="true">-->
-<!--      </ion-button>-->
-<!--    </ion-buttons>-->
+    <ion-title class="ion-text-center">Notification</ion-title>
+    <!--    <ion-buttons right style="width: 30px">-->
+    <!--      <ion-button [disabled]="true">-->
+    <!--      </ion-button>-->
+    <!--    </ion-buttons>-->
 
   </ion-toolbar>
 
-  <ion-toolbar  class="toolBarShap" color="gray" *ngIf="platform.is('ios')" scrollable="true">
-    <ion-segment [(ngModel)]="selectedTab" color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" *ngIf="platform.is('ios')" scrollable="true">
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
+  <ion-toolbar class="toolBarShap" color="gray" *ngIf="platform.is('ios')" scrollable="true">
+    <ion-segment [(ngModel)]="selectedTab" color="primary"
+      style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" *ngIf="platform.is('ios')" scrollable="true">
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all"
+        (click)="tabThatSelectedDo('all')">All</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent"
+        (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved"
+        (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval
+      </ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived"
+        (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 
   <ion-toolbar class="toolBarShap" color="gray" *ngIf="!platform.is('ios')">
     <ion-segment [(ngModel)]="selectedTab" color="primary" scrollable="true">
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all" (click)="tabThatSelectedDo('all')">All</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent" (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved" (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived" (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="all"
+        (click)="tabThatSelectedDo('all')">All</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="sent"
+        (click)="tabThatSelectedDo('sent')">Sent</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="approved"
+        (click)="tabThatSelectedDo('approved')" *ngIf="accountServ.getUserRole().notificationApproved">Awaiting Approval
+      </ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" value="archived"
+        (click)="tabThatSelectedDo('archived')" *ngIf="accountServ.getUserRole().archiveNotificationView">Archived
+      </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 
@@ -34,57 +47,71 @@
 
 <ion-content>
 
-  <ion-slides #ionSlides style="height: 100%;" [options]="slideOpts" (ionSlideDidChange)="slideChanged()" >
+  <ion-slides #ionSlides style="height: 100%;" [options]="slideOpts" (ionSlideDidChange)="slideChanged()">
     <ion-slide style="height: 100%;">
       <ion-content class="contentScroll">
 
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content
-                  pullingIcon="arrow-dropdown"
-                  pullingText="Pull to refresh"
-                  refreshingSpinner="circles"
-                  refreshingText="Refreshing...">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
           </ion-refresher-content>
         </ion-refresher>
-        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)" *ngIf="noNOtifications">
-          <img text-center align-self-center src="assets/imgs/empty%20notification.png">
+        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)"
+          *ngIf="noNOtifications">
+          <img class="ion-text-center" align-self-center src="assets/imgs/empty%20notification.png">
         </div>
         <ion-grid style="background: #f4f4f4;">
           <ion-row>
-            <ion-col *ngFor="let notify of notifications; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6" [sizeSm]="12" [sizeXs]="12" [size]="12">
+            <ion-col *ngFor="let notify of notifications; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6"
+              [sizeSm]="12" [sizeXs]="12" [size]="12">
               <div class="editDivView">
                 <ion-card class="scale-up-center">
 
                   <div class="buttonOnImg">
-                    <ion-button class="closeInDiv" fill="clear" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
-                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only" class="buttonShape" ></ion-icon>
+                    <ion-button class="closeInDiv" fill="clear"
+                      *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)"
+                      item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only"
+                        class="buttonShape"></ion-icon>
                     </ion-button>
                   </div>
 
-                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
-                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0">
+                    <ion-slide *ngFor="let item of notify.attachmentsList"
+                      (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
                       <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png"
+                          *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png"
+                          *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png"
+                          *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png"
+                          *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png"
+                          *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png"
+                          *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png"
+                          *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
                       </div>
                     </ion-slide>
                   </ion-slides>
 
                   <ion-slides *ngIf="platform.is('ios')"></ion-slides>
 
-                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
-                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="ion-text-center" class="lableInItem"
+                    *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="lableInItem" *ngIf="notify.attachmentsList.length<=0">
+                    {{notify.title}}
+                  </ion-item>
 
                   <br>
 
                   <div style="padding-left: 16px;">
-                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" class="ion-text-center" *ngIf="notify.attachmentsList.length>0">
+                      {{notify.body}}</h2>
                     <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
                   </div>
 
@@ -95,15 +122,19 @@
 
                     <ion-label text-capitalize class="senderName">{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
                       <button [id]="'buttonApprove'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
                     </div>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
-                      <button [id]="'buttonApprove'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApprove'+i" style="padding-left: 5px;" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <ion-button fill="outline"  item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
+                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'"
+                      (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
                     <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                   </ion-item>
 
@@ -128,51 +159,65 @@
       <ion-content class="contentScroll">
 
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content
-                  pullingIcon="arrow-dropdown"
-                  pullingText="Pull to refresh"
-                  refreshingSpinner="circles"
-                  refreshingText="Refreshing...">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
           </ion-refresher-content>
         </ion-refresher>
-        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)" *ngIf="noNotificationsSent">
-          <img text-center align-self-center src="assets/imgs/empty%20notification.png">
+        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)"
+          *ngIf="noNotificationsSent">
+          <img class="ion-text-center" align-self-center src="assets/imgs/empty%20notification.png">
         </div>
         <ion-grid style="background: #f4f4f4;">
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsSent; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6" [sizeSm]="12" [sizeXs]="12" [size]="12">
+            <ion-col *ngFor="let notify of notificationsSent; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6"
+              [sizeSm]="12" [sizeXs]="12" [size]="12">
               <div class="editDivView">
                 <ion-card class="scale-up-center">
 
                   <div class="buttonOnImg">
-                    <ion-button class="closeInDiv" fill="clear" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
-                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only" class="buttonShape" ></ion-icon>
+                    <ion-button class="closeInDiv" fill="clear"
+                      *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)"
+                      item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only"
+                        class="buttonShape"></ion-icon>
                     </ion-button>
                   </div>
 
-                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
-                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0">
+                    <ion-slide *ngFor="let item of notify.attachmentsList"
+                      (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
                       <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png"
+                          *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png"
+                          *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png"
+                          *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png"
+                          *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png"
+                          *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png"
+                          *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png"
+                          *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
                       </div>
                     </ion-slide>
                   </ion-slides>
 
                   <ion-slides *ngIf="platform.is('ios')"></ion-slides>
 
-                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
-                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="ion-text-center" class="lableInItem"
+                    *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="lableInItem" *ngIf="notify.attachmentsList.length<=0">
+                    {{notify.title}}
+                  </ion-item>
 
 
                   <div style="padding-left: 16px;">
-                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" class="ion-text-center" *ngIf="notify.attachmentsList.length>0">
+                      {{notify.body}}</h2>
                     <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
                   </div>
 
@@ -183,15 +228,20 @@
 
                     <ion-label text-capitalize class="senderName">{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
-                      <button [id]="'buttonApproveSent'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveSent'+i" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
-                      <button [id]="'buttonApproveSent'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveSent'+i" style="padding-left: 5px;" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
+                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'"
+                      (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
                     <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                   </ion-item>
 
@@ -219,51 +269,65 @@
 
 
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content
-                  pullingIcon="arrow-dropdown"
-                  pullingText="Pull to refresh"
-                  refreshingSpinner="circles"
-                  refreshingText="Refreshing...">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
           </ion-refresher-content>
         </ion-refresher>
-        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)" *ngIf="noNotificationsApproved">
-          <img text-center align-self-center src="assets/imgs/empty%20notification.png">
+        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)"
+          *ngIf="noNotificationsApproved">
+          <img class="ion-text-center" align-self-center src="assets/imgs/empty%20notification.png">
         </div>
         <ion-grid style="background: #f4f4f4;">
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsApproved; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6" [sizeSm]="12" [sizeXs]="12" [size]="12">
+            <ion-col *ngFor="let notify of notificationsApproved; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6"
+              [sizeSm]="12" [sizeXs]="12" [size]="12">
               <div class="editDivView">
                 <ion-card class="scale-up-center">
 
                   <div class="buttonOnImg">
-                    <ion-button class="closeInDiv" fill="clear" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
-                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only" class="buttonShape" ></ion-icon>
+                    <ion-button class="closeInDiv" fill="clear"
+                      *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)"
+                      item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only"
+                        class="buttonShape"></ion-icon>
                     </ion-button>
                   </div>
 
-                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
-                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0">
+                    <ion-slide *ngFor="let item of notify.attachmentsList"
+                      (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
                       <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png"
+                          *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png"
+                          *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png"
+                          *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png"
+                          *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png"
+                          *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png"
+                          *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png"
+                          *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
                       </div>
                     </ion-slide>
                   </ion-slides>
 
                   <ion-slides *ngIf="platform.is('ios')"></ion-slides>
 
-                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
-                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="ion-text-center" class="lableInItem"
+                    *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="lableInItem" *ngIf="notify.attachmentsList.length <= 0">
+                    {{notify.title}}
+                  </ion-item>
 
 
                   <div style="padding-left: 16px;">
-                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" class="ion-text-center" *ngIf="notify.attachmentsList.length>0">
+                      {{notify.body}}</h2>
                     <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
                   </div>
 
@@ -274,15 +338,20 @@
 
                     <ion-label text-capitalize class="senderName">{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
-                      <button [id]="'buttonApproveApp'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveApp'+i" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
-                      <button [id]="'buttonApproveApp'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveApp'+i" style="padding-left: 5px;" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
+                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'"
+                      (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
                     <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                   </ion-item>
 
@@ -310,52 +379,66 @@
       <ion-content class="contentScroll">
 
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content
-                  pullingIcon="arrow-dropdown"
-                  pullingText="Pull to refresh"
-                  refreshingSpinner="circles"
-                  refreshingText="Refreshing...">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="Refreshing...">
           </ion-refresher-content>
         </ion-refresher>
 
-        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)" *ngIf="noNotificationsArchived">
-          <img text-center align-self-center src="assets/imgs/empty%20notification.png">
+        <div style="width: 100%;height: 100%;padding-top: 50%;padding-left: calc(50% - 187.5px)"
+          *ngIf="noNotificationsArchived">
+          <img class="ion-text-center" align-self-center src="assets/imgs/empty%20notification.png">
         </div>
         <ion-grid style="background: #f4f4f4;">
           <ion-row>
-            <ion-col *ngFor="let notify of notificationsArchived; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6" [sizeSm]="12" [sizeXs]="12" [size]="12">
+            <ion-col *ngFor="let notify of notificationsArchived; let i = index" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6"
+              [sizeSm]="12" [sizeXs]="12" [size]="12">
               <div class="editDivView">
                 <ion-card class="scale-up-center">
 
                   <div class="buttonOnImg">
-                    <ion-button class="closeInDiv" fill="clear" *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)" item-end (click)="onSelectCard($event, i,notify)">
-                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only" class="buttonShape" ></ion-icon>
+                    <ion-button class="closeInDiv" fill="clear"
+                      *ngIf="notify.pending != 'pending' && (accountServ.getUserRole().notificationDelete || accountServ.getUserRole().notificationUpdate||accountServ.getUserRole().notificationCreate)"
+                      item-end (click)="onSelectCard($event, i,notify)">
+                      <ion-icon style="background: #eee0;color: #000000;" name="more" slot="icon-only"
+                        class="buttonShape"></ion-icon>
                     </ion-button>
                   </div>
 
-                  <ion-slides pager *ngIf="notify.attachmentsList.length>0" >
-                    <ion-slide *ngFor="let item of notify.attachmentsList" (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
+                  <ion-slides pager *ngIf="notify.attachmentsList.length>0">
+                    <ion-slide *ngFor="let item of notify.attachmentsList"
+                      (click)="onAttachmentClick($event,item.name,item.id,item.type,item.url,notify.pending)">
                       <div style="text-align: -webkit-center;">
                         <img class="imgUrl" justify-content-center [src]="item.url" *ngIf="item.type == 'IMAGE'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png" *ngIf="item.type == 'PDF'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png" *ngIf="item.type == 'WORD'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png" *ngIf="item.type == 'EXCEL'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png" *ngIf="item.type == 'POWERPOINT'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png" *ngIf="item.type == 'AUDIO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png" *ngIf="item.type == 'VIDEO'">
-                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png" *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/pdf_img.png"
+                          *ngIf="item.type == 'PDF'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/word_img.png"
+                          *ngIf="item.type == 'WORD'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/excel_img.png"
+                          *ngIf="item.type == 'EXCEL'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/powerpoint_img.png"
+                          *ngIf="item.type == 'POWERPOINT'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/audio_img.png"
+                          *ngIf="item.type == 'AUDIO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/video_img.png"
+                          *ngIf="item.type == 'VIDEO'">
+                        <img class="imgAttach" justify-content-center src="assets/imgs/doc_img.png"
+                          *ngIf="item.type != 'PDF' && item.type != 'IMAGE' && item.type != 'WORD' && item.type != 'EXCEL' && item.type != 'POWERPOINT' && item.type != 'AUDIO' && item.type != 'VIDEO'">
                       </div>
                     </ion-slide>
                   </ion-slides>
 
                   <ion-slides *ngIf="platform.is('ios')"></ion-slides>
 
-                  <ion-item text-wrap text-center class="lableInItem" *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
-                  <ion-item text-wrap class="lableInItem" *ngIf="notify.attachmentsList.length<=0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="ion-text-center" class="lableInItem"
+                    *ngIf="notify.attachmentsList.length>0">{{notify.title}}</ion-item>
+                  <ion-item class="ion-text-wrap" class="lableInItem" *ngIf="notify.attachmentsList.length<=0">
+                    {{notify.title}}
+                  </ion-item>
 
 
                   <div style="padding-left: 16px;">
-                    <h2 style="color: gray" text-center *ngIf="notify.attachmentsList.length>0">{{notify.body}}</h2>
+                    <h2 style="color: gray" class="ion-text-center" *ngIf="notify.attachmentsList.length>0">
+                      {{notify.body}}</h2>
                     <h2 style="color: gray" text-left *ngIf="notify.attachmentsList.length<=0">{{notify.body}}</h2>
                   </div>
 
@@ -366,15 +449,20 @@
 
                     <ion-label text-capitalize class="senderName">{{ notify.senderName}}</ion-label>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
-                      <button [id]="'buttonApproveArc'+i" class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && !platform.is('ios')">
+                      <button [id]="'buttonApproveArc'+i" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <div item-end class="containerApprove" *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
-                      <button [id]="'buttonApproveArc'+i"  style="padding-left: 5px;"  class="buttonApprove" (click)="approveNotification(i)"></button>
+                    <div item-end class="containerApprove"
+                      *ngIf="accountServ.getUserRole().notificationCanApprove && !notify.approved && platform.is('ios')">
+                      <button [id]="'buttonApproveArc'+i" style="padding-left: 5px;" class="buttonApprove"
+                        (click)="approveNotification(i)"></button>
                     </div>
 
-                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'" (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
+                    <ion-button fill="outline" item-end class="buttonInCard" *ngIf="notify.pending != 'pending'"
+                      (click)="openNotificationViewBy(notify)">{{notify.seenCount}} views</ion-button>
                     <ion-badge color="danger" item-end *ngIf="notify.pending == 'pending'">pending</ion-badge>
                   </ion-item>
 
@@ -396,7 +484,9 @@
   </ion-slides>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="onOpenView()" *ngIf="accountServ.getUserRole().notificationCreate"><ion-icon name="add"></ion-icon></ion-fab-button>
+    <ion-fab-button (click)="onOpenView()" *ngIf="accountServ.getUserRole().notificationCreate">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
   </ion-fab>
 
 </ion-content>

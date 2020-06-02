@@ -118,8 +118,8 @@ export class MenuPage implements OnInit {
     if (this.accountServ.getUserRole().chatView && data.chatActivated) {
       let data = {
         title: "Chat",
-        icon: "ios-chatbubbles",
-        main: true,
+        icon: "chatbubbles",
+        main: true, 
         url: "/menu/chat",
         customReport: false,
       };
@@ -189,7 +189,7 @@ export class MenuPage implements OnInit {
     if (customReports.length > 0) {
       let CR = {
         title: "Reports",
-        icon: "ios-copy",
+        icon: "copy",
         main: true,
         url: "",
         customReport: true,

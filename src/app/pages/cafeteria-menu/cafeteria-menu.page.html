@@ -3,21 +3,22 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title text-center>Online Ordering</ion-title>
+    <ion-title class="ion-text-center">Online Ordering</ion-title>
   </ion-toolbar>
 
   <ion-toolbar color="primary">
     <ion-searchbar mode="ios" (ionInput)="onSearchInput($event)" (ionCancel)="onSearchCancel($event)"
-      (ionBlur)="onSearchBlur($event)" (ionFocus)="onSearchFocus($event)" showCancelButton debounce="500" animated>
+      (ionBlur)="onSearchBlur()" (ionFocus)="onSearchFocus($event)" showCancelButton="focus" debounce="500"
+      animated>
     </ion-searchbar>
   </ion-toolbar>
 
 
   <ion-toolbar class="toolBarShap" color="gray" scrollable="true" *ngIf="!isSearching">
     <ion-segment #segments [(ngModel)]="selectedTab" color="primary"
-      style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true">
-      <ion-segment-button *ngFor="let category of categories; let i= index" [value]="category.name"
-        [attr.checked]="selectedCategory.name == category.name?'checked':null" (ionSelect)="segmentChanged(i)">
+      style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true"
+      (ionChange)="segmentChanged($event)">
+      <ion-segment-button *ngFor="let category of categories; let i= index" [value]="i">
         <ion-label>{{category.name}}</ion-label>
       </ion-segment-button>
 

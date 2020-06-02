@@ -7,7 +7,7 @@
       </ion-button>
     </ion-buttons>
 
-    <ion-title text-center (click)="showNames()">{{PageName}}</ion-title>
+    <ion-title class="ion-text-center" (click)="showNames()">{{PageName}}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="onClickonMenuCalenderFromReport()">
@@ -18,12 +18,12 @@
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-  <ion-title text-center>{{reportDates}}</ion-title>
+    <ion-title class="ion-text-center">{{reportDates}}</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
-<ion-content padding class="contentColor">
+<ion-content class="ion-padding" class="contentColor">
 
   <div class="loading-spinner">
     <ion-spinner name="crescent" style="zoom: 1.5;" *ngIf="loadingReportInBackground"></ion-spinner>
@@ -41,16 +41,15 @@
         <ion-card class="questionCard">
           <div class="questionTitle">
 
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
               <mat-form-field [floatLabel]="never" class="custom-Field_QOne">
-              <textarea matInput matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6"
-                        class="custom-textArea" style="width: 100%" placeholder="wirte here"
-                        [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer"
-                        (change)="dataChanges()">
+                <textarea matInput matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6"
+                  class="custom-textArea" style="width: 100%" placeholder="wirte here"
+                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer" (change)="dataChanges()">
               </textarea>
 
               </mat-form-field>
@@ -70,14 +69,16 @@
         <ion-card class="questionCard">
           <div class="questionTitle">
 
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
-                <mat-checkbox class="checkbox" type="checkbox"  [name]="'checkbox'+drIndex" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[parameter.id]" (change)="dataChanges()">
+              <div *ngFor="let parameter of itm.parametersList" class="LopContain">
+                <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[parameter.id]"
+                  (change)="dataChanges()">
                   {{parameter.value}}
                 </mat-checkbox>
               </div>
@@ -91,25 +92,30 @@
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN"-->
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN' ||
                   itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
               <div *ngFor="let param of itm.parametersList; let i = index" style="display: block;width: 100%">
-                <div *ngIf="param.key == 'OPTION_ANSWER'" >
+                <div *ngIf="param.key == 'OPTION_ANSWER'">
                   <div class="inline-group">
-                    <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
+                    <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
                       <mat-form-field class="custom-Field_QThree">
-                        <input matInput (change)="dataChanges()" type="number" required [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[(itm.parametersList[i].id)+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
+                        <input matInput (change)="dataChanges()" type="number" required
+                          [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[(itm.parametersList[i].id)+1]"
+                          style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;"
+                          [disabled]="!reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
                       </mat-form-field>
                       {{itm.parametersList[i].value}}
                     </mat-checkbox>
@@ -125,12 +131,13 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'">
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -140,7 +147,9 @@
 
                 <div *ngFor="let pram of itm.parametersList;let i = index" class="LopContain">
                   <div *ngIf="pram.key == 'OPTION_ANSWER'">
-                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox" [name]="'checkbox' + drIndex" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]">
+                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
+                      [name]="'checkbox' + drIndex"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]">
                       {{itm.parametersList[i].value}}
                     </mat-checkbox>
                   </div>
@@ -149,11 +158,14 @@
               </div>
 
               <div style=" clear: both;">
-                <div *ngFor="let pram of itm.parametersList;let i = index" >
+                <div *ngFor="let pram of itm.parametersList;let i = index">
                   <div *ngIf="pram.key != 'OPTION_ANSWER'">
 
                     <mat-form-field class="custom-Field_QFour">
-                      <textarea [placeholder]="itm.parametersList[i].value" matInput class="editTextWithCheckBox" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" (change)="dataChanges()" cols="50" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"></textarea>
+                      <textarea [placeholder]="itm.parametersList[i].value" matInput class="editTextWithCheckBox"
+                        matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" (change)="dataChanges()"
+                        cols="50"
+                        [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -166,13 +178,14 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -182,12 +195,10 @@
                 <div class="col col-12 inline-group">
                   <div *ngFor="let pram of itm.parametersList; let i = index" class="LoopManyCheckWithEdit">
                     <mat-radio-group (change)="enableOther(drIndex,i)"
-                                     [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
 
-                      <mat-radio-button class="radio" type="radio"
-                                        [value]="itm.parametersList[i].value"
-                                        [name]="'radio-inline' + drIndex"
-                                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
+                      <mat-radio-button class="radio" type="radio" [value]="itm.parametersList[i].value"
+                        [name]="'radio-inline' + drIndex" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                         {{pram.value}}
                       </mat-radio-button>
 
@@ -200,16 +211,17 @@
                       <!--<div style="display: inline-block" >-->
 
                       <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex"
-                                        [value]="itm.parametersList[i].value" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
+                        [value]="itm.parametersList[i].value"
+                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
                         {{pram.value}}
                       </mat-radio-button>
 
-                      <mat-form-field class="custom-Field_QSix" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
-                        <input  matInput (change)="dataChanges()" style="width:100%" class="custom-scroll"
-                                [disabled]="enableOtherNote[drIndex]||enableOtherNote.length<1"
-                                [placeholder]="itm.parametersList[i].value"
-                                ng-init="enableOtherNote[drIndex]=true"
-                                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
+                      <mat-form-field class="custom-Field_QSix"
+                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
+                        <input matInput (change)="dataChanges()" style="width:100%" class="custom-scroll"
+                          [disabled]="enableOtherNote[drIndex]||enableOtherNote.length<1"
+                          [placeholder]="itm.parametersList[i].value" ng-init="enableOtherNote[drIndex]=true"
+                          [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
                       </mat-form-field>
 
                       <!--</div>-->
@@ -228,19 +240,21 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <mat-radio-group (change)="dataChanges()" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex ].answer">
+              <mat-radio-group (change)="dataChanges()"
+                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex ].answer">
 
                 <div *ngFor="let pram of itm.parametersList" class="LopContain">
                   <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Food'" style="display: inline-block">
@@ -249,13 +263,13 @@
                     </mat-radio-button>
                   </div>
 
-                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'"style="display: inline-block">
+                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'" style="display: inline-block">
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value">
                       <img [src]="'assets/mood/'+pram.value+'.png'" class="imgOfRadio">
                     </mat-radio-button>
                   </div>
 
-                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'"style="display: inline-block">
+                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'" style="display: inline-block">
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value">
                       <img [src]="'assets/milk/'+pram.value+'.png'" class="imgOfRadio">
                     </mat-radio-button>
@@ -277,21 +291,24 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <mat-radio-group (change)="dataChanges()" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
+              <mat-radio-group (change)="dataChanges()"
+                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
 
                 <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
-                  <mat-radio-button *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'" class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value" >
+                  <mat-radio-button *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'" class="radio" type="radio"
+                    [name]="'radio-inline' + drIndex" [value]="pram.value">
                     {{pram.value}}
                   </mat-radio-button>
                 </div>
@@ -301,10 +318,10 @@
               <div *ngFor="let pram of itm.parametersList; let i = index">
                 <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
                   <mat-form-field class="custom-Field_QEight">
-                      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
-                                matAutosizeMaxRows="6" (change)="dataChanges()" cols="50"
-                                class="custom-scroll" [placeholder]="pram.value"
-                                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
+                    <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
+                      matAutosizeMaxRows="6" (change)="dataChanges()" cols="50" class="custom-scroll"
+                      [placeholder]="pram.value"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
                       </textarea>
                   </mat-form-field>
                 </div>
@@ -317,13 +334,14 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -332,9 +350,9 @@
               <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
                 <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                   <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
-                                [name]="'checkbox' + drIndex+i"
-                                ng-change="disableNote(reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0],drIndex)"
-                                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
+                    [name]="'checkbox' + drIndex+i"
+                    ng-change="disableNote(reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0],drIndex)"
+                    [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]">
                     {{itm.parametersList[i].value}}
                   </mat-checkbox>
                 </div>
@@ -346,10 +364,10 @@
                   <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
                     <mat-form-field class="custom-Field_QEight">
                       <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
-                                matAutosizeMaxRows="6" (change)="dataChanges()"
-                                [disabled]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]"
-                                [placeholder]="itm.parametersList[i].value"
-                                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
+                        matAutosizeMaxRows="6" (change)="dataChanges()"
+                        [disabled]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[0]"
+                        [placeholder]="itm.parametersList[i].value"
+                        [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[1]">
                       </textarea>
                     </mat-form-field>
                   </div>
@@ -370,7 +388,7 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -386,21 +404,21 @@
 
                   {{openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
                   <mat-form-field class="custom-Field_QNine">
-                    <input matInput (change)="dataChanges()" (change)="override()"  type="text"
-                           [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"
-                           [placeholder]="pram.value">
+                    <input matInput (change)="dataChanges()" (change)="override()" type="text"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"
+                      [placeholder]="pram.value">
                   </mat-form-field>
                 </div>
 
 
-                <mat-radio-group *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
-                                 [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[(i)]"
-                                 (change)="dataChanges()">
+                <mat-radio-group
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
+                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[(i)]"
+                  (change)="dataChanges()">
 
-                  <mat-radio-button *ngFor="let radio of itm.parametersList[i]; let j = index"
-                                    class="radioNine" type="radio" [value]="radio.value"
-                                    [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1"
-                                    (change)="override()">
+                  <mat-radio-button *ngFor="let radio of itm.parametersList[i]; let j = index" class="radioNine"
+                    type="radio" [value]="radio.value"
+                    [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" (change)="override()">
                     {{radio.value}}
                   </mat-radio-button>
 
@@ -421,15 +439,15 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBodyMULTI_SHORT_TEXT_ONE_VIEW_SELECTED">
 
               <mat-radio-group *ngFor=" let pram of itm.parametersList; let i = index;"
-                               [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]"
-                               (change)="dataChanges()">
+                [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]"
+                (change)="dataChanges()">
 
                 <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
                   <label class="formLabel">
@@ -441,17 +459,16 @@
                   {{openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
 
                   <input matInput (change)="dataChanges()" [placeholder]="pram.value" type="text"
-                         [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"
-                         (change)="override()">
+                    [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]" (change)="override()">
                 </mat-form-field>
 
-                <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';" class="divRadioButton">
-                    <mat-radio-button type="radio" class="radio"
-                                      [name]="'radio-inline'+ drIndex"
-                                      [value]="itm.parametersList[i].value"
-                                      (change)="override()">
-                      {{pram.value}}
-                    </mat-radio-button>
+                <span
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
+                  class="divRadioButton">
+                  <mat-radio-button type="radio" class="radio" [name]="'radio-inline'+ drIndex"
+                    [value]="itm.parametersList[i].value" (change)="override()">
+                    {{pram.value}}
+                  </mat-radio-button>
                 </span>
 
               </mat-radio-group>
@@ -475,23 +492,22 @@
           <div class="questionTitle">
 
             <div>
-              <ion-card-header text-wrap class="formLabelTen">
+              <ion-card-header class="ion-text-wrap" class="formLabelTen">
                 {{itm.question}}
               </ion-card-header>
 
-              <ion-button fill="clear" class="createButton"
-                      (click)="editSaveQuestion(drIndex)"
-                      *ngIf="itm.editQuestion == false && showEditButton()" [hidden]="!editQuestionAlloweds">
+              <ion-button fill="clear" class="createButton" (click)="editSaveQuestion(drIndex)"
+                *ngIf="itm.editQuestion == false && showEditButton()" [hidden]="!editQuestionAlloweds">
                 <ion-icon slot="icon-only" style="font-size: 20px;" name="create"></ion-icon>
               </ion-button>
 
-              <ion-button icon-only fill="clear" class="cancelButton"
-                      (click)="cancelEditigQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+              <ion-button icon-only fill="clear" class="cancelButton" (click)="cancelEditigQuestion(drIndex)"
+                *ngIf="itm.editQuestion == true">
                 cancel
               </ion-button>
 
-              <ion-button icon-only fill="clear" class="saveButton"
-                      (click)="editSaveQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+              <ion-button icon-only fill="clear" class="saveButton" (click)="editSaveQuestion(drIndex)"
+                *ngIf="itm.editQuestion == true">
                 save
               </ion-button>
             </div>
@@ -502,24 +518,25 @@
               <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
                 <span *ngIf="pram.key == 'OPTION_HELPER_TEXT' || pram.key == 'OPTION_ANSWER'">
                   <span class="divElevenCheckbox">
-                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
-                                  [name]="'checkbox'+drIndex"
-                                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[pram.id]">
+                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[pram.id]">
                       {{pram.value}}
                     </mat-checkbox>
-                    <ion-button fill="clear" class="divElevenButtonIcon" (click)="removeQuestionParameter(drIndex ,pram.id)" *ngIf="itm.editQuestion == true" [disabled]="!editQuestionAlloweds">
+                    <ion-button fill="clear" class="divElevenButtonIcon"
+                      (click)="removeQuestionParameter(drIndex ,pram.id)" *ngIf="itm.editQuestion == true"
+                      [disabled]="!editQuestionAlloweds">
                       <ion-icon slot="icon-only" style="font-size: 20px;" name="trash"></ion-icon>
                     </ion-button>
                   </span>
                 </span>
               </span>
 
-              <div  class="divElevenInput" *ngIf="itm.editQuestion == true">
+              <div class="divElevenInput" *ngIf="itm.editQuestion == true">
                 <input matInput (change)="dataChanges()" *ngIf="itm.editQuestion == true"
-                       [(ngModel)]="reportQuestionsEditParamTemp[drIndex].parameters[0].value"
-                       class="divElevenOfInput" placeholder=" Pleas enter your new question">
+                  [(ngModel)]="reportQuestionsEditParamTemp[drIndex].parameters[0].value" class="divElevenOfInput"
+                  placeholder=" Pleas enter your new question">
                 <ion-button icon-only fill="clear" class="divElevenOfInputButton"
-                        (click)="addParameterForQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+                  (click)="addParameterForQuestion(drIndex)" *ngIf="itm.editQuestion == true">
                   add
                 </ion-button>
               </div>
@@ -533,25 +550,25 @@
 
 
       <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBodyLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER">
 
               <mat-radio-group [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer"
-                               (change)="dataChanges()">
-                <mat-radio-button  *ngFor="let pram of itm.parametersList; let k = index;"
-                                   class="radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER" type="radio"
-                                   [value]="itm.parametersList[k].value"
-                                   [name]="'radio-inline' + drIndex"
-                                   ng-change="enableOther(drIndex, k)">
+                (change)="dataChanges()">
+                <mat-radio-button *ngFor="let pram of itm.parametersList; let k = index;"
+                  class="radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER" type="radio"
+                  [value]="itm.parametersList[k].value" [name]="'radio-inline' + drIndex"
+                  ng-change="enableOther(drIndex, k)">
                   {{pram.value}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -571,7 +588,7 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -579,7 +596,7 @@
 
               <mat-form-field class="custom-Field_QOne" *ngFor="let pram of itm.parametersList; let k = index;">
                 <input matInput (change)="dataChanges()" type="text" [placeholder]="pram.value"
-                       [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[k]">
+                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[k]">
               </mat-form-field>
 
             </ion-card-content>
@@ -592,13 +609,14 @@
 
 
       <!--Type "SHORT_HELPER_TEXT_QUESTION"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION';let i = index;">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'SHORT_HELPER_TEXT_QUESTION';let i = index;">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -606,7 +624,7 @@
 
               <mat-form-field class="custom-Field_QTwelve" *ngFor="let pram of itm.parametersList; let TEMP = index">
                 <input matInput (change)="dataChanges()" type="text" [placeholder]="pram.value"
-                       [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[TEMP.toString()]">
+                  [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[TEMP.toString()]">
               </mat-form-field>
 
             </ion-card-content>
@@ -621,13 +639,14 @@
 
       <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_EN"-->
       <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_AR"-->
-      <div class="mainDivQuestion" *ngIf="itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
+      <div class="mainDivQuestion"
+        *ngIf="itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.dailyReportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -644,23 +663,27 @@
                   {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
                   <ion-label style="margin: 0px 8px 13px 0;">{{itm.parametersList[i].value}}</ion-label>
                   <ion-item style="padding: 0;margin: 0">
-                    <ion-select (change)="dataChanges()" style="width: 100%;max-width: 100%" [placeholder]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]" multiple="false" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]">
-                      <ion-select-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">{{itmPram.value}}</ion-select-option>
+                    <ion-select (change)="dataChanges()" style="width: 100%;max-width: 100%"
+                      [placeholder]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]" multiple="false"
+                      [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]">
+                      <ion-select-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">
+                        {{itmPram.value}}</ion-select-option>
                     </ion-select>
                   </ion-item>
                   <br>
                 </div>
 
 
-                <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
+                <div
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
 
 
-                  <mat-radio-group class="radioButtonOfDropMenu" [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"
-                                   (change)="dataChanges()" (change)="override()">
+                  <mat-radio-group class="radioButtonOfDropMenu"
+                    [(ngModel)]="reportAnswers.dailyReportAnswersObjectsList[drIndex].answer[i]"
+                    (change)="dataChanges()" (change)="override()">
 
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline'+drIndex + i"
-                                      [value]="radio.value"
-                                      *ngFor="let radio of itm.parametersList[i]; let j = index">
+                      [value]="radio.value" *ngFor="let radio of itm.parametersList[i]; let j = index">
                       {{radio.value}}
                     </mat-radio-button>
 
@@ -678,7 +701,8 @@
 
 
       <!--Type "Else"-->
-      <div *ngIf="itm.dailyReportQuestionType.title != 'TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER'
+      <div
+        *ngIf="itm.dailyReportQuestionType.title != 'TEXT_QUESTION' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER'
        && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_EN'
         && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_NONE_ANSWER_INPUT_BOX_AR' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'
          && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT' && itm.dailyReportQuestionType.title != 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'
@@ -693,7 +717,7 @@
 
         <ion-card class="questionCardElse">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
           </div>
@@ -722,8 +746,10 @@
   <!--CUSTOM REPORT-->
 
 
-  <div style="border-radius: 10px; padding-bottom: 10px;margin-left: 0;margin-right: 0;width: 100%;margin-bottom: 39px;"  *ngIf="accountServ.reportId != -1">
-    <div style="padding-bottom: 0;padding-right: 10px;padding-left: 10px;padding-top: 10px" *ngFor="let itm of drQuestion; let drIndex = index">
+  <div style="border-radius: 10px; padding-bottom: 10px;margin-left: 0;margin-right: 0;width: 100%;margin-bottom: 39px;"
+    *ngIf="accountServ.reportId != -1">
+    <div style="padding-bottom: 0;padding-right: 10px;padding-left: 10px;padding-top: 10px"
+      *ngFor="let itm of drQuestion; let drIndex = index">
 
 
       <!--Type "TEXT_QUESTION"-->
@@ -734,16 +760,15 @@
         <ion-card class="questionCard">
           <div class="questionTitle">
 
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
               <mat-form-field [floatLabel]="never" class="custom-Field_QOne">
-              <textarea matInput matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6"
-                        class="custom-textArea" style="width: 100%" placeholder="wirte here"
-                        [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer"
-                        (change)="dataChanges()">
+                <textarea matInput matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6"
+                  class="custom-textArea" style="width: 100%" placeholder="wirte here"
+                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer" (change)="dataChanges()">
               </textarea>
               </mat-form-field>
             </ion-card-content>
@@ -762,14 +787,16 @@
         <ion-card class="questionCard">
           <div class="questionTitle">
 
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <div *ngFor="let parameter of itm.parametersList" class="LopContain" >
-                <mat-checkbox class="checkbox" type="checkbox"  [name]="'checkbox'+drIndex" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[parameter.id]" (change)="dataChanges()">
+              <div *ngFor="let parameter of itm.parametersList" class="LopContain">
+                <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[parameter.id]"
+                  (change)="dataChanges()">
                   {{parameter.value}}
                 </mat-checkbox>
               </div>
@@ -790,18 +817,22 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
               <div *ngFor="let param of itm.parametersList; let i = index" style="display: block;width: 100%">
-                <div *ngIf="param.key == 'OPTION_ANSWER'" >
+                <div *ngIf="param.key == 'OPTION_ANSWER'">
                   <div class="inline-group">
-                    <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
+                    <mat-checkbox class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
                       <mat-form-field class="custom-Field_QThree">
-                        <input matInput (change)="dataChanges()" type="number" required [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[(itm.parametersList[i].id)+1]" style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;" [disabled]="!reportAnswers.reportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
+                        <input matInput (change)="dataChanges()" type="number" required
+                          [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[(itm.parametersList[i].id)+1]"
+                          style="width:50px;height: 25px;left: 0px;position: relative;margin-left: 10px;margin-right: 10px;padding-bottom: 4px;top: -5px;"
+                          [disabled]="!reportAnswers.reportAnswersObjectsList[drIndex].answer[itm.parametersList[i].id]">
                       </mat-form-field>
                       {{itm.parametersList[i].value}}
                     </mat-checkbox>
@@ -817,12 +848,13 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTIPLE_ANSWER_WITH_EDIT'">
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -832,7 +864,9 @@
 
                 <div *ngFor="let pram of itm.parametersList;let i = index" class="LopContain">
                   <div *ngIf="pram.key == 'OPTION_ANSWER'">
-                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox" [name]="'checkbox' + drIndex" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]">
+                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
+                      [name]="'checkbox' + drIndex"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]">
                       {{itm.parametersList[i].value}}
                     </mat-checkbox>
                   </div>
@@ -841,11 +875,13 @@
               </div>
 
               <div style=" clear: both;">
-                <div *ngFor="let pram of itm.parametersList;let i = index" >
+                <div *ngFor="let pram of itm.parametersList;let i = index">
                   <div *ngIf="pram.key != 'OPTION_ANSWER'">
 
                     <mat-form-field class="custom-Field_QFour">
-                      <textarea [placeholder]="itm.parametersList[i].value" matInput class="editTextWithCheckBox" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" (change)="dataChanges()" cols="50" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"></textarea>
+                      <textarea [placeholder]="itm.parametersList[i].value" matInput class="editTextWithCheckBox"
+                        matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="6" (change)="dataChanges()"
+                        cols="50" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -858,13 +894,14 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_EDIT'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -874,12 +911,10 @@
                 <div class="col col-12 inline-group">
                   <div *ngFor="let pram of itm.parametersList; let i = index" class="LoopManyCheckWithEdit">
                     <mat-radio-group (change)="enableOther(drIndex,i)"
-                                     [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
 
-                      <mat-radio-button class="radio" type="radio"
-                                        [value]="itm.parametersList[i].value"
-                                        [name]="'radio-inline' + drIndex"
-                                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
+                      <mat-radio-button class="radio" type="radio" [value]="itm.parametersList[i].value"
+                        [name]="'radio-inline' + drIndex" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                         {{pram.value}}
                       </mat-radio-button>
 
@@ -892,16 +927,17 @@
                       <!--<div style="display: inline-block" >-->
 
                       <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex"
-                                        [value]="itm.parametersList[i].value" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
+                        [value]="itm.parametersList[i].value"
+                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
                         {{pram.value}}
                       </mat-radio-button>
 
-                      <mat-form-field class="custom-Field_QSix" *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
-                        <input  matInput (change)="dataChanges()" style="width:100%" class="custom-scroll"
-                                [disabled]="enableOtherNote[drIndex]||enableOtherNote.length<1"
-                                [placeholder]="itm.parametersList[i].value"
-                                ng-init="enableOtherNote[drIndex]=true"
-                                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
+                      <mat-form-field class="custom-Field_QSix"
+                        *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER_WITH_EDIT'">
+                        <input matInput (change)="dataChanges()" style="width:100%" class="custom-scroll"
+                          [disabled]="enableOtherNote[drIndex]||enableOtherNote.length<1"
+                          [placeholder]="itm.parametersList[i].value" ng-init="enableOtherNote[drIndex]=true"
+                          [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
                       </mat-form-field>
 
                       <!--</div>-->
@@ -920,19 +956,21 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <mat-radio-group (change)="dataChanges()" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex ].answer">
+              <mat-radio-group (change)="dataChanges()"
+                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex ].answer">
 
                 <div *ngFor="let pram of itm.parametersList" class="LopContain">
                   <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Food'" style="display: inline-block">
@@ -941,13 +979,13 @@
                     </mat-radio-button>
                   </div>
 
-                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'"style="display: inline-block">
+                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Mood'" style="display: inline-block">
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value">
                       <img [src]="'assets/mood/'+pram.value+'.png'" class="imgOfRadio">
                     </mat-radio-button>
                   </div>
 
-                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'"style="display: inline-block">
+                  <div *ngIf="setImageOrLable(itm.question,pram.value) == 'Milk'" style="display: inline-block">
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value">
                       <img [src]="'assets/milk/'+pram.value+'.png'" class="imgOfRadio">
                     </mat-radio-button>
@@ -969,21 +1007,24 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER_WITH_TEXT_QUESTION'">
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBody">
 
-              <mat-radio-group (change)="dataChanges()" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
+              <mat-radio-group (change)="dataChanges()"
+                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
 
                 <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
-                  <mat-radio-button *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'" class="radio" type="radio" [name]="'radio-inline' + drIndex" [value]="pram.value" >
+                  <mat-radio-button *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'" class="radio" type="radio"
+                    [name]="'radio-inline' + drIndex" [value]="pram.value">
                     {{pram.value}}
                   </mat-radio-button>
                 </div>
@@ -993,10 +1034,10 @@
               <div *ngFor="let pram of itm.parametersList; let i = index">
                 <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
                   <mat-form-field class="custom-Field_QEight">
-                      <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
-                                matAutosizeMaxRows="6" (change)="dataChanges()" cols="50"
-                                class="custom-scroll" [placeholder]="pram.value"
-                                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
+                    <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
+                      matAutosizeMaxRows="6" (change)="dataChanges()" cols="50" class="custom-scroll"
+                      [placeholder]="pram.value"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
                       </textarea>
                   </mat-form-field>
                 </div>
@@ -1009,13 +1050,14 @@
 
 
       <!--Type "SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'SHORT_TEXT_MULTISELECT_VIEW_SELECTED_MULTISELECT_ANSWER_WITH_TEXT_QUESTION'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -1024,9 +1066,9 @@
               <div *ngFor="let pram of itm.parametersList; let i = index" class="LopContain">
                 <div *ngIf="itm.parametersList[i].key == 'OPTION_ANSWER'">
                   <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
-                                [name]="'checkbox' + drIndex+i"
-                                ng-change="disableNote(reportAnswers.reportAnswersObjectsList[drIndex].answer[0],drIndex)"
-                                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
+                    [name]="'checkbox' + drIndex+i"
+                    ng-change="disableNote(reportAnswers.reportAnswersObjectsList[drIndex].answer[0],drIndex)"
+                    [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]">
                     {{itm.parametersList[i].value}}
                   </mat-checkbox>
                 </div>
@@ -1038,10 +1080,10 @@
                   <div *ngIf="itm.parametersList[i].key != 'OPTION_ANSWER'">
                     <mat-form-field class="custom-Field_QEight">
                       <textarea matInput class="editInput" matTextareaAutosize matAutosizeMinRows="1"
-                                matAutosizeMaxRows="6" (change)="dataChanges()"
-                                [disabled]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]"
-                                [placeholder]="itm.parametersList[i].value"
-                                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
+                        matAutosizeMaxRows="6" (change)="dataChanges()"
+                        [disabled]="reportAnswers.reportAnswersObjectsList[drIndex].answer[0]"
+                        [placeholder]="itm.parametersList[i].value"
+                        [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[1]">
                       </textarea>
                     </mat-form-field>
                   </div>
@@ -1062,7 +1104,7 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -1078,21 +1120,20 @@
 
                   {{openDataSINGLE_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
                   <mat-form-field class="custom-Field_QNine">
-                    <input matInput (change)="dataChanges()" (change)="override()"  type="text"
-                           [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"
-                           [placeholder]="pram.value">
+                    <input matInput (change)="dataChanges()" (change)="override()" type="text"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"
+                      [placeholder]="pram.value">
                   </mat-form-field>
                 </div>
 
 
-                <mat-radio-group *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
-                                 [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[(i)]"
-                                 (change)="dataChanges()">
+                <mat-radio-group
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
+                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[(i)]" (change)="dataChanges()">
 
-                  <mat-radio-button *ngFor="let radio of itm.parametersList[i]; let j = index"
-                                    class="radioNine" type="radio" [value]="radio.value"
-                                    [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1"
-                                    (change)="override()">
+                  <mat-radio-button *ngFor="let radio of itm.parametersList[i]; let j = index" class="radioNine"
+                    type="radio" [value]="radio.value"
+                    [name]="'radio-inline'+ SINGLE_SHORT_TEXT_ONE_VIEW_SELECTED_INDEX+1" (change)="override()">
                     {{radio.value}}
                   </mat-radio-button>
 
@@ -1113,15 +1154,15 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBodyMULTI_SHORT_TEXT_ONE_VIEW_SELECTED">
 
               <mat-radio-group *ngFor=" let pram of itm.parametersList; let i = index;"
-                               [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]"
-                               (change)="dataChanges()">
+                [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[MULTI_SHORT_TEXT_ONE_VIEW_SELECTED_Index+1]"
+                (change)="dataChanges()">
 
                 <div *ngIf="itm.parametersList[i].key == 'OPTION_HELPER_TITLE'">
                   <label class="formLabel">
@@ -1133,17 +1174,16 @@
                   {{openDataMULTI_SHORT_TEXT_ONE_VIEW_SELECTED(i)}}
 
                   <input matInput (change)="dataChanges()" [placeholder]="pram.value" type="text"
-                         [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"
-                         (change)="override()">
+                    [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]" (change)="override()">
                 </mat-form-field>
 
-                <span *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';" class="divRadioButton">
-                    <mat-radio-button type="radio" class="radio"
-                                      [name]="'radio-inline'+ drIndex"
-                                      [value]="itm.parametersList[i].value"
-                                      (change)="override()">
-                      {{pram.value}}
-                    </mat-radio-button>
+                <span
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_HELPER_TEXT';"
+                  class="divRadioButton">
+                  <mat-radio-button type="radio" class="radio" [name]="'radio-inline'+ drIndex"
+                    [value]="itm.parametersList[i].value" (change)="override()">
+                    {{pram.value}}
+                  </mat-radio-button>
                 </span>
 
               </mat-radio-group>
@@ -1167,23 +1207,22 @@
           <div class="questionTitle">
 
             <div>
-              <ion-card-header text-wrap class="formLabelTen">
+              <ion-card-header class="ion-text-wrap" class="formLabelTen">
                 {{itm.question}}
               </ion-card-header>
 
-              <ion-button fill="clear" class="createButton"
-                      (click)="editSaveQuestion(drIndex)"
-                      *ngIf="itm.editQuestion == false && showEditButton()" [hidden]="!editQuestionAlloweds">
+              <ion-button fill="clear" class="createButton" (click)="editSaveQuestion(drIndex)"
+                *ngIf="itm.editQuestion == false && showEditButton()" [hidden]="!editQuestionAlloweds">
                 <ion-icon slot="icon-only" style="font-size: 20px;" name="create"></ion-icon>
               </ion-button>
 
-              <ion-button icon-only fill="clear" class="cancelButton"
-                      (click)="cancelEditigQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+              <ion-button icon-only fill="clear" class="cancelButton" (click)="cancelEditigQuestion(drIndex)"
+                *ngIf="itm.editQuestion == true">
                 cancel
               </ion-button>
 
-              <ion-button icon-only fill="clear" class="saveButton"
-                      (click)="editSaveQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+              <ion-button icon-only fill="clear" class="saveButton" (click)="editSaveQuestion(drIndex)"
+                *ngIf="itm.editQuestion == true">
                 save
               </ion-button>
             </div>
@@ -1194,24 +1233,25 @@
               <span *ngFor="let pram of itm.parametersList;let j = index" style="display: block">
                 <span *ngIf="pram.key == 'OPTION_HELPER_TEXT' || pram.key == 'OPTION_ANSWER'">
                   <span class="divElevenCheckbox">
-                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox"
-                                  [name]="'checkbox'+drIndex"
-                                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[pram.id]">
+                    <mat-checkbox (change)="dataChanges()" class="checkbox" type="checkbox" [name]="'checkbox'+drIndex"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[pram.id]">
                       {{pram.value}}
                     </mat-checkbox>
-                    <ion-button fill="clear" class="divElevenButtonIcon" (click)="removeQuestionParameter(drIndex ,pram.id)" *ngIf="itm.editQuestion == true" [disabled]="!editQuestionAlloweds">
+                    <ion-button fill="clear" class="divElevenButtonIcon"
+                      (click)="removeQuestionParameter(drIndex ,pram.id)" *ngIf="itm.editQuestion == true"
+                      [disabled]="!editQuestionAlloweds">
                       <ion-icon slot="icon-only" style="font-size: 20px;" name="trash"></ion-icon>
                     </ion-button>
                   </span>
                 </span>
               </span>
 
-              <div  class="divElevenInput" *ngIf="itm.editQuestion == true">
+              <div class="divElevenInput" *ngIf="itm.editQuestion == true">
                 <input matInput (change)="dataChanges()" *ngIf="itm.editQuestion == true"
-                       [(ngModel)]="reportQuestionsEditParamTemp[drIndex].parameters[0].value"
-                       class="divElevenOfInput" placeholder=" Pleas enter your new question">
+                  [(ngModel)]="reportQuestionsEditParamTemp[drIndex].parameters[0].value" class="divElevenOfInput"
+                  placeholder=" Pleas enter your new question">
                 <ion-button icon-only fill="clear" class="divElevenOfInputButton"
-                        (click)="addParameterForQuestion(drIndex)" *ngIf="itm.editQuestion == true">
+                  (click)="addParameterForQuestion(drIndex)" *ngIf="itm.editQuestion == true">
                   add
                 </ion-button>
               </div>
@@ -1225,25 +1265,25 @@
 
 
       <!--Type "LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'LONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER'">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
             <ion-card-content class="questionBodyLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER">
 
               <mat-radio-group [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer"
-                               (change)="dataChanges()">
-                <mat-radio-button  *ngFor="let pram of itm.parametersList; let k = index;"
-                                   class="radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER" type="radio"
-                                   [value]="itm.parametersList[k].value"
-                                   [name]="'radio-inline' + drIndex"
-                                   ng-change="enableOther(drIndex, k)">
+                (change)="dataChanges()">
+                <mat-radio-button *ngFor="let pram of itm.parametersList; let k = index;"
+                  class="radioLONG_TEXT_MULTISELECT_VIEW_SELECTED_ONE_ANSWER" type="radio"
+                  [value]="itm.parametersList[k].value" [name]="'radio-inline' + drIndex"
+                  ng-change="enableOther(drIndex, k)">
                   {{pram.value}}
                 </mat-radio-button>
               </mat-radio-group>
@@ -1263,7 +1303,7 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -1271,7 +1311,7 @@
 
               <mat-form-field class="custom-Field_QOne" *ngFor="let pram of itm.parametersList; let k = index;">
                 <input matInput (change)="dataChanges()" type="text" [placeholder]="pram.value"
-                       [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[k]">
+                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[k]">
               </mat-form-field>
 
             </ion-card-content>
@@ -1290,7 +1330,7 @@
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -1298,7 +1338,7 @@
 
               <mat-form-field class="custom-Field_QTwelve" *ngFor="let pram of itm.parametersList; let TEMP = index">
                 <input matInput (change)="dataChanges()" type="text" [placeholder]="pram.value"
-                       [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[TEMP.toString()]">
+                  [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[TEMP.toString()]">
               </mat-form-field>
 
             </ion-card-content>
@@ -1313,13 +1353,14 @@
 
       <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_EN"-->
       <!--Type "DROPDOWN_MENU_ONE_VIEW_SELECTED_AR"-->
-      <div class="mainDivQuestion" *ngIf="itm.reportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.reportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
+      <div class="mainDivQuestion"
+        *ngIf="itm.reportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_EN' || itm.reportQuestionType.title == 'DROPDOWN_MENU_ONE_VIEW_SELECTED_AR';let i = index;">
 
         <ion-icon class="ErrorIcon" name="alert" color="danger" *ngIf="showConflict(drIndex)"></ion-icon>
 
         <ion-card class="questionCard">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
 
@@ -1336,23 +1377,27 @@
                   {{openDataDROPDOWN_MENU_ONE_VIEW_SELECTED(i)}}
                   <ion-label style="margin: 0px 8px 13px 0;">{{itm.parametersList[i].value}}</ion-label>
                   <ion-item style="padding: 0;margin: 0">
-                    <ion-select (change)="dataChanges()" style="width: 100%;max-width: 100%" [placeholder]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]" multiple="false" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]">
-                      <ion-select-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">{{itmPram.value}}</ion-select-option>
+                    <ion-select (change)="dataChanges()" style="width: 100%;max-width: 100%"
+                      [placeholder]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]" multiple="false"
+                      [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]">
+                      <ion-select-option *ngFor="let itmPram of selectionData.get(itm.id)" [value]="itmPram.value">
+                        {{itmPram.value}}</ion-select-option>
                     </ion-select>
                   </ion-item>
                   <br>
                 </div>
 
 
-                <div *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
+                <div
+                  *ngIf="itm.parametersList[i].key != 'OPTION_HELPER_TITLE' && itm.parametersList[i].key != 'OPTION_DROP_DOWN';">
 
 
-                  <mat-radio-group class="radioButtonOfDropMenu" [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]"
-                                   (change)="dataChanges()" (change)="override()">
+                  <mat-radio-group class="radioButtonOfDropMenu"
+                    [(ngModel)]="reportAnswers.reportAnswersObjectsList[drIndex].answer[i]" (change)="dataChanges()"
+                    (change)="override()">
 
                     <mat-radio-button class="radio" type="radio" [name]="'radio-inline'+drIndex + i"
-                                      [value]="radio.value"
-                                      *ngFor="let radio of itm.parametersList[i]; let j = index">
+                      [value]="radio.value" *ngFor="let radio of itm.parametersList[i]; let j = index">
                       {{radio.value}}
                     </mat-radio-button>
 
@@ -1385,7 +1430,7 @@
 
         <ion-card class="questionCardElse">
           <div class="questionTitle">
-            <ion-card-header text-wrap class="formLabel">
+            <ion-card-header class="ion-text-wrap" class="formLabel">
               {{itm.question}}
             </ion-card-header>
           </div>
@@ -1417,40 +1462,45 @@
 <div style="position: fixed; bottom: 0; right: 0; width: 100%; z-index: 1;">
 
 
-  <ion-fab *ngIf="!loadingReportInBackground" vertical="bottom" horizontal="end" slot="fixed" #fab style="z-index: -1;" >
-    <ion-fab-button><ion-icon name="more"></ion-icon></ion-fab-button>
-    <ion-fab-list side="top" >
-      <ion-fab-button class="forSave" style="padding: 0;background-color: white" (click)="fabSelected('save',fab)" *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
+  <ion-fab *ngIf="!loadingReportInBackground" vertical="bottom" horizontal="end" slot="fixed" #fab style="z-index: -1;">
+    <ion-fab-button>
+      <ion-icon name="more"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button class="forSave" style="padding: 0;background-color: white" (click)="fabSelected('save',fab)"
+        *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">
         <img src="assets/icon/save.png">
       </ion-fab-button>
       <ion-label *ngIf="showSaveOrUpdate() == 'save' && showButtonOfSaveOrUpdate()">Save</ion-label>
 
-      <ion-fab-button top style="padding: 0;background-color: white" (click)="fabSelected('update',fab)" *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
+      <ion-fab-button top style="padding: 0;background-color: white" (click)="fabSelected('update',fab)"
+        *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">
         <img src="assets/icon/save.png">
       </ion-fab-button>
       <ion-label *ngIf="showSaveOrUpdate() == 'update' && showButtonOfSaveOrUpdate()">Update</ion-label>
     </ion-fab-list>
 
 
-    <ion-fab-list side="start" >
+    <ion-fab-list side="start">
       <ion-fab-button style="padding: 0;background-color: white" (click)="fabSelected('approve',fab)"
-              *ngIf="showApproveButton()">
+        *ngIf="showApproveButton()">
         <img src="assets/icon/approved_black.png">
       </ion-fab-button>
-        <ion-label *ngIf="showApproveButton()">Approve</ion-label>
+      <ion-label *ngIf="showApproveButton()">Approve</ion-label>
     </ion-fab-list>
 
 
-    <ion-fab-list side="startTop" >
-      <ion-fab-button style="padding: 0;background-color: white" (click)="fabSelected('rest',fab)" *ngIf="showRestButton()">
+    <ion-fab-list side="startTop">
+      <ion-fab-button style="padding: 0;background-color: white" (click)="fabSelected('rest',fab)"
+        *ngIf="showRestButton()">
         <img src="assets/icon/reset.png">
       </ion-fab-button>
-        <ion-label *ngIf="showRestButton()">Rest</ion-label>
+      <ion-label *ngIf="showRestButton()">Rest</ion-label>
     </ion-fab-list>
   </ion-fab>
 
   <app-report-comment *ngIf="selectedListOfStudents?.length == 1" [date]="selectedReportDate"
-                      [studentId]="selectedListOfStudents[0].id" [expanded]="shouldAutoExpandComments" [reportId]="reportId"></app-report-comment>
+    [studentId]="selectedListOfStudents[0].id" [expanded]="shouldAutoExpandComments" [reportId]="reportId">
+  </app-report-comment>
 
 </div>
-

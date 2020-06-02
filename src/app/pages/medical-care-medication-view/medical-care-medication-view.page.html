@@ -2,11 +2,11 @@
   <ion-toolbar color="primary">
     <ion-title>View Medication</ion-title>
 
-  <ion-buttons slot="end">
-    <ion-button color="light" (click)="close()">
-      <ion-icon slot="icon-only" name="close"></ion-icon>
-    </ion-button>
-  </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
@@ -17,13 +17,13 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           Medicine
         </ion-card-header>
 
         <ion-card-content class="questionBody">
 
-          <div  class="LoopContainWithFullWidth">
+          <div class="LoopContainWithFullWidth">
             <div class="medicienCellFullWidth">
               <div class="medicineLable">
                 {{medication.medicine.name}}
@@ -42,13 +42,13 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           {{dosageWord}}
         </ion-card-header>
 
         <ion-card-content class="questionBody">
 
-          <div  class="LoopContainWithFullWidth">
+          <div class="LoopContainWithFullWidth">
             <div class="medicienCellFullWidth">
               <div class="medicineLable">
                 {{medication.dosageNumber +' - '+medication.dosageType.type}}
@@ -67,13 +67,13 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           Start from
         </ion-card-header>
 
         <ion-card-content class="questionBody">
 
-          <div  class="LoopContainWithFullWidth">
+          <div class="LoopContainWithFullWidth">
             <div class="medicienCellFullWidth">
               <div class="medicineLable">
                 {{medication.startDate.slice(0,-6)}}
@@ -92,13 +92,13 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           End at
         </ion-card-header>
 
         <ion-card-content class="questionBody">
 
-          <div  class="LoopContainWithFullWidth">
+          <div class="LoopContainWithFullWidth">
             <div class="medicienCellFullWidth">
               <div class="medicineLable">
                 {{medication.endDate.slice(0,-6)}}
@@ -117,7 +117,7 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           Days
         </ion-card-header>
 
@@ -142,7 +142,7 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           {{timesWords}}
         </ion-card-header>
 
@@ -167,7 +167,7 @@
     <ion-card class="questionCard">
       <div class="questionTitle">
 
-        <ion-card-header text-wrap class="formLabel">
+        <ion-card-header class="ion-text-wrap" class="formLabel">
           Medication Instructions
         </ion-card-header>
 

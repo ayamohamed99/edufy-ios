@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-button (click)="createReceiversPdf()" [disabled]="receiverListStudents.length <= 0">
-          <img src="assets/icon/download-from-cloud.png"/>
+        <img src="assets/icon/download-from-cloud.png" />
       </ion-button>
     </ion-buttons>
 
@@ -16,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding style="--background: #F4F4F4;">
+<ion-content class="ion-padding" style="--background: #F4F4F4;">
   <div *ngIf="originalReceiverListStudents.length == 0" style="height: 100%;">
     <ion-label style="text-align: center;padding-top: 100%;padding-bottom: 100%;">{{norecievers}}</ion-label>
   </div>
@@ -30,32 +30,45 @@
 
       <ion-row>
         <ion-col [size]="4">
-          <div class="ChartDataContainer"><ion-label class="ChartDataNumber" text-center>{{TotalNumOfReceivers}}</ion-label></div>
+          <div class="ChartDataContainer">
+            <ion-label class="ChartDataNumber" class="ion-text-center">{{TotalNumOfReceivers}}</ion-label>
+          </div>
         </ion-col>
         <ion-col [size]="4">
-          <div class="ChartDataContainer"><ion-label class="ChartDataNumber" text-center>{{SeenNumOfReceivers}}</ion-label></div>
+          <div class="ChartDataContainer">
+            <ion-label class="ChartDataNumber" class="ion-text-center">{{SeenNumOfReceivers}}</ion-label>
+          </div>
         </ion-col>
         <ion-col [size]="4">
-          <div class="ChartDataContainer"><ion-label class="ChartDataNumber" text-center>{{UnseenNumOfReceivers}}</ion-label></div>
+          <div class="ChartDataContainer">
+            <ion-label class="ChartDataNumber" class="ion-text-center">{{UnseenNumOfReceivers}}</ion-label>
+          </div>
         </ion-col>
       </ion-row>
 
       <ion-row>
         <ion-col [size]="4">
-          <div class="ChartDataContainerDescrubtion"><ion-label class="ChartDataDescribtion" text-center>Total</ion-label></div>
+          <div class="ChartDataContainerDescrubtion">
+            <ion-label class="ChartDataDescribtion" class="ion-text-center">Total</ion-label>
+          </div>
         </ion-col>
         <ion-col [size]="4">
-          <div class="ChartDataContainerDescrubtion"><ion-label class="ChartDataDescribtion" text-center>Seen</ion-label></div>
+          <div class="ChartDataContainerDescrubtion">
+            <ion-label class="ChartDataDescribtion" class="ion-text-center">Seen</ion-label>
+          </div>
         </ion-col>
         <ion-col [size]="4">
-          <div class="ChartDataContainerDescrubtion"><ion-label class="ChartDataDescribtion" text-center>Unseen</ion-label></div>
+          <div class="ChartDataContainerDescrubtion">
+            <ion-label class="ChartDataDescribtion" class="ion-text-center">Unseen</ion-label>
+          </div>
         </ion-col>
       </ion-row>
     </ion-card>
 
     <br>
 
-    <ion-searchbar mode="ios" style="padding: 0;background: rgba(0, 0, 0, 0);border-radius: 6px;border-bottom: 0;" (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar mode="ios" style="padding: 0;background: rgba(0, 0, 0, 0);border-radius: 6px;border-bottom: 0;"
+      (ionInput)="getItems($event)"></ion-searchbar>
     <br>
     <mat-accordion>
       <mat-expansion-panel *ngFor="let itm of receiverListStudents">
@@ -65,7 +78,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <ion-card  style="border-radius: 15px;" *ngFor="let stud of itm.studentlist">
+        <ion-card style="border-radius: 15px;" *ngFor="let stud of itm.studentlist">
           <ion-item>
             <ion-label style="height: 21px;">
               {{stud.student.name}}
@@ -75,7 +88,7 @@
           </ion-item>
         </ion-card>
 
-        <ion-label text-center style="height: 21px;" *ngIf="itm.studentlist.length == 0">
+        <ion-label class="ion-text-center" style="height: 21px;" *ngIf="itm.studentlist.length == 0">
           No students here !
         </ion-label>
 

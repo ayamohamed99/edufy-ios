@@ -4,9 +4,12 @@ import { LoadingViewService } from "src/app/services/LoadingView/loading-view.se
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 import { CafeteriaProduct } from "src/app/models/cafeteria_product";
 import { CafeteriaOrder } from "src/app/models/cafeteria_order";
-import { ActionSheetController, AlertController, IonSegment } from "@ionic/angular";
+import {
+  ActionSheetController,
+  AlertController,
+  IonSegment,
+} from "@ionic/angular";
 import { DrawerState } from "ion-bottom-drawer";
-import { pipeBind1 } from '@angular/core/src/render3';
 
 @Component({
   selector: "app-cafeteria-menu",
@@ -16,6 +19,7 @@ import { pipeBind1 } from '@angular/core/src/render3';
 export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
+  selectedCategoryIndex = "0";
   selectedCategoryProducts: CafeteriaProduct[];
   allProducts: CafeteriaProduct[];
   isSearching: boolean = false;
@@ -30,7 +34,7 @@ export class CafeteriaMenuPage implements OnInit {
 
   order: CafeteriaOrder;
 
-  @ViewChild("segments") segments: IonSegment;
+  @ViewChild("segments", { static: false }) segments: IonSegment;
 
   constructor(
     private cafeteriaService: CafeteriaService,
@@ -48,6 +52,8 @@ export class CafeteriaMenuPage implements OnInit {
     this.load.startNormalLoading("Loading Products...");
     this.categories = await this.cafeteriaService.getCafeteriaProducts();
     this.selectedCategory = this.categories[0];
+    this.segments.value = this.selectedCategoryIndex;
+    this.selectedCategoryIndex = "0";
     this.selectedCategoryProducts = this.categories[0].products;
     this.load.stopLoading();
 
@@ -55,15 +61,18 @@ export class CafeteriaMenuPage implements OnInit {
     for (let category of this.categories) {
       this.allProducts = this.allProducts.concat(category.products);
     }
-    // Sort products asc
+    // Sort products ASC
     this.allProducts = this.allProducts.sort((product1, product2) =>
       product1.name.localeCompare(product2.name)
     );
   }
 
-  segmentChanged(index) {
+  segmentChanged(event: CustomEvent) {
     console.log("segmentChanged:", event);
+    const index =
+      event && event.detail && event.detail.value ? event.detail.value : 0;
     this.selectedCategory = this.categories[index];
+    this.selectedCategoryIndex = "" + index;
     this.selectedCategoryProducts = this.categories[index].products;
   }
 
@@ -141,15 +150,15 @@ export class CafeteriaMenuPage implements OnInit {
   onSearchCancel(event) {
     console.log("onSearchCancel");
     this.isSearching = false;
-    this.segments.value = this.selectedCategory.name;
+    this.segments.value = this.selectedCategoryIndex;
     this.selectedCategoryProducts = this.selectedCategory.products;
   }
 
   // When searchbar loses focus
-  onSearchBlur(event) {
+  onSearchBlur() {
     console.log("onSearchBlur");
     this.isSearching = false;
-    this.segments.value = this.selectedCategory.name;
+    this.segments.value = this.selectedCategoryIndex;
     this.selectedCategoryProducts = this.selectedCategory.products;
   }
 

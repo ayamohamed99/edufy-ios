@@ -5,7 +5,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title text-center>{{pageName}}</ion-title>
+    <ion-title class="ion-text-center">{{pageName}}</ion-title>
 
     <ion-buttons slot="end">
       <ion-button (click)="oonClickonMenuCalender()">
@@ -16,12 +16,12 @@
   </ion-toolbar>
 
   <ion-toolbar color="primary">
-    <ion-title text-center>{{dateView}}</ion-title>
+    <ion-title class="ion-text-center">{{dateView}}</ion-title>
   </ion-toolbar>
 
 </ion-header>
 
-<ion-content padding class="contentColor">
+<ion-content class="ion-padding" class="contentColor">
   <div class="mainDiv" *ngIf="classesList.length > 0">
     <mat-accordion class="example-headers-align">
       <div *ngFor="let itm of classesList; let i = index">
@@ -36,20 +36,33 @@
         </div>
 
 
-        <mat-expansion-panel hideToggle="true" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)" (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.name)" [disabled]="itm.noOfAllStudent <= 0">
+        <mat-expansion-panel hideToggle="true" #epansionPanel (closed)="whenClosed(itm.studentsList,iconRef)"
+          (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.name)" [disabled]="itm.noOfAllStudent <= 0">
           <mat-expansion-panel-header>
             <mat-panel-title col-4>
               <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
               {{itm.grade.name}} {{itm.name}}
             </mat-panel-title>
-            <mat-panel-description col-3 *ngIf="accountServ.reportId == -1" style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">{{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
-            <mat-panel-description col-3 *ngIf="accountServ.reportId != -1" style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">{{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains</mat-panel-description>
-            <mat-panel-description col-3 style="-webkit-text-fill-color: #38f560;" *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>
-            <mat-panel-description col-3 style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">Finalized</mat-panel-description>
-            <mat-panel-description col-3 style="-webkit-text-fill-color: #AE2534;" *ngIf="!itm.allStudentFinalized && !itm.allStudentApproved && itm.noOfAllStudent != 0">Pending</mat-panel-description>
+            <mat-panel-description col-3 *ngIf="accountServ.reportId == -1"
+              style="-webkit-text-fill-color: #8a8a8a;vertical-align: middle">
+              {{-(itm.noOfStudentDailyReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains
+            </mat-panel-description>
+            <mat-panel-description col-3 *ngIf="accountServ.reportId != -1"
+              style="-webkit-text-fill-color: #8a8a8a; vertical-align: middle">
+              {{-(itm.noOfStudentReportFinalized - itm.noOfAllStudent)}} of {{itm.noOfAllStudent}} Remains
+            </mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #38f560;"
+              *ngIf="itm.allStudentApproved || itm.noOfAllStudent == 0">Approved</mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #f1f530;" *ngIf="itm.allStudentFinalized">
+              Finalized</mat-panel-description>
+            <mat-panel-description col-3 style="-webkit-text-fill-color: #AE2534;"
+              *ngIf="!itm.allStudentFinalized && !itm.allStudentApproved && itm.noOfAllStudent != 0">Pending
+            </mat-panel-description>
             <mat-panel-description col-3 *ngIf="showApproveButton()">
               <div item-end class="containerApprove">
-                <button [id]="'buttonReportApprove'+i"  style="padding-left: 5px;"  class="buttonApprove" [ngClass]="itm.allStudentApproved || itm.noOfAllStudent == 0?'validate':''" (click)="approveClass($event,i,itm.id, itm.name, itm.grade.name, itm.noOfAllStudent)"></button>
+                <button [id]="'buttonReportApprove'+i" style="padding-left: 5px;" class="buttonApprove"
+                  [ngClass]="itm.allStudentApproved || itm.noOfAllStudent == 0?'validate':''"
+                  (click)="approveClass($event,i,itm.id, itm.name, itm.grade.name, itm.noOfAllStudent)"></button>
               </div>
 
             </mat-panel-description>
@@ -57,7 +70,8 @@
 
           <div *ngIf="showAllButton">
             <ion-row *ngIf="itm.noOfAllStudent > 0">
-              <ion-checkbox class="allCheckBox" mode="ios" item-start justify-content-center [(ngModel)]="isAll" (click)="selectClass(itm.id, isAll, i, -1, studentsList)"></ion-checkbox>
+              <ion-checkbox class="allCheckBox" mode="ios" item-start justify-content-center [(ngModel)]="isAll"
+                (click)="selectClass(itm.id, isAll, i, -1, studentsList)"></ion-checkbox>
               <ion-label>All</ion-label>
             </ion-row>
           </div>
@@ -66,8 +80,9 @@
 
             <div class="unseen-comments-container">
               <div class="unseen-comments-count-active"
-                   [ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
-                <span [innerText]="stud.numberOfUnseenComments && stud.numberOfUnseenComments > 0? stud.numberOfUnseenComments:stud.totalNumberOfComments"></span>
+                [ngClass]="shouldHighlightComment(stud)? 'unseen-comments-count-active':'unseen-comments-count-inactive'">
+                <span
+                  [innerText]="stud.numberOfUnseenComments && stud.numberOfUnseenComments > 0? stud.numberOfUnseenComments:stud.totalNumberOfComments"></span>
               </div>
             </div>
 
@@ -75,8 +90,9 @@
 
               <ion-row style="position: relative;">
 
-                <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked" (ngModelChange)="checkedStudent(stud.id,stud.classes.id,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.name,i)"
-                              class="checkboxInCard"></ion-checkbox>
+                <ion-checkbox mode="ios" item-start [(ngModel)]="stud.reportChecked"
+                  (ngModelChange)="checkedStudent(stud.id,stud.classes.id,studentsList,j,stud.reportFinalized,stud.reportChecked,stud.name,i)"
+                  class="checkboxInCard"></ion-checkbox>
 
                 <ion-avatar class="avaterInCard">
                   <img class="imgInAvatar" src="assets/imgs/profile.png" *ngIf="stud.profileImg == null">
@@ -84,16 +100,21 @@
                 </ion-avatar>
 
                 <div style="display: inline-block; width: calc(100% - 155px)">
-                <ion-label style="display:inline-block;padding-left: 10px;vertical-align: middle; -webkit-text-fill-color: #a4a4a4;height: fit-content;">{{stud.name}}</ion-label>
+                  <ion-label
+                    style="display:inline-block;padding-left: 10px;vertical-align: middle; -webkit-text-fill-color: #a4a4a4;height: fit-content;">
+                    {{stud.name}}</ion-label>
                 </div>
 
-                <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: 70px; padding: 10px 5px" item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
-                <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: 70px; padding: 10px 5px" item-end *ngIf="stud.reportApproved">Approved</label>
-                <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: 70px; padding: 10px 5px" item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
+                <label style="-webkit-text-fill-color: #f53d3d; display:inline-block; width: 70px; padding: 10px 5px"
+                  item-end *ngIf="stud.reportApproved==false && stud.reportFinalized==false">Pending</label>
+                <label style="-webkit-text-fill-color: #38f560; display:inline-block; width: 70px; padding: 10px 5px"
+                  item-end *ngIf="stud.reportApproved">Approved</label>
+                <label style="-webkit-text-fill-color: #f1f530; display:inline-block; width: 70px; padding: 10px 5px"
+                  item-end *ngIf="stud.reportFinalized && !stud.reportApproved">Finalized</label>
                 <span class="circleGreen" item-end style="float: right;padding-top: 10px;"
-                      *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
+                  *ngIf="stud.reportSeenByParent || stud.reportSeenByStudent"></span>
                 <span class="circleRed" item-end style="float: right;padding-top: 10px;"
-                      *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
+                  *ngIf="!stud.reportSeenByParent && !stud.reportSeenByStudent"></span>
               </ion-row>
 
             </ion-card>
@@ -150,8 +171,8 @@
   <!--</div>-->
 
   <div *ngIf="NoClasses">
-    <ion-label justify-content-center align-self-center align-items-center text-center
-               style="-webkit-text-fill-color: #707070;width: 100%;height: 100%">
+    <ion-label justify-content-center align-self-center align-items-center class="ion-text-center"
+      style="-webkit-text-fill-color: #707070;width: 100%;height: 100%">
       You have no role on any class
     </ion-label>
   </div>
