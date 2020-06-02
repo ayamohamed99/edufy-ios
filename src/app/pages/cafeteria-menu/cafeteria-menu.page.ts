@@ -6,6 +6,7 @@ import { CafeteriaProduct } from "src/app/models/cafeteria_product";
 import { CafeteriaOrder } from "src/app/models/cafeteria_order";
 import { ActionSheetController, AlertController, IonSegment } from "@ionic/angular";
 import { DrawerState } from "ion-bottom-drawer";
+import { pipeBind1 } from '@angular/core/src/render3';
 
 @Component({
   selector: "app-cafeteria-menu",
@@ -54,6 +55,10 @@ export class CafeteriaMenuPage implements OnInit {
     for (let category of this.categories) {
       this.allProducts = this.allProducts.concat(category.products);
     }
+    // Sort products asc
+    this.allProducts = this.allProducts.sort((product1, product2) =>
+      product1.name.localeCompare(product2.name)
+    );
   }
 
   segmentChanged(index) {
