@@ -11,7 +11,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="onClickonMenuCalenderFromReport()">
-        <ion-icon slot="icon-only" name="md-calendar"></ion-icon>
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -1464,7 +1464,7 @@
 
   <ion-fab *ngIf="!loadingReportInBackground" vertical="bottom" horizontal="end" slot="fixed" #fab style="z-index: -1;">
     <ion-fab-button>
-      <ion-icon name="more"></ion-icon>
+      <ion-icon name="ellipsis-vertical"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
       <ion-fab-button class="forSave" style="padding: 0;background-color: white" (click)="fabSelected('save',fab)"

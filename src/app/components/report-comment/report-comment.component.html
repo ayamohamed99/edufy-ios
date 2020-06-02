@@ -59,7 +59,7 @@
       <div class="new-comment-button-container">
         <ion-fab-button class="new-comment-button" (click)="submitNewComment()"
                 *ngIf="!isSendingComment" [disabled]="newCommentToBeSubmitted.trim().length == 0" size="small">
-          <ion-icon name="md-send"></ion-icon>
+          <ion-icon name="send"></ion-icon>
         </ion-fab-button>
         <ion-spinner class="new-comment-spinner" name="crescent" *ngIf="isSendingComment"></ion-spinner>
 

@@ -91,7 +91,7 @@
                     <div class="buttonOnImg"
                       *ngIf="medicine.createdFrom == 'web' && (accountServ.getUserRole().editMedication || accountServ.getUserRole().deleteMedication)">
                       <ion-button class="closeInDiv" fill="clear" item-end (click)="openMenu($event,medicine,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;font-size: 1.8rem;" name="md-more"
+                        <ion-icon style="background: #eee0;color: #000000;font-size: 1.8rem;" name="ellipsis-vertical"
                           slot="icon-only" class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
@@ -241,7 +241,7 @@
         <ion-item mode="md" class="fitTheView removeItemRight" *ngIf="accountServ.getUserRole().exportIncident">
           <ion-button color="light" class="exportButton" (click)="openExportIncidentsPage()"
             [disabled]="allclasses.length <= 0&&allStudents.length<=0">
-            <ion-icon name="md-exit" style="padding-right: 5px"></ion-icon>
+            <ion-icon name="exit" style="padding-right: 5px"></ion-icon>
             Export Incidents
           </ion-button>
         </ion-item>
@@ -317,7 +317,7 @@
                       <ion-button class="closeInDiv" fill="clear"
                         *ngIf="accountServ.getUserRole().editIncident || accountServ.getUserRole().deleteIncident"
                         item-end (click)="openMenu($event,incident,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only"
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
                           class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
@@ -489,7 +489,7 @@
                       <ion-button class="closeInDiv" fill="clear"
                         *ngIf="this.accountServ.getUserRole().editCheckup || this.accountServ.getUserRole().deleteCheckup"
                         item-end (click)="openMenu($event,checkup,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only"
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
                           class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
@@ -674,7 +674,7 @@
                       <ion-button class="closeInDiv" fill="clear"
                         *ngIf="approval.medicalRecord.checkup || approval.medicalRecord.incident" item-end
                         (click)="openMenu($event,approval,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only"
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
                           class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>

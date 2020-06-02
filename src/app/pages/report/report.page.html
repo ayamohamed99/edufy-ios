@@ -9,7 +9,7 @@
 
     <ion-buttons slot="end">
       <ion-button (click)="oonClickonMenuCalender()">
-        <ion-icon slot="icon-only" name="md-calendar"></ion-icon>
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -40,7 +40,7 @@
           (opened)="whenOpen(iconRef,itm.id,i,itm.grade.name+' '+itm.name)" [disabled]="itm.noOfAllStudent <= 0">
           <mat-expansion-panel-header>
             <mat-panel-title col-4>
-              <ion-icon #iconRef name="ios-arrow-down" class="fa-arrow-down"></ion-icon>
+              <ion-icon #iconRef name="chevron-down" class="fa-arrow-down"></ion-icon>
               {{itm.grade.name}} {{itm.name}}
             </mat-panel-title>
             <mat-panel-description col-3 *ngIf="accountServ.reportId == -1"

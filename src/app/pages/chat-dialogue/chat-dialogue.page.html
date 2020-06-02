@@ -31,7 +31,7 @@
 
       <div class="teacher-bubble" *ngIf="dialoug.user != null">
         <div class="teacherTalk">
-          <ion-icon [id]="'errorIcon'+i" class="ErrorIcon" name="md-refresh-circle" color="danger"
+          <ion-icon [id]="'errorIcon'+i" class="ErrorIcon" name="refresh-circle" color="danger"
             *ngIf="dialoug.errorSend" (click)="reloadSend(dialoug,i)"></ion-icon>
           <ion-label class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}
           </ion-label>
