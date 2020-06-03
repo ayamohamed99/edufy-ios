@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
 import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
 import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
@@ -19,10 +19,12 @@ import { DrawerState } from "ion-bottom-drawer";
 export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
-  selectedCategoryIndex:number = 0;
+  selectedCategoryIndex = "0";
   selectedCategoryProducts: CafeteriaProduct[];
   allProducts: CafeteriaProduct[];
   isSearching: boolean = false;
+
+  searchInput = "";
 
   cart: Map<CafeteriaProduct, number>;
   total: number = 0.0;
@@ -34,12 +36,11 @@ export class CafeteriaMenuPage implements OnInit {
 
   order: CafeteriaOrder;
 
-
   constructor(
     private cafeteriaService: CafeteriaService,
     private load: LoadingViewService,
     public actionSheetController: ActionSheetController,
-    private alertController: AlertController
+    private alertController: AlertController,
   ) {}
 
   ngOnInit() {
@@ -51,7 +52,7 @@ export class CafeteriaMenuPage implements OnInit {
     this.load.startNormalLoading("Loading Products...");
     this.categories = await this.cafeteriaService.getCafeteriaProducts();
     this.selectedCategory = this.categories[0];
-    this.selectedCategoryIndex = 0;
+    this.selectedCategoryIndex = "0";
     this.selectedCategoryProducts = this.categories[0].products;
     this.load.stopLoading();
 
@@ -70,7 +71,7 @@ export class CafeteriaMenuPage implements OnInit {
     const index =
       event && event.detail && event.detail.value ? event.detail.value : 0;
     this.selectedCategory = this.categories[index];
-    this.selectedCategoryIndex = index;
+    this.selectedCategoryIndex = "" + index;
     this.selectedCategoryProducts = this.categories[index].products;
   }
 
@@ -139,23 +140,28 @@ export class CafeteriaMenuPage implements OnInit {
   onSearchInput(event) {
     const val = event.target.value as string;
     console.log("onSearchInput" + val);
-
-    this.selectedCategoryProducts = this.allProducts.filter((product) =>
-      product.name.toLocaleLowerCase().includes(val.toLocaleLowerCase())
-    );
+    this.searchInput = val;
+    if (val && val.trim() != "") {
+      this.selectedCategoryProducts = this.allProducts.filter((product) =>
+        product.name.toLocaleLowerCase().includes(val.toLocaleLowerCase())
+      );
+    }
   }
 
   onSearchCancel(event) {
     console.log("onSearchCancel");
     this.isSearching = false;
     this.selectedCategoryProducts = this.selectedCategory.products;
+    this.searchInput = "";
   }
 
   // When searchbar loses focus
   onSearchBlur() {
     console.log("onSearchBlur");
-    this.isSearching = false;
-    this.selectedCategoryProducts = this.selectedCategory.products;
+    if(this.searchInput == ""){
+      this.isSearching = false;
+      this.selectedCategoryProducts = this.selectedCategory.products;
+    }
   }
 
   onSearchFocus(event) {
