@@ -40,7 +40,7 @@ export class CafeteriaMenuPage implements OnInit {
     private cafeteriaService: CafeteriaService,
     private load: LoadingViewService,
     public actionSheetController: ActionSheetController,
-    private alertController: AlertController,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -142,6 +142,10 @@ export class CafeteriaMenuPage implements OnInit {
     console.log("onSearchInput" + val);
     this.searchInput = val;
     if (val && val.trim() != "") {
+      if (!this.isSearching) {
+        this.isSearching = true;
+        this.selectedCategoryProducts = this.allProducts;
+      }
       this.selectedCategoryProducts = this.allProducts.filter((product) =>
         product.name.toLocaleLowerCase().includes(val.toLocaleLowerCase())
       );
@@ -156,17 +160,11 @@ export class CafeteriaMenuPage implements OnInit {
   }
 
   // When searchbar loses focus
-  onSearchBlur() {
-    console.log("onSearchBlur");
-    if(this.searchInput == ""){
+  onSearchBlur(event) {
+    console.log("onSearchBlur", event);
+    if (this.searchInput == "") {
       this.isSearching = false;
       this.selectedCategoryProducts = this.selectedCategory.products;
     }
-  }
-
-  onSearchFocus(event) {
-    console.log("onSearchFocus");
-    this.isSearching = true;
-    this.selectedCategoryProducts = this.allProducts;
   }
 }
