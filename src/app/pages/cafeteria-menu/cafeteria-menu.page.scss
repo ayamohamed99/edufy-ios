@@ -2,7 +2,8 @@
     border-radius: 4px 4px 0px 0px;
     background: var(--ion-color-primary-tint);
     color: white;
-    height: fit-content;
+    height: 100%;
+    padding-top: 8px;
 
     ion-row, ion-col {
         height: 100%;
