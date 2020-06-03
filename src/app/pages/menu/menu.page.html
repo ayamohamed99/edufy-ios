@@ -13,7 +13,7 @@
                 <div *ngIf="p.main && p.children">
 
                     <ion-item [routerLink]="p.url" routerDirection="root" (click)="onLoadReport(p.url, p.title, -1)"
-                        [class.active-item]="selectedPath.startsWith(p.url)">
+                       >
                         <ion-icon [name]="p.icon" slot="start"></ion-icon>
                         {{ p.title }}
                     </ion-item>

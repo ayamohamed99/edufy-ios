@@ -77,7 +77,7 @@ export class MenuPage implements OnInit {
         title: "Cafeteria",
         icon: "cafe",
         main: true,
-        url: "/menu/cafeteria-",
+        url: "/menu/cafeteria-card",
         customReport: false,
         children: [
           {
