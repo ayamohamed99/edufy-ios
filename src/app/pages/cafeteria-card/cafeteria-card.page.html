@@ -11,9 +11,11 @@
   <ion-grid *ngIf="card!=null">
     <ion-row>
       <ion-col>
-        <ion-card>
+        <ion-card style="--background: url('../../../assets/imgs/food_bck.svg');
+        background-repeat: no-repeat; background-size: cover;
+    background-position: center;">
           <ion-card-header style="display: flex;">
-            <ion-img [src]="logo" style="width: 50px;"></ion-img>
+            <ion-img [src]="logo" style="width: 80px;"></ion-img>
             <ion-card-subtitle style="text-align: end; width: 100%; padding: 10px;">{{card.barCode}}</ion-card-subtitle>
           </ion-card-header>
 
