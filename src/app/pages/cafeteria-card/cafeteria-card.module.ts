@@ -6,6 +6,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { CafeteriaCardPage } from "./cafeteria-card.page";
+import { NgxBarcodeModule } from "ngx-barcode";
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    NgxBarcodeModule,
     RouterModule.forChild(routes),
   ],
   declarations: [CafeteriaCardPage],
