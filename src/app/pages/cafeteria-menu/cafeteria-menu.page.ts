@@ -40,7 +40,8 @@ export class CafeteriaMenuPage implements OnInit {
     private cafeteriaService: CafeteriaService,
     private load: LoadingViewService,
     public actionSheetController: ActionSheetController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -55,7 +56,7 @@ export class CafeteriaMenuPage implements OnInit {
     this.selectedCategoryIndex = "0";
     this.selectedCategoryProducts = this.categories[0].products;
     this.load.stopLoading();
-
+    this.cdRef.detectChanges();
     this.allProducts = new Array();
     for (let category of this.categories) {
       this.allProducts = this.allProducts.concat(category.products);
