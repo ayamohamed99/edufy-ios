@@ -29,14 +29,16 @@
     <ion-item *ngFor="let product of selectedCategoryProducts">
       <ion-grid>
         <ion-row>
-          <ion-col size="10">
+          <ion-col>
             <ion-label style="text-transform: capitalize;" class="ion-text-wrap">{{product.name}}</ion-label>
             <ion-button shape="round" fill="outline" style="--border-width: thin; margin: 8px 0px;"
               (click)="addItem(product)">EGP {{product.price}}
             </ion-button>
           </ion-col>
-          <ion-col>
-            <ion-img *ngIf="product.productImg" [src]="product.productImg" style="max-width: 100px;
+          <ion-col style="
+    justify-content: end;
+    display: inherit;">
+            <ion-img *ngIf="product.productImg" [src]="product.productImg" style="width: 80px;
                             padding: 4px;"></ion-img>
           </ion-col>
         </ion-row>
