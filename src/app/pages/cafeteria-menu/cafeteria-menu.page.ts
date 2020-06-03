@@ -19,7 +19,7 @@ import { DrawerState } from "ion-bottom-drawer";
 export class CafeteriaMenuPage implements OnInit {
   categories: CafeteriaCategory[];
   selectedCategory: CafeteriaCategory;
-  selectedCategoryIndex = "0";
+  selectedCategoryIndex:number = 0;
   selectedCategoryProducts: CafeteriaProduct[];
   allProducts: CafeteriaProduct[];
   isSearching: boolean = false;
@@ -34,7 +34,6 @@ export class CafeteriaMenuPage implements OnInit {
 
   order: CafeteriaOrder;
 
-  @ViewChild("segments", { static: false }) segments: IonSegment;
 
   constructor(
     private cafeteriaService: CafeteriaService,
@@ -52,8 +51,7 @@ export class CafeteriaMenuPage implements OnInit {
     this.load.startNormalLoading("Loading Products...");
     this.categories = await this.cafeteriaService.getCafeteriaProducts();
     this.selectedCategory = this.categories[0];
-    this.segments.value = this.selectedCategoryIndex;
-    this.selectedCategoryIndex = "0";
+    this.selectedCategoryIndex = 0;
     this.selectedCategoryProducts = this.categories[0].products;
     this.load.stopLoading();
 
@@ -72,7 +70,7 @@ export class CafeteriaMenuPage implements OnInit {
     const index =
       event && event.detail && event.detail.value ? event.detail.value : 0;
     this.selectedCategory = this.categories[index];
-    this.selectedCategoryIndex = "" + index;
+    this.selectedCategoryIndex = index;
     this.selectedCategoryProducts = this.categories[index].products;
   }
 
@@ -150,7 +148,6 @@ export class CafeteriaMenuPage implements OnInit {
   onSearchCancel(event) {
     console.log("onSearchCancel");
     this.isSearching = false;
-    this.segments.value = this.selectedCategoryIndex;
     this.selectedCategoryProducts = this.selectedCategory.products;
   }
 
@@ -158,7 +155,6 @@ export class CafeteriaMenuPage implements OnInit {
   onSearchBlur() {
     console.log("onSearchBlur");
     this.isSearching = false;
-    this.segments.value = this.selectedCategoryIndex;
     this.selectedCategoryProducts = this.selectedCategory.products;
   }
 
