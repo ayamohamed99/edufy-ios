@@ -12,9 +12,9 @@
     <ion-row>
       <ion-col>
         <ion-card>
-          <ion-card-header>
-            <!-- <ion-img></ion-img> -->
-            <ion-card-subtitle style="text-align: end;">{{card.barCode}}</ion-card-subtitle>
+          <ion-card-header style="display: flex;">
+            <ion-img [src]="logo" style="width: 50px;"></ion-img>
+            <ion-card-subtitle style="text-align: end; width: 100%; padding: 10px;">{{card.barCode}}</ion-card-subtitle>
           </ion-card-header>
 
           <ion-card-content>

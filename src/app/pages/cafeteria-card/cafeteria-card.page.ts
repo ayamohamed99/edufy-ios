@@ -3,6 +3,7 @@ import { CafeteriaService } from 'src/app/services/Cafeteria/cafeteria.service';
 import { LoadingViewService } from 'src/app/services/LoadingView/loading-view.service';
 import { CafeteriaCard } from 'src/app/models/cafeteria_card';
 import { CafeteriaReceipt } from 'src/app/models/cafeteria_receipt';
+import { AccountService } from 'src/app/services/Account/account.service';
 
 @Component({
   selector: "app-cafeteria-card",
@@ -14,11 +15,15 @@ export class CafeteriaCardPage implements OnInit {
   history: CafeteriaReceipt[];
   viewHistory = false;
   gettingHistory = false;
+  logo;
 
   constructor(
     private cafeteriaService: CafeteriaService,
+    private accountservice: AccountService,
     private load: LoadingViewService
-  ) {}
+  ) {
+    this.logo = this.accountservice.getAccountLogoUrl();
+  }
 
   ngOnInit() {
     this.getCafeteriaCard();
