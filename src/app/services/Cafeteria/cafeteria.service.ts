@@ -72,7 +72,7 @@ export class CafeteriaService {
     return card;
   }
 
-  getCafeteriaReceipts() {
+  getStatment() {
     // TODO
     // return this.http.get(
     //   this.DomainUrl.Domain +
@@ -81,65 +81,5 @@ export class CafeteriaService {
     //     "&withHistory=" +
     //     withHistory
     // );
-
-    const receipts = new Array();
-    const receipt1 = new CafeteriaReceipt();
-    receipt1.creationDate = 1580135184000;
-    receipt1.status = "PENDING";
-    receipt1.discount = 25;
-    receipt1.subTotal = 72;
-    receipt1.total = 72;
-    receipt1.products = [
-      {
-        id: 736,
-        cost: 40,
-        price: 80,
-        quantity: 1,
-        product: {
-          id: 492,
-          name: "pasta 2",
-          price: 0,
-          productImg: "",
-        },
-      },
-    ];
-
-    const receipt2 = new CafeteriaReceipt();
-    receipt2.creationDate = 1580227357000;
-    receipt2.deliveredDate = 1580229318000;
-    receipt2.status = "COMPLETED";
-    receipt2.discount = 25;
-    receipt2.subTotal = 72.9;
-    receipt2.total = 72.9;
-    receipt2.products = [
-      {
-        id: 1026,
-        cost: 1,
-        price: 1,
-        quantity: 1,
-        product: {
-          id: 557,
-          name: "test 2",
-          price: 0,
-          productImg: "",
-        },
-      },
-      {
-        id: 1027,
-        cost: 40,
-        price: 80,
-        quantity: 1,
-        product: {
-          id: 492,
-          name: "pasta 2",
-          price: 0,
-          productImg: "",
-        },
-      },
-    ];
-
-    receipts.push(receipt1);
-    receipts.push(receipt2);
-    return receipts;
   }
 }

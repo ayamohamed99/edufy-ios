@@ -8,14 +8,81 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="card!=null">
     <ion-row>
       <ion-col>
-        <ion-card></ion-card>
+        <ion-card>
+          <ion-card-header>
+            <!-- <ion-img></ion-img> -->
+            <ion-card-subtitle style="text-align: end;">{{card.barCode}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-card-subtitle>Cafeteria Credit</ion-card-subtitle>
+                  <ion-card-title style="font-weight: bold;">{{card.credit}} EGP</ion-card-title>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ngx-barcode [bc-value]="card.barCode" [bc-display-value]="false" style="text-align: center;">
+                  </ngx-barcode>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col></ion-col>
+      <ion-col>
+        <ion-button fill="outline" expand="block" (click)="viewStatment()">VIEW STATMENT</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="viewHistory && !gettingHistory">
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/charge.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">Recharged</p>
+                  <p style="font-size: 12px;">18-03-20 01:03:54</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: green;">+5.0 EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/withdraw.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">Withdrawal</p>
+                  <p style="font-size: 12px;">03-06-20 01:51:19</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: red;">-53.5 EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="viewHistory && gettingHistory">
+      <ion-col style="text-align: center;">
+        <ion-spinner name="crescent"></ion-spinner>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
