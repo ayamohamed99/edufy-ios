@@ -87,4 +87,17 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-grid *ngIf="card==null&&!cardExists" style="margin: 0px 16px;">
+    <ion-row>
+      <ion-col style="display: flex; justify-content: center; text-align: center;">
+        <ion-img src="../../../assets/imgs/no_card.svg" style="width: 100px;"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="text-align: center;">
+        <p>You don't have a cafeteria card.</p>
+        <ion-button size="small" fill="outline" (click)="refresh()">Refresh</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

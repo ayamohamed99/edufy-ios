@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
-import { CafeteriaService } from 'src/app/services/Cafeteria/cafeteria.service';
-import { LoadingViewService } from 'src/app/services/LoadingView/loading-view.service';
-import { CafeteriaCard } from 'src/app/models/cafeteria_card';
-import { CafeteriaReceipt } from 'src/app/models/cafeteria_receipt';
-import { AccountService } from 'src/app/services/Account/account.service';
+import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
+import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
+import { CafeteriaCard } from "src/app/models/cafeteria_card";
+import { CafeteriaReceipt } from "src/app/models/cafeteria_receipt";
+import { AccountService } from "src/app/services/Account/account.service";
 
 @Component({
   selector: "app-cafeteria-card",
@@ -15,6 +15,7 @@ export class CafeteriaCardPage implements OnInit {
   history: CafeteriaReceipt[];
   viewHistory = false;
   gettingHistory = false;
+  cardExists = true;
   logo;
 
   constructor(
@@ -30,11 +31,14 @@ export class CafeteriaCardPage implements OnInit {
   }
 
   async getCafeteriaCard() {
-    // TODO
-    // this.load.startNormalLoading("Loading...");
-    this.card = await this.cafeteriaService.getCafeteriaCard(true);
+    this.load.startNormalLoading("Loading...");
+    this.cardExists = true;
+    this.card = await this.cafeteriaService.getCafeteriaCard();
     // this.history = await this.cafeteriaService.getStatment();
-    // this.load.stopLoading();
+    if (this.card == null) {
+      this.cardExists = false;
+    }
+    this.load.stopLoading();
   }
 
   viewStatment() {
@@ -44,5 +48,9 @@ export class CafeteriaCardPage implements OnInit {
     setTimeout(() => {
       this.gettingHistory = false;
     }, 2000);
+  }
+
+  refresh() {
+    this.getCafeteriaCard();
   }
 }
