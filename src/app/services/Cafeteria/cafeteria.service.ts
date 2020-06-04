@@ -6,6 +6,7 @@ import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 import { CafeteriaCard } from "src/app/models/cafeteria_card";
 import { CafeteriaReceipt } from "src/app/models/cafeteria_receipt";
 import { CafeteriaOrder } from "src/app/models/cafeteria_order";
+import { CafeteriaReceiptProduct } from "src/app/models/cafeteria_receipt_product";
 
 @Injectable({
   providedIn: "root",
@@ -48,11 +49,25 @@ export class CafeteriaService {
     return result as CafeteriaCategory[];
   }
 
-  placeOrder(order: CafeteriaOrder) {
-    order.user = this.accountService.user;
+  placeOrder(products, subTotal, card, comment) {
+    const order = {} as CafeteriaOrder;
+    order.card = card;
+    order.discount = card.discount;
+    order.creationDate = new Date().getTime();
+    order.status = "PENDING";
+    order.subTotal = subTotal;
+    order.comment = comment;
+
+    order.user = { id: this.accountService.userId };
     order.branchId = this.accountService.userBranchId;
     order.total = this.calculateTotal(order.subTotal, order.card.discount, 0);
 
+    order.products = new Array();
+    for (let product of products) {
+      const receiptProduct = {} as CafeteriaReceiptProduct;
+      receiptProduct.product = product;
+      order.products.push(receiptProduct);
+    }
     return this.http
       .post(
         this.DomainUrl.Domain +
@@ -64,7 +79,7 @@ export class CafeteriaService {
 
   calculateTotal(subtotal, discount, tax) {
     if (discount > 0) {
-      return subtotal - subtotal * (discount/100.0);
+      return subtotal - subtotal * (discount / 100.0);
     } else {
       return subtotal;
     }

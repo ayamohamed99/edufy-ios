@@ -37,12 +37,11 @@ export class CafeteriaMenuPage implements OnInit {
   cart: Map<CafeteriaProduct, number>;
   total: number = 0.0;
   count: number = 0.0;
+  comment = "";
   drawerState = DrawerState.Docked;
   distanceTop = 20;
   minimumHeight = 56;
   dockedHeight = 56;
-
-  order: CafeteriaOrder;
 
   constructor(
     private cafeteriaService: CafeteriaService,
@@ -55,7 +54,6 @@ export class CafeteriaMenuPage implements OnInit {
 
   ngOnInit() {
     this.getCategories();
-    this.order = new CafeteriaOrder();
   }
 
   async getCategories() {
@@ -112,7 +110,7 @@ export class CafeteriaMenuPage implements OnInit {
       if (data && data.data) {
         this.cart = data.data.cart;
         if (data.data.comment) {
-          this.order.comment = data.data.comment;
+          this.comment = data.data.comment;
         }
         if (data.data.count) {
           this.count = data.data.count;
@@ -145,16 +143,9 @@ export class CafeteriaMenuPage implements OnInit {
       return;
     }
 
-    this.order.card = card;
-    this.order.discount = card.discount;
-    this.order.creationDate = new Date().getTime();
-    this.order.status = "PENDING";
-    this.order.subTotal = this.total;
-    this.order.products = Array.from(this.cart.keys());
-    delete this.order.comment;
-
     this.cafeteriaService
-      .placeOrder(this.order)
+      .placeOrder(Array.from(this.cart.keys()), this.total,
+      card, this.comment)
       .then(async (res) => {
         const alert = await this.alertController.create({
           // cssClass: 'my-custom-class',

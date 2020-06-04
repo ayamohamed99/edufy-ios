@@ -1,6 +1,7 @@
 
 import {CafeteriaProduct} from './cafeteria_product';
 import { CafeteriaCard } from './cafeteria_card';
+import { CafeteriaReceiptProduct } from './cafeteria_receipt_product';
 
 export class CafeteriaOrder {
   id: any;
@@ -13,7 +14,7 @@ export class CafeteriaOrder {
   subTotal: number;
   tax: number;
   user: any;
-  products: CafeteriaProduct[];
+  products: CafeteriaProduct|CafeteriaReceiptProduct[];
   comment: string;
 
   constructor() {}
