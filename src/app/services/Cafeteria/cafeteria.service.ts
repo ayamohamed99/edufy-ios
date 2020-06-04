@@ -52,34 +52,51 @@ export class CafeteriaService {
     // return this.http.post(this.DomainUrl.Domain + "authentication/CafeteriaPos.ent/postCafeteriaReceipt.ent?isNew=true", null);
   }
 
-  getCafeteriaCard(withHistory) {
-    // TODO
-    // return this.http.get(
-    //   this.DomainUrl.Domain +
-    //     "/authentication/student.ent/getStudentCafeteriaCard.ent?studentId=" +
-    //     this.accountService.userId +
-    //     "&withHistory=" +
-    //     withHistory
-    // );
+  async getCafeteriaCard() {
+    const card = await this.http
+      .get(
+        this.DomainUrl.Domain +
+          "/authentication/user.ent/getUserCafeteriaCard.ent?userId=" +
+          this.accountService.userId +
+          "&withHistory=" +
+          false
+      )
+      .toPromise()
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        console.error("getCafeteriaCard", error);
+        return null;
+      });
 
-    const card = new CafeteriaCard();
-    card.id = 467;
-    card.barCode = "99999999";
-    card.credit = 150;
-    card.discount = 25;
-    card.branchId = this.accountService.userBranchId;
+    // const card = new CafeteriaCard();
+    // card.id = 467;
+    // card.barCode = "99999999";
+    // card.credit = 150;
+    // card.discount = 25;
+    // card.branchId = this.accountService.userBranchId;
 
-    return card;
+    return card as CafeteriaCard;
   }
 
-  getStatment() {
-    // TODO
-    // return this.http.get(
-    //   this.DomainUrl.Domain +
-    //     "/authentication/student.ent/getStudentCafeteriaCard.ent?studentId=" +
-    //     this.accountService.userId +
-    //     "&withHistory=" +
-    //     withHistory
-    // );
+  async getStatment() {
+    const result = await this.http
+      .get(
+        this.DomainUrl.Domain +
+          "/authentication/user.ent/getUserCafeteriaCard.ent?userId=" +
+          this.accountService.userId +
+          "&withHistory=" +
+          true
+      )
+      .toPromise()
+      .then((res) => {
+        return res;
+      })
+      .catch((error) => {
+        console.error("getCafeteriaCard", error);
+        return null;
+      });
+    return result;
   }
 }
