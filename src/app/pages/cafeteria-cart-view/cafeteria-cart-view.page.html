@@ -1,42 +1,18 @@
 <ion-header>
+
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+    <ion-title>Cart</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Online Ordering</ion-title>
-  </ion-toolbar>
-
-  <ion-toolbar color="primary">
-    <ion-searchbar mode="ios" (ionInput)="onSearchInput($event)" (ionCancel)="onSearchCancel($event)"
-      (ionBlur)="onSearchBlur($event)" showCancelButton="focus" animated debounce="500">
-    </ion-searchbar>
-  </ion-toolbar>
-
-
-  <ion-toolbar class="toolBarShap" color="gray" scrollable="true" *ngIf="!isSearching">
-    <ion-segment color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true"
-      (ionChange)="segmentChanged($event)" [(ngModel)]="selectedCategoryIndex">
-      <ion-segment-button *ngFor="let category of categories; let i= index" [value]="i">
-        <ion-label>{{category.name}}</ion-label>
-      </ion-segment-button>
-    </ion-segment>
   </ion-toolbar>
 
 </ion-header>
 
 <ion-content>
-
-  <ion-grid class="bottom-drawer-top-grid">
-    <ion-row>
-      <ion-col size="1">
-        <ion-button size="small" fill="clear" (click)="closeCart()">
-          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-title style="padding: 8px;">Cart</ion-title>
-      </ion-col>
-    </ion-row>
+  <ion-grid *ngIf="cart!=null && cart.size>0">
     <ion-row>
       <ion-col>
         <ion-list>
@@ -82,7 +58,7 @@
     <ion-row>
       <ion-col class="comment-col">
         <ion-label position="floating" style="font-weight: bold;">Add any comments here</ion-label>
-        <ion-textarea autoGrow="true" maxlength="250" [(ngModel)]="order.comment" class="comment-textarea">
+        <ion-textarea autoGrow="true" maxlength="250" [(ngModel)]="comment" class="comment-textarea">
         </ion-textarea>
       </ion-col>
     </ion-row>

@@ -6,7 +6,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 
 import { CafeteriaMenuPage } from "./cafeteria-menu.page";
-import { IonBottomDrawerModule } from 'ion-bottom-drawer';
+import { IonBottomDrawerModule } from "ion-bottom-drawer";
+import { CafeteriaCartViewPageModule } from '../cafeteria-cart-view/cafeteria-cart-view.module';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    CafeteriaCartViewPageModule,
     IonBottomDrawerModule,
   ],
   declarations: [CafeteriaMenuPage],

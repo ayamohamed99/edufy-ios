@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ReflectiveInjector } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+  ReflectiveInjector,
+} from "@angular/core";
 import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
 import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
@@ -8,8 +14,10 @@ import {
   ActionSheetController,
   AlertController,
   IonSegment,
+  ModalController,
 } from "@ionic/angular";
 import { DrawerState } from "ion-bottom-drawer";
+import { CafeteriaCartViewPage } from "../cafeteria-cart-view/cafeteria-cart-view.page";
 
 @Component({
   selector: "app-cafeteria-menu",
@@ -41,6 +49,7 @@ export class CafeteriaMenuPage implements OnInit {
     private load: LoadingViewService,
     public actionSheetController: ActionSheetController,
     private alertController: AlertController,
+    private modalController: ModalController,
     private cdRef: ChangeDetectorRef
   ) {}
 
@@ -89,46 +98,51 @@ export class CafeteriaMenuPage implements OnInit {
     this.count++;
   }
 
-  increment(product: CafeteriaProduct) {
-    const count = this.cart.get(product);
-    this.cart.set(product, count + 1);
-    this.total += product.price;
-    this.count++;
-  }
+  async openCart() {
+    const modal = await this.modalController.create({
+      component: CafeteriaCartViewPage,
+      componentProps: {
+        cart: this.cart,
+        count: this.count,
+        total: this.total,
+      },
+    });
 
-  decrement(product: CafeteriaProduct) {
-    const count = this.cart.get(product);
-    if (count == 1) {
-      this.cart.delete(product);
-    } else {
-      this.cart.set(product, count - 1);
-    }
-    this.total -= product.price;
-    this.count--;
-  }
+    modal.onDidDismiss().then((data) => {
+      if (data && data.data) {
+        this.cart = data.data.cart;
+        if (data.data.comment) {
+          this.order.comment = data.data.comment;
+        }
+        if (data.data.count) {
+          this.count = data.data.count;
+        }
+        if (data.data.total) {
+          this.total = data.data.total;
+        }
+        if (data.data.name == "orderPlaced") {
+          this.placeOrder();
+        }
+      }
+    });
 
-  openCart() {
-    this.drawerState = DrawerState.Top;
-  }
-
-  closeCart() {
-    this.drawerState = DrawerState.Docked;
+    return await modal.present();
   }
 
   async placeOrder() {
-    this.closeCart();
     this.load.startNormalLoading("Placing Order...");
     const card = await this.cafeteriaService.getCafeteriaCard();
-    if(card == null) {
+    if (card == null) {
       const alert = await this.alertController.create({
         // cssClass: 'my-custom-class',
         header: "Order cannot be placed",
-        message: "You don't have a cafeteria card. Please contact your adminstration.",
+        message:
+          "You don't have a cafeteria card. Please contact your adminstration.",
         buttons: ["OK"],
       });
       this.load.stopLoading();
       await alert.present();
-      return; 
+      return;
     }
     // TODO
     setTimeout(async () => {
