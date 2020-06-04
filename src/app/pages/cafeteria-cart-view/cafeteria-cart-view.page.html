@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Online Ordering</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar color="primary">
+    <ion-searchbar mode="ios" (ionInput)="onSearchInput($event)" (ionCancel)="onSearchCancel($event)"
+      (ionBlur)="onSearchBlur($event)" showCancelButton="focus" animated debounce="500">
+    </ion-searchbar>
+  </ion-toolbar>
+
+
+  <ion-toolbar class="toolBarShap" color="gray" scrollable="true" *ngIf="!isSearching">
+    <ion-segment color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true"
+      (ionChange)="segmentChanged($event)" [(ngModel)]="selectedCategoryIndex">
+      <ion-segment-button *ngFor="let category of categories; let i= index" [value]="i">
+        <ion-label>{{category.name}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-grid class="bottom-drawer-top-grid">
+    <ion-row>
+      <ion-col size="1">
+        <ion-button size="small" fill="clear" (click)="closeCart()">
+          <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-title style="padding: 8px;">Cart</ion-title>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let product of cart.keys()">
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-img *ngIf="product.productImg" [src]="product.productImg" style="width: 60px; height: 60px;
+                                    padding: 4px;"></ion-img>
+                  <ion-img *ngIf="!product.productImg" src="../../../assets/imgs/food-hot-bowl.svg" style="width: 60px; height: 60px;
+                                    padding: 4px;"></ion-img>
+                </ion-col>
+                <ion-col size="9">
+                  <ion-label style="text-transform: capitalize;" class="ion-text-wrap">{{product.name}}</ion-label>
+                  <div class="quantity-div">
+                    <ion-button size="small" fill="clear" (click)="decrement(product)">
+                      <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                    <p style="margin: 8px;">{{cart.get(product)}}</p>
+                    <ion-button size="small" fill="clear" (click)="increment(product)">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                  <ion-grid class="price-grid">
+                    <ion-row>
+                      <ion-col>
+                        <p style="color: black; margin-right: 4px;">Item price</p>
+                        <p>{{product.price}}</p>
+                      </ion-col>
+                      <ion-col>
+                        <p style="color: black; margin-right: 4px;">Total</p>
+                        <p>{{product.price*cart.get(product)}}</p>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="comment-col">
+        <ion-label position="floating" style="font-weight: bold;">Add any comments here</ion-label>
+        <ion-textarea autoGrow="true" maxlength="250" [(ngModel)]="order.comment" class="comment-textarea">
+        </ion-textarea>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" size="large" style="margin-bottom: 16px;" (click)="placeOrder()">
+          PLACE ORDER
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
