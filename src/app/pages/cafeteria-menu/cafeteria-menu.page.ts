@@ -144,18 +144,32 @@ export class CafeteriaMenuPage implements OnInit {
       await alert.present();
       return;
     }
-    // TODO
-    setTimeout(async () => {
-      const alert = await this.alertController.create({
-        // cssClass: 'my-custom-class',
-        header: "Order Placed",
-        message: "Your order is being prepared.",
-        buttons: ["OK"],
+
+    this.order.card = card;
+    this.order.discount = card.discount;
+    this.order.creationDate = new Date().getTime();
+    this.order.status = "PENDING";
+    this.order.subTotal = this.total;
+    this.order.products = Array.from(this.cart.keys());
+    delete this.order.comment;
+
+    this.cafeteriaService
+      .placeOrder(this.order)
+      .then(async (res) => {
+        const alert = await this.alertController.create({
+          // cssClass: 'my-custom-class',
+          header: "Order Placed",
+          message: "Your order is being prepared.",
+          buttons: ["OK"],
+        });
+        this.load.stopLoading();
+        await alert.present();
+        this.emptyCart();
+      })
+      .catch((error) => {
+        // TODO
+        this.load.stopLoading();
       });
-      this.load.stopLoading();
-      await alert.present();
-      this.emptyCart();
-    }, 2000);
   }
 
   emptyCart() {
