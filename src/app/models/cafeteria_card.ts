@@ -1,11 +1,13 @@
-export class CafeteriaCard {
-  id: number;
-  branchId: number;
-  barCode: string;
-  credit: number;
-  discount: number;
-  receiptSet: any;
-  cafeteriaCardRechargeHistories: [];
+import { CafeteriaRechargeHistory } from './cafeteria_recharge_history';
 
-  constructor() {}
-}
+export class CafeteriaCard {
+         id: number;
+         branchId: number;
+         barCode: string;
+         credit: number;
+         discount: number;
+         receiptSet: any;
+         cafeteriaCardRechargeHistories: CafeteriaRechargeHistory[];
+
+         constructor() {}
+       }

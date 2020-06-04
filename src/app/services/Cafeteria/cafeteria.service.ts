@@ -113,7 +113,7 @@ export class CafeteriaService {
     return card as CafeteriaCard;
   }
 
-  async getStatment() {
+  async getStatement() {
     const result = await this.http
       .get(
         this.DomainUrl.Domain +
@@ -124,12 +124,12 @@ export class CafeteriaService {
       )
       .toPromise()
       .then((res) => {
-        return res;
+        return res as CafeteriaCard;
       })
       .catch((error) => {
         console.error("getCafeteriaCard", error);
         return null;
       });
-    return result;
+    return result as CafeteriaCard;
   }
 }

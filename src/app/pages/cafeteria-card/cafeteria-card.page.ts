@@ -4,6 +4,7 @@ import { LoadingViewService } from "src/app/services/LoadingView/loading-view.se
 import { CafeteriaCard } from "src/app/models/cafeteria_card";
 import { CafeteriaReceipt } from "src/app/models/cafeteria_receipt";
 import { AccountService } from "src/app/services/Account/account.service";
+import { CafeteriaRechargeHistory } from 'src/app/models/cafeteria_recharge_history';
 
 @Component({
   selector: "app-cafeteria-card",
@@ -12,7 +13,7 @@ import { AccountService } from "src/app/services/Account/account.service";
 })
 export class CafeteriaCardPage implements OnInit {
   card: CafeteriaCard;
-  history: CafeteriaReceipt[];
+  history: CafeteriaRechargeHistory[];
   viewHistory = false;
   gettingHistory = false;
   cardExists = true;
@@ -34,20 +35,17 @@ export class CafeteriaCardPage implements OnInit {
     this.load.startNormalLoading("Loading...");
     this.cardExists = true;
     this.card = await this.cafeteriaService.getCafeteriaCard();
-    // this.history = await this.cafeteriaService.getStatment();
     if (this.card == null) {
       this.cardExists = false;
     }
     this.load.stopLoading();
   }
 
-  viewStatment() {
+  async viewStatement() {
     this.viewHistory = true;
     this.gettingHistory = true;
-    // TODO
-    setTimeout(() => {
-      this.gettingHistory = false;
-    }, 2000);
+    this.history = await (await this.cafeteriaService.getStatement()).cafeteriaCardRechargeHistories;
+    this.gettingHistory = false;
   }
 
   refresh() {
