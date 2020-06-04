@@ -5,6 +5,7 @@ import { Url_domain } from "src/app/models/url_domain";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
 import { CafeteriaCard } from "src/app/models/cafeteria_card";
 import { CafeteriaReceipt } from "src/app/models/cafeteria_receipt";
+import { CafeteriaOrder } from "src/app/models/cafeteria_order";
 
 @Injectable({
   providedIn: "root",
@@ -47,9 +48,26 @@ export class CafeteriaService {
     return result as CafeteriaCategory[];
   }
 
-  placeOrder() {
-    // TODO
-    // return this.http.post(this.DomainUrl.Domain + "authentication/CafeteriaPos.ent/postCafeteriaReceipt.ent?isNew=true", null);
+  placeOrder(order: CafeteriaOrder) {
+    order.user = this.accountService.user;
+    order.branchId = this.accountService.userBranchId;
+    order.total = this.calculateTotal(order.subTotal, order.card.discount, 0);
+
+    return this.http
+      .post(
+        this.DomainUrl.Domain +
+          "/authentication/CafeteriaPos.ent/postCafeteriaReceipt.ent?isNew=true&viaMobile=true",
+        order
+      )
+      .toPromise();
+  }
+
+  calculateTotal(subtotal, discount, tax) {
+    if (discount > 0) {
+      return subtotal - subtotal * (discount/100.0);
+    } else {
+      return subtotal;
+    }
   }
 
   async getCafeteriaCard() {
