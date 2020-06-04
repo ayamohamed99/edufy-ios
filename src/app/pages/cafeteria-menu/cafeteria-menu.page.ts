@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ReflectiveInjector } from "@angular/core";
 import { CafeteriaService } from "src/app/services/Cafeteria/cafeteria.service";
 import { LoadingViewService } from "src/app/services/LoadingView/loading-view.service";
 import { CafeteriaCategory } from "src/app/models/cafeteria_category";
@@ -115,9 +115,21 @@ export class CafeteriaMenuPage implements OnInit {
     this.drawerState = DrawerState.Docked;
   }
 
-  placeOrder() {
+  async placeOrder() {
     this.closeCart();
     this.load.startNormalLoading("Placing Order...");
+    const card = await this.cafeteriaService.getCafeteriaCard();
+    if(card == null) {
+      const alert = await this.alertController.create({
+        // cssClass: 'my-custom-class',
+        header: "Order cannot be placed",
+        message: "You don't have a cafeteria card. Please contact your adminstration.",
+        buttons: ["OK"],
+      });
+      this.load.stopLoading();
+      await alert.present();
+      return; 
+    }
     // TODO
     setTimeout(async () => {
       const alert = await this.alertController.create({
