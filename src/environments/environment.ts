@@ -7,7 +7,7 @@ export const environment = {
 };
 
 // export const DOMAIN_URL = '';
-export const DOMAIN_URL = "http://197.57.36.73:8080";
+export const DOMAIN_URL = "http://197.57.107.194:8080";
 // export const DOMAIN_URL = "http://104.198.175.198";
 
 /*
