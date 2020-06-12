@@ -4,7 +4,9 @@ import { LoadingViewService } from "src/app/services/LoadingView/loading-view.se
 import { CafeteriaCard } from "src/app/models/cafeteria_card";
 import { CafeteriaReceipt } from "src/app/models/cafeteria_receipt";
 import { AccountService } from "src/app/services/Account/account.service";
-import { CafeteriaRechargeHistory } from 'src/app/models/cafeteria_recharge_history';
+import { CafeteriaRechargeHistory } from "src/app/models/cafeteria_recharge_history";
+import { ModalController } from "@ionic/angular";
+import { CafeteriaOrderViewPage } from "../cafeteria-order-view/cafeteria-order-view.page";
 
 @Component({
   selector: "app-cafeteria-card",
@@ -22,7 +24,8 @@ export class CafeteriaCardPage implements OnInit {
   constructor(
     private cafeteriaService: CafeteriaService,
     private accountservice: AccountService,
-    private load: LoadingViewService
+    private load: LoadingViewService,
+    private modalController: ModalController
   ) {
     this.logo = this.accountservice.getAccountLogoUrl();
   }
@@ -44,11 +47,29 @@ export class CafeteriaCardPage implements OnInit {
   async viewStatement() {
     this.viewHistory = true;
     this.gettingHistory = true;
-    this.history = await (await this.cafeteriaService.getStatement()).cafeteriaCardRechargeHistories;
+    this.history = await (await this.cafeteriaService.getStatement())
+      .cafeteriaCardRechargeHistories;
     this.gettingHistory = false;
   }
 
   refresh() {
     this.getCafeteriaCard();
+  }
+
+  async viewOrder(receipt: CafeteriaReceipt) {
+    let count = 0;
+    for(let product of receipt.products){
+      count += product.quantity?product.quantity:1;
+    }
+    const modal = await this.modalController.create({
+      component: CafeteriaOrderViewPage,
+      componentProps: {
+        logo: this.logo,
+        receipt: receipt,
+        numberOfItems: count
+      },
+    });
+
+    return await modal.present();
   }
 }
