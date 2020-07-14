@@ -57,7 +57,8 @@ export class CafeteriaService {
     order.status = "PENDING";
     order.subTotal = subTotal;
     order.comment = comment;
-
+    order.deleted = false;
+    // order.tax = 14;
     order.user = { id: this.accountService.userId };
     order.branchId = this.accountService.userBranchId;
     order.total = this.calculateTotal(order.subTotal, order.card.discount, 0);
@@ -79,7 +80,7 @@ export class CafeteriaService {
 
   calculateTotal(subtotal, discount, tax) {
     if (discount > 0) {
-      return subtotal - subtotal * (discount / 100.0);
+      return subtotal - subtotal * (discount / 100.0) + subtotal * (tax/100.0);
     } else {
       return subtotal;
     }

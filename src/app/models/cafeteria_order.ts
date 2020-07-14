@@ -16,6 +16,6 @@ export class CafeteriaOrder {
   user: any;
   products: CafeteriaProduct|CafeteriaReceiptProduct[];
   comment: string;
-
+  deleted: boolean;
   constructor() {}
 }
