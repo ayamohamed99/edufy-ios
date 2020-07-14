@@ -27,7 +27,7 @@
 <ion-content>
   <ion-list>
     <ion-item *ngFor="let product of selectedCategoryProducts; let i =index"
-      [class.last-item]="i == selectedCategoryProducts.length-1">
+      [class.last-item]="i == selectedCategoryProducts.length-1" (click)="addItem(product)">
       <ion-grid>
         <ion-row>
           <ion-col>
