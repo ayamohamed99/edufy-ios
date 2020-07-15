@@ -82,13 +82,13 @@ export class MenuPage implements OnInit {
         children: [
           {
             title: "Card",
-            icon: "",
+            icon: "wallet",
             url: "/menu/cafeteria-card",
             customReport: false,
           },
           {
             title: "Online Ordering",
-            icon: "",
+            icon: "basket",
             url: "/menu/cafeteria-menu",
             customReport: false,
           },

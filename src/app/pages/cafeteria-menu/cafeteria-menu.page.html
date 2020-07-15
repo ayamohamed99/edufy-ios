@@ -27,13 +27,13 @@
 <ion-content>
   <ion-list>
     <ion-item *ngFor="let product of selectedCategoryProducts; let i =index"
-      [class.last-item]="i == selectedCategoryProducts.length-1">
+      [class.last-item]="i == selectedCategoryProducts.length-1" (click)="addItem(product)">
       <ion-grid>
         <ion-row>
           <ion-col>
             <ion-label style="text-transform: capitalize;" class="ion-text-wrap">{{product.name}}</ion-label>
             <ion-button shape="round" fill="outline" style="--border-width: thin; margin: 8px 0px;"
-              (click)="addItem(product)">EGP {{product.price}}
+              >EGP {{product.price}}
             </ion-button>
           </ion-col>
           <ion-col style="
