@@ -58,7 +58,7 @@ export class CafeteriaService {
     order.subTotal = subTotal;
     order.comment = comment;
     order.deleted = false;
-    // order.tax = 14;
+    order.tax = 14;
     order.user = { id: this.accountService.userId };
     order.branchId = this.accountService.userBranchId;
     order.total = this.calculateTotal(order.subTotal, order.card.discount, 0);
