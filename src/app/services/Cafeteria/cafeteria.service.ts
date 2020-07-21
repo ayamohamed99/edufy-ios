@@ -58,7 +58,7 @@ export class CafeteriaService {
     order.subTotal = subTotal;
     order.comment = comment;
     order.deleted = false;
-    order.tax = 14;
+    // order.tax = 14;
     order.user = { id: this.accountService.userId };
     order.branchId = this.accountService.userBranchId;
     order.total = this.calculateTotal(order.subTotal, order.card.discount, 0);
@@ -67,6 +67,7 @@ export class CafeteriaService {
     for (let product of products) {
       const receiptProduct = {} as CafeteriaReceiptProduct;
       receiptProduct.product = product;
+      receiptProduct.deleted = false;
       order.products.push(receiptProduct);
     }
     return this.http
