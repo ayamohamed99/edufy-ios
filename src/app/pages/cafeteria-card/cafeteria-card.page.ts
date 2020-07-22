@@ -7,6 +7,7 @@ import { AccountService } from "src/app/services/Account/account.service";
 import { CafeteriaRechargeHistory } from "src/app/models/cafeteria_recharge_history";
 import { ModalController } from "@ionic/angular";
 import { CafeteriaOrderViewPage } from "../cafeteria-order-view/cafeteria-order-view.page";
+import { element } from 'protractor';
 
 @Component({
   selector: "app-cafeteria-card",
@@ -49,6 +50,7 @@ export class CafeteriaCardPage implements OnInit {
     this.gettingHistory = true;
     this.history = await (await this.cafeteriaService.getStatement())
       .cafeteriaCardRechargeHistories;
+    this.history = this.history.reverse();
     this.gettingHistory = false;
   }
 
