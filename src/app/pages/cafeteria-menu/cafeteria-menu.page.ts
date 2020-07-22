@@ -144,7 +144,7 @@ export class CafeteriaMenuPage implements OnInit {
     }
 
     this.cafeteriaService
-      .placeOrder(Array.from(this.cart.keys()), this.total,
+      .placeOrder(Array.from(this.cart.keys()), this.cart, this.total,
       card, this.comment)
       .then(async (res) => {
         const alert = await this.alertController.create({

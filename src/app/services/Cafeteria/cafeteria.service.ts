@@ -49,7 +49,7 @@ export class CafeteriaService {
     return result as CafeteriaCategory[];
   }
 
-  placeOrder(products, subTotal, card, comment) {
+  placeOrder(products, cart, subTotal, card, comment) {
     const order = {} as CafeteriaOrder;
     order.card = card;
     order.discount = card.discount;
@@ -68,6 +68,7 @@ export class CafeteriaService {
       const receiptProduct = {} as CafeteriaReceiptProduct;
       receiptProduct.product = product;
       receiptProduct.deleted = false;
+      receiptProduct.quantity = cart.get(product);
       order.products.push(receiptProduct);
     }
     return this.http
