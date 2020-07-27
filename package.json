@@ -52,6 +52,7 @@
     "com-sarriaroman-photoviewer": "1.2.4",
     "cordova-android": "^8.1.0",
     "cordova-android-support-gradle-release": "^3.0.1",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-advanced-http": "2.3.0",
     "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-androidx": "1.0.2",
@@ -168,7 +169,8 @@
       "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
