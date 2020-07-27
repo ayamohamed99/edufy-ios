@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title text-center>{{student.name}}</ion-title>
+    <ion-title class="ion-text-center">{{student.name}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="close()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -11,7 +11,7 @@
 
 <ion-content class="contentColor">
   <div class="loadDiv" *ngIf="loading">
-    <img class="editloadingImageOpened" src="assets/imgs/load.svg"/>
+    <img class="editloadingImageOpened" src="assets/imgs/load.svg" />
   </div>
 
   <div #ChatDialogue class="chat_scroll">
@@ -19,23 +19,26 @@
 
       <div class="student-bubble" *ngIf="dialoug.user == null || dialoug.user == '' ">
 
-        <img class="editProfileImageStudent" src="assets/imgs/profile.png" *ngIf="!student.profileImg"/>
-        <img class="editProfileImageStudent" [src]="student.profileImg" *ngIf="student.profileImg"/>
+        <img class="editProfileImageStudent" src="assets/imgs/profile.png" *ngIf="!student.profileImg" />
+        <img class="editProfileImageStudent" [src]="student.profileImg" *ngIf="student.profileImg" />
 
         <div class="studentTalk">
-          <ion-label class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}</ion-label>
+          <ion-label class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}
+          </ion-label>
           <p class="bodyContent">{{dialoug.message}}</p>
         </div>
       </div>
 
       <div class="teacher-bubble" *ngIf="dialoug.user != null">
         <div class="teacherTalk">
-          <ion-icon [id]="'errorIcon'+i" class="ErrorIcon" name="md-refresh-circle" color="danger" *ngIf="dialoug.errorSend" (click)="reloadSend(dialoug,i)"></ion-icon>
-          <ion-label class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}</ion-label>
+          <ion-icon [id]="'errorIcon'+i" class="ErrorIcon" name="refresh-circle" color="danger"
+            *ngIf="dialoug.errorSend" (click)="reloadSend(dialoug,i)"></ion-icon>
+          <ion-label class="timeContent">@ {{getDate.transformTheDate(dialoug.dateTimeSent,'HH:mm MMM dd, yyyy')}}
+          </ion-label>
           <p class="bodyContent"><b>{{dialoug.user.name}}</b><br>{{dialoug.message}}</p>
         </div>
 
-        <img class="editProfileImageTeacher" src="assets/imgs/profile.png"/>
+        <img class="editProfileImageTeacher" src="assets/imgs/profile.png" />
       </div>
 
     </div>
@@ -46,11 +49,11 @@
 <ion-footer color="primary" class="new_message">
   <div class="card-typing">
     <mat-form-field class="editFormChat" floatLabel="never">
-        <textarea matInput class="editInputChat" matTextareaAutosize matAutosizeMinRows="1"
-                  matAutosizeMaxRows="3" placeholder="Type here..." [(ngModel)]="theMessage"></textarea>
+      <textarea matInput class="editInputChat" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="3"
+        placeholder="Type here..." [(ngModel)]="theMessage"></textarea>
     </mat-form-field>
     <button mat-icon-button class="send-chat" (click)="sendMessage()" [disabled]="!theMessage">
-      <img src="assets/imgs/send-button.png"/>
+      <img src="assets/imgs/send-button.png" />
     </button>
   </div>
 </ion-footer>

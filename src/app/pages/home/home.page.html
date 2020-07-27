@@ -2,48 +2,79 @@
 
 <ion-content padding-right="16px" padding-left="16px">
   <div id="particle-container">
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
-    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
   </div>
   <ion-grid>
     <ion-row>
       <ion-col [sizeXs]="1" [sizeSm]="1" [sizeMd]="3" [sizeLg]="2" [sizeXl]="3"></ion-col>
-      <ion-col [sizeXs]="10" [sizeSm]="10" [sizeMd]="6" [sizeLg]="8" [sizeXl]="6"  style="vertical-align: middle">
+      <ion-col [sizeXs]="10" [sizeSm]="10" [sizeMd]="6" [sizeLg]="8" [sizeXl]="6" style="vertical-align: middle">
 
-        <section class="login-container" >
+        <section class="login-container">
           <div class = "col header text-center" no-padding no-margin>
 
             <div col-sm-1 col-md-1 col-lg-1></div>
-            <div col-sm-10 col-md-10 col-lg-10 col-xl-12 justify-content-center align-items-center align-self-center text-center no-margin no-padding>
-              <img class="colorless" src="assets/imgs/edufy.png" class = "logo" />
+            <div col-sm-10 col-md-10 col-lg-10 col-xl-12 justify-content-center align-items-center align-self-center
+              class="ion-text-center" no-margin no-padding>
+              <img class="colorless" src="assets/imgs/edufy.png" class="logo" />
             </div>
             <div col-sm-1 col-md-10 col-lg-1></div>
           </div>
@@ -55,12 +86,15 @@
                 <ion-list inset no-padding no-margin>
 
                   <ion-item class="colorless">
-                    <ion-input width-5 placeholder="Email" name="userName" id="loginField" type="text" required [(ngModel)]="userName" #email></ion-input>
+                    <ion-input width-5 placeholder="Email" name="userName" id="loginField" type="text" required
+                      [(ngModel)]="userName" #email></ion-input>
                   </ion-item>
 
                   <ion-item class="colorless">
-                    <ion-input #passwordInput width-5 placeholder="Password" name="password" id="passwordField" type="{{ !passOn ? 'password' : 'text' }}" required [(ngModel)]="password"></ion-input>
-                    <ion-button fill="clear" item-right type="button" (click)="showPassword()" style="margin: 0; padding: 0;">
+                    <ion-input #passwordInput width-5 placeholder="Password" name="password" id="passwordField"
+                      type="{{ !passOn ? 'password' : 'text' }}" required [(ngModel)]="password"></ion-input>
+                    <ion-button fill="clear" item-right type="button" (click)="showPassword()"
+                      style="margin: 0; padding: 0;">
                       <ion-icon name="eye-off" style="font-size: 2.2rem;" *ngIf="!passOn"></ion-icon>
                       <ion-icon name="eye" style="font-size: 2.2rem;" *ngIf="passOn"></ion-icon>
                     </ion-button>
@@ -72,7 +106,8 @@
 
             <ion-row>
               <ion-col no-margin no-paddings>
-                <ion-button width-5 class="submit-btn" expand="full" type="submit" [disabled]="!loginForm.form.valid">Login</ion-button>
+                <ion-button width-5 class="submit-btn" expand="full" type="submit" [disabled]="!loginForm.form.valid">
+                  Login</ion-button>
               </ion-col>
             </ion-row>
           </form>
@@ -85,7 +120,9 @@
   </ion-grid>
 
   <ion-fab top right [hidden]="true">
-    <button ion-fab color="danger" mini><ion-icon><img src="assets/icon/iconcs.png"/></ion-icon></button>
+    <button ion-fab color="danger" mini>
+      <ion-icon><img src="assets/icon/iconcs.png" /></ion-icon>
+    </button>
   </ion-fab>
 
 </ion-content>

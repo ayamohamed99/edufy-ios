@@ -1,4 +1,4 @@
-<ion-content padding class="contentColor">
+<ion-content class="ion-padding" class="contentColor">
 
   <div class="containerDIV">
 
@@ -12,7 +12,7 @@
 
 
     <div class="divOfImg">
-      <img class="medicationTypeImg" [src]="setImageOfNotification(dosageType)"/>
+      <img class="medicationTypeImg" [src]="setImageOfNotification(dosageType)" />
     </div>
 
     <label class="studentData">{{medicationTime}}</label>
@@ -20,8 +20,10 @@
     <label class="studentData">next at {{medicationNextTime}}</label>
 
     <div class="midScreen">
-      <ion-button mode="ios" fill="outline" color="white" class="leftButtonClass" (click)="confimTime(shceduleId)">Give</ion-button>
-      <ion-button mode="ios" fill="outline"  color="white" class="rightButtonClass" (click)="cancelTime()">Late</ion-button>
+      <ion-button mode="ios" fill="outline" color="white" class="leftButtonClass" (click)="confimTime(shceduleId)">Give
+      </ion-button>
+      <ion-button mode="ios" fill="outline" color="white" class="rightButtonClass" (click)="cancelTime()">Late
+      </ion-button>
     </div>
 
   </div>

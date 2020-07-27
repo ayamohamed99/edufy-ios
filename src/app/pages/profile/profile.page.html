@@ -3,7 +3,7 @@
 <!--    <ion-buttons slot="start">-->
 <!--      <ion-menu-button></ion-menu-button>-->
 <!--    </ion-buttons>-->
-<!--    <ion-title text-center>{{name}}'s Profile</ion-title>-->
+<!--    <ion-title class="ion-text-center">{{name}}'s Profile</ion-title>-->
 <!--    <ion-buttons right>-->
 <!--      <ion-button icon-only [disabled]="true">-->
 <!--        <ion-icon></ion-icon>-->
@@ -25,39 +25,39 @@
   <!--</button>-->
   <!--</ion-buttons>-->
 
-<!--  <div class="container">-->
-<!--    <div class="fb-profile">-->
-<!--      <img align="left" class="fb-image-lg" src="assets/imgs/soon.png" alt="Profile image example"/>-->
-<!--      <img align="left" class="fb-image-profile thumbnail" src="assets/imgs/profile.png" alt="Profile image example"/>-->
-<!--      <div class="fb-profile-text">-->
-<!--        <h1 style="margin-left: 240px;" *ngIf="onCore()">{{name}}</h1>-->
-<!--        <h1 *ngIf="onMobile()">{{name}}</h1>-->
+  <!--  <div class="container">-->
+  <!--    <div class="fb-profile">-->
+  <!--      <img align="left" class="fb-image-lg" src="assets/imgs/soon.png" alt="Profile image example"/>-->
+  <!--      <img align="left" class="fb-image-profile thumbnail" src="assets/imgs/profile.png" alt="Profile image example"/>-->
+  <!--      <div class="fb-profile-text">-->
+  <!--        <h1 style="margin-left: 240px;" *ngIf="onCore()">{{name}}</h1>-->
+  <!--        <h1 *ngIf="onMobile()">{{name}}</h1>-->
 
-<!--        <ion-list inset no-lines>-->
+  <!--        <ion-list inset no-lines>-->
 
-<!--          <ion-item margin-left="20px"> <ion-icon name="person" margin-right="5px"></ion-icon>-->
-<!--            {{userName}}-->
-<!--          </ion-item>-->
+  <!--          <ion-item margin-left="20px"> <ion-icon name="person" margin-right="5px"></ion-icon>-->
+  <!--            {{userName}}-->
+  <!--          </ion-item>-->
 
-<!--          <ion-item margin-left="20px"> <ion-icon name="call" margin-right="5px"></ion-icon>-->
-<!--            {{userPhone}}-->
-<!--          </ion-item>-->
+  <!--          <ion-item margin-left="20px"> <ion-icon name="call" margin-right="5px"></ion-icon>-->
+  <!--            {{userPhone}}-->
+  <!--          </ion-item>-->
 
-<!--          <ion-item margin-left="20px"> <ion-icon name="mail" margin-right="5px"></ion-icon>-->
-<!--            {{userMail}}-->
-<!--          </ion-item>-->
+  <!--          <ion-item margin-left="20px"> <ion-icon name="mail" margin-right="5px"></ion-icon>-->
+  <!--            {{userMail}}-->
+  <!--          </ion-item>-->
 
-<!--          <ion-item margin-left="20px"> <ion-icon name="locate" margin-right="5px"></ion-icon>-->
-<!--            {{userAddress}}-->
-<!--          </ion-item>-->
+  <!--          <ion-item margin-left="20px"> <ion-icon name="locate" margin-right="5px"></ion-icon>-->
+  <!--            {{userAddress}}-->
+  <!--          </ion-item>-->
 
-<!--        </ion-list>-->
+  <!--        </ion-list>-->
 
-<!--        <div style="height: 1px; background-color: lightgray; margin-left: 80px; margin-right: 80px; margin-top: 40px"></div>-->
+  <!--        <div style="height: 1px; background-color: lightgray; margin-left: 80px; margin-right: 80px; margin-top: 40px"></div>-->
 
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <!--<button (click)="openNav()">Open</button>-->
 
@@ -71,31 +71,31 @@
     <div class="profile-card js-profile-card">
       <div class="profile-card__img">
         <img [src]="accountServ.user.profileImg" alt="profile card" *ngIf="accountServ.user.profileImg">
-          <avatar [name]="name" [displayType]="'circle'" alt="profile card" *ngIf="!accountServ.user.profileImg"></avatar>
+        <avatar [name]="name" [displayType]="'circle'" alt="profile card" *ngIf="!accountServ.user.profileImg"></avatar>
       </div>
 
       <div class="profile-card__cnt js-profile-cnt">
         <div class="profile-card__name">{{name}}</div>
         <div class="profile-card__txt">{{userName}}</div>
         <div class="profile-card-loc">
-<!--        <span class="profile-card-loc__icon">-->
-<!--          <svg class="icon"><use xlink:href="#icon-location"></use></svg>-->
-<!--        </span>-->
+          <!--        <span class="profile-card-loc__icon">-->
+          <!--          <svg class="icon"><use xlink:href="#icon-location"></use></svg>-->
+          <!--        </span>-->
 
           <ion-list inset no-lines style="width: 100%">
 
             <ion-item style="color: gray;font-weight: 100;">
-              <img src="assets/icon/call-answer.png" style="margin-right: 10px"/>
+              <img src="assets/icon/call-answer.png" style="margin-right: 10px" />
               {{userPhone}}
             </ion-item>
 
             <ion-item style="color: gray;font-weight: 100;">
-              <img src="assets/icon/mail.png" style="margin-right: 10px"/>
+              <img src="assets/icon/mail.png" style="margin-right: 10px" />
               {{userMail}}
             </ion-item>
 
             <ion-item style="color: gray;font-weight: 100;">
-              <img src="assets/icon/placeholder.png" style="margin-right: 10px"/>
+              <img src="assets/icon/placeholder.png" style="margin-right: 10px" />
               {{userAddress}}
             </ion-item>
 
@@ -105,22 +105,25 @@
         <div style="background: #E9E1E1;height: 1.0px;width: 100%;margin-bottom: 20px;"></div>
 
 
-          <ion-button expand="full" (click)="checkInOut('Add')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().attendanceAdmin && network.type == 'wifi'
+        <ion-button expand="full" (click)="checkInOut('Add')" *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().attendanceAdmin && network.type == 'wifi'
           && this.attendData.length < 1 && this.accountServ.getUserRole().controlWifiPoint">
-              Add this wifi
-          </ion-button>
+          Add this wifi
+        </ion-button>
 
-        <ion-button expand="full" (click)="checkInOut('In')" *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance
+        <ion-button expand="full" (click)="checkInOut('In')"
+          *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkInAttendance
          && network.type == 'wifi' && attendData.length > 0 && (userShiftData == null || userShiftData.checkOutDate != null)">
           Check In
         </ion-button>
 
-          <ion-button  color="danger" expand="full" (click)="checkInOut('Out')" *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance
+        <ion-button color="danger" expand="full" (click)="checkInOut('Out')"
+          *ngIf="!accountServ.getUserRole().attendanceAdmin && accountServ.getAccountFeature().attendanceTeachersActivated && accountServ.getUserRole().checkOutAttendance
           && network.type == 'wifi' && attendData.length > 0 && userShiftData != null && userShiftData.checkOutDate == null">
-              Check Out
-          </ion-button>
+          Check Out
+        </ion-button>
 
-          <label *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">Connected To: {{wifi.ssid}}</label>
+        <label *ngIf="accountServ.getAccountFeature().attendanceTeachersActivated && network.type == 'wifi'">Connected
+          To: {{wifi.ssid}}</label>
 
       </div>
 

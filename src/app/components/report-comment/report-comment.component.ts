@@ -87,7 +87,7 @@ export class ReportCommentComponent implements OnInit {
   public inEditModeComments: object = {};
   public isLoadingComments: boolean = false;
   private shouldScrollToBottom: boolean = true;
-  @ViewChild('commentsContainer') private commentsContainer: any;
+  @ViewChild('commentsContainer', { static: false }) private commentsContainer: any;
 
   constructor(private commentsProvider: ReportCommentService, public accountService: AccountService,
               public actionSheetCtrl: ActionSheetController, private toastCtrl: ToastViewService,

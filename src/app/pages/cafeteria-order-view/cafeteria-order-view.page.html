@@ -1,0 +1,63 @@
+<ion-header>
+
+  <ion-toolbar color="primary">
+    <ion-title>Order Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-img [src]="logo" style="width: 80px;"></ion-img>
+      </ion-col>
+      <ion-col style="text-align: end;">
+        <ion-card-title style="font-weight: bold;">RECEIPT #{{receipt.id}}</ion-card-title>
+        <ion-card-subtitle>{{receipt.creationDate | date:"dd-MM-yy hh:mm"}}</ion-card-subtitle>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <p class="product-details-medium" style="font-weight: bold;">{{numberOfItems}} Items</p>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let product of receipt.products">
+            <ion-grid>
+              <ion-row class="product-details">
+                <ion-col class="product-details-light">{{product.quantity?product.quantity:1}}x</ion-col>
+                <ion-col>
+                  <div class="ion-text-wrap product-details-medium">
+                    {{product.product.name}}
+                  </div>
+                </ion-col>
+                <ion-col class="product-details-light" style="text-align: end;">{{product.price*(product.quantity?product.quantity:1)}} EGP
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-end product-details-light" style="margin: 2px;">
+          Subtotal: {{receipt.subTotal}}
+        </div>
+        <div class="ion-text-end product-details-medium" style="font-weight: bold; margin: 2px;">
+          Total: {{receipt.total}}
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

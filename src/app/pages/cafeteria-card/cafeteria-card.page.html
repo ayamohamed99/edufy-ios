@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Cafeteria Card</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="card!=null">
+    <ion-row>
+      <ion-col>
+        <ion-card style="--background: url('../../../assets/imgs/food_bck.svg');
+        background-repeat: no-repeat; background-size: cover;
+    background-position: center;">
+          <ion-card-header style="display: flex;">
+            <ion-img [src]="logo" style="width: 80px;"></ion-img>
+            <ion-card-subtitle style="text-align: end; width: 100%; padding: 10px;">{{card.barCode}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-card-subtitle>Cafeteria Credit</ion-card-subtitle>
+                  <ion-card-title style="font-weight: bold;">{{card.credit}} EGP</ion-card-title>
+                </ion-col>
+                <ion-col style="text-align: end;">
+                  <ion-card-subtitle>Discount</ion-card-subtitle>
+                  <ion-card-title style="font-weight: bold;">{{card.discount}}%</ion-card-title>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ngx-barcode [bc-value]="card.barCode" [bc-display-value]="false" style="text-align: center;">
+                  </ngx-barcode>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button fill="outline" expand="block" (click)="viewStatement()">VIEW STATEMENT</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="viewHistory && !gettingHistory">
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let item of history">
+            <ion-grid *ngIf="item.status.toLowerCase().includes('recharge')">
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/charge.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">{{item.status}}</p>
+                  <p style="font-size: 12px;">{{item.creationDate | date:"dd-MM-yy hh:mm:ss"}}</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: green;">+{{item.amount}} EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-grid *ngIf="item.status.toLowerCase().includes('refund')">
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/refund.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">{{item.status}}</p>
+                  <p style="font-size: 12px;">{{item.creationDate | date:"dd-MM-yy hh:mm:ss"}}</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: blue;">+{{item.amount}} EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-grid
+              *ngIf="!item.status.toLowerCase().includes('refund') && !item.status.toLowerCase().includes('recharge')"
+              (click)="viewOrder(item.receipt)">
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/withdraw.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">Withdrawal</p>
+                  <p style="font-size: 12px;">{{item.creationDate | date:"dd-MM-yy hh:mm:ss"}}</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: red;">-{{item.amount}} EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="viewHistory && gettingHistory">
+      <ion-col style="text-align: center;">
+        <ion-spinner name="crescent"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="card==null&&!cardExists" style="margin: 0px 16px;">
+    <ion-row>
+      <ion-col style="display: flex; justify-content: center; text-align: center;">
+        <ion-img src="../../../assets/imgs/no_card.svg" style="width: 100px;"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col style="text-align: center;">
+        <p>You don't have a cafeteria card.</p>
+        <ion-button size="small" fill="outline" (click)="refresh()">Refresh</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
