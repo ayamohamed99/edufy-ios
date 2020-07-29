@@ -33,7 +33,7 @@
           <ion-col>
             <ion-label style="text-transform: capitalize;" class="ion-text-wrap">{{product.name}}</ion-label>
             <ion-button shape="round" fill="outline" style="--border-width: thin; margin: 8px 0px;"
-              >EGP {{product.price}}
+              >EGP {{product.hasIngredient?product.price: product.productInfoHistorySet[product.productInfoHistorySet.length -1].price}}
             </ion-button>
           </ion-col>
           <ion-col style="

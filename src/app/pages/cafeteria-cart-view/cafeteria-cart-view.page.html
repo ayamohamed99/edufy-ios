@@ -40,11 +40,11 @@
                     <ion-row>
                       <ion-col>
                         <p style="color: black; margin-right: 4px;">Item price</p>
-                        <p>{{product.price}}</p>
+                        <p>{{product.hasIngredient?product.price: product.productInfoHistorySet[product.productInfoHistorySet.length -1].price}}</p>
                       </ion-col>
                       <ion-col>
                         <p style="color: black; margin-right: 4px;">Total</p>
-                        <p>{{product.price*cart.get(product)}}</p>
+                        <p>{{product.hasIngredient?product.price*cart.get(product) : product.productInfoHistorySet[product.productInfoHistorySet.length -1].price*cart.get(product)}}</p>
                       </ion-col>
                     </ion-row>
                   </ion-grid>

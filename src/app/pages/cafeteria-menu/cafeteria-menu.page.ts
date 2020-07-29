@@ -84,6 +84,7 @@ export class CafeteriaMenuPage implements OnInit {
   }
 
   addItem(product: CafeteriaProduct) {
+    console.log(product);
     if (this.cart == null) {
       this.cart = new Map();
     }
@@ -92,7 +93,11 @@ export class CafeteriaMenuPage implements OnInit {
       count = this.cart.get(product);
     }
     this.cart.set(product, count + 1);
-    this.total += product.price;
+    if(!product.hasIngredient){
+      this.total += product.productInfoHistorySet[product.productInfoHistorySet.length -1].price;
+    }else{
+      this.total += product.price;
+    }
     this.count++;
   }
 

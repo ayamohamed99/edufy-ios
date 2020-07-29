@@ -21,7 +21,11 @@ export class CafeteriaCartViewPage implements OnInit {
   increment(product: CafeteriaProduct) {
     const count = this.cart.get(product);
     this.cart.set(product, count + 1);
-    this.total += product.price;
+    if(!product.hasIngredient){
+      this.total += product.productInfoHistorySet[product.productInfoHistorySet.length -1].price;
+    }else{
+      this.total += product.price;
+    }
     this.count++;
   }
 
@@ -32,7 +36,11 @@ export class CafeteriaCartViewPage implements OnInit {
     } else {
       this.cart.set(product, count - 1);
     }
-    this.total -= product.price;
+    if(!product.hasIngredient){
+      this.total -= product.productInfoHistorySet[product.productInfoHistorySet.length -1].price;
+    }else{
+      this.total -= product.price;
+    }
     this.count--;
   }
 

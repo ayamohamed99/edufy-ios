@@ -14,6 +14,7 @@ export class CafeteriaProduct {
   hasIngredient: boolean;
   ingredient: boolean;
   ingredients: any;
+  productInfoHistorySet: any
   ingredientsOf: any;
   productUnitOfMeasure: any;
   productAdditionalParameterAnswerSet: any;
