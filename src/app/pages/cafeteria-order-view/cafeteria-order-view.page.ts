@@ -14,9 +14,12 @@ export class CafeteriaOrderViewPage implements OnInit {
 
   constructor(private modalController: ModalController) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.receipt);
+  }
 
   close() {
     this.modalController.dismiss();
   }
+
 }
