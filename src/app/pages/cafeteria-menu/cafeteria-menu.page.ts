@@ -162,9 +162,13 @@ export class CafeteriaMenuPage implements OnInit {
         await alert.present();
         this.emptyCart();
       })
-      .catch((error) => {
-        // TODO
+      .catch(async (error) => {
+        const alert = await this.alertController.create({
+          header: "Order cannot be placed",
+          buttons: ["OK"],
+        });
         this.load.stopLoading();
+        await alert.present();
       });
   }
 
