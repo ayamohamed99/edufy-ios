@@ -79,8 +79,22 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
+            <ion-grid *ngIf="item.status.toLowerCase().includes('reset')">
+              <ion-row>
+                <ion-col size="2" style="display: flex;">
+                  <ion-img src="../../../assets/imgs/refund.svg" style="width: 50px;"></ion-img>
+                </ion-col>
+                <ion-col>
+                  <p style="font-size: 14px;">{{item.status}}</p>
+                  <p style="font-size: 12px;">{{item.creationDate | date:"dd-MM-yy hh:mm:ss"}}</p>
+                </ion-col>
+                <ion-col>
+                  <p style="text-align: end; font-size: 14px; color: #a57225;">{{item.amount}} EGP</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
             <ion-grid
-              *ngIf="!item.status.toLowerCase().includes('refund') && !item.status.toLowerCase().includes('recharge')"
+              *ngIf="!item.status.toLowerCase().includes('refund') && !item.status.toLowerCase().includes('recharge') && !item.status.toLowerCase().includes('reset')"
               (click)="viewOrder(item.receipt)">
               <ion-row>
                 <ion-col size="2" style="display: flex;">
