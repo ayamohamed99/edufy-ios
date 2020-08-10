@@ -40,7 +40,7 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore edufy_teachers.
 PASSWORD : @Entrepreware123
 
 
-zipalign -v 4 app-release-unsigned.apk 1.0.4-edufy_teachers.apk
+zipalign -v 4 app-release-unsigned.apk 1.1.8-edufy_teachers.apk
 
 
 apksigner verify 1.0.4-edufy_teachers.apk
