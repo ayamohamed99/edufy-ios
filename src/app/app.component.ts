@@ -275,6 +275,7 @@ export class AppComponent {
   }
 
   accountInfo() {
+    console.log("get accountInfo app");
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
         (val) => {
             let data = val;
