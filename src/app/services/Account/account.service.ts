@@ -6,9 +6,10 @@ import { Url_domain } from "../../models/url_domain";
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/mergeMap';
 import { Custom_reports_data } from "../../models/custom_reports_data";
-import { BehaviorSubject, from } from "rxjs";
+import { BehaviorSubject, from, Observable } from "rxjs";
 import { HTTP } from "@ionic-native/http/ngx";
 import { Platform } from "@ionic/angular";
+// import * as Bcrypt from 'bcryptjs';
 
 @Injectable({
   providedIn: "root",
@@ -27,6 +28,7 @@ export class AccountService {
   private _accountBranchesListIds: any = [];
   private _accountBranchesList: any = [];
   private _tagArry: any = [];
+  private _userSalt:any;
   private Arry: any = [];
   thisCore: boolean;
   private customReportsValue: any = [];
@@ -44,9 +46,41 @@ export class AccountService {
   constructor(
     private http: HttpClient,
     private httpN: HTTP,
-    private platform: Platform
+    private platform: Platform,
+    // private bcrypt: Bcrypt
   ) {
     this.DomainUrl = new Url_domain();
+  }
+
+  checkPasswordValidity(password: string, id: number){
+    return this.http.get(
+      this.DomainUrl.Domain +
+      "/authentication/password.ent?id="+id+"&password="+password
+    );
+  }
+
+  changePassword(oldPassword:string, newPassword:string){
+    // oldPassword = this.bcrypt.hashSync(oldPassword, this._userSalt);
+
+    // let salt = this.bcrypt.genSalt(10);
+    // newPassword = this.bcrypt.hashSync(newPassword, salt);
+
+    let updatedUser = {
+      'id': this.userId,
+      'newPassword': newPassword,
+      'oldPassword': oldPassword
+    };
+
+    return this.http.put(
+      this.DomainUrl.Domain +
+      "/authentication/user.ent/updatePassword.ent",
+      updatedUser
+    );
+    // return this.http.put(
+    //   this.DomainUrl.Domain +
+    //   "/authentication/user.ent?operationId=1&view=PROFILE",
+    //   updatedUser
+    // );
   }
 
   getAccountLogoUrl() {
@@ -112,6 +146,7 @@ export class AccountService {
     this.userAddress = this.value.address;
     this.userBranchId = this.value.branchId;
     this._accountBranchesList = this.value.branchesList;
+    this._userSalt = this.value.userSalt;
     for (const branch of this.value.branchesList) {
       this._accountBranchesListIds.push(branch.id);
     }
@@ -192,6 +227,10 @@ export class AccountService {
 
   getCustomReportsList() {
     return this.customReportsList;
+  }
+
+  getUserId (){
+    return this._userId;
   }
 
   get accountBranchesList(): any {
