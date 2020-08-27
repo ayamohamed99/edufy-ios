@@ -83,7 +83,6 @@
           <!--        </span>-->
 
           <ion-list inset no-lines style="width: 100%">
-
             <ion-item style="color: gray;font-weight: 100;">
               <img src="assets/icon/call-answer.png" style="margin-right: 10px" />
               {{userPhone}}
@@ -98,7 +97,7 @@
               <img src="assets/icon/placeholder.png" style="margin-right: 10px" />
               {{userAddress}}
             </ion-item>
-
+            <ion-button (click)="openUpdatePasswordModal()" > Change Password </ion-button>
           </ion-list>
         </div>
 

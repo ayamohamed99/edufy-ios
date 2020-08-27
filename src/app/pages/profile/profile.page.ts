@@ -17,7 +17,8 @@ import {error} from 'selenium-webdriver';
 import {AndroidPermissions} from '@ionic-native/android-permissions/ngx';
 import {ToastViewService} from '../../services/ToastView/toast-view.service';
 import {LoginService} from '../../services/Login/login.service';
-
+import {UpdatePasswordPage} from '../update-password/update-password.page';
+import { ModalController } from '@ionic/angular';
 // declare var wifiinformation: any;
 declare var WifiWizard2: any;
 
@@ -56,6 +57,7 @@ export class ProfilePage implements OnInit {
   samePhone = false;
 
   constructor(
+    public modalController: ModalController,
     public platform: Platform,
     public accountServ: AccountService,
     public alertController: AlertController,
@@ -472,6 +474,11 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
+  async openUpdatePasswordModal(){
+    const modal = await this.modalController.create({
+      component: UpdatePasswordPage});
+    return await modal.present();
+  }
   // async getActiveDevices() {
   //     // get all active devices
   //     wifiinformation.getActiveDevices(success => {
