@@ -117,4 +117,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-document-viewer" spec="0.9.11" />
     <plugin name="cordova-plugin-datepicker" spec="0.9.3" />
+    <plugin name="cordova-plugin-wkwebview-inject-cookie" spec="^1.0.6" />
 </widget>

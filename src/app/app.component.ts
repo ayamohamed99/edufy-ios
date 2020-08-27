@@ -26,11 +26,12 @@ import {PassDataService} from './services/pass-data.service';
 import * as dateFNS from "date-fns";
 import {TransFormDateService} from './services/TransFormDate/trans-form-date.service';
 
+declare var wkWebView: any;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent {  
   homePath = '/home';
   menuPath = '/menu';
   userName: string;
@@ -72,13 +73,15 @@ export class AppComponent {
       private alertCtrl: AlertController,
       private navCtrl: NavController,
       public passData:PassDataService,
-      public transDate:TransFormDateService
+      public transDate:TransFormDateService,
   ) {
     this.initializeApp();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+      wkWebView.injectCookie('http://104.198.175.198/');
+
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString('#5C87F7');
       this.startAutoLogin();
