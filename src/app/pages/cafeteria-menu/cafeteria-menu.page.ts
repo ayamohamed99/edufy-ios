@@ -126,6 +126,9 @@ export class CafeteriaMenuPage implements OnInit {
         if (data.data.name == "orderPlaced") {
           this.placeOrder();
         }
+
+        if(data.data.count == 0 && data.data.total == 0)
+          this.emptyCart();
       }
     });
 
