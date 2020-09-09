@@ -23,6 +23,8 @@ import {LoadingViewService} from '../../services/LoadingView/loading-view.servic
 import {__await} from 'tslib';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {MedicationNotificationPage} from '../medication-notification/medication-notification.page';
+import {ReportTemplatePage} from '../report-template/report-template.page';
+import {PassDataService} from '../../services/pass-data.service';
 
 @Component({
   selector: "app-home",
@@ -70,7 +72,8 @@ export class HomePage {
     public iab: InAppBrowser,
     public modalCtrl: ModalController,
     public medicalService: MedicalCareService,
-    public load: LoadingViewService
+    public load: LoadingViewService,
+    private passData:PassDataService
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -509,14 +512,18 @@ export class HomePage {
   async onLoadReportTemplateWithComments(params?) {
     this.accountServ.reportId = params.reportId;
     this.accountServ.reportPage = params.reportName;
+
+    let data = {
+      student: { id: params.studentId, name: params.studentName },
+      classId: params.classId,
+      reportDate: params.reportDate,
+      comment: true
+    };
+    this.passData.dataToPass = data;
+
     const model = await this.modalCtrl.create({
-      component: "ReportTemplatePage",
-      componentProps: {
-        student: { id: params.studentId, name: params.studentName },
-        classId: params.classId,
-        reportDate: params.reportDate,
-        comment: true,
-      },
+      component: ReportTemplatePage,
+      componentProps: data
     });
 
     return await model.present();
