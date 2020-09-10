@@ -22,6 +22,8 @@ import {
 } from "@angular/material";
 import { MedicationNotificationPageModule } from "./pages/medication-notification/medication-notification.module";
 import { ChatDialoguePageModule } from "./pages/chat-dialogue/chat-dialogue.module";
+import { ReportTemplatePageModule } from "./pages/report-template/report-template.module";
+
 import { FormsModule } from "@angular/forms";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import {
@@ -49,6 +51,7 @@ import { TokenInterceptorService } from "./services/token-interceptor.service";
 import { AvatarModule } from "ng2-avatar";
 import { Device } from "@ionic-native/device/ngx";
 import { BackgroundMode } from "@ionic-native/background-mode/ngx";
+import { UpdatePasswordPageModule } from './pages/update-password/update-password.module';
 
 const mods = [
   MatExpansionModule,
@@ -64,7 +67,10 @@ const mods = [
   MatCheckboxModule,
   MatRadioModule,
 ];
-const modals = [ChatDialoguePageModule, MedicationNotificationPageModule];
+const modals = [ChatDialoguePageModule,
+    MedicationNotificationPageModule,
+    UpdatePasswordPageModule,
+    ReportTemplatePageModule];
 
 @NgModule({
   declarations: [AppComponent],

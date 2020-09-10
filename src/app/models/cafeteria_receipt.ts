@@ -2,6 +2,7 @@ import { CafeteriaReceiptProduct } from "./cafeteria_receipt_product";
 
 export class CafeteriaReceipt {
   id: number;
+  receiptId: number;
   branchId: number;
   creationDate: number;
   deliveredDate: number;

@@ -25,6 +25,7 @@ import { Storage } from '@ionic/storage';
 import {PassDataService} from './services/pass-data.service';
 import * as dateFNS from "date-fns";
 import {TransFormDateService} from './services/TransFormDate/trans-form-date.service';
+import {ReportTemplatePage} from './pages/report-template/report-template.page';
 
 declare var wkWebView: any;
 @Component({
@@ -623,10 +624,19 @@ export class AppComponent {
   async onLoadReportTemplateWithComments(params?) {
     this.accountServ.reportId = params.reportId;
     this.accountServ.reportPage = params.reportName;
+
+    let data = {
+      student: { id: params.studentId, name: params.studentName },
+      classId: params.classId,
+      reportDate: params.reportDate,
+      comment: true
+    };
+
+    this.passData.dataToPass = data;
+
     const model = await this.modalCtrl.create({
-      component: 'ReportTemplatePage',
-      componentProps: {student: {id: params.studentId, name: params.studentName},
-        classId: params.classId, reportDate: params.reportDate, comment: true}
+      component: ReportTemplatePage,
+      componentProps: data
     });
 
     return await model.present();

@@ -286,12 +286,12 @@ export class ReportTemplatePage implements OnInit {
   }
 
 /////////////////// HERE THE CODE START /////////////////////////////////// ABOVE CODE FOR VIEW ONLY TO APPEAR //////////////////
-  constructor(public accountServ:AccountService, public sanitizer:DomSanitizer,private passData:PassDataService,
+  constructor(public accountServ:AccountService, public sanitizer:DomSanitizer,public passData:PassDataService,
               public platform: Platform, public storage: Storage,public dailyReportServ:DailyReportService, public loadCtrl: LoadingViewService,
               private toastCtrl: ToastViewService, private modalCtrl:ModalController,public alrtCtrl: AlertController, private reportCommentProvider:ReportCommentService,
               public checkboxFunctionService:CheckboxFunctionService,private datePicker: DatePicker,private tranformDate:TransFormDateService)
   {
-
+    
     this.comment = passData.dataToPass.comment;
     this.template = passData.dataToPass.template;
     this.class = passData.dataToPass.class;
@@ -311,6 +311,7 @@ export class ReportTemplatePage implements OnInit {
 
     this.shouldAutoExpandComments = !!this.comment;
     if (this.shouldAutoExpandComments) {
+      this.storage.remove("DAILY_REPORT_COMMENT_NOTIFICATION");
       this.loadingReportInBackground = true;
       this.initTemplateViewWithAutoExpandedComments();
       return;

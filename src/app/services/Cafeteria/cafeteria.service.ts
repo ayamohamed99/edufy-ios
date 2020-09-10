@@ -39,14 +39,28 @@ export class CafeteriaService {
 
   async getCafeteriaProducts() {
     const categories = (await this.getCafeteriaCategories().toPromise()) as any[];
-    const promisesArray = [];
+    
+    let promisesArray = [];
     for (let category of categories) {
       promisesArray.push(
         this.getCafeteriaCategoryProducts(category.id).toPromise()
       );
     }
     const result = await Promise.all(promisesArray);
-    return result as CafeteriaCategory[];
+    let sortedCategories = result as CafeteriaCategory[];
+    sortedCategories = sortedCategories.sort((a, b) => {
+      if(a.name > b.name) return 1;
+      else if (a.name < b.name) return -1;
+      else return 0;
+    });
+    for(let category of sortedCategories){
+      category.products = category.products.sort((a, b) => {
+        if(a.name > b.name) return 1;
+        else if (a.name < b.name) return -1;
+        else return 0;
+      });
+    }
+    return sortedCategories;
   }
 
   placeOrder(products, cart, subTotal, card, comment) {
