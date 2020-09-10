@@ -42,6 +42,9 @@ export class CafeteriaMenuPage implements OnInit {
   distanceTop = 20;
   minimumHeight = 56;
   dockedHeight = 56;
+  subTotal: number = 0.0;
+  discount: number = 0;
+  card: any;
 
   constructor(
     private cafeteriaService: CafeteriaService,
@@ -52,8 +55,12 @@ export class CafeteriaMenuPage implements OnInit {
     private cdRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getCategories();
+    this.card = await this.cafeteriaService.getCafeteriaCard();
+    if(this.card != null){
+      this.discount = this.card.discount;
+    }
   }
 
   async getCategories() {
@@ -93,11 +100,16 @@ export class CafeteriaMenuPage implements OnInit {
       count = this.cart.get(product);
     }
     this.cart.set(product, count + 1);
+    let productPrice = 0;
+
     if(!product.hasIngredient){
-      this.total += product.productInfoHistorySet[product.productInfoHistorySet.length -1].price;
+      productPrice = product.productInfoHistorySet[product.productInfoHistorySet.length -1].price;
     }else{
-      this.total += product.price;
+      productPrice = product.price;
     }
+    
+    this.subTotal += productPrice;
+    this.total += this.cafeteriaService.calculateTotal(productPrice, this.discount, 0);
     this.count++;
   }
 
@@ -108,6 +120,8 @@ export class CafeteriaMenuPage implements OnInit {
         cart: this.cart,
         count: this.count,
         total: this.total,
+        subTotal: this.subTotal,
+        discount: this.discount
       },
     });
 
@@ -123,6 +137,9 @@ export class CafeteriaMenuPage implements OnInit {
         if (data.data.total) {
           this.total = data.data.total;
         }
+        if (data.data.subTotal){
+          this.subTotal = data.data.subTotal;
+        }
         if (data.data.name == "orderPlaced") {
           this.placeOrder();
         }
@@ -137,8 +154,8 @@ export class CafeteriaMenuPage implements OnInit {
 
   async placeOrder() {
     this.load.startNormalLoading("Placing Order...");
-    const card = await this.cafeteriaService.getCafeteriaCard();
-    if (card == null) {
+    // const card = await this.cafeteriaService.getCafeteriaCard();
+    if (this.card == null) {
       const alert = await this.alertController.create({
         // cssClass: 'my-custom-class',
         header: "Order cannot be placed",
@@ -152,8 +169,8 @@ export class CafeteriaMenuPage implements OnInit {
     }
 
     this.cafeteriaService
-      .placeOrder(Array.from(this.cart.keys()), this.cart, this.total,
-      card, this.comment)
+      .placeOrder(Array.from(this.cart.keys()), this.cart, this.subTotal,
+      this.card, this.comment)
       .then(async (res) => {
         const alert = await this.alertController.create({
           // cssClass: 'my-custom-class',
@@ -178,6 +195,7 @@ export class CafeteriaMenuPage implements OnInit {
   emptyCart() {
     this.cart.clear();
     this.total = 0.0;
+    this.subTotal = 0.0;
     this.count = 0.0;
   }
 
