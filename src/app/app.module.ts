@@ -51,6 +51,7 @@ import { TokenInterceptorService } from "./services/token-interceptor.service";
 import { AvatarModule } from "ng2-avatar";
 import { Device } from "@ionic-native/device/ngx";
 import { BackgroundMode } from "@ionic-native/background-mode/ngx";
+import { UpdatePasswordPageModule } from './pages/update-password/update-password.module';
 
 const mods = [
   MatExpansionModule,
@@ -66,7 +67,10 @@ const mods = [
   MatCheckboxModule,
   MatRadioModule,
 ];
-const modals = [ChatDialoguePageModule, MedicationNotificationPageModule, ReportTemplatePageModule];
+const modals = [ChatDialoguePageModule,
+    MedicationNotificationPageModule,
+    UpdatePasswordPageModule,
+    ReportTemplatePageModule];
 
 @NgModule({
   declarations: [AppComponent],
