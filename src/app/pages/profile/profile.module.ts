@@ -8,8 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { ProfilePage } from './profile.page';
 import {AvatarModule} from 'ng2-avatar';
 
-
-
 const routes: Routes = [
   {
     path: '',

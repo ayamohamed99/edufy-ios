@@ -8,10 +8,18 @@
 
   <ion-toolbar class="toolBarShap" color="light" scrollable="true">
     <ion-segment [(ngModel)]="View" color="primary" scrollable="true">
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)" *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME" (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="CHECKUPS_NAME" (click)="tabThatSelectedDo(CHECKUPS_NAME)" *ngIf="accountServ.getUserRole().viewCheckup">{{CHECKUP_TAB}}</ion-segment-button>
-      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="WAITING_APPROVAL_NAME" (click)="tabThatSelectedDo(WAITING_APPROVAL_NAME)" *ngIf="accountServ.getUserRole().medicalRecordCanApprove">{{APPROVING_TAB}}</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px"
+        [value]="MEDICATIONS_NAME" (click)="tabThatSelectedDo(MEDICATIONS_NAME)"
+        *ngIf="accountServ.getUserRole().viewMedication">{{MEDICATION_TAB}}</ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="INCIDENTS_NAME"
+        (click)="tabThatSelectedDo(INCIDENTS_NAME)" *ngIf="accountServ.getUserRole().viewIncident">{{INCIDENT_TAB}}
+      </ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px" [value]="CHECKUPS_NAME"
+        (click)="tabThatSelectedDo(CHECKUPS_NAME)" *ngIf="accountServ.getUserRole().viewCheckup">{{CHECKUP_TAB}}
+      </ion-segment-button>
+      <ion-segment-button style="min-width: fit-content; padding-left: 6px;padding-right: 6px"
+        [value]="WAITING_APPROVAL_NAME" (click)="tabThatSelectedDo(WAITING_APPROVAL_NAME)"
+        *ngIf="accountServ.getUserRole().medicalRecordCanApprove">{{APPROVING_TAB}}</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
   <!--<ion-toolbar  class="toolBarShap" color="primary" *ngIf="platform.is('ios')">-->
@@ -38,10 +46,8 @@
 
         <!--SCROLL TO REFRESH-->
         <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-          <ion-refresher-content  pullingIcon="arrow-dropdown"
-                                  pullingText="Pull to refresh"
-                                  refreshingSpinner="circles"
-                                  refreshingText="">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="">
           </ion-refresher-content>
         </ion-refresher>
 
@@ -49,16 +55,19 @@
           <img class="loadingMedicalCare" src="assets/imgs/heartbeat.svg">
         </div>
 
-        <ion-item class="fitTheView" >
+        <ion-item class="fitTheView">
           <ion-label class="textColor">Status</ion-label>
-          <ion-select [selectedText]="theStatus" (ngModelChange)="statusModelChange(true)" interface="popover" [disabled]="loadingMedication && medicalRecords.length < 1">
-            <ion-select-option [selected]="theStatus" *ngFor="let status of allStatusInMedication" >{{status}}</ion-select-option>
+          <ion-select [value]="theStatus" (ngModelChange)="statusModelChange(true)" interface="popover"
+            [disabled]="loadingMedication && medicalRecords.length < 1">
+            <ion-select-option [value]="theStatus" *ngFor="let status of allStatusInMedication">{{status}}
+            </ion-select-option>
           </ion-select>
         </ion-item>
 
         <ion-grid class="contentColor">
           <ion-row>
-            <ion-col *ngFor="let medicine of medicalRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6" >
+            <ion-col *ngFor="let medicine of medicalRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12"
+              [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
               <!--START THE CARD-->
 
               <div class="editDivView">
@@ -72,15 +81,18 @@
                       <img [src]="medicine.student.profileImg" *ngIf="medicine.student.profileImg">
                     </ion-avatar>
 
-                      <span>
-                        <label class="studentName" text-capitalize>{{ medicine.student.name}}</label>
-                        <label class="studentClass" text-capitalize>{{medicine.student.classes.grade.name+" - "+medicine.student.classes.name}}</label>
-                        <label class="creationDate" text-capitalize>{{ medicine.oneMedication.creationDate}}</label>
-                      </span>
+                    <span>
+                      <label class="studentName" text-capitalize>{{ medicine.student.name}}</label>
+                      <label class="studentClass"
+                        text-capitalize>{{medicine.student.classes.grade.name+" - "+medicine.student.classes.name}}</label>
+                      <label class="creationDate" text-capitalize>{{ medicine.oneMedication.creationDate}}</label>
+                    </span>
 
-                    <div class="buttonOnImg" *ngIf="medicine.createdFrom == 'web' && (accountServ.getUserRole().editMedication || accountServ.getUserRole().deleteMedication)">
+                    <div class="buttonOnImg"
+                      *ngIf="medicine.createdFrom == 'web' && (accountServ.getUserRole().editMedication || accountServ.getUserRole().deleteMedication)">
                       <ion-button class="closeInDiv" fill="clear" item-end (click)="openMenu($event,medicine,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;font-size: 1.8rem;" name="md-more" slot="icon-only" class="buttonShape" ></ion-icon>
+                        <ion-icon style="background: #eee0;color: #000000;font-size: 1.8rem;" name="ellipsis-vertical"
+                          slot="icon-only" class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
                   </ion-item>
@@ -89,7 +101,7 @@
 
                   <div class="dosagePart">
 
-                    <img class="imgDosage" src="assets/icon/times.png"/>
+                    <img class="imgDosage" src="assets/icon/times.png" />
                     <label class="dosageTimes">Times of Dosages</label>
 
                   </div>
@@ -98,61 +110,72 @@
                   <div class="dosagePartForButton">
                     <!--<div class="imgSpaceButton"></div>-->
                     <div class="buttonDiv">
-                      <label class="timesColor"style="padding-right: 5px;">{{optimizeTimesData(medicine.oneMedication.medicationSchedule)}}</label>
+                      <label class="timesColor"
+                        style="padding-right: 5px;">{{optimizeTimesData(medicine.oneMedication.medicationSchedule)}}</label>
                     </div>
                   </div>
 
 
                   <span *ngIf="medicine.activeMedication && !medicine.activeMedicationTaken">
-            <div class="dosagePart">
-              <img class="imgDosage" src="assets/icon/warning.png"/>
-              <label class="dosageTimes">Instructions</label>
-            </div>
+                    <div class="dosagePart">
+                      <img class="imgDosage" src="assets/icon/warning.png" />
+                      <label class="dosageTimes">Instructions</label>
+                    </div>
 
 
-            <div class="dosagePartForButton">
-              <div class="imgSpaceButton"></div>
-              <div class="buttonDiv">
-                <label class="timesColor">{{optimizeInstructionData(medicine.oneMedication.instructions)}}</label>
-              </div>
-            </div>
-          </span>
+                    <div class="dosagePartForButton">
+                      <div class="imgSpaceButton"></div>
+                      <div class="buttonDiv">
+                        <label
+                          class="timesColor">{{optimizeInstructionData(medicine.oneMedication.instructions)}}</label>
+                      </div>
+                    </div>
+                  </span>
 
-                  <span *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || !medicine.activeMedication">
-            <div class="dosagePart">
-              <img class="imgDosage" src="assets/icon/calendar.png"/>
-              <label class="dosageTimes">Days</label>
-            </div>
+                  <span
+                    *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || !medicine.activeMedication">
+                    <div class="dosagePart">
+                      <img class="imgDosage" src="assets/icon/calendar.png" />
+                      <label class="dosageTimes">Days</label>
+                    </div>
 
-            <div class="dosagePartForButton">
-              <!--<div class="imgSpaceButton"></div>-->
-              <div class="buttonDiv">
-                <label class="timesColor"style="padding-right: 5px;">{{setDaysOfMedication(medicine.oneMedication.medicationSchedule[0])}}</label>
-              </div>
-            </div>
-          </span>
+                    <div class="dosagePartForButton">
+                      <!--<div class="imgSpaceButton"></div>-->
+                      <div class="buttonDiv">
+                        <label class="timesColor"
+                          style="padding-right: 5px;">{{setDaysOfMedication(medicine.oneMedication.medicationSchedule[0])}}</label>
+                      </div>
+                    </div>
+                  </span>
 
                   <span *ngIf="!medicine.activeMedication && !medicine.activeMedicationTaken">
-            <div class="dosagePart">
-              <img class="imgDosage" src="assets/icon/sand-clock.png"/>
-              <div class="separatImg">
-                <label class="dosageNumber">From</label>
-                <label class="dosageType">To</label>
-              </div>
-            </div>
+                    <div class="dosagePart">
+                      <img class="imgDosage" src="assets/icon/sand-clock.png" />
+                      <div class="separatImg">
+                        <label class="dosageNumber">From</label>
+                        <label class="dosageType">To</label>
+                      </div>
+                    </div>
 
-            <div class="dosagePartWithoutMargin">
-              <div class="imgSpace"></div>
-              <div class="separatValue">
-                <label class="dosageNumberValue">{{setStartAndEndDate(medicine.oneMedication.startDate,'start')}}</label>
-                <img class="imgDosage" src="assets/icon/FromToArrow.png"/>
-                <label class="dosageTypeValue">{{setStartAndEndDate(medicine.oneMedication.endDate,'end')}}</label>
-              </div>
-            </div>
-          </span>
+                    <div class="dosagePartWithoutMargin">
+                      <div class="imgSpace"></div>
+                      <div class="separatValue">
+                        <label
+                          class="dosageNumberValue">{{setStartAndEndDate(medicine.oneMedication.startDate,'start')}}</label>
+                        <img class="imgDosage" src="assets/icon/FromToArrow.png" />
+                        <label
+                          class="dosageTypeValue">{{setStartAndEndDate(medicine.oneMedication.endDate,'end')}}</label>
+                      </div>
+                    </div>
+                  </span>
 
-                  <div class="buttonActionTime" [ngClass]="medicine.activeMedicationTaken?'buttonActionTimeConfirm':'buttonActionTime'" *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || ( medicine.activeMedication && !medicine.activeMedicationTaken)">
-                    <ion-button mode="ios" class="buttonTime" [ngClass]="medicine.activeMedicationTaken?'confirmTime':'buttonTime'" [id]="'timeButton'+k"  expand="block"  (click)="confirmTime($event,'timeButton'+k,medicine.timeOfActiveMedication.id,checkIfTaken(medicine.timeOfActiveMedication.medicationsNotifications))">
+                  <div class="buttonActionTime"
+                    [ngClass]="medicine.activeMedicationTaken?'buttonActionTimeConfirm':'buttonActionTime'"
+                    *ngIf="(medicine.activeMedication && medicine.activeMedicationTaken) || ( medicine.activeMedication && !medicine.activeMedicationTaken)">
+                    <ion-button mode="ios" class="buttonTime"
+                      [ngClass]="medicine.activeMedicationTaken?'confirmTime':'buttonTime'" [id]="'timeButton'+k"
+                      expand="block"
+                      (click)="confirmTime($event,'timeButton'+k,medicine.timeOfActiveMedication.id,checkIfTaken(medicine.timeOfActiveMedication.medicationsNotifications))">
                       {{writeOnTimeButton(medicine)}}
                     </ion-button>
                   </div>
@@ -204,13 +227,11 @@
       <ion-content class="contentScroll">
 
         <!--SCROLL TO REFRESH-->
-          <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-              <ion-refresher-content  pullingIcon="arrow-dropdown"
-                                      pullingText="Pull to refresh"
-                                      refreshingSpinner="circles"
-                                      refreshingText="">
-              </ion-refresher-content>
-          </ion-refresher>
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="">
+          </ion-refresher-content>
+        </ion-refresher>
 
 
         <div *ngIf="loadingIncident && incidentRecords.length < 1">
@@ -218,46 +239,47 @@
         </div>
 
         <ion-item mode="md" class="fitTheView removeItemRight" *ngIf="accountServ.getUserRole().exportIncident">
-          <ion-button color="light" class="exportButton" (click)="openExportIncidentsPage()" [disabled]="allclasses.length <= 0&&allStudents.length<=0">
-            <ion-icon name="md-exit" style="padding-right: 5px"></ion-icon>
+          <ion-button color="light" class="exportButton" (click)="openExportIncidentsPage()"
+            [disabled]="allclasses.length <= 0&&allStudents.length<=0">
+            <ion-icon name="exit" style="padding-right: 5px"></ion-icon>
             Export Incidents
           </ion-button>
         </ion-item>
 
 
         <fieldset id="field1" style="display: none;">
-          <section  *ngFor="let inci of exAllIncidents; let i = index">
+          <section *ngFor="let inci of exAllIncidents; let i = index">
             <table id="{{inci.id}}" border="2">
 
               <thead bgcolor="#d3d3d3">
-              {{compareIncidentList(inci.list,i)}}
-              <tr *ngIf="inci.newLine">
-                <th style="background-color: #ddd;font-weight: bold">
-                  Student Name
-                </th>
-                <th style="background-color: #ddd;font-weight: bold">
-                  Class Name
-                </th>
-                <th style="background-color: #ddd;font-weight: bold">
-                  Incident Date
-                </th>
-                <th style="background-color: #ddd;font-weight: bold">
-                  Incident Title
-                </th>
-                <th *ngFor="let item of inci.list" style="background-color: #ddd;font-weight: bold">
-                  {{item.q}}
-                </th>
-              </tr>
+                {{compareIncidentList(inci.list,i)}}
+                <tr *ngIf="inci.newLine">
+                  <th style="background-color: #ddd;font-weight: bold">
+                    Student Name
+                  </th>
+                  <th style="background-color: #ddd;font-weight: bold">
+                    Class Name
+                  </th>
+                  <th style="background-color: #ddd;font-weight: bold">
+                    Incident Date
+                  </th>
+                  <th style="background-color: #ddd;font-weight: bold">
+                    Incident Title
+                  </th>
+                  <th *ngFor="let item of inci.list" style="background-color: #ddd;font-weight: bold">
+                    {{item.q}}
+                  </th>
+                </tr>
               </thead>
 
               <tbody>
-              <tr>
-                <td>{{inci.student}}</td>
-                <td>{{inci.class}}</td>
-                <td>{{inci.date}}</td>
-                <td>{{inci.title}}</td>
-                <td *ngFor="let item of inci.list">{{item.a}}</td>
-              </tr>
+                <tr>
+                  <td>{{inci.student}}</td>
+                  <td>{{inci.class}}</td>
+                  <td>{{inci.date}}</td>
+                  <td>{{inci.title}}</td>
+                  <td *ngFor="let item of inci.list">{{item.a}}</td>
+                </tr>
               </tbody>
 
             </table>
@@ -267,7 +289,8 @@
 
         <ion-grid class="contentColor">
           <ion-row>
-            <ion-col *ngFor="let incident of incidentRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
+            <ion-col *ngFor="let incident of incidentRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12"
+              [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
 
 
               <div class="editDivView">
@@ -278,18 +301,24 @@
 
                     <ion-avatar item-start>
                       <img src="assets/imgs/profile.png" *ngIf="!incident.medicalRecord.student.profileImg">
-                      <img [src]="incident.medicalRecord.student.profileImg" *ngIf="incident.medicalRecord.student.profileImg">
+                      <img [src]="incident.medicalRecord.student.profileImg"
+                        *ngIf="incident.medicalRecord.student.profileImg">
                     </ion-avatar>
 
                     <span>
-                    <label class="studentName" text-capitalize>{{ incident.medicalRecord.student.name}}</label>
-                    <label class="studentClass" text-capitalize>{{incident.medicalRecord.student.classes.grade.name+" - "+incident.medicalRecord.student.classes.name}}</label>
-                    <label class="creationDate" text-capitalize>{{setStartAndEndDate(incident.medicalRecord.incident.incidentDate,'start')}}</label>
+                      <label class="studentName" text-capitalize>{{ incident.medicalRecord.student.name}}</label>
+                      <label class="studentClass"
+                        text-capitalize>{{incident.medicalRecord.student.classes.grade.name+" - "+incident.medicalRecord.student.classes.name}}</label>
+                      <label class="creationDate"
+                        text-capitalize>{{setStartAndEndDate(incident.medicalRecord.incident.incidentDate,'start')}}</label>
                     </span>
 
                     <div class="buttonOnImg">
-                      <ion-button class="closeInDiv" fill="clear" *ngIf="accountServ.getUserRole().editIncident || accountServ.getUserRole().deleteIncident" item-end (click)="openMenu($event,incident,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only" class="buttonShape" ></ion-icon>
+                      <ion-button class="closeInDiv" fill="clear"
+                        *ngIf="accountServ.getUserRole().editIncident || accountServ.getUserRole().deleteIncident"
+                        item-end (click)="openMenu($event,incident,View,k)">
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
+                          class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
                   </ion-item>
@@ -304,13 +333,13 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/icon/mc.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Checkup
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div  class="LoopContainWithFullWidth" *ngIf="incident.medicalRecord.checkup.title!=''">
+                          <div class="LoopContainWithFullWidth" *ngIf="incident.medicalRecord.checkup.title!=''">
                             <div class="medicienCellFullWidth" (click)="viewMedicalReport(incident,'Checkup')">
                               <div class="medicineLable">
                                 {{incident.medicalRecord.checkup.title}}
@@ -331,13 +360,14 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Medication
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div *ngFor="let parameter of incident.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
+                          <div *ngFor="let parameter of incident.medicalRecord.prescription?.medications;let i = index"
+                            class="LoopContainFitContent">
                             <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
@@ -356,7 +386,8 @@
 
 
                   <div class="buttonActionTime">
-                    <ion-button mode="ios" class="buttonTime" expand="block"  (click)="viewMedicalReport(incident,'Incident')">
+                    <ion-button mode="ios" class="buttonTime" expand="block"
+                      (click)="viewMedicalReport(incident,'Incident')">
                       See Full Incident
                     </ion-button>
                   </div>
@@ -412,13 +443,11 @@
 
 
         <!--SCROLL TO REFRESH-->
-          <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-              <ion-refresher-content  pullingIcon="arrow-dropdown"
-                                      pullingText="Pull to refresh"
-                                      refreshingSpinner="circles"
-                                      refreshingText="">
-              </ion-refresher-content>
-          </ion-refresher>
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="">
+          </ion-refresher-content>
+        </ion-refresher>
 
 
         <div *ngIf="loadingCheckup && checkupRecords.length < 1">
@@ -431,7 +460,8 @@
 
         <ion-grid class="contentColor">
           <ion-row>
-            <ion-col *ngFor="let checkup of checkupRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
+            <ion-col *ngFor="let checkup of checkupRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12"
+              [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
 
 
 
@@ -443,18 +473,24 @@
 
                     <ion-avatar item-start>
                       <img src="assets/imgs/profile.png" *ngIf="!checkup.medicalRecord.student.profileImg">
-                      <img [src]="checkup.medicalRecord.student.profileImg" *ngIf="checkup.medicalRecord.student.profileImg">
+                      <img [src]="checkup.medicalRecord.student.profileImg"
+                        *ngIf="checkup.medicalRecord.student.profileImg">
                     </ion-avatar>
 
                     <span>
-                    <label class="studentName" text-capitalize>{{ checkup.medicalRecord.student.name}}</label>
-                    <label class="studentClass" text-capitalize>{{checkup.medicalRecord.student.classes.grade.name+" - "+checkup.medicalRecord.student.classes.name}}</label>
-                    <label class="creationDate" text-capitalize>{{ setStartAndEndDate(checkup.medicalRecord.checkup.checkupDate,'start')}}</label>
+                      <label class="studentName" text-capitalize>{{ checkup.medicalRecord.student.name}}</label>
+                      <label class="studentClass"
+                        text-capitalize>{{checkup.medicalRecord.student.classes.grade.name+" - "+checkup.medicalRecord.student.classes.name}}</label>
+                      <label class="creationDate"
+                        text-capitalize>{{ setStartAndEndDate(checkup.medicalRecord.checkup.checkupDate,'start')}}</label>
                     </span>
 
                     <div class="buttonOnImg">
-                      <ion-button class="closeInDiv" fill="clear" *ngIf="this.accountServ.getUserRole().editCheckup || this.accountServ.getUserRole().deleteCheckup" item-end (click)="openMenu($event,checkup,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only" class="buttonShape" ></ion-icon>
+                      <ion-button class="closeInDiv" fill="clear"
+                        *ngIf="this.accountServ.getUserRole().editCheckup || this.accountServ.getUserRole().deleteCheckup"
+                        item-end (click)="openMenu($event,checkup,View,k)">
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
+                          class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
                   </ion-item>
@@ -470,13 +506,13 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/icon/firstAid.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Incident
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div  class="LoopContainWithFullWidth" *ngIf="checkup.medicalRecord.incident.title!=''">
+                          <div class="LoopContainWithFullWidth" *ngIf="checkup.medicalRecord.incident.title!=''">
                             <div class="medicienCellFullWidth" (click)="viewMedicalReport(checkup,'Incident')">
                               <div class="medicineLable">
                                 {{checkup.medicalRecord.incident.title}}
@@ -498,13 +534,14 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Medication
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div *ngFor="let parameter of checkup.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
+                          <div *ngFor="let parameter of checkup.medicalRecord.prescription?.medications;let i = index"
+                            class="LoopContainFitContent">
                             <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
@@ -523,7 +560,8 @@
 
 
                   <div class="buttonActionTime">
-                    <ion-button mode="ios" class="buttonTime" expand="block"  (click)="viewMedicalReport(checkup,'Checkup')">
+                    <ion-button mode="ios" class="buttonTime" expand="block"
+                      (click)="viewMedicalReport(checkup,'Checkup')">
                       See Full Checkup
                     </ion-button>
                   </div>
@@ -589,13 +627,11 @@
 
 
         <!--SCROLL TO REFRESH-->
-          <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-              <ion-refresher-content  pullingIcon="arrow-dropdown"
-                                      pullingText="Pull to refresh"
-                                      refreshingSpinner="circles"
-                                      refreshingText="">
-              </ion-refresher-content>
-          </ion-refresher>
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+            refreshingText="">
+          </ion-refresher-content>
+        </ion-refresher>
 
 
         <div *ngIf="loadingApprove && approvalRecords.length < 1">
@@ -608,7 +644,8 @@
 
         <ion-grid class="contentColor">
           <ion-row>
-            <ion-col *ngFor="let approval of approvalRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12" [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
+            <ion-col *ngFor="let approval of approvalRecords;let k = index" [size]="12" [sizeSm]="12" [sizeXs]="12"
+              [sizeXl]="4" [sizeLg]="6" [sizeMd]="6">
 
 
 
@@ -621,18 +658,24 @@
 
                     <ion-avatar item-start>
                       <img src="assets/imgs/profile.png" *ngIf="!approval.medicalRecord.student.profileImg">
-                      <img [src]="approval.medicalRecord.student.profileImg" *ngIf="approval.medicalRecord.student.profileImg">
+                      <img [src]="approval.medicalRecord.student.profileImg"
+                        *ngIf="approval.medicalRecord.student.profileImg">
                     </ion-avatar>
 
                     <span>
-                    <label class="studentName" text-capitalize>{{ approval.medicalRecord.student.name}}</label>
-                    <label class="studentClass" text-capitalize>{{approval.medicalRecord.student.classes.grade.name+" - "+approval.medicalRecord.student.classes.name}}</label>
-                    <label class="creationDate" text-capitalize>{{ getDateForApproval(approval.medicalRecord)}}</label>
+                      <label class="studentName" text-capitalize>{{ approval.medicalRecord.student.name}}</label>
+                      <label class="studentClass"
+                        text-capitalize>{{approval.medicalRecord.student.classes.grade.name+" - "+approval.medicalRecord.student.classes.name}}</label>
+                      <label class="creationDate"
+                        text-capitalize>{{ getDateForApproval(approval.medicalRecord)}}</label>
                     </span>
 
                     <div class="buttonOnImg">
-                      <ion-button class="closeInDiv" fill="clear" *ngIf="approval.medicalRecord.checkup || approval.medicalRecord.incident" item-end (click)="openMenu($event,approval,View,k)">
-                        <ion-icon style="background: #eee0;color: #000000;" name="md-more" slot="icon-only" class="buttonShape" ></ion-icon>
+                      <ion-button class="closeInDiv" fill="clear"
+                        *ngIf="approval.medicalRecord.checkup || approval.medicalRecord.incident" item-end
+                        (click)="openMenu($event,approval,View,k)">
+                        <ion-icon style="background: #eee0;color: #000000;" name="ellipsis-vertical" slot="icon-only"
+                          class="buttonShape"></ion-icon>
                       </ion-button>
                     </div>
                   </ion-item>
@@ -645,13 +688,13 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/icon/firstAid.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Incident
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div  class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.incident.title!=''">
+                          <div class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.incident.title!=''">
                             <div class="medicienCellFullWidth" (click)="viewMedicalReport(approval,'Incident')">
                               <div class="medicineLable">
                                 {{approval.medicalRecord.incident.title}}
@@ -672,13 +715,13 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/icon/mc.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Checkup
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div  class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.checkup.title!=''">
+                          <div class="LoopContainWithFullWidth" *ngIf="approval.medicalRecord.checkup.title!=''">
                             <div class="medicienCellFullWidth" (click)="viewMedicalReport(approval,'Checkup')">
                               <div class="medicineLable">
                                 {{approval.medicalRecord.checkup.title}}
@@ -698,13 +741,14 @@
                       <img class="topRightIcon turnImgToWhite" src="assets/imgs/drugs.png">
                       <div class="questionTitle">
 
-                        <ion-card-header text-wrap class="formLabel">
+                        <ion-card-header class="ion-text-wrap" class="formLabel">
                           Medication
                         </ion-card-header>
 
                         <ion-card-content class="questionBody">
 
-                          <div *ngFor="let parameter of approval.medicalRecord.prescription?.medications;let i = index" class="LoopContainFitContent" >
+                          <div *ngFor="let parameter of approval.medicalRecord.prescription?.medications;let i = index"
+                            class="LoopContainFitContent">
                             <div class="medicienCell" (click)="viewThisMedication(parameter)">
                               <div class="medicineLable">
                                 {{parameter.medicine.name}}
@@ -722,7 +766,8 @@
 
 
                   <div class="buttonActionTime">
-                    <ion-button mode="ios" class="buttonApprove" [id]="'timeButton'+k" expand="block" (click)="approveMedicalRecord(approval.medicalRecord.id)">
+                    <ion-button mode="ios" class="buttonApprove" [id]="'timeButton'+k" expand="block"
+                      (click)="approveMedicalRecord(approval.medicalRecord.id)">
                       Approve Now
                     </ion-button>
                   </div>
@@ -754,12 +799,14 @@
 <ion-fab vertical="bottom" horizontal="end" #fab>
 
   <!--<button ion-fab [disabled]="loading && medicalRecords.length < 1" ><ion-icon name="add"></ion-icon></button>-->
-  <ion-fab-button ><ion-icon name="add"></ion-icon></ion-fab-button>
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
   <ion-fab-list side="top" *ngIf="accountServ.getUserRole().createIncident">
     <ion-fab-button class="forSave" style="padding: 0;background-color: white" (click)="fabSelected(0,fab)">
       <img src="assets/icon/firstAid.png">
     </ion-fab-button>
-      <ion-label>Incident</ion-label>
+    <ion-label>Incident</ion-label>
   </ion-fab-list>
 
 
@@ -767,7 +814,7 @@
     <ion-fab-button style="padding: 0;background-color: white" (click)="fabSelected(1,fab)">
       <img src="assets/icon/mc.png">
     </ion-fab-button>
-      <ion-label>Checkup</ion-label>
+    <ion-label>Checkup</ion-label>
   </ion-fab-list>
 
 </ion-fab>

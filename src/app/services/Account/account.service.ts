@@ -1,20 +1,20 @@
 /* tslint:disable:max-line-length */
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Url_domain} from '../../models/url_domain';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Url_domain } from "../../models/url_domain";
 // import 'rxjs/add/observable/fromPromise';
 // import 'rxjs/add/operator/map';
 // import 'rxjs/add/operator/mergeMap';
-import {Custom_reports_data} from '../../models/custom_reports_data';
-import {BehaviorSubject, from} from 'rxjs';
-import {HTTP} from '@ionic-native/http/ngx';
-import {Platform} from '@ionic/angular';
+import { Custom_reports_data } from "../../models/custom_reports_data";
+import { BehaviorSubject, from, Observable } from "rxjs";
+import { HTTP } from "@ionic-native/http/ngx";
+import { Platform } from "@ionic/angular";
+// import * as Bcrypt from 'bcryptjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AccountService {
-
   DomainUrl: Url_domain;
   private value: any = [];
   private accountFeature: any = [];
@@ -28,6 +28,7 @@ export class AccountService {
   private _accountBranchesListIds: any = [];
   private _accountBranchesList: any = [];
   private _tagArry: any = [];
+  private _userSalt:any;
   private Arry: any = [];
   thisCore: boolean;
   private customReportsValue: any = [];
@@ -38,48 +39,98 @@ export class AccountService {
   private _reportId: number;
   private _userId: number;
 
-  private _user:any;
+  private _user: any;
 
   menuFeatures: BehaviorSubject<object> = new BehaviorSubject(null);
 
-  constructor(private http: HttpClient,private httpN:HTTP, private platform:Platform) {
+  constructor(
+    private http: HttpClient,
+    private httpN: HTTP,
+    private platform: Platform,
+    // private bcrypt: Bcrypt
+  ) {
     this.DomainUrl = new Url_domain();
   }
 
-  getAccountRoles(subHeader: string) {
+  checkPasswordValidity(password: string, id: number){
+    return this.http.get(
+      this.DomainUrl.Domain +
+      "/authentication/password.ent?id="+id+"&password="+password
+    );
+  }
 
-    const httpOptions =  {headers: new HttpHeaders({
+  changePassword(oldPassword:string, newPassword:string){
+    // oldPassword = this.bcrypt.hashSync(oldPassword, this._userSalt);
+
+    // let salt = this.bcrypt.genSalt(10);
+    // newPassword = this.bcrypt.hashSync(newPassword, salt);
+
+    let updatedUser = {
+      'id': this.userId,
+      'newPassword': newPassword,
+      'oldPassword': oldPassword
+    };
+
+    return this.http.put(
+      this.DomainUrl.Domain +
+      "/authentication/user.ent/updatePassword.ent",
+      updatedUser
+    );
+    // return this.http.put(
+    //   this.DomainUrl.Domain +
+    //   "/authentication/user.ent?operationId=1&view=PROFILE",
+    //   updatedUser
+    // );
+  }
+
+  getAccountLogoUrl() {
+    return (
+      this.DomainUrl.Domain +
+      "/admissionApplication.ent/getImage.ent?url=https://storage.googleapis.com/entrepreware-education.appspot.com/schoolsLogos/" +
+      this.userAccount.logo
+    );
+  }
+
+  getAccountRoles(subHeader: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
         // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
         // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
         // 'Accept':'application/json',
         // 'content-type':'application/json',
-        Authorization : subHeader
-      })};
+        Authorization: subHeader,
+      }),
+    };
     // if(this.platform.is('cordova')){
     //   return from(this.httpN.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', {}, {'Authorization' : subHeader}));
     // }else {
-      return this.http.post(this.DomainUrl.Domain + '/authentication/authenticator.ent?operationId=3', null);
+    return this.http.post(
+      this.DomainUrl.Domain + "/authentication/authenticator.ent?operationId=3",
+      null
+    );
     // }
   }
 
-
   getCustomReports(subHeader: string) {
-    const httpOptions =  {headers: new HttpHeaders({
+    const httpOptions = {
+      headers: new HttpHeaders({
         // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
         // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
         // 'Accept':'application/json',
         // 'content-type':'application/json',
-        Authorization : subHeader
-      })};
+        Authorization: subHeader,
+      }),
+    };
     // if(this.platform.is('cordova')){
     //   return from(this.httpN.get(this.DomainUrl.Domain + '/authentication/report.ent/accountReports.ent', {}, {'Authorization' : subHeader}));
     // }else{
-      return this.http.get(this.DomainUrl.Domain + '/authentication/report.ent/accountReports.ent');
+    return this.http.get(
+      this.DomainUrl.Domain + "/authentication/report.ent/accountReports.ent"
+    );
     // }
   }
 
   setDate(data: any) {
-
     this.value = data;
     if (this.value.data != null) {
       this.value = JSON.parse(this.value.data);
@@ -95,6 +146,7 @@ export class AccountService {
     this.userAddress = this.value.address;
     this.userBranchId = this.value.branchId;
     this._accountBranchesList = this.value.branchesList;
+    this._userSalt = this.value.userSalt;
     for (const branch of this.value.branchesList) {
       this._accountBranchesListIds.push(branch.id);
     }
@@ -102,7 +154,6 @@ export class AccountService {
 
     this.menuFeatures.next(this.value.accountFeatures);
   }
-
 
   setCustomReport(data: any) {
     this.customReportsList = [];
@@ -116,15 +167,16 @@ export class AccountService {
     }
   }
 
-
   getTags(subHeader: string) {
-    const httpOptions =  {headers: new HttpHeaders({
+    const httpOptions = {
+      headers: new HttpHeaders({
         // 'Access-Control-Allow-Origin' : 'http://localhost:8100',
         // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
         // 'Accept':'application/json',
         // 'content-type':'application/json',
-        Authorization : subHeader
-      })};
+        Authorization: subHeader,
+      }),
+    };
 
     // if(this.platform.is('cordova')){
     //   from(this.httpN.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds, {},{'Authorization' : subHeader})).subscribe(value => {
@@ -135,7 +187,13 @@ export class AccountService {
     //   });
     // }else {
 
-      this.http.get(this.DomainUrl.Domain + '/authentication/tag.ent?branchesIds=' + this.accountBranchesListIds).subscribe(value => {
+    this.http
+      .get(
+        this.DomainUrl.Domain +
+          "/authentication/tag.ent?branchesIds=" +
+          this.accountBranchesListIds
+      )
+      .subscribe((value) => {
         this.Arry = value;
         for (const tag of this.Arry) {
           this._tagArry.push(tag);
@@ -171,6 +229,10 @@ export class AccountService {
     return this.customReportsList;
   }
 
+  getUserId (){
+    return this._userId;
+  }
+
   get accountBranchesList(): any {
     return this._accountBranchesList;
   }
@@ -187,7 +249,6 @@ export class AccountService {
     this._accountBranchesListIds = value;
   }
 
-
   get tagArry(): any {
     return this._tagArry;
   }
@@ -196,7 +257,6 @@ export class AccountService {
     this._tagArry = value;
   }
 
-
   get reportPage(): string {
     return this._reportPage;
   }
@@ -204,7 +264,6 @@ export class AccountService {
   set reportPage(value: string) {
     this._reportPage = value;
   }
-
 
   get reportId(): any {
     return this._reportId;
@@ -230,11 +289,9 @@ export class AccountService {
     this._userBranchId = value;
   }
 
-
   get userAccount(): any {
     return this._userAccount;
   }
-
 
   get user(): any {
     return this._user;

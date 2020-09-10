@@ -3,11 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
 };
 
 // export const DOMAIN_URL = '';
-export const DOMAIN_URL = 'http://192.168.1.28:9090';
+export const DOMAIN_URL = "http://197.57.226.178:8080";
+// export const DOMAIN_URL = "http://104.198.175.198";
 
 /*
  * For easier debugging in development mode, you can import the following file

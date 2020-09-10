@@ -1,0 +1,16 @@
+.bottom-drawer-docked-grid {
+  border-radius: 4px 4px 0px 0px;
+  background: var(--ion-color-primary-tint);
+  color: white;
+  height: 100%;
+  padding-top: 8px;
+
+  ion-row,
+  ion-col {
+    height: 100%;
+  }
+}
+
+.last-item {
+  margin-bottom: 56px;
+}
