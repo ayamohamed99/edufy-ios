@@ -362,8 +362,8 @@ export class HomePage {
         this.onLoadReport(this.reportPage,
           data.reportName,
           data.reportId,
-          data.student.id,
-          data.student.name,
+          data.studentId,
+          data.studentName,
           data.reportDate,
           data.classId);
       } else if (data.page === this.chatPage) {
