@@ -25,6 +25,10 @@ import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {MedicationNotificationPage} from '../medication-notification/medication-notification.page';
 import {ReportTemplatePage} from '../report-template/report-template.page';
 import {PassDataService} from '../../services/pass-data.service';
+import {DailyReportService} from '../../services/DailyReport/daily-report.service';
+import {ClassesService} from '../../services/Classes/classes.service';
+import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: "app-home",
@@ -74,7 +78,10 @@ export class HomePage {
     public modalCtrl: ModalController,
     public medicalService: MedicalCareService,
     public load: LoadingViewService,
-    private passData:PassDataService
+    public classesServ: ClassesService,
+    private passData:PassDataService,
+    private dailyReportServ:DailyReportService,
+    public transformDate:TransFormDateService
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -525,31 +532,63 @@ export class HomePage {
       classId: any) {
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
-    let data = {
-      student: {
-        id: studentId,
-        name: studentName
-      },
-      class: {
-        id: classId
-      },
-      classId: classId,
-      reportDate: reportDate,
-      comment: false,
-      selected:[{
-        id: studentId,
-        name: studentName
-      }]
-    };
-    this.passData.dataToPass = data;
 
-    const model = await this.modalCtrl.create({
-      component: ReportTemplatePage,
-      componentProps: data
-    });
+    // let pickerStartDate = new Date();
+    // const date = this.transformDate.transformTheDate(pickerStartDate,'dd-MM-yyyy');
+    // var dateData = date.split('-');
+    // var year = dateData [2];
+    // var month = dateData [1];
+    // var day = dateData [0];
 
-    return await model.present();
-    // this.navCtrl.navigateRoot(["menu/report", pageName]);
+    // let selectedDate = day + "-" + month + "-" + year;
+
+    // this.classesServ.getClassList('REPORT', 5,selectedDate, null, null, reportId).subscribe(
+    //   classesResponse => {
+    //     console.log(classesResponse);
+
+    //     this.dailyReportServ.getStudentReportAnswers(classId, selectedDate, reportId).subscribe(
+    //       answers=>{
+    //         console.log(answers);
+
+    //         this.dailyReportServ.getDailyReportTemplate("English",selectedDate,classId,reportId).subscribe(
+    //           async template => {
+    //             console.log(template);
+
+    //             let data = {
+    //               selected:[{
+    //                 id: studentId,
+    //                 name: studentName
+    //               }],
+    //               template: template[0].questionsList,
+    //               reportDate: selectedDate,
+    //               selectedDate: selectedDate,
+    //               reportAnswer: answers,
+    //               student: {
+    //                 id: studentId,
+    //                 name: studentName
+    //               },
+    //               class: {
+    //                 id: classId
+    //               },
+    //               classId: classId,
+    //               comment: false,
+    //               reportConflict: []
+    //             };
+    //             this.passData.dataToPass = data;
+                
+    //             const model = await this.modalCtrl.create({
+    //               component: ReportTemplatePage,
+    //               componentProps: data
+    //             });
+    
+    //             return await model.present();
+    //           }
+    //         )
+    //       }
+    //     );
+    //   }
+    // )
+    this.navCtrl.navigateRoot(["menu/report", pageName]);
   }
 
   async onLoadReportTemplateWithComments(params?) {
