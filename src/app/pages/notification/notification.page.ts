@@ -745,8 +745,8 @@ export class NotificationPage implements OnInit {
     ) {
       this.alrtCtrl
         .create({
-          header: "Atachment",
-          message: "What are you want to do with this file!",
+          header: "Attachment",
+          message: "What do you want to do with this file?",
           buttons: [
             {
               text: "Download",
