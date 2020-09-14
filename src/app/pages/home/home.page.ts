@@ -52,6 +52,7 @@ export class HomePage {
   reportPage = "ReportPage";
   medicalcarePage = "MedicalCarePage";
   medicationNotificationPage = "MedicationNotificationPage";
+  homePage = "HomePage";
 
   constructor(
     private router: Router,
@@ -351,12 +352,20 @@ export class HomePage {
       if (data.isCommentNotification) {
         this.onLoadReportTemplateWithComments(data);
       } else if (data.page === "ReportPage") {
-        this.onLoadReport(this.reportPage, data.reportName, data.reportId);
+        this.onLoadReport(this.reportPage,
+          data.reportName,
+          data.reportId,
+          data.student.id,
+          data.student.name,
+          data.reportDate,
+          data.classId);
       } else if (data.page === this.chatPage) {
         this.handelChatOnBackground(data);
       } else if (data.page === this.medicationNotificationPage) {
         this.openMedicalCareNotification(data);
-      } else {
+      } else if (data.page === this.homePage) {
+        this.navCtrl.navigateRoot("/menu/profile");
+      }else {
         if (this.getPathFromPageName(data.data.page) != null) {
           this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
         } else {
@@ -391,12 +400,18 @@ export class HomePage {
           this.onLoadReport(
             this.reportPage,
             data.data.reportName,
-            data.data.reportId
+            data.data.reportId,
+            data.data.student.id,
+            data.data.student.name,
+            data.data.reportDate,
+            data.data.classId
           );
         } else if (data.data.page === this.chatPage) {
           this.handelChatONForeground(data);
         } else if (data.data.page === this.medicationNotificationPage) {
           this.openMedicalCareNotification(data.data);
+        } else if (data.data.page === this.homePage) {
+          this.navCtrl.navigateRoot("/menu/profile");
         } else {
           if (this.getPathFromPageName(data.data.page) != null) {
             this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
@@ -503,10 +518,38 @@ export class HomePage {
     this.iab.create("http://104.198.175.198/", "_system");
   }
 
-  onLoadReport(page: any, pageName: any, reportId: any) {
+  async onLoadReport(page: any, pageName: any, reportId: any,
+      studentId: any, 
+      studentName: any,
+      reportDate: any,
+      classId: any) {
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
-    // this.navCtrl.setRoot(page);
+    let data = {
+      student: {
+        id: studentId,
+        name: studentName
+      },
+      class: {
+        id: classId
+      },
+      classId: classId,
+      reportDate: reportDate,
+      comment: false,
+      selected:[{
+        id: studentId,
+        name: studentName
+      }]
+    };
+    this.passData.dataToPass = data;
+
+    const model = await this.modalCtrl.create({
+      component: ReportTemplatePage,
+      componentProps: data
+    });
+
+    return await model.present();
+    // this.navCtrl.navigateRoot(["menu/report", pageName]);
   }
 
   async onLoadReportTemplateWithComments(params?) {
