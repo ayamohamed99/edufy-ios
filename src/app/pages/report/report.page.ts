@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {ReportCommentService} from '../../services/ReportComment/report-comment.service';
 import {AlertController, ModalController, NavController, Platform} from '@ionic/angular';
@@ -210,7 +210,7 @@ export class ReportPage implements OnInit {
 
   constructor(public navCtrl: NavController,private dailyReportServ:DailyReportService, public accountServ: AccountService,
               public studentsServ: StudentsService, public classesServ: ClassesService, public alrtCtrl: AlertController,private passData:PassDataService,
-              public loadCtrl: LoadingViewService, public platform: Platform, public storage: Storage,private datePicker: DatePicker,
+              public loadCtrl: LoadingViewService, public platform: Platform, public storage: Storage,private datePicker: DatePicker,private zone: NgZone,
               private toastCtrl:ToastViewService, private modalCtrl:ModalController,private reportComment:ReportCommentService,public transformDate:TransFormDateService)
   {
 
@@ -270,7 +270,10 @@ export class ReportPage implements OnInit {
             this.dailyReportServ.putHeader(val);
             this.classesServ.putHeader(val);
             this.studentsServ.putHeader(val);
-            this.getAllClasses();
+            this.zone.run(() => {
+              this.getAllClasses();
+            });
+            
           });
 
     }
@@ -366,6 +369,7 @@ export class ReportPage implements OnInit {
 
   getAllClasses() {
     this.loadCtrl.startNormalLoading('Loading classes ...');
+    let that =this;
     this.classesServ.getClassList(this.viewName, this.classOpId, this.selectedDate, null, null,this.reportId).subscribe((value) => {
           let allData: any = value;
 
@@ -374,6 +378,7 @@ export class ReportPage implements OnInit {
           // }
 
           console.log(allData);
+          that.classesList = [] ;
           if(allData) {
             for (let data of allData) {
               let item = new Class();
@@ -424,7 +429,11 @@ export class ReportPage implements OnInit {
                 }
               }
 
-              this.classesList.push(item);
+              that.classesList.push(item);
+              console.log(that.classesList);
+              console.log("this.classes: ");
+              console.log(this.classesList);
+
             }
             this.foundBefore = true;
             this.loadCtrl.stopLoading();

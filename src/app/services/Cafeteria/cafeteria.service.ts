@@ -48,17 +48,9 @@ export class CafeteriaService {
     }
     const result = await Promise.all(promisesArray);
     let sortedCategories = result as CafeteriaCategory[];
-    sortedCategories = sortedCategories.sort((a, b) => {
-      if(a.name > b.name) return 1;
-      else if (a.name < b.name) return -1;
-      else return 0;
-    });
+    sortedCategories = sortedCategories.sort((a, b) => a.name.localeCompare(b.name));
     for(let category of sortedCategories){
-      category.products = category.products.sort((a, b) => {
-        if(a.name > b.name) return 1;
-        else if (a.name < b.name) return -1;
-        else return 0;
-      });
+      category.products = category.products.sort((a, b) => a.name.localeCompare(b.name));
     }
     return sortedCategories;
   }
