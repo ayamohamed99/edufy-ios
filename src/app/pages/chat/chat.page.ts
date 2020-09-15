@@ -47,6 +47,7 @@ export class ChatPage implements OnInit {
         storage.get(this.recentChatKey).then((val) => {
           if (val) {
             this.lastStudents = JSON.parse(val);
+            console.log(this.lastStudents);
           }
           this.getNewChat();
         });

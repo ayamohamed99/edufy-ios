@@ -64,7 +64,7 @@ export class ChatService {
     // if(this.platform.is('cordova')){
     //   return from(this.httpN.get(this.DomainUrl.Domain + 'authentication/chat.ent?operationId=1',{},{'content-type': 'application/json', 'Authorization': this.val}));
     // }else{
-      return this.http.get(this.DomainUrl.Domain + 'authentication/chat.ent?operationId=1', this.httpOptions);
+      return this.http.get(this.DomainUrl.Domain + '/authentication/chat.ent?operationId=1', this.httpOptions);
     // }
   }
 

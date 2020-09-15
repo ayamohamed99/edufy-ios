@@ -449,6 +449,11 @@ export class HomePage {
   }
 
   handelChatOnBackground(data) {
+    this.alertCtrl.getTop().then(val => {
+      if(val.header == 'Chat'){
+        val.dismiss();
+      }
+    })
     let JData = JSON.parse(data.chatMessage);
     let student = JData.chatThread.student;
     let Stud = new Student();
@@ -463,6 +468,11 @@ export class HomePage {
   }
 
   handelChatONForeground(data) {
+    this.alertCtrl.getTop().then(val => {
+      if(val.header == 'Chat'){
+        val.dismiss();
+      }
+    })
     let JData = JSON.parse(data.data.chatMessage);
     let student = JData.chatThread.student;
     let Stud = new Student();
@@ -488,6 +498,15 @@ export class HomePage {
       component: ChatDialoguePage,
       componentProps: data,
     });
+
+    let students = [];
+    students.push(student);
+
+    if (this.platform.is("desktop")) {
+      localStorage.setItem("LOCAL_STORAGE_RECENT_CHAT", JSON.stringify(students));
+    }else{
+      this.storage.set("LOCAL_STORAGE_RECENT_CHAT", JSON.stringify(students));
+    }
 
     modal.onDidDismiss().then((val) => {
       if (this.platform.is("desktop")) {
