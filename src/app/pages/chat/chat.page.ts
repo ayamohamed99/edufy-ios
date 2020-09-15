@@ -303,7 +303,7 @@ export class ChatPage implements OnInit {
         }
       },
       (err) => {
-        console.log("cant get recent chat from server");
+        console.log("can't get recent chat from server");
         console.log(err);
       }
     );

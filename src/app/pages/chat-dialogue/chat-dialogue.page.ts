@@ -81,6 +81,8 @@ export class ChatDialoguePage implements OnInit {
             this.chatDialogs.push(chat);
           }
 
+          this.chatDialogs = this.chatDialogs.reverse();
+          
           this.chatServ.newMessageSubject$.subscribe(
             (value) => {
               if (value) {
