@@ -68,6 +68,10 @@ export class ChatService {
     // }
   }
 
+  getNumberOfUnseenMessages(){
+    return this.http.get(this.DomainUrl.Domain + '/authentication/chat.ent/getUnseenMessagesCount.ent', this.httpOptions);
+  }
+
   getChatMessagesHistory(studentId, branchId) {
     let requestURL = this.commonUrl + '?operationId=3';
 

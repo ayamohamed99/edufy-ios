@@ -29,6 +29,7 @@ import {DailyReportService} from '../../services/DailyReport/daily-report.servic
 import {ClassesService} from '../../services/Classes/classes.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {combineLatest} from 'rxjs';
+import {RefreshService} from '../../services/refresh/refresh.service';
 
 @Component({
   selector: "app-home",
@@ -81,7 +82,8 @@ export class HomePage {
     public classesServ: ClassesService,
     private passData:PassDataService,
     private dailyReportServ:DailyReportService,
-    public transformDate:TransFormDateService
+    public transformDate:TransFormDateService,
+    public refresh: RefreshService
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -354,6 +356,8 @@ export class HomePage {
   setupNotification() {
     this.fire.getToken();
 
+    this.refresh.refreshNoOfUnseenMessages();
+    
     this.fire.onBackgroundNotification().subscribe((data) => {
       console.log("Background Notification : \n", JSON.stringify(data));
       if (data.isCommentNotification) {

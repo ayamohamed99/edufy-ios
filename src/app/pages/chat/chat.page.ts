@@ -6,6 +6,7 @@ import {Student} from '../../models';
 import {Storage} from '@ionic/storage';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {PassDataService} from '../../services/pass-data.service';
+import {RefreshService} from '../../services/refresh/refresh.service';
 
 @Component({
   selector: "app-chat",
@@ -28,8 +29,10 @@ export class ChatPage implements OnInit {
     public alrt: AlertController,
     public modalCtrl: ModalController,
     public chatServ: ChatService,
-    public passData: PassDataService
+    public passData: PassDataService,
+    public refresh: RefreshService
   ) {
+    this.refresh.refreshNoOfUnseenMessages();
     if (platform.is("desktop")) {
       studentServ.putHeader(localStorage.getItem("LOCAL_STORAGE_TOKEN"));
       this.getChatStudent();

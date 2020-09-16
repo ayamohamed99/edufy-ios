@@ -10,7 +10,8 @@ import {MedicalCareService} from './../../services/MedicalCare/medical-care.serv
 import {LoginService} from './../../services/Login/login.service';
 import { Platform, NavController} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
+import {ChatService} from '../../services/Chat/chat.service';
+import {RefreshService} from '../../services/refresh/refresh.service';
 
 import _ from "lodash";
 
@@ -33,6 +34,8 @@ export class MenuPage implements OnInit {
 
   elementByClass: any = [];
 
+  // public noOfUnseenMessages:any = 0;
+
   constructor(private router: Router,
     private platform: Platform,
     private logout: LogoutService,
@@ -43,12 +46,20 @@ export class MenuPage implements OnInit {
     private medicalService: MedicalCareService,
     private studentServ: StudentsService,
     private navCtrl: NavController,
+    public refresh: RefreshService,
+    private chatService: ChatService,
     private accountServ: AccountService) {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {
         this.selectedPath = event.url;
       }
     });
+    // this.chatService.getNumberOfUnseenMessages().subscribe(
+    //   val => {
+    //     this.noOfUnseenMessages = val;
+    //   }
+    // )
+    this.refresh.refreshNoOfUnseenMessages();
   }
 
   ngOnInit() {}
@@ -144,6 +155,7 @@ export class MenuPage implements OnInit {
         main: true, 
         url: "/menu/chat",
         customReport: false,
+        chat: true
       };
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
