@@ -50,10 +50,15 @@
                 </div>
 
                 <div *ngIf="!p.main  && !p.children">
-                    <ion-item [routerLink]="p.url" routerDirection="root" class="toolsItem"
+                    <ion-item *ngIf="!p.logout" [routerLink]="p.url" routerDirection="root" class="toolsItem"
                         [class.active-item]="selectedPath.startsWith(p.url)">
                         <ion-icon [name]="p.icon" slot="start"></ion-icon>
                         {{ p.title }}
+                    </ion-item>
+                    <ion-item *ngIf="p.logout" (click)="onSignOut()"class="toolsItem"
+                    [class.active-item]="selectedPath.startsWith(p.url)">
+                        <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                            {{ p.title }}
                     </ion-item>
                 </div>
             </ion-menu-toggle>
