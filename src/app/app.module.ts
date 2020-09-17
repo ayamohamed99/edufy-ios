@@ -52,6 +52,7 @@ import { AvatarModule } from "ng2-avatar";
 import { Device } from "@ionic-native/device/ngx";
 import { BackgroundMode } from "@ionic-native/background-mode/ngx";
 import { UpdatePasswordPageModule } from './pages/update-password/update-password.module';
+import { RefreshService } from '../app/services/refresh/refresh.service';
 
 const mods = [
   MatExpansionModule,
@@ -96,6 +97,7 @@ const modals = [ChatDialoguePageModule,
   providers: [
     StatusBar,
     SplashScreen,
+    RefreshService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     {
       provide: HTTP_INTERCEPTORS,

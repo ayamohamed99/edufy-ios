@@ -75,13 +75,24 @@ export class FCMService {
     //         this.sendTokenToServer();
     //       });
     // }else{
+    if(this.platform.is('ios')){
+      this.http.post(this.DomainUrl.Domain + '/authentication/regedufyApnstoken.ent', body, httpOptions).subscribe(
+        (val) => {
+          console.log(val);
+        }, (err) => {
+          console.log(err);
+          this.sendTokenToServer();
+        });
+    }else{
       this.http.post(this.DomainUrl.Domain + '/authentication/regedufyfcmtoken.ent', body, httpOptions).subscribe(
-          (val) => {
-            console.log(val);
-          }, (err) => {
-            console.log(err);
-            this.sendTokenToServer();
-          });
+        (val) => {
+          console.log(val);
+        }, (err) => {
+          console.log(err);
+          this.sendTokenToServer();
+        });
+    }
+      
     // }
 
 

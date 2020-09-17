@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <ion-content [class]="lastStudents.length>0? 'scrollInsideWithLastOpened' : 'scrollInsideAlone'" *ngIf="allStudents.length>0 && loading == false">
+  <ion-content [class]="allStudents.length>0? 'scrollInsideWithLastOpened' : 'scrollInsideAlone'" *ngIf="allStudents.length>0 && loading == false">
     <ion-list class="ListColor" mode="ios">
       <ion-item mode="ios" *ngFor="let student of allStudents" (click)="openDialog(student,-1,'All')" class="removeBorder">
 
