@@ -76,6 +76,11 @@ export class FCMService {
     //       });
     // }else{
     if(this.platform.is('ios')){
+      const body = {
+        branchId: this.accountServ.userBranchId,
+        userId: this.accountServ.userId,
+        deviceToken: this.Token
+      };
       this.http.post(this.DomainUrl.Domain + '/authentication/regedufyApnstoken.ent', body, httpOptions).subscribe(
         (val) => {
           console.log(val);
