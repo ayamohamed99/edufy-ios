@@ -7,7 +7,9 @@
                         [class.active-item]="selectedPath.startsWith(p.url)">
                         <ion-icon [name]="p.icon" slot="start"></ion-icon>
                         {{ p.title }}
-                        <span slot="end" *ngIf="p.chat && refresh.noOfUnSeenMessages != 0">{{ refresh.noOfUnSeenMessages }}</span>
+                        <ion-badge *ngIf="p.chat && refresh.hasUnSeenMessages " slot="end" color="danger">
+                            {{ refresh.noOfUnSeenMessages }}
+                        </ion-badge>
                     </ion-item>
                 </div>
 
