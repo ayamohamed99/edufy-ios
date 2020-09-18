@@ -25,6 +25,10 @@ import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {MedicationNotificationPage} from '../medication-notification/medication-notification.page';
 import {ReportTemplatePage} from '../report-template/report-template.page';
 import {PassDataService} from '../../services/pass-data.service';
+import {DailyReportService} from '../../services/DailyReport/daily-report.service';
+import {ClassesService} from '../../services/Classes/classes.service';
+import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
+import {combineLatest} from 'rxjs';
 
 @Component({
   selector: "app-home",
@@ -52,6 +56,7 @@ export class HomePage {
   reportPage = "ReportPage";
   medicalcarePage = "MedicalCarePage";
   medicationNotificationPage = "MedicationNotificationPage";
+  homePage = "HomePage";
 
   constructor(
     private router: Router,
@@ -73,7 +78,10 @@ export class HomePage {
     public modalCtrl: ModalController,
     public medicalService: MedicalCareService,
     public load: LoadingViewService,
-    private passData:PassDataService
+    public classesServ: ClassesService,
+    private passData:PassDataService,
+    private dailyReportServ:DailyReportService,
+    public transformDate:TransFormDateService
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -351,12 +359,20 @@ export class HomePage {
       if (data.isCommentNotification) {
         this.onLoadReportTemplateWithComments(data);
       } else if (data.page === "ReportPage") {
-        this.onLoadReport(this.reportPage, data.reportName, data.reportId);
+        this.onLoadReport(this.reportPage,
+          data.reportName,
+          data.reportId,
+          data.studentId,
+          data.studentName,
+          data.reportDate,
+          data.classId);
       } else if (data.page === this.chatPage) {
         this.handelChatOnBackground(data);
       } else if (data.page === this.medicationNotificationPage) {
         this.openMedicalCareNotification(data);
-      } else {
+      } else if (data.page === this.homePage) {
+        this.navCtrl.navigateRoot("/menu/profile");
+      }else {
         if (this.getPathFromPageName(data.data.page) != null) {
           this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
         } else {
@@ -391,12 +407,18 @@ export class HomePage {
           this.onLoadReport(
             this.reportPage,
             data.data.reportName,
-            data.data.reportId
+            data.data.reportId,
+            data.data.student.id,
+            data.data.student.name,
+            data.data.reportDate,
+            data.data.classId
           );
         } else if (data.data.page === this.chatPage) {
           this.handelChatONForeground(data);
         } else if (data.data.page === this.medicationNotificationPage) {
           this.openMedicalCareNotification(data.data);
+        } else if (data.data.page === this.homePage) {
+          this.navCtrl.navigateRoot("/menu/profile");
         } else {
           if (this.getPathFromPageName(data.data.page) != null) {
             this.navCtrl.navigateRoot(this.getPathFromPageName(data.data.page));
@@ -503,10 +525,70 @@ export class HomePage {
     this.iab.create("http://104.198.175.198/", "_system");
   }
 
-  onLoadReport(page: any, pageName: any, reportId: any) {
+  async onLoadReport(page: any, pageName: any, reportId: any,
+      studentId: any, 
+      studentName: any,
+      reportDate: any,
+      classId: any) {
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
-    // this.navCtrl.setRoot(page);
+
+    // let pickerStartDate = new Date();
+    // const date = this.transformDate.transformTheDate(pickerStartDate,'dd-MM-yyyy');
+    // var dateData = date.split('-');
+    // var year = dateData [2];
+    // var month = dateData [1];
+    // var day = dateData [0];
+
+    // let selectedDate = day + "-" + month + "-" + year;
+
+    // this.classesServ.getClassList('REPORT', 5,selectedDate, null, null, reportId).subscribe(
+    //   classesResponse => {
+    //     console.log(classesResponse);
+
+    //     this.dailyReportServ.getStudentReportAnswers(classId, selectedDate, reportId).subscribe(
+    //       answers=>{
+    //         console.log(answers);
+
+    //         this.dailyReportServ.getDailyReportTemplate("English",selectedDate,classId,reportId).subscribe(
+    //           async template => {
+    //             console.log(template);
+
+    //             let data = {
+    //               selected:[{
+    //                 id: studentId,
+    //                 name: studentName
+    //               }],
+    //               template: template[0].questionsList,
+    //               reportDate: selectedDate,
+    //               selectedDate: selectedDate,
+    //               reportAnswer: answers,
+    //               student: {
+    //                 id: studentId,
+    //                 name: studentName
+    //               },
+    //               class: {
+    //                 id: classId
+    //               },
+    //               classId: classId,
+    //               comment: false,
+    //               reportConflict: []
+    //             };
+    //             this.passData.dataToPass = data;
+                
+    //             const model = await this.modalCtrl.create({
+    //               component: ReportTemplatePage,
+    //               componentProps: data
+    //             });
+    
+    //             return await model.present();
+    //           }
+    //         )
+    //       }
+    //     );
+    //   }
+    // )
+    this.navCtrl.navigateRoot(["menu/report", pageName]);
   }
 
   async onLoadReportTemplateWithComments(params?) {

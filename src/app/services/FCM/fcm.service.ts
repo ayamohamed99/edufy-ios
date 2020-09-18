@@ -123,6 +123,8 @@ export class FCMService {
         page: data.page,
         reportName: reportname,
         reportId: reportid,
+        reportDate: data.reportDate,
+        classId: data.classId,
         chatMessage,
         medicationName: data.medicationName,
         dosageType: data.dosageType,
@@ -130,7 +132,13 @@ export class FCMService {
         shceduleId: data.shceduleId,
         medicationTime: data.medicationTime,
         medicationNextTime: data.medicationNextTime,
-        student: data.student
+        student: {
+          id: data.studentId,
+          name: data.studentName
+        },
+        class:{
+          id: data.classId
+        }
       }
     });
   }
