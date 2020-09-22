@@ -1,4 +1,4 @@
-import {Component, ElementRef, Renderer, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, Renderer, Renderer2, ViewChild, NgZone} from '@angular/core';
 import {
     AlertController,
     LoadingController,
@@ -83,7 +83,8 @@ export class HomePage {
     private passData:PassDataService,
     private dailyReportServ:DailyReportService,
     public transformDate:TransFormDateService,
-    public refresh: RefreshService
+    public refresh: RefreshService,
+    private zone: NgZone
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -356,7 +357,10 @@ export class HomePage {
   setupNotification() {
     this.fire.getToken();
 
-    this.refresh.refreshNoOfUnseenMessages();
+    this.zone.run(()=>{
+      this.refresh.refreshNoOfUnseenMessages();
+    })
+    
     
     this.fire.onBackgroundNotification().subscribe((data) => {
       console.log("Background Notification : \n", JSON.stringify(data));

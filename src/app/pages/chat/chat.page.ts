@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, NgZone} from '@angular/core';
 import {StudentsService} from '../../services/Students/students.service';
 import {AlertController, ModalController, NavParams, Platform} from '@ionic/angular';
 import {ChatService} from '../../services/Chat/chat.service';
@@ -7,7 +7,6 @@ import {Storage} from '@ionic/storage';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {PassDataService} from '../../services/pass-data.service';
 import {RefreshService} from '../../services/refresh/refresh.service';
-
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.page.html",
@@ -30,9 +29,13 @@ export class ChatPage implements OnInit {
     public modalCtrl: ModalController,
     public chatServ: ChatService,
     public passData: PassDataService,
-    public refresh: RefreshService
+    public refresh: RefreshService,
+    private zone: NgZone
   ) {
-    this.refresh.refreshNoOfUnseenMessages();
+    zone.run(() => {
+      this.refresh.refreshNoOfUnseenMessages();
+    })
+    
     if (platform.is("desktop")) {
       studentServ.putHeader(localStorage.getItem("LOCAL_STORAGE_TOKEN"));
       this.getChatStudent();

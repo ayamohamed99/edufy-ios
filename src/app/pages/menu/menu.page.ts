@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { Router, RouterEvent } from "@angular/router";
 import { AccountService } from "../../services/Account/account.service";
 import {BehaviorSubject} from 'rxjs';
@@ -48,6 +48,7 @@ export class MenuPage implements OnInit {
     private navCtrl: NavController,
     public refresh: RefreshService,
     private chatService: ChatService,
+    private zone: NgZone,
     private accountServ: AccountService) {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {
@@ -59,7 +60,9 @@ export class MenuPage implements OnInit {
     //     this.noOfUnseenMessages = val;
     //   }
     // )
-    this.refresh.refreshNoOfUnseenMessages();
+    this.zone.run(()=>{
+      this.refresh.refreshNoOfUnseenMessages();
+    })
   }
 
   ngOnInit() {}

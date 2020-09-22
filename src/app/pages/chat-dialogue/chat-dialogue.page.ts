@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, Input, OnInit, ViewChild, NgZone} from '@angular/core';
 import {ModalController, NavParams, Platform} from '@ionic/angular';
 import {ChatService} from '../../services/Chat/chat.service';
 import {AccountService} from '../../services/Account/account.service';
@@ -33,9 +33,13 @@ export class ChatDialoguePage implements OnInit {
     public accountServ: AccountService,
     public getDate: TransFormDateService,
     public tost: ToastViewService,
-    public refresh: RefreshService
+    public refresh: RefreshService,
+    private zone: NgZone
   ) {
-    this.refresh.refreshNoOfUnseenMessages();
+    zone.run(() => {
+      this.refresh.refreshNoOfUnseenMessages();
+    })
+    
     this.student = this.passData.dataToPass.studentData;
     if (platform.is("desktop")) {
       chatServ.putHeader(localStorage.getItem("LOCAL_STORAGE_TOKEN"));
