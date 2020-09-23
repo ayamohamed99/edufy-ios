@@ -641,40 +641,53 @@ export class HomePage {
       } else {
         if (!data.user) {
           that.chatServ.NewChats.push(JSON.parse(message.data));
-          that.alertCtrl
-            .create({
-              header: "Chat",
-              subHeader:
-                "New chat from your student " + data.chatThread.student.name,
-              buttons: [
-                {
-                  text: "Later",
-                  role: "cancel",
-                  handler: () => {
-                    console.log("Cancel clicked");
+          that.refresh.refreshNoOfUnseenMessages();
+          that.alertCtrl.getTop().then((val) => {
+            let haveAlert = true;
+            if(val === undefined){
+              haveAlert = false;
+            }else if(val !== undefined){
+              if(val.header != "Chat"){
+                haveAlert = false;
+              }
+            }
+            if(!haveAlert){
+              that.alertCtrl
+              .create({
+                header: "Chat",
+                subHeader:
+                  "New chat from your student " + data.chatThread.student.name,
+                buttons: [
+                  {
+                    text: "Later",
+                    role: "cancel",
+                    handler: () => {
+                      console.log("Cancel clicked");
+                    },
                   },
-                },
-                {
-                  text: "See now",
-                  handler: () => {
-                    // that.nav.setRoot(that.chatPage);
-                    let student = data.chatThread.student;
-                    let Stud = new Student();
-                    Stud.id = student.id;
-                    Stud.name = student.name;
-                    Stud.address = student.address;
-                    Stud.classes = student.classes;
-                    Stud.profileImg = student.profileImg;
-                    Stud.searchByClassGrade =
-                      student.classes.grade.name + " " + student.classes.name;
-                    // let modal = that.modalCtrl.create('ChatDialoguePage',
-                    //     {studentData:Stud});
-                    // modal.present();
+                  {
+                    text: "See now",
+                    handler: () => {
+                      // that.nav.setRoot(that.chatPage);
+                      let student = data.chatThread.student;
+                      let Stud = new Student();
+                      Stud.id = student.id;
+                      Stud.name = student.name;
+                      Stud.address = student.address;
+                      Stud.classes = student.classes;
+                      Stud.profileImg = student.profileImg;
+                      Stud.searchByClassGrade =
+                        student.classes.grade.name + " " + student.classes.name;
+                      // let modal = that.modalCtrl.create('ChatDialoguePage',
+                      //     {studentData:Stud});
+                      // modal.present();
+                    },
                   },
-                },
-              ],
-            })
-            .then((alert) => alert.present());
+                ],
+              })
+              .then((alert) => alert.present());
+            }
+          });
         }
       }
     };

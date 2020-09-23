@@ -38,14 +38,14 @@ export class StudentsService {
 
   getAllStudents(operationId, fromPage: string): any {
     if (operationId == 7 && this.getAllStudentWithID_7.getValue() != null) {
-      if(this.platform.is('desktop')){
-        return JSON.parse(localStorage.getItem("ALL_STUDENTS"));
-      }else{
-       this.storage.get("ALL_STUDENTS").then(val =>{
-         return JSON.parse(val);
-       })
-      }
-      // return this.getAllStudentWithID_7;
+    //   if(this.platform.is('desktop')){
+    //     return JSON.parse(localStorage.getItem("ALL_STUDENTS"));
+    //   }else{
+    //    this.storage.get("ALL_STUDENTS").then(val =>{
+    //      return JSON.parse(val);
+    //    })
+    //   }
+      return this.getAllStudentWithID_7;
     } else {
         return this.http.get(this.DomainUrl.Domain + '/authentication/student.ent?operationId=' + operationId + '&name=' +
           fromPage, this.httpOptions).pipe(

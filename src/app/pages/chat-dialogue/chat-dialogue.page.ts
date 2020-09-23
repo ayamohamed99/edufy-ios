@@ -36,7 +36,7 @@ export class ChatDialoguePage implements OnInit {
     public refresh: RefreshService,
     private zone: NgZone
   ) {
-    zone.run(() => {
+    this.zone.run(() => {
       this.refresh.refreshNoOfUnseenMessages();
     })
     

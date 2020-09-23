@@ -32,7 +32,7 @@ export class ChatPage implements OnInit {
     public refresh: RefreshService,
     private zone: NgZone
   ) {
-    zone.run(() => {
+    this.zone.run(() => {
       this.refresh.refreshNoOfUnseenMessages();
     })
     
@@ -51,8 +51,9 @@ export class ChatPage implements OnInit {
         this.getChatStudent();
         chatServ.putHeader(val);
         storage.get(this.recentChatKey).then((val) => {
-          if (val) {
-            this.lastStudents = JSON.parse(val);
+          val = JSON.parse(val);
+          if (val != [null] && val != null && val[0] != null) {
+            this.lastStudents = val;
             console.log(this.lastStudents);
           }
           this.getNewChat();
@@ -132,6 +133,7 @@ export class ChatPage implements OnInit {
         // if(this.platform.is('cordova')){
         //   Data = JSON.parse(value.data);
         // }
+        let that = this;
         for (let student of Data) {
           let Stud = new Student();
           Stud.id = student.id;
@@ -141,8 +143,8 @@ export class ChatPage implements OnInit {
           Stud.profileImg = student.profileImg;
           Stud.searchByClassGrade =
             student.classes.grade.name + " " + student.classes.name;
-          this.allStudents.push(Stud);
-          this.MAIN_STUDENTS_ARRAY.push(Stud);
+          that.allStudents.push(Stud);
+          that.MAIN_STUDENTS_ARRAY.push(Stud);
         }
       },
       (error2) => {
@@ -290,6 +292,7 @@ export class ChatPage implements OnInit {
   }
 
   getNewChat() {
+    let that =this;
     this.chatServ.getNewMessages().subscribe(
       // @ts-ignore
       (val) => {
@@ -300,11 +303,12 @@ export class ChatPage implements OnInit {
         // }
         if (values.length > 0) {
           for (let data of values) {
-            let stu: any = this.studentServ.findStudentByID(
+            let stu: any = that.studentServ.findStudentByID(
               data.senderId,
-              this.MAIN_STUDENTS_ARRAY
+              that.MAIN_STUDENTS_ARRAY
             );
-            this.viewListsEffect(stu, -1, "server");
+            if(stu !== undefined)
+              that.viewListsEffect(stu, -1, "server");
           }
         }
       },

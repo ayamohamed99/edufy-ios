@@ -55,11 +55,6 @@ export class MenuPage implements OnInit {
         this.selectedPath = event.url;
       }
     });
-    // this.chatService.getNumberOfUnseenMessages().subscribe(
-    //   val => {
-    //     this.noOfUnseenMessages = val;
-    //   }
-    // )
     this.zone.run(()=>{
       this.refresh.refreshNoOfUnseenMessages();
     })

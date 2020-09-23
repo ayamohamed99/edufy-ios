@@ -14,6 +14,7 @@ export class RefreshService {
       this.noOfUnSeenMessages = val;
       if(this.noOfUnSeenMessages == 0) this.hasUnSeenMessages = false;
       else this.hasUnSeenMessages = true;
+      console.log("number of unseen Messages: " + this.noOfUnSeenMessages);
     })
   };
 }
