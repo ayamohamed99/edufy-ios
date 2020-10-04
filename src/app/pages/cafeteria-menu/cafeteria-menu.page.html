@@ -16,7 +16,7 @@
   <ion-toolbar class="toolBarShap" color="gray" scrollable="true" *ngIf="!isSearching && categories">
     <ion-segment color="primary" style="--padding-top: 5px;--padding-right: 5px;--padding-left: 5px" scrollable="true"
       (ionChange)="segmentChanged($event)" [(ngModel)]="selectedCategoryIndex">
-      <ion-segment-button  *ngFor="let category of categories; let i= index" [value]="i">
+      <ion-segment-button style="min-width: auto;" *ngFor="let category of categories; let i= index" [value]="i">
         <ion-label style="width: fit-content;">{{category.name}}</ion-label>
       </ion-segment-button>
     </ion-segment>

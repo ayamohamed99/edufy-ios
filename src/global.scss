@@ -13,6 +13,14 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
+
+ion-app {
+  margin-top: env(safe-area-inset-top);
+  margin-bottom: env(safe-area-inset-bottom);
+  margin-left: env(safe-area-inset-left);
+  margin-bottom: env(safe-area-inset-right)
+}
+
 .collopsible {
   background-color: #ffffff;
   color: #000000;

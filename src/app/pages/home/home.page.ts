@@ -238,6 +238,7 @@ export class HomePage {
   }
 
   accountInfo() {
+    console.log("get accountInfo home");
     this.accountServ.getAccountRoles(this.toKenFull).subscribe(
       (val) => {
         // this.load.stopLoading();
@@ -254,6 +255,7 @@ export class HomePage {
           // this.navCtrl.setRoot(ProfilePage);
           this.CustomReport();
         } else {
+          console.log("data: git data without id");
           this.load.stopLoading();
           this.alertCtrl
             .create({
@@ -265,6 +267,8 @@ export class HomePage {
         }
       },
       (err) => {
+        console.log("get accountInfo ERROR: ", err);
+
         this.load.stopLoading();
         this.alertCtrl
           .create({

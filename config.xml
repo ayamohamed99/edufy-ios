@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.entrepreware.Edufy_Teachers" version="1.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.entrepreware.EdufyTeachers" version="1.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Edufy Teachers</name>
     <description>Edufy is an app for teachers.</description>
     <author email="" href="http://www.entrepreware.com/">Mostafa Elshafei Team</author>
@@ -117,4 +117,5 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-document-viewer" spec="0.9.11" />
     <plugin name="cordova-plugin-datepicker" spec="0.9.3" />
+    <plugin name="cordova-plugin-wkwebview-inject-cookie" spec="^1.0.6" />
 </widget>
