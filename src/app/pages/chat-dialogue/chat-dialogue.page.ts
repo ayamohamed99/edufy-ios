@@ -7,6 +7,7 @@ import {TransFormDateService} from '../../services/TransFormDate/trans-form-date
 import {ChatDialogue} from '../../models/chat-dialogue';
 import {Storage} from '@ionic/storage';
 import {PassDataService} from '../../services/pass-data.service';
+import {RefreshService} from '../../services/refresh/refresh.service';
 
 @Component({
   selector: "app-chat-dialogue",
@@ -31,8 +32,10 @@ export class ChatDialoguePage implements OnInit {
     public passData: PassDataService,
     public accountServ: AccountService,
     public getDate: TransFormDateService,
-    public tost: ToastViewService
+    public tost: ToastViewService,
+    public refresh: RefreshService
   ) {
+    this.refresh.refreshNoOfUnseenMessages();
     this.student = this.passData.dataToPass.studentData;
     if (platform.is("desktop")) {
       chatServ.putHeader(localStorage.getItem("LOCAL_STORAGE_TOKEN"));
@@ -81,6 +84,8 @@ export class ChatDialoguePage implements OnInit {
             this.chatDialogs.push(chat);
           }
 
+          this.chatDialogs = this.chatDialogs.reverse();
+          
           this.chatServ.newMessageSubject$.subscribe(
             (value) => {
               if (value) {

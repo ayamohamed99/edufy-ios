@@ -118,53 +118,6 @@ export class AppComponent {
 
 
 
-
-  // Mark: SignOut Method
-  onSignOut() {
-    this.loadCtrl.startNormalLoading('Wait please ...');
-
-    this.classesServ.getClassListWithID_2_AND_NOT_REPORTS = new BehaviorSubject(null);
-    this.studentServ.getAllStudentWithID_7 = new BehaviorSubject(null);
-    this.medicalService.getMedicines_FOR_MedicalReport = new BehaviorSubject(null);
-    this.medicalService.getDosageTypes_FOR_MedicalReport = new BehaviorSubject(null);
-    this.medicalService.getInstructions_FOR_MedicalReport = new BehaviorSubject(null);
-    this.medicalService.getIncidentTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
-    this.medicalService.getCheckupTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
-    this.medicalService.getSETINGS_FOR_MEDICALREPORT = new BehaviorSubject(null);
-
-    const plat = this.platform.is('desktop');
-
-    if (plat) {
-      const token = localStorage.getItem(this.loginServ.localStorageToken);
-      this.logout.putHeader(token);
-      if (this.platform.is('desktop')) {
-        localStorage.clear();
-      } else {
-        this.storage.clear();
-      }
-      this.loadCtrl.stopLoading().then( () => {
-        this.navCtrl.navigateRoot(this.homePath);
-      });
-    } else {
-      this.storage.get(this.loginServ.localStorageToken).then(
-          value => {
-            this.logout.putHeader(value);
-            // this.logoutMethod();
-            if (this.platform.is('desktop')) {
-              localStorage.clear();
-            } else {
-              this.storage.clear();
-            }
-            this.loadCtrl.stopLoading().then( () => {
-              this.navCtrl.navigateRoot(this.homePath);
-            });
-          });
-
-    }
-
-  }
-
-
   logoutMethod() {
     this.logout.postlogout(null, null, null).subscribe(
         // @ts-ignore

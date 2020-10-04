@@ -29,6 +29,7 @@ import {DailyReportService} from '../../services/DailyReport/daily-report.servic
 import {ClassesService} from '../../services/Classes/classes.service';
 import {TransFormDateService} from '../../services/TransFormDate/trans-form-date.service';
 import {combineLatest} from 'rxjs';
+import {RefreshService} from '../../services/refresh/refresh.service';
 
 @Component({
   selector: "app-home",
@@ -81,7 +82,8 @@ export class HomePage {
     public classesServ: ClassesService,
     private passData:PassDataService,
     private dailyReportServ:DailyReportService,
-    public transformDate:TransFormDateService
+    public transformDate:TransFormDateService,
+    public refresh: RefreshService
   ) {
     // if(platform.is('desktop')){
     //     this.userName = localStorage.getItem(this.loginServ.localStorageUserName);
@@ -358,6 +360,8 @@ export class HomePage {
   setupNotification() {
     this.fire.getToken();
 
+    this.refresh.refreshNoOfUnseenMessages();
+    
     this.fire.onBackgroundNotification().subscribe((data) => {
       console.log("Background Notification : \n", JSON.stringify(data));
       if (data.isCommentNotification) {
@@ -453,6 +457,11 @@ export class HomePage {
   }
 
   handelChatOnBackground(data) {
+    this.alertCtrl.getTop().then(val => {
+      if(val.header == 'Chat'){
+        val.dismiss();
+      }
+    })
     let JData = JSON.parse(data.chatMessage);
     let student = JData.chatThread.student;
     let Stud = new Student();
@@ -467,6 +476,11 @@ export class HomePage {
   }
 
   handelChatONForeground(data) {
+    this.alertCtrl.getTop().then(val => {
+      if(val.header == 'Chat'){
+        val.dismiss();
+      }
+    })
     let JData = JSON.parse(data.data.chatMessage);
     let student = JData.chatThread.student;
     let Stud = new Student();
@@ -481,17 +495,40 @@ export class HomePage {
   }
 
   async presentChatDialogue(Stud, student) {
+
+    let data = {
+      studentData: Stud
+    };
+
+    this.passData.dataToPass = data;
+
     const modal = await this.modalCtrl.create({
       component: ChatDialoguePage,
-      componentProps: { studentData: Stud },
+      componentProps: data,
     });
 
+    let students = [];
+    students.push(student);
+
+    if (this.platform.is("desktop")) {
+      localStorage.setItem("LOCAL_STORAGE_RECENT_CHAT", JSON.stringify(students));
+    }else{
+      this.storage.set("LOCAL_STORAGE_RECENT_CHAT", JSON.stringify(students));
+    }
+
     modal.onDidDismiss().then((val) => {
-      this.storage.get("LOCAL_STORAGE_RECENT_CHAT").then((val) => {
-        if (val) {
-          this.updateRecentChatData(val, student);
+      if (this.platform.is("desktop")) {
+        let v = localStorage.getItem("LOCAL_STORAGE_RECENT_CHAT");
+        if (v) {
+          this.updateRecentChatData(v, student);
         }
-      });
+      }else{
+        this.storage.get("LOCAL_STORAGE_RECENT_CHAT").then((val) => {
+          if (val) {
+            this.updateRecentChatData(val, student);
+          }
+        });
+      }
     });
 
     return await modal.present();
@@ -536,62 +573,6 @@ export class HomePage {
       classId: any) {
     this.accountServ.reportPage = pageName;
     this.accountServ.reportId = reportId;
-
-    // let pickerStartDate = new Date();
-    // const date = this.transformDate.transformTheDate(pickerStartDate,'dd-MM-yyyy');
-    // var dateData = date.split('-');
-    // var year = dateData [2];
-    // var month = dateData [1];
-    // var day = dateData [0];
-
-    // let selectedDate = day + "-" + month + "-" + year;
-
-    // this.classesServ.getClassList('REPORT', 5,selectedDate, null, null, reportId).subscribe(
-    //   classesResponse => {
-    //     console.log(classesResponse);
-
-    //     this.dailyReportServ.getStudentReportAnswers(classId, selectedDate, reportId).subscribe(
-    //       answers=>{
-    //         console.log(answers);
-
-    //         this.dailyReportServ.getDailyReportTemplate("English",selectedDate,classId,reportId).subscribe(
-    //           async template => {
-    //             console.log(template);
-
-    //             let data = {
-    //               selected:[{
-    //                 id: studentId,
-    //                 name: studentName
-    //               }],
-    //               template: template[0].questionsList,
-    //               reportDate: selectedDate,
-    //               selectedDate: selectedDate,
-    //               reportAnswer: answers,
-    //               student: {
-    //                 id: studentId,
-    //                 name: studentName
-    //               },
-    //               class: {
-    //                 id: classId
-    //               },
-    //               classId: classId,
-    //               comment: false,
-    //               reportConflict: []
-    //             };
-    //             this.passData.dataToPass = data;
-                
-    //             const model = await this.modalCtrl.create({
-    //               component: ReportTemplatePage,
-    //               componentProps: data
-    //             });
-    
-    //             return await model.present();
-    //           }
-    //         )
-    //       }
-    //     );
-    //   }
-    // )
     this.navCtrl.navigateRoot(["menu/report", pageName]);
   }
 

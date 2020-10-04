@@ -15,6 +15,7 @@ import {
   AlertController,
   IonSegment,
   ModalController,
+  NavController
 } from "@ionic/angular";
 import { DrawerState } from "ion-bottom-drawer";
 import { CafeteriaCartViewPage } from "../cafeteria-cart-view/cafeteria-cart-view.page";
@@ -52,7 +53,8 @@ export class CafeteriaMenuPage implements OnInit {
     public actionSheetController: ActionSheetController,
     private alertController: AlertController,
     private modalController: ModalController,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private navCtrl: NavController,
   ) {}
 
   async ngOnInit() {
@@ -66,19 +68,34 @@ export class CafeteriaMenuPage implements OnInit {
   async getCategories() {
     this.load.startNormalLoading("Loading Products...");
     this.categories = await this.cafeteriaService.getCafeteriaProducts();
-    this.selectedCategory = this.categories[0];
-    this.selectedCategoryIndex = "0";
-    this.selectedCategoryProducts = this.categories[0].products;
-    this.load.stopLoading();
-    this.cdRef.detectChanges();
-    this.allProducts = new Array();
-    for (let category of this.categories) {
-      this.allProducts = this.allProducts.concat(category.products);
+    if(this.categories.length !== 0){
+      this.selectedCategory = this.categories[0];
+      this.selectedCategoryIndex = "0";
+      this.selectedCategoryProducts = this.categories[0].products;
+      this.load.stopLoading();
+      this.cdRef.detectChanges();
+      this.allProducts = new Array();
+      for (let category of this.categories) {
+        this.allProducts = this.allProducts.concat(category.products);
+      }
+      // Sort products ASC
+      this.allProducts = this.allProducts.sort((product1, product2) =>
+        product1.name.localeCompare(product2.name)
+      );
+    }else{
+      const alert = await this.alertController.create({
+        header: "There is no categories in this branch.",
+        buttons: [{
+          text: "OK",
+          handler: ()=>{
+            this.navCtrl.navigateRoot('/menu/profile');
+          }
+        }],
+      });
+      this.load.stopLoading();
+      await alert.present();
     }
-    // Sort products ASC
-    this.allProducts = this.allProducts.sort((product1, product2) =>
-      product1.name.localeCompare(product2.name)
-    );
+    
   }
 
   segmentChanged(event: CustomEvent) {
