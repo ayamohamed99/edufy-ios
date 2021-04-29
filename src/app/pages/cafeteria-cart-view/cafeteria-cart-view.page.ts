@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CafeteriaProduct } from 'src/app/models/cafeteria_product';
 import { CafeteriaService } from 'src/app/services/Cafeteria/cafeteria.service';
+import { NavigationService } from 'src/app/services/navigation/navigation.service';
 
 @Component({
   selector: "app-cafeteria-cart-view",
@@ -17,9 +18,18 @@ export class CafeteriaCartViewPage implements OnInit {
   @Input() subTotal: number;
   @Input() discount: number;
 
-  constructor(private modalController: ModalController, private cafeteriaService: CafeteriaService) {}
+  product: CafeteriaProduct;
+  products: CafeteriaProduct[];
+  constructor(private modalController: ModalController, private cafeteriaService: CafeteriaService,
+    private navService: NavigationService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log({
+      cart: this.cart
+    })
+
+    this.navService.setCafeteriaCartViewPage(this);
+  }
 
   increment(product: CafeteriaProduct) {
     const count = this.cart.get(product);
@@ -66,6 +76,27 @@ export class CafeteriaCartViewPage implements OnInit {
   }
 
   close() {
+    this.modalController.dismiss({
+      cart: this.cart,
+      comment: this.comment,
+      count: this.count,
+      total: this.total,
+      subTotal: this.subTotal
+    });
+  }
+
+  onBackButtonPressed() {
+    console.log("onBackButtonPressed Cafeteria cart view");
+    console.log({
+      updatedCart: {
+        cart: this.cart,
+        comment: this.comment,
+        count: this.count,
+        total: this.total,
+        subTotal: this.subTotal
+      }
+    });
+
     this.modalController.dismiss({
       cart: this.cart,
       comment: this.comment,

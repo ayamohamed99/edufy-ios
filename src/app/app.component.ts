@@ -26,6 +26,8 @@ import {PassDataService} from './services/pass-data.service';
 import * as dateFNS from "date-fns";
 import {TransFormDateService} from './services/TransFormDate/trans-form-date.service';
 import {ReportTemplatePage} from './pages/report-template/report-template.page';
+import { NavigationService } from './services/navigation/navigation.service';
+import { BackListener } from './interfaces/BackListener';
 
 declare var wkWebView: any;
 @Component({
@@ -61,8 +63,6 @@ export class AppComponent {
       private storage: Storage,
       private router: Router,
       private loadCtrl: LoadingViewService,
-      private classesServ: ClassesService,
-      private studentServ: StudentsService,
       private medicalService: MedicalCareService,
       private logout: LogoutService,
       private localNotifications: LocalNotifications,
@@ -73,6 +73,7 @@ export class AppComponent {
       private modalCtrl: ModalController,
       private alertCtrl: AlertController,
       private navCtrl: NavController,
+      private navService: NavigationService,
       public passData:PassDataService,
       public transDate:TransFormDateService,
   ) {
@@ -81,12 +82,42 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      console.log("initializeApp");
+
+      this.registerHardwareBackButton();
+
       wkWebView.injectCookie('http://104.198.175.198/');
 
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString('#5C87F7');
       this.startAutoLogin();
       this.splashScreen.hide();
+    });
+  }
+
+  registerHardwareBackButton() {
+    this.platform.backButton.subscribeWithPriority(1000, async () => {
+      const pages = (this.platform.url() as string).split("/");
+      const currentPageUrl = pages[pages.length - 1];
+
+      console.log("registerHardwareBackButton");
+      console.log("currentPageUrl: ", currentPageUrl);
+
+      let modal = false;
+      try {
+        modal = await this.modalCtrl.dismiss();
+      } catch (e) {
+        console.log("Can not dismiss opened model");
+      }
+
+      if (this.navService && this.navService.getChargeGiftPage() != null) {
+        try {
+          (this.navService.getChargeGiftPage() as BackListener).onBackButtonPressed();
+        } catch (e) {
+          console.error("custom back-navigation action", e);
+        }
+      }
+
     });
   }
 
