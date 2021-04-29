@@ -103,12 +103,12 @@ export class AppComponent {
       console.log("registerHardwareBackButton");
       console.log("currentPageUrl: ", currentPageUrl);
 
-      let modal = false;
-      try {
-        modal = await this.modalCtrl.dismiss();
-      } catch (e) {
-        console.log("Can not dismiss opened model");
-      }
+      // let modal = false;
+      // try {
+      //   modal = await this.modalCtrl.dismiss();
+      // } catch (e) {
+      //   console.log("Can not dismiss opened model");
+      // }
 
       if (this.navService && this.navService.getChargeGiftPage() != null) {
         try {
