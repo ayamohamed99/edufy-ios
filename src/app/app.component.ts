@@ -86,7 +86,7 @@ export class AppComponent {
 
       this.registerHardwareBackButton();
 
-      wkWebView.injectCookie('http://104.198.175.198/');
+      // wkWebView.injectCookie('http://104.198.175.198/');
 
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString('#5C87F7');
