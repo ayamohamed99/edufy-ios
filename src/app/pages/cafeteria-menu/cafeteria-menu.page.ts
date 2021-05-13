@@ -143,6 +143,10 @@ export class CafeteriaMenuPage implements OnInit {
     });
 
     modal.onDidDismiss().then((data) => {
+      console.log("Close cafeteria cart");
+      console.log({
+        data: data
+      });
       if (data && data.data) {
         this.cart = data.data.cart;
         if (data.data.comment) {
@@ -211,6 +215,7 @@ export class CafeteriaMenuPage implements OnInit {
 
   emptyCart() {
     this.cart.clear();
+    this.cart = new Map();
     this.total = 0.0;
     this.subTotal = 0.0;
     this.count = 0.0;
