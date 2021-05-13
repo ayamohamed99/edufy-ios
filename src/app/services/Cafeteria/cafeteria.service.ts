@@ -47,12 +47,19 @@ export class CafeteriaService {
       );
     }
     const result = await Promise.all(promisesArray);
+
     let sortedCategories = result as CafeteriaCategory[];
-    sortedCategories = sortedCategories.sort((a, b) => a.name.localeCompare(b.name));
+    let categoriesWithProducts = [];
     for(let category of sortedCategories){
-      category.products = category.products.sort((a, b) => a.name.localeCompare(b.name));
+      if(category){
+        category.products = category.products.sort((a, b) => a.name.localeCompare(b.name));
+        categoriesWithProducts.push(category);
+      }
+        
     }
-    return sortedCategories;
+    categoriesWithProducts = categoriesWithProducts.sort((a, b) => a.name.localeCompare(b.name));
+
+    return categoriesWithProducts;
   }
 
   placeOrder(products, cart, subTotal, card, comment) {

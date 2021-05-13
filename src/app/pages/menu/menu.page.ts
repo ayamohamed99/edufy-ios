@@ -1,6 +1,18 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, NgZone } from "@angular/core";
 import { Router, RouterEvent } from "@angular/router";
 import { AccountService } from "../../services/Account/account.service";
+import {BehaviorSubject} from 'rxjs';
+import {LogoutService} from './../../services/Logout/logout.service';
+import {LoadingViewService} from './../../services/LoadingView/loading-view.service';
+import {StudentsService} from './../../services/Students/students.service';
+import {ClassesService} from './../../services/Classes/classes.service';
+import {MedicalCareService} from './../../services/MedicalCare/medical-care.service';
+import {LoginService} from './../../services/Login/login.service';
+import { Platform, NavController} from '@ionic/angular';
+import { Storage } from '@ionic/storage';
+import {ChatService} from '../../services/Chat/chat.service';
+import {RefreshService} from '../../services/refresh/refresh.service';
+
 import _ from "lodash";
 
 @Component({
@@ -12,6 +24,7 @@ export class MenuPage implements OnInit {
   selectedPath = "";
 
   // toolTabNum = 1;
+  homePath = '/home';
 
   custumReportTabIn = 3;
 
@@ -21,12 +34,30 @@ export class MenuPage implements OnInit {
 
   elementByClass: any = [];
 
-  constructor(private router: Router, private accountServ: AccountService) {
+  // public noOfUnseenMessages:any = 0;
+
+  constructor(private router: Router,
+    private platform: Platform,
+    private logout: LogoutService,
+    private loadCtrl: LoadingViewService,
+    private loginServ: LoginService,
+    private classesServ: ClassesService,
+    private storage: Storage,
+    private medicalService: MedicalCareService,
+    private studentServ: StudentsService,
+    private navCtrl: NavController,
+    public refresh: RefreshService,
+    private chatService: ChatService,
+    private zone: NgZone,
+    private accountServ: AccountService) {
     this.router.events.subscribe((event: RouterEvent) => {
       if (event && event.url) {
         this.selectedPath = event.url;
       }
     });
+    this.zone.run(()=>{
+      this.refresh.refreshNoOfUnseenMessages();
+    })
   }
 
   ngOnInit() {}
@@ -122,6 +153,7 @@ export class MenuPage implements OnInit {
         main: true, 
         url: "/menu/chat",
         customReport: false,
+        chat: true
       };
       // this.pages.splice(this.pages.length - this.toolTabNum, 0, data);
       this.pages.push(data);
@@ -179,6 +211,7 @@ export class MenuPage implements OnInit {
       icon: "log-out",
       main: false,
       url: "/home",
+      logout: true
     };
     this.pages.push(LogOut);
   }
@@ -242,6 +275,47 @@ export class MenuPage implements OnInit {
         this.elementByClass.push(coll[i]);
       }
     }
+  }
+
+  // Mark: SignOut Method
+  onSignOut() {
+    // clear storage only
+    // this.loadCtrl.startNormalLoading('Wait please ...');
+
+    this.classesServ.getClassListWithID_2_AND_NOT_REPORTS = new BehaviorSubject(null);
+    this.studentServ.getAllStudentWithID_7 = new BehaviorSubject(null);
+    this.medicalService.getMedicines_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getDosageTypes_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getInstructions_FOR_MedicalReport = new BehaviorSubject(null);
+    this.medicalService.getIncidentTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
+    this.medicalService.getCheckupTemplate_FOR_MEDICALREPORT = new BehaviorSubject(null);
+    this.medicalService.getSETINGS_FOR_MEDICALREPORT = new BehaviorSubject(null);
+
+    const plat = this.platform.is('desktop');
+
+    if (plat) {
+      const token = localStorage.getItem(this.loginServ.localStorageToken);
+      this.logout.putHeader(token);
+      if (this.platform.is('desktop')) {
+        localStorage.clear();
+      } else {
+        this.storage.clear();
+      }
+    } else {
+      this.storage.get(this.loginServ.localStorageToken).then(
+        value => {
+          this.logout.putHeader(value);
+          // this.logoutMethod();
+          if (this.platform.is('desktop')) {
+            localStorage.clear();
+          } else {
+            this.storage.clear();
+          }
+        }
+      );
+    }
+    // this.loadCtrl.stopLoading();
+    this.navCtrl.navigateRoot(this.homePath);
   }
 
   stopAll(ev: Event) {

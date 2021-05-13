@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, NgZone} from '@angular/core';
 import {StudentsService} from '../../services/Students/students.service';
 import {AlertController, ModalController, NavParams, Platform} from '@ionic/angular';
 import {ChatService} from '../../services/Chat/chat.service';
@@ -6,7 +6,7 @@ import {Student} from '../../models';
 import {Storage} from '@ionic/storage';
 import {ChatDialoguePage} from '../chat-dialogue/chat-dialogue.page';
 import {PassDataService} from '../../services/pass-data.service';
-
+import {RefreshService} from '../../services/refresh/refresh.service';
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.page.html",
@@ -28,8 +28,14 @@ export class ChatPage implements OnInit {
     public alrt: AlertController,
     public modalCtrl: ModalController,
     public chatServ: ChatService,
-    public passData: PassDataService
+    public passData: PassDataService,
+    public refresh: RefreshService,
+    private zone: NgZone
   ) {
+    this.zone.run(() => {
+      this.refresh.refreshNoOfUnseenMessages();
+    })
+    
     if (platform.is("desktop")) {
       studentServ.putHeader(localStorage.getItem("LOCAL_STORAGE_TOKEN"));
       this.getChatStudent();
@@ -45,8 +51,10 @@ export class ChatPage implements OnInit {
         this.getChatStudent();
         chatServ.putHeader(val);
         storage.get(this.recentChatKey).then((val) => {
-          if (val) {
-            this.lastStudents = JSON.parse(val);
+          val = JSON.parse(val);
+          if (val != [null] && val != null && val[0] != null) {
+            this.lastStudents = val;
+            console.log(this.lastStudents);
           }
           this.getNewChat();
         });
@@ -125,6 +133,7 @@ export class ChatPage implements OnInit {
         // if(this.platform.is('cordova')){
         //   Data = JSON.parse(value.data);
         // }
+        let that = this;
         for (let student of Data) {
           let Stud = new Student();
           Stud.id = student.id;
@@ -134,8 +143,8 @@ export class ChatPage implements OnInit {
           Stud.profileImg = student.profileImg;
           Stud.searchByClassGrade =
             student.classes.grade.name + " " + student.classes.name;
-          this.allStudents.push(Stud);
-          this.MAIN_STUDENTS_ARRAY.push(Stud);
+          that.allStudents.push(Stud);
+          that.MAIN_STUDENTS_ARRAY.push(Stud);
         }
       },
       (error2) => {
@@ -283,6 +292,7 @@ export class ChatPage implements OnInit {
   }
 
   getNewChat() {
+    let that =this;
     this.chatServ.getNewMessages().subscribe(
       // @ts-ignore
       (val) => {
@@ -293,16 +303,17 @@ export class ChatPage implements OnInit {
         // }
         if (values.length > 0) {
           for (let data of values) {
-            let stu: any = this.studentServ.findStudentByID(
+            let stu: any = that.studentServ.findStudentByID(
               data.senderId,
-              this.MAIN_STUDENTS_ARRAY
+              that.MAIN_STUDENTS_ARRAY
             );
-            this.viewListsEffect(stu, -1, "server");
+            if(stu !== undefined)
+              that.viewListsEffect(stu, -1, "server");
           }
         }
       },
       (err) => {
-        console.log("cant get recent chat from server");
+        console.log("can't get recent chat from server");
         console.log(err);
       }
     );

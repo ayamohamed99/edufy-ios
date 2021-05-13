@@ -31,8 +31,19 @@ export class FCMService {
     if (this.platform.is('ios')) {
       await this.fcm.requestPermission().then(
           tokens => {
-            this.fcm.getToken('apns-string').then(token => {
+            // this.fcm.getToken('apns-string').then(token => {
+            //   this.Token = token;
+            // console.log({
+            //   iosDeviceToken: token
+            // })
+            //   this.sendTokenToServer();
+            // });
+
+            this.fcm.getToken().then(token => {
               this.Token = token;
+              console.log({
+                iosToken: token
+              })
               this.sendTokenToServer();
             });
           });
@@ -75,13 +86,29 @@ export class FCMService {
     //         this.sendTokenToServer();
     //       });
     // }else{
+    if(this.platform.is('ios')){
+      const body = {
+        branchId: this.accountServ.userBranchId,
+        userId: this.accountServ.userId,
+        deviceToken: this.Token
+      };
+      this.http.post(this.DomainUrl.Domain + '/authentication/regedufyApnstoken.ent', body, httpOptions).subscribe(
+        (val) => {
+          console.log(val);
+        }, (err) => {
+          console.log(err);
+          this.sendTokenToServer();
+        });
+    }else{
       this.http.post(this.DomainUrl.Domain + '/authentication/regedufyfcmtoken.ent', body, httpOptions).subscribe(
-          (val) => {
-            console.log(val);
-          }, (err) => {
-            console.log(err);
-            this.sendTokenToServer();
-          });
+        (val) => {
+          console.log(val);
+        }, (err) => {
+          console.log(err);
+          this.sendTokenToServer();
+        });
+    }
+      
     // }
 
 
