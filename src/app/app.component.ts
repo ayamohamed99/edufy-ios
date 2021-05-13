@@ -390,6 +390,7 @@ export class AppComponent {
             title = data.gcm.title;
             body = data.gcm.body;
           }
+          
           this.fire.setLocatNotification(title, body, JSON.parse(JSON.stringify(data)));
           this.fire.onOpenLocalNotification().subscribe(
               data => {
@@ -648,6 +649,8 @@ export class AppComponent {
       return '/menu/profile';
     } else if (name == 'ProfilePage') {
       return '/menu/profile';
+    } else if (name == 'HomePage'){
+      return '/home';
     } else {
       return null;
     }
