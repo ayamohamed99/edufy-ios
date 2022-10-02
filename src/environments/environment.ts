@@ -8,7 +8,8 @@ export const environment = {
 
 
 // PROD
-export const DOMAIN_URL = 'http://104.198.175.198';
+//export const DOMAIN_URL = 'http://104.198.175.198';
+export const DOMAIN_URL = 'http://192.168.1.13:8080'
 // export const DOMAIN_URL = "http://197.57.226.178:8080";
 // export const DOMAIN_URL = "http://104.198.175.198";
 
